@@ -1,4 +1,5 @@
-// FileName: index.js
+const dotenv = require('dotenv');
+dotenv.config();// FileName: index.js
 // Import express
 const express = require('express');
 
@@ -9,12 +10,13 @@ const bodyParser = require('body-parser');
 // Initialize the app
 const app = express();
 // Import db
-const connection = require('./db');
+const pool = require('./db');
 // import services
 // ...
 
 app.use(function(req, res, next) {
-  // Website you wish to allow to connect, * means that all the website are allowed
+  // Website you wish to allow to connect,
+  // * means that all the website are allowed
   res.setHeader('Access-Control-Allow-Origin', '*');
 
   // Request methods you wish to allow
@@ -46,7 +48,7 @@ app.use(
 app.use(bodyParser.json());
 
 // Setup server port
-const port = process.env.PORT || 8080;
+const port = process.env.EXPRESS_PORT;
 
 // Import routes
 // NomeVariabileImportServices(app);
