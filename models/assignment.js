@@ -4,7 +4,10 @@ const states = ['Unassigned', 'Waiting', 'Booked', 'Assigned', 'Over'];
 const titles = ['PhD', 'Master'];
 const table = 'assignment';
 
-// Assignment object constructor
+/**
+ * Assignment object constructor
+ * @param {Assignment} assignment
+ */
 const Assignment = function(assignment) {
   this.id = assignment.id;
   this.notice_protocol = assignment.notice_protocol;
@@ -21,7 +24,16 @@ const Assignment = function(assignment) {
   this.note = assignment.note;
 };
 
+/**
+ * Creates a new Assignment.
+ * @param {Assignment} assignment The assignment to save.
+ * @param {callback} result The callback that handle the response.
+ * @return {void}
+ */
 Assignment.create = (assignment, result) => {
+  if (assignment == null) {
+    return result(new Error('Parametro passato nullo'), null);
+  }
   pool.query(`INSERT INTO ${table} SET ? `,
       assignment,
       (err, data) => {
@@ -33,7 +45,16 @@ Assignment.create = (assignment, result) => {
       });
 };
 
+/**
+ * Updates an Assignment.
+ * @param {Assignment} assignment The assignment to update.
+ * @param {callback} result The callback that handle the response.
+ * @return {void}
+ */
 Assignment.update = (assignment, result) => {
+  if (assignment == null) {
+    return result(new Error('Parametro passato nullo'), null);
+  }
   pool.query(`UPDATE ${table} SET ? WHERE id = ${assignment.id}`,
       assignment,
       (err, data) => {
@@ -44,7 +65,16 @@ Assignment.update = (assignment, result) => {
       });
 };
 
+/**
+ * Removes an Assignment.
+ * @param {Assignment} assignment The assignment to remove.
+ * @param {callback} result The callback that handle the response.
+ * @return {void}
+ */
 Assignment.remove = (assignment, result) => {
+  if (assignment == null) {
+    return result(new Error('Parametro passato nullo'), null);
+  }
   pool.query(`DELETE FROM ${table} WHERE id = ?`,
       assignment.id,
       (err, data) => {
@@ -55,7 +85,16 @@ Assignment.remove = (assignment, result) => {
       });
 };
 
+/**
+ * Finds the assignment with the specified id.
+ * @param {Number} id The id of an existing assignment.
+ * @param {callback} result The callback that handle the response.
+ * @return {void}
+ */
 Assignment.findById = (id, result) => {
+  if (id == null) {
+    return result(new Error('Parametro passato nullo'), null);
+  }
   pool.query(`SELECT * FROM ${table} WHERE id = ?`, id, (err, data) => {
     if (err) {
       return result(err, null);
@@ -64,7 +103,16 @@ Assignment.findById = (id, result) => {
   });
 };
 
+/**
+ * Finds the assignments of the specified notice.
+ * @param {string} noticeProtocol The protocol of a notice.
+ * @param {callback} result The callback that handle the response.
+ * @return {void}
+ */
 Assignment.findByNotice = (noticeProtocol, result) => {
+  if (noticeProtocol == null) {
+    return result(new Error('Parametro passato nullo'), null);
+  }
   pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`,
       noticeProtocol,
       (err, data) => {
@@ -75,7 +123,16 @@ Assignment.findByNotice = (noticeProtocol, result) => {
       });
 };
 
+/**
+ * Finds the assignments of a student.
+ * @param {string} emailStudent The email of the student.
+ * @param {callback} result The callback that handle the response.
+ * @return {void}
+ */
 Assignment.findByStudent = (emailStudent, result) => {
+  if (emailStudent == null) {
+    return result(new Error('Parametro passato nullo'), null);
+  }
   pool.query(`SELECT * FROM ${table} WHERE student = ?`,
       emailStudent,
       (err, data) => {
@@ -86,6 +143,11 @@ Assignment.findByStudent = (emailStudent, result) => {
       });
 };
 
+/**
+ * Finds all the assignments.
+ * @param {callback} result The callback that handle the response.
+ * @return {void}
+ */
 Assignment.findAll = (result) => {
   pool.query(`SELECT * FROM ${table}`, (err, data) => {
     if (err) {
@@ -95,7 +157,16 @@ Assignment.findAll = (result) => {
   });
 };
 
+/**
+ * Checks if an assignment exists.
+ * @param {Assignment} assignment The assignment to check.
+ * @param {callback} result The callback that handle the response.
+ * @return {void}
+ */
 Assignment.exists = (assignment, result) => {
+  if (assignment == null) {
+    return result(new Error('Parametro passato nullo'), null);
+  }
   pool.query(`SELECT * FROM ${table} WHERE id = ?`,
       assignment.id,
       (err, data) => {
