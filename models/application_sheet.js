@@ -1,3 +1,14 @@
+/**
+ * Notice
+ *
+ * This class represents a Notice
+ *
+ * @author Giannandrea Vicidomini
+ * @version
+ * @since
+ *
+ * 2019 - Copyright by Gang Of Four Eyes
+ */
 const pool = require('../db');
 const table = 'application_sheet';
 
@@ -64,7 +75,7 @@ ApplicationSheet.remove = (applicationSheet, result) => {
   }
   pool.query(`DELETE FROM ${table} WHERE notice_protocol = 
   ${applicationSheet.noticeProtocol}`,
-  (err, res)=>{
+  (err, data)=>{
     if (err) {
       return result(err, null);
     }
