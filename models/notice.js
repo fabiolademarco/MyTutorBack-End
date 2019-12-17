@@ -1,14 +1,15 @@
 const pool = require('../db');
 const applicationSheet = require('./application_sheet');
-const evaluationCriterio = require('./evalutation_criterion');
+const evaluationCriterion = require('./evalutation_criterion');
 const article = require('./article');
 
-
-const states = ['Draft', 'In Acceptance', 'Accepted', 'In Approval', 'Approved',
-  'Published', 'Expired', 'Waiting for Graded List', 'Closed'];
 const table = 'notice';
 
-
+/**
+ * Notice object constructor
+ * @param {Notice} notice The JS object that contains fields
+ *                            for setting new Notice object
+ */
 const Notice = function(notice) {
   this.protocol = notice.protocol;
   this.referent_professor = notice.referent_professor;
@@ -23,13 +24,34 @@ const Notice = function(notice) {
   this.terminationOfTheAssignment = notice.terminationOfTheAssignment;
   this.natureOfTheAssignment = notice.natureOfTheAssignment;
   this.unusedFunds = notice.unusedFunds;
-  this.state = states.includes(notice.state) ? notice.state : null;
+  this.state = Object.values(States).includes(notice.state) ?
+                      notice.state : null;
   this.type = notice.type;
   this.deadline = notice.deadline;
   this.noticeFile = notice.noticeFile;
   this.gradedListFile = notice.gradedListFile;
 };
 
+/**
+ * All possible states of a notice
+ */
+Notice.States = {
+  DRAFT: 'Draft',
+  IN_ACCEPTANCE: 'In Acceptance',
+  ACCEPTED: 'Accepted',
+  IN_APPROVAL: 'In Approval',
+  APPROVED: 'Approved',
+  PUBLISHED: 'Published',
+  EXPIRED: 'Expired',
+  WAITING_FOR_GRADED_LIST: 'Waiting for Graded List',
+  CLOSED: 'Closed',
+};
+
+/**
+ * Creates a new notice in database.
+ * @param {Notice} notice The notice to save.
+ * @param {callback} result Tha callback that handle the response.
+ */
 Notice.create = (notice, result) => {
   pool.query(`INSERT INTO ${table} SET ? `,
       notice,
@@ -45,7 +67,7 @@ Notice.create = (notice, result) => {
           return data;
         });
 
-        evaluationCriterio.create(notice.evaluationCriterio, (err, data) => {
+        evaluationCriterion.create(notice.evaluationCriterion, (err, data) => {
           if (err) {
             return err;
           }
@@ -63,6 +85,11 @@ Notice.create = (notice, result) => {
       });
 };
 
+/**
+ * Update a notice in database.
+ * @param {Notice} notice The notice to update.
+ * @param {callback} result The callback that handles the response.
+ */
 Notice.update = (notice, result) => {
   pool.query(`UPDATE ${table} WHERE protocol = ?`,
       notice.protocol,
@@ -80,13 +107,14 @@ Notice.update = (notice, result) => {
           });
         }
 
-        if (notice.evaluationCriterio) {
-          evaluationCriterio.update(notice.evaluationCriterio, (err, data) => {
-            if (err) {
-              return err;
-            }
-            return data;
-          });
+        if (notice.evaluationCriterion) {
+          evaluationCriterion.update(notice.evaluationCriterion,
+              (err, data) => {
+                if (err) {
+                  return err;
+                }
+                return data;
+              });
         }
 
         if (notice.article) {
@@ -102,9 +130,14 @@ Notice.update = (notice, result) => {
       });
 };
 
+/**
+ * Removes a notice from database.
+ * @param {Notice} notice The notice to remove.
+ * @param {callback} result The callback that handles the response.
+ */
 Notice.remove = (notice, result) => {
   pool.query(`DELETE FROM ${table} WHERE protocol = ?`,
-      notice.id,
+      notice.prtocol,
       (err, data) => {
         if (err) {
           result(err, null);
@@ -113,36 +146,111 @@ Notice.remove = (notice, result) => {
       });
 };
 
-Notice.findByProtocol = (protocol, result) => {
+/**
+ * Finds the notice with the specific protocol.
+ * @param {String} noticeProtocol The protocol of the notice.
+ * @param {callback} result The callback that handles the response.
+ */
+Notice.findByProtocol = (noticeProtocol, result) => {
   pool.query(`SELECT * 
-              FROM ${table} 
-                INNER JOIN ${applicationSheet.table} 
-                INNER JOIN ${evaluationCriterion.table} 
-                INNER JOIN ${article.table} 
+              FROM ${table}
               WHERE protocol = ?`,
-  protocol,
+  noticeProtocol,
   (err, data) => {
     if (err) {
-      result(err, null);
+      return result(err, null);
     }
-    result(null, data);
+
+    const tempNotice = data[0];
+    const {
+      applicationSheet,
+      evaluationCriterion,
+      article,
+    } = getOtherFields(protocol);
+
+    tempNotice.applicationSheet = applicationSheet;
+    tempNotice.evaluationCriterion = evaluationCriterion;
+    tempNotice.article = article;
+
+    result(null, tempNotice);
   });
 };
 
+/**
+ * Finds the notices with the specific state.
+ * @param {Notice.States} state The state of the notice.
+ * @param {callback} result The callback that handles the response.
+ */
 Notice.findByState = (state, result) => {
   pool.query(`SELECT * 
-              FROM ${table} 
-                INNER JOIN ${applicationSheet.table} 
-                INNER JOIN ${evaluationCriterion.table} 
-                INNER JOIN ${article.table} 
+              FROM ${table}
               WHERE state = ?`,
   state,
   (err, data) => {
     if (err) {
-      result(err, null);
+      return result(err, null);
     }
-    result(null, data);
+
+    noticesArray = [];
+
+    for (const el of data) {
+      const {
+        applicationSheet,
+        evaluationCriterion,
+        article,
+      } = getOtherFields(el.protocol);
+
+      el.applicationSheet = applicationSheet;
+      el.evaluationCriterion = evaluationCriterion;
+      el.article = article;
+
+      noticesArray.append(el);
+    }
+
+    result(null, noticesArray);
   });
 };
+
+/**
+ * This function retrieve other fields of a notice.
+ * @param {String} noticeProtocol The protocol of the notice.
+ * @return {Object} The object with the other fields stored in.
+ */
+function getOtherFields(noticeProtocol) {
+  otherFileds = {
+    applicationSheet: [],
+    evaluationCriterion: [],
+    article: [],
+  };
+
+  applicationSheet.findByNotice(noticeProtocol, (err, data) => {
+    if (err) {
+      return err;
+    }
+    for (const l of data) {
+      otherFileds.applicationSheet.append(l);
+    }
+  });
+
+  evaluationCriterion.findByNotice(noticeProtocol, (err, data) =>{
+    if (err) {
+      return err;
+    }
+    for (const l of data) {
+      otherFileds.evaluationCriterion.append(l);
+    }
+  });
+
+  article.findByNotice(noticeProtocol, (err, data) =>{
+    if (err) {
+      return err;
+    }
+    for (const l of data) {
+      otherFileds.article.append(l);
+    }
+  });
+
+  return otherFileds;
+}
 
 module.exports = Notice;
