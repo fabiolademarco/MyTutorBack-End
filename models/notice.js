@@ -1,3 +1,15 @@
+/**
+ * Notice
+ *
+ * This class represents a Notice
+ *
+ * @author Francesco Migliaro
+ * @version
+ * @since
+ *
+ * 2019 - Copyright by Gang Of Four Eyes
+ */
+
 const pool = require('../db');
 const applicationSheet = require('./application_sheet');
 const evaluationCriterion = require('./evalutation_criterion');
@@ -33,7 +45,9 @@ const Notice = function(notice) {
 };
 
 /**
- * All possible states of a notice
+ * Enum for all possible states of a notice
+ * @readonly
+ * @enum {string}
  */
 Notice.States = {
   DRAFT: 'Draft',
@@ -53,36 +67,37 @@ Notice.States = {
  * @param {callback} result Tha callback that handle the response.
  */
 Notice.create = (notice, result) => {
-  pool.query(`INSERT INTO ${table} SET ? `,
-      notice,
-      (err, data) => {
-        if (err) {
-          return result(err, null);
-        }
+  pool.query(`INSERT INTO ${table}
+              SET ?`,
+  notice,
+  (err, data) => {
+    if (err) {
+      return result(err, null);
+    }
 
-        applicationSheet.create(notice.applicationSheet, (err, data) => {
-          if (err) {
-            return err;
-          }
-          return data;
-        });
+    applicationSheet.create(notice.applicationSheet, (err, data) => {
+      if (err) {
+        return err;
+      }
+      return data;
+    });
 
-        evaluationCriterion.create(notice.evaluationCriterion, (err, data) => {
-          if (err) {
-            return err;
-          }
-          return data;
-        });
+    evaluationCriterion.create(notice.evaluationCriterion, (err, data) => {
+      if (err) {
+        return err;
+      }
+      return data;
+    });
 
-        article.create(notice.article, (err, data) => {
-          if (err) {
-            return err;
-          }
-          return data;
-        });
+    article.create(notice.article, (err, data) => {
+      if (err) {
+        return err;
+      }
+      return data;
+    });
 
-        result(null, data);
-      });
+    result(null, data);
+  });
 };
 
 /**
@@ -91,43 +106,45 @@ Notice.create = (notice, result) => {
  * @param {callback} result The callback that handles the response.
  */
 Notice.update = (notice, result) => {
-  pool.query(`UPDATE ${table} WHERE protocol = ?`,
-      notice.protocol,
-      (err, data) => {
+  pool.query(`UPDATE ${table} 
+              SET ? 
+              WHERE protocol = ${notice.protocol}`,
+  notice,
+  (err, data) => {
+    if (err) {
+      result(err, null);
+    }
+
+    if (notice.applicationSheet) {
+      applicationSheet.update(notice.applicationSheet, (err, data) => {
         if (err) {
-          result(err, null);
+          return err;
         }
-
-        if (notice.applicationSheet) {
-          applicationSheet.update(notice.applicationSheet, (err, data) => {
-            if (err) {
-              return err;
-            }
-            return data;
-          });
-        }
-
-        if (notice.evaluationCriterion) {
-          evaluationCriterion.update(notice.evaluationCriterion,
-              (err, data) => {
-                if (err) {
-                  return err;
-                }
-                return data;
-              });
-        }
-
-        if (notice.article) {
-          article.update(notice.article, (err, data) => {
-            if (err) {
-              return err;
-            }
-            return data;
-          });
-        }
-
-        result(null, data);
+        return data;
       });
+    }
+
+    if (notice.evaluationCriterion) {
+      evaluationCriterion.update(notice.evaluationCriterion,
+          (err, data) => {
+            if (err) {
+              return err;
+            }
+            return data;
+          });
+    }
+
+    if (notice.article) {
+      article.update(notice.article, (err, data) => {
+        if (err) {
+          return err;
+        }
+        return data;
+      });
+    }
+
+    result(null, data);
+  });
 };
 
 /**
@@ -136,19 +153,21 @@ Notice.update = (notice, result) => {
  * @param {callback} result The callback that handles the response.
  */
 Notice.remove = (notice, result) => {
-  pool.query(`DELETE FROM ${table} WHERE protocol = ?`,
-      notice.prtocol,
-      (err, data) => {
-        if (err) {
-          result(err, null);
-        }
-        result(null, data);
-      });
+  pool.query(`DELETE 
+              FROM ${table} 
+              WHERE protocol = ?`,
+  notice.prtocol,
+  (err, data) => {
+    if (err) {
+      result(err, null);
+    }
+    result(null, data);
+  });
 };
 
 /**
  * Finds the notice with the specific protocol.
- * @param {String} noticeProtocol The protocol of the notice.
+ * @param {string} noticeProtocol The protocol of the notice.
  * @param {callback} result The callback that handles the response.
  */
 Notice.findByProtocol = (noticeProtocol, result) => {
@@ -213,7 +232,7 @@ Notice.findByState = (state, result) => {
 
 /**
  * This function retrieve other fields of a notice.
- * @param {String} noticeProtocol The protocol of the notice.
+ * @param {string} noticeProtocol The protocol of the notice.
  * @return {Object} The object with the other fields stored in.
  */
 function getOtherFields(noticeProtocol) {
