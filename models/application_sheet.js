@@ -18,8 +18,7 @@ const table = 'application_sheet';
  */
 const ApplicationSheet = function(applicationSheet) {
   this.noticeProtocol = applicationSheet.noticeProtocol;
-  this.penalInformation = applicationSheet.penalInformation;
-  this.privacyPolicy = applicationSheet.privacyPolicy;
+  this.documentsToAttach = applicationSheet.documentsToAttach;
 };
 
 /** Creates an application sheet
