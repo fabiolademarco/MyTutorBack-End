@@ -144,8 +144,7 @@ DROP TABLE IF EXISTS application_sheet;
 
 CREATE TABLE application_sheet (
   notice_protocol                   varchar(125) NOT NULL, 
-  penal_information                 text, 
-  privacy_policy                    text, 
+  documents_to_attach               text, 
   PRIMARY KEY (notice_protocol),
   FOREIGN KEY (notice_protocol) REFERENCES notice(protocol) ON UPDATE Cascade ON DELETE Cascade );
 
