@@ -1,7 +1,7 @@
 /**
- * Notice
+ * Application Sheet
  *
- * This class represents a Notice
+ * This class represents an Application Sheet
  *
  * @author Giannandrea Vicidomini
  * @version
