@@ -105,3 +105,6 @@ dist
 
 # vscode configuration directory
 .vscode
+
+# test file for development
+test.js
