@@ -1,7 +1,12 @@
 const Assignment = require('../models/assignment');
 
-// Bisogna definire l'autenticazione
+// Bisogna definire l'autenticazione ed l'invio delle email
 
+/**
+ * Allows to send a request of an assignment
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.sendRequest = (req, res) => {
   const assignment = new Assignment(req.body);
   const emailStudent = req.param('emailStudent', null);
@@ -25,6 +30,12 @@ exports.sendRequest = (req, res) => {
   });
 };
 
+/**
+ * Allows to book the firm for an assignment
+ * @param {Request} req
+ * @param {Response} res
+ */
+
 exports.book = (req, res) => {
   const assignment = new Assignment(req.body);
 
@@ -42,6 +53,12 @@ exports.book = (req, res) => {
     // Inviare email
   });
 };
+
+/**
+ * Allows to assign an assignment to a student
+ * @param {Request} req
+ * @param {Response} res
+ */
 
 exports.assign = (req, res) => {
   const assignment = new Assignment(req.body);
@@ -61,6 +78,11 @@ exports.assign = (req, res) => {
   });
 };
 
+/**
+ * Return a list of assignments, that respect the filter criteria
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.search = (req, res) => {
   const filter = {
     code: req.param('code', undefined),
@@ -77,6 +99,11 @@ exports.search = (req, res) => {
   });
 };
 
+/**
+ * Allows to decline the request of an assignment
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.decline = (req, res) => {
   const assignment = new Assignment(req.body);
 
@@ -96,6 +123,12 @@ exports.decline = (req, res) => {
   });
 };
 
+/**
+ * Finds an assignment
+ * @param {Request} req
+ * @param {Response} res
+ */
+
 exports.find = (req, res) => {
   const id = req.param('id', null);
   if (id === null || !Number.isInteger(id)) {
@@ -112,6 +145,11 @@ exports.find = (req, res) => {
   });
 };
 
+/**
+ * Allows to close an assignment
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.close = (req, res) => {
   const assignment = new Assignment(req.body);
 
