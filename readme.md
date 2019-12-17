@@ -12,11 +12,11 @@ After you've imported the project you should run the command `npm install` in th
 ### The .env file
 To get started you should make a **.env** (dotenv) file, it should have the following format: 
 ```
-HOST=your_db_host_address
+DB_HOST=your_db_host_address
 DB_PORT=your_db_port
-DATABASE=your_db_name
-USER=your_db_username
-PASSWORD=your_db_password
+DB_NAME=your_db_name
+DB_USER=your_db_username
+DB_PASSWORD=your_db_password
 EXPRESS_PORT=your_express_port
 ```
 
