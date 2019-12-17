@@ -93,4 +93,20 @@ ApplicationSheet.findByNotice = (noticeProtocol, result) => {
       });
 };
 
+
+/** Returns aplication sheet table content
+ * @param {callback} result
+ * @return {void}
+ */
+ApplicationSheet.findAll= (result)=>{
+  pool.query(`SELECT * FROM ${table}`,
+      (err, data)=>{
+        if (err) {
+          return result(err, null);
+        }
+        result(null, data);
+      });
+};
+
+
 module.exports = ApplicationSheet;
