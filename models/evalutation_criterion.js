@@ -83,9 +83,34 @@ EvalutationCriterion.remove = (evaluationCriterion, result) => {
     if (err) {
       return result(err, null);
     }
+
     result(null, data);
   },
   );
+};
+
+/**
+ * Find the evaluation criterion with the specific id.
+ * @param {string} name The name of the evaluation criterion.
+ * @param {string} noticeProtocol The protocol of the notice
+ *                                to which the evaluation criterion
+ *                                is related.
+ * @param {callback} result The callback that handles the response.
+ */
+EvalutationCriterion.findById = (name, noticeProtocol, result) => {
+  pool.query(`SELECT *
+              FROM ${table}
+              WHERE notice_protocol = ?
+                AND name = ?`,
+  [noticeProtocol,
+    name],
+  (err, data) => {
+    if (err) {
+      return result(err, null);
+    }
+
+    result(null, data);
+  });
 };
 
 /**
@@ -102,7 +127,42 @@ EvalutationCriterion.findByNotice = (noticeProtocol, result) => {
     if (err) {
       return result(err. null);
     }
+
     result(null, data);
+  });
+};
+
+EvalutationCriterion.findAll = (result) =>{
+  pool.query(`SELECT *
+              FROM ${table}`,
+  (err, data) =>{
+    if (err) {
+      return result(err, null);
+    }
+
+    result(null, data);
+  });
+};
+
+/**
+ * Check if an evaluation criterion exists.
+ * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion
+ *                                                  to check.
+ * @param {callback} result The callback that handles the response.
+ */
+EvalutationCriterion.exists = (evaluationCriterion, result) =>{
+  pool.query(`SELECT *
+              FROM ${table}
+              WHERE notice_protocol = ?
+                AND name = ?`,
+  [evaluationCriterion.noticeProtocol,
+    evaluationCriterion.name],
+  (err, data) => {
+    if (err) {
+      return result(err, null);
+    }
+
+    result(null, data.length > 0);
   });
 };
 
