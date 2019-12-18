@@ -17,7 +17,6 @@ const Notice = require('../models/notice');
  *
  * @param {Request} req
  * @param {Response} res
- *
  */
 exports.create = (req, res) => {
   const notice = req.body;
@@ -51,15 +50,29 @@ exports.search = (req, res) => {
 };
 
 exports.find = (req, res) => {
+  res.set('Content-Type', 'application/json');
+  const id = req.query.protocol;
+  if (id === null || Number.parseInt(protocol) === NaN) {
+    res.status(412)
+        .send(new Error('Protocollo non valido'));
+    return;
+  }
 
+  Notice.findByProtocol(id, (err, data) => {
+    if (err) {
+      return res.status(414).send(err);
+    }
+    return res.status(200).send({notice: data});
+  });
 };
 
 exports.findAll = (req, res) => {
-
-};
-
-exports.create = (req, res) => {
-
+  Notice.findAll((err, data) => {
+    if (err) {
+      return res.status(414).send({error: 'Errore del database'});
+    }
+    return res.status(200).send({notices: data});
+  });
 };
 
 exports.downloadNotice = (req, res) => {
