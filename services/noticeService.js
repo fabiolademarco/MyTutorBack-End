@@ -2,7 +2,7 @@ const NoticeControl = require('../controllers/noticeControl');
 
 module.exports = (app) => {
   app.put('/api/notice/create', NoticeControl.create);
-  app.get('/api/notice/update', NoticeControl.update);
+  app.put('/api/notice/update', NoticeControl.update);
   app.put('/api/notice/set_status', NoticeControl.setStatus);
   app.get('/api/notice/delete', NoticeControl.delete);
   app.get('/api/notice/search', NoticeControl.search);
