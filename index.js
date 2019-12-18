@@ -13,6 +13,7 @@ const app = express();
 const pool = require('./db');
 // import services
 // ...
+const assignmentService = require('./services/assignmentService');
 
 app.use(function(req, res, next) {
   // Website you wish to allow to connect,
@@ -57,3 +58,6 @@ const port = process.env.EXPRESS_PORT;
 app.listen(port, function() {
   console.log('Running RestHub on port ' + port);
 });
+
+// AssignmentService routes
+assignmentService(app);
