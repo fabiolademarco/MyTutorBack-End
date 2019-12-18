@@ -80,8 +80,23 @@ Article.remove = (article, result) => {
   });
 };
 
+/**
+ * Find the article with the specific id.
+ * @param {Number} id The id of the article.
+ * @param {callback} result The callback that handles the result.
+ */
 Article.findById = (id, result) => {
-  // TODO
+  pool.query(`SELECT *
+              FROM ${table}
+              WHERE id = ?`,
+  id,
+  (err, data) => {
+    if (err) {
+      return result(err, null);
+    }
+
+    result(null, data);
+  });
 };
 
 /**
@@ -102,6 +117,10 @@ Article.findByNotice = (noticeProtocol, result) => {
   });
 };
 
+/**
+ * Finds all the evaluation criterion.
+ * @param {callback} result The callback that handles the response.
+ */
 Article.findAll = (result) => {
   pool.query(`SELECT *
               FROM ${table}`,
@@ -114,6 +133,11 @@ Article.findAll = (result) => {
   });
 };
 
+/**
+ * Check if an article exists.
+ * @param {Article} article The article to check.
+ * @param {callback} result The callback that handles the result.
+ */
 Article.exists = (article, result) =>{
   pool.query(`SELECT *
               FROM ${table}
