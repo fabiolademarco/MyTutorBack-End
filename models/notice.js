@@ -31,25 +31,25 @@ const Notice = function(notice) {
   this.protocol = notice.protocol;
   this.referent_professor = notice.referent_professor;
   this.description = notice.description;
-  this.noticeSubject = notice.noticeSubject;
-  this.admissionRequirements = notice.admissionRequirements;
-  this.assessableTitles = notice.assessableTitles;
-  this.howToSubmitApplications = notice.howToSubmitApplications;
-  this.selectionBoard = notice.selectionBoard;
+  this.notice_subject = notice.notice_subject;
+  this.admission_requirements = notice.admission_requirements;
+  this.assessable_titles = notice.assessable_titles;
+  this.how_to_submit_applications = notice.how_to_submit_applications;
+  this.selection_board = notice.selection_board;
   this.acceptance = notice.acceptance;
   this.incompatibility = notice.incompatibility;
-  this.terminationOfTheAssignment = notice.terminationOfTheAssignment;
-  this.natureOfTheAssignment = notice.natureOfTheAssignment;
-  this.unusedFunds = notice.unusedFunds;
+  this.termination_of_the_assignment = notice.termination_of_the_assignment;
+  this.nature_of_the_assignment = notice.nature_of_the_assignment;
+  this.unused_funds = notice.unused_funds;
   this.state = Object.values(States).includes(notice.state) ?
                       notice.state : null;
   this.type = notice.type;
   this.deadline = notice.deadline;
-  this.noticeFile = notice.noticeFile;
-  this.gradedListFile = notice.gradedListFile;
+  this.notice_file = notice.notice_file;
+  this.graded_list_file = notice.graded_list_file;
   this.articles = notice.articles;
-  this.evaluationCriterions = notice.evaluationCriterions;
-  this.applicationSheet = notice.applicationSheet;
+  this.evaluation_criterions = notice.evaluation_criterions;
+  this.application_sheet = notice.application_sheet;
   this.assignments = notice.assignments;
   this.comment = notice.comment;
 };
@@ -89,7 +89,7 @@ Notice.create = (notice, result) => {
     // entities correlate to that
 
     // Create application sheet correlate to the notice
-    applicationSheet.create(notice.applicationSheet, (err, data) => {
+    applicationSheet.create(notice.application_sheet, (err, data) => {
       if (err) {
         return err;
       }
@@ -98,7 +98,7 @@ Notice.create = (notice, result) => {
 
 
     // Create all evaluation criterions correlate to the notice
-    for (const tempEvalCrit of notice.evaluationCriterions) {
+    for (const tempEvalCrit of notice.evaluation_criterions) {
       evaluationCriterion.create(tempEvalCrit, (err, data) => {
         if (err) {
           return err;
@@ -154,8 +154,8 @@ Notice.update = (notice, result) => {
     // entities correlate to that
 
     // Update application sheet correlate to the notice if it's necessary
-    if (notice.applicationSheet) {
-      applicationSheet.update(notice.applicationSheet, (err, data) => {
+    if (notice.application_sheet) {
+      applicationSheet.update(notice.application_sheet, (err, data) => {
         if (err) {
           return err;
         }
@@ -165,8 +165,8 @@ Notice.update = (notice, result) => {
 
     // Update all evaluation criterions correlate to the notice if it's
     // necessary
-    if (notice.evaluationCriterions) {
-      for (const tempEvalCrit of notice.evaluationCriterions) {
+    if (notice.evaluation_criterions) {
+      for (const tempEvalCrit of notice.evaluation_criterions) {
         evaluationCriterion.update(tempEvalCrit,
             (err, data) => {
               if (err) {
@@ -235,8 +235,8 @@ Notice.findByProtocol = (noticeProtocol, result) => {
       comment,
     } = getOtherFields(protocol);
 
-    tempNotice.applicationSheet = applicationSheet;
-    tempNotice.evaluationCriterions = evaluationCriterions;
+    tempNotice.application_sheet = applicationSheet;
+    tempNotice.evaluation_criterions = evaluationCriterions;
     tempNotice.articles = articles;
     tempNotice.comment = comment;
 
@@ -269,8 +269,8 @@ Notice.findByState = (state, result) => {
         comment,
       } = getOtherFields(el.protocol);
 
-      el.applicationSheet = applicationSheet;
-      el.evaluationCriterions = evaluationCriterions;
+      el.application_sheet = applicationSheet;
+      el.evaluation_criterions = evaluationCriterions;
       el.articles = articles;
       el.comment = comment;
 
@@ -306,8 +306,8 @@ Notice.findByReferent = (referent, result) => {
         comment,
       } = getOtherFields(el.protocol);
 
-      el.applicationSheet = applicationSheet;
-      el.evaluationCriterions = evaluationCriterions;
+      el.application_sheet = applicationSheet;
+      el.evaluation_criterions = evaluationCriterions;
       el.articles = articles;
       el.comment = comment;
 
@@ -340,8 +340,8 @@ Notice.findAll = (result) => {
         comment,
       } = getOtherFields(el.protocol);
 
-      el.applicationSheet = applicationSheet;
-      el.evaluationCriterions = evaluationCriterions;
+      el.application_sheet = applicationSheet;
+      el.evaluation_criterions = evaluationCriterions;
       el.articles = articles;
       el.comment = comment;
 

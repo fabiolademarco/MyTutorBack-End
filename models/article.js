@@ -20,7 +20,7 @@ const table = 'article';
  */
 const Article = function(article) {
   this.id = article.id;
-  this.noticeProtocol = article.noticeProtocol;
+  this.notice_protocol = article.notice_protocol;
   this.text = article.text;
   this.initial = article.initial;
 };
@@ -38,6 +38,7 @@ Article.create = (article, result) => {
     if (err) {
       return result(err, null);
     }
+
     result(null, data);
   });
 };
@@ -58,6 +59,7 @@ Article.update = (article, result) => {
     if (err) {
       return result(err, null);
     }
+
     result(null, data);
   });
 };
@@ -76,6 +78,7 @@ Article.remove = (article, result) => {
     if (err) {
       return result(err, null);
     }
+
     result(null, data);
   });
 };
@@ -113,6 +116,7 @@ Article.findByNotice = (noticeProtocol, result) => {
     if (err) {
       return result(err, null);
     }
+
     result(null, data);
   });
 };

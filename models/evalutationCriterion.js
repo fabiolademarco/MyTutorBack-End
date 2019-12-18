@@ -21,7 +21,7 @@ const table = 'evaulation_criterion';
  *                                                   EvaluationCriterion object
  */
 const EvalutationCriterion = function(evaluationCriterion) {
-  this.noticeProtocol = evaluationCriterion.noticeProtocol;
+  this.notice_protocol = evaluationCriterion.notice_protocol;
   this.name = evaluationCriterion.name;
   this.maxScore = evaluationCriterion.maxScore;
 };
@@ -57,7 +57,7 @@ EvalutationCriterion.update = (evaluationCriterion, result) => {
               WHERE name = ? AND notice_protocol = ?`,
   [evaluationCriterion,
     evaluationCriterion.name,
-    evaluationCriterion.noticeProtocol],
+    evaluationCriterion.notice_protocol],
   (err, data) => {
     if (err) {
       return result(err, null);
@@ -75,10 +75,11 @@ EvalutationCriterion.update = (evaluationCriterion, result) => {
  */
 EvalutationCriterion.remove = (evaluationCriterion, result) => {
   pool.query(`DELETE
-            FROM ${table}
-            WHERE name = ? AND notice_protocol = ?`,
+              FROM ${table}
+              WHERE name = ? 
+                AND notice_protocol = ?`,
   [evaluationCriterion.name,
-    evaluationCriterion.noticeProtocol],
+    evaluationCriterion.notice_protocol],
   (err, data) => {
     if (err) {
       return result(err, null);
@@ -155,7 +156,7 @@ EvalutationCriterion.exists = (evaluationCriterion, result) =>{
               FROM ${table}
               WHERE notice_protocol = ?
                 AND name = ?`,
-  [evaluationCriterion.noticeProtocol,
+  [evaluationCriterion.notice_protocol,
     evaluationCriterion.name],
   (err, data) => {
     if (err) {
