@@ -9,8 +9,6 @@ const bodyParser = require('body-parser');
 // let mysql = require('mysql');
 // Initialize the app
 const app = express();
-// Import db
-const pool = require('./db');
 // import services
 // ...
 const assignmentService = require('./services/assignmentService');
@@ -61,3 +59,4 @@ app.listen(port, function() {
 
 // AssignmentService routes
 assignmentService(app);
+

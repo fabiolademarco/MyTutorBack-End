@@ -88,8 +88,8 @@ Assignment.update = (assignment, result) => {
   if (assignment == null) {
     return result(new Error('Parametro passato nullo'), null);
   }
-  pool.query(`UPDATE ${table} SET ? WHERE id = ${assignment.id}`,
-      assignment,
+  pool.query(`UPDATE ${table} SET ? WHERE id = ?`,
+      [assignment, assignment.id],
       (err, data) => {
         if (err) {
           return result(err, null);

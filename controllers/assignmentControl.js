@@ -22,21 +22,21 @@ const ERR_SERVER_STATUS = 500;
  */
 exports.sendRequest = (req, res) => {
   res.set('Content-Type', 'application/json');
-  const assignment = new Assignment(req.body);
-  const emailStudent = req.param('emailStudent', null);
+  console.log(req.body);
+  const assignment = new Assignment(req.body.assignment);
+  const emailStudent = req.body.emailStudent;
   // Bisogna  controllare che esista anche lo studente
   // e forse che sia in graduatoria
-
   if (emailStudent === null || assignment == null) {
     res.status(ERR_CLIENT_STATUS);
-    res.send(new Error('Non è stato specificato lo studente o l\'incarico'));
+    res.send({error: 'Non è stato specificato lo studente o l\'incarico'});
     return;
   }
   assignment.student = emailStudent;
   assignment.state = Assignment.states.WAITING;
   Assignment.update(assignment, (err, data) => {
     if (err) {
-      res.status(ERR_SERVER_STATUS).send(new Error('Aggiornamento fallito'));
+      res.status(ERR_SERVER_STATUS).send({error: 'Aggiornamento fallito'});
       return;
     }
     res.status(OK_STATUS).send(data);
@@ -52,20 +52,20 @@ exports.sendRequest = (req, res) => {
 
 exports.book = (req, res) => {
   res.set('Content-Type', 'application/json');
-  const assignment = new Assignment(req.body);
+  const assignment = new Assignment(req.body.assignment);
 
   if (assignment === null || assignment.state !== Assignment.states.WAITING) {
     res.status(ERR_CLIENT_STATUS);
-    res.send(new Error('L\'incarico non può essere prenotato'));
+    res.send({error: 'L\'incarico non può essere prenotato'});
     return;
   }
   assignment.state = Assignment.states.BOOKED;
   Assignment.update(assignment, (err, data) => {
     if (err) {
-      res.status(ERR_SERVER_STATUS).send(false);
+      res.status(ERR_SERVER_STATUS).send({error: false});
       return;
     }
-    res.status(OK_STATUS).send(true);
+    res.status(OK_STATUS).send({result: true});
     // Inviare email
   });
 };
@@ -78,20 +78,20 @@ exports.book = (req, res) => {
 
 exports.assign = (req, res) => {
   res.set('Content-Type', 'application/json');
-  const assignment = new Assignment(req.body);
+  const assignment = new Assignment(req.body.assignment);
 
   if (assignment.state !== Assignment.states.BOOKED) {
     res.status(ERR_CLIENT_STATUS)
-        .send(new Error('L\'incarico non può essere assegnato'));
+        .send({error: 'L\'incarico non può essere assegnato'});
     return;
   }
   assignment.state = Assignment.states.BOOKED;
   Assignment.update(assignment, (err, data) => {
     if (err) {
-      res.status(ERR_SERVER_STATUS).send(false);
+      res.status(ERR_SERVER_STATUS).send({error: false});
       return;
     }
-    res.status(OK_STATUS).send(true);
+    res.status(OK_STATUS).send({result: true});
     // Inviare email
   });
 };
@@ -111,10 +111,10 @@ exports.search = (req, res) => {
   };
   Assignment.search(filter, (err, data) => {
     if (err) {
-      res.status(ERR_SERVER_STATUS).send(err);
+      res.status(ERR_SERVER_STATUS).send({error: err});
       return;
     }
-    res.status(OK_STATUS).send(data);
+    res.status(OK_STATUS).send({list: data});
   });
 };
 
@@ -125,21 +125,21 @@ exports.search = (req, res) => {
  */
 exports.decline = (req, res) => {
   res.set('Content-Type', 'application/json');
-  const assignment = new Assignment(req.body);
+  const assignment = new Assignment(req.body.assignment);
 
   if (assignment === null || assignment.state !== Assignment.states.WAITING) {
     res.status(ERR_CLIENT_STATUS)
-        .send(new Error('L\'incarico non può essere rifiutato'));
+        .send({error: 'L\'incarico non può essere rifiutato'});
     return;
   }
   assignment.state = Assignment.states.UNASSIGNED;
   assignment.student = null;
   Assignment.update(assignment, (err, data) => {
     if (err) {
-      res.status(ERR_SERVER_STATUS).send(false);
+      res.status(ERR_SERVER_STATUS).send({error: false});
       return;
     }
-    res.status(OK_STATUS).send(true);
+    res.status(OK_STATUS).send({result: true});
     // Inviare email
   });
 };
@@ -152,17 +152,19 @@ exports.decline = (req, res) => {
 
 exports.find = (req, res) => {
   res.set('Content-Type', 'application/json');
-  const id = req.query.id;
-  if (id === null || !Number.isInteger(id)) {
-    res.status(ERR_CLIENT_STATUS).send(new Error('Id non passato'));
+  const id = req.params.id;
+  console.log(id);
+  if (id === null || Number.parseInt(id) === NaN) {
+    res.status(ERR_CLIENT_STATUS).send({error: 'Id non passato'});
     return null;
   }
   Assignment.findById(id, (err, data) => {
     if (err) {
-      res.status(ERR_SERVER_STATUS).send(err);
+      res.status(ERR_SERVER_STATUS).send({error: err});
       return null;
     }
-    res.status(OK_STATUS).send(data);
+    data = data === undefined ? null : data;
+    res.status(OK_STATUS).send({assignment: data});
     return data;
   });
 };
@@ -178,16 +180,16 @@ exports.close = (req, res) => {
 
   if (assignment === null || assignment.state !== Assignment.states.ASSIGNED) {
     res.status(ERR_CLIENT_STATUS)
-        .send(new Error('L\'incarico non può essere chiuso'));
+        .send({error: 'L\'incarico non può essere chiuso'});
     return;
   }
   assignment.state = Assignment.states.OVER;
   Assignment.update(assignment, (err, data) => {
     if (err) {
-      res.status(ERR_SERVER_STATUS).send(false);
+      res.status(ERR_SERVER_STATUS).send({error: false});
       return;
     }
-    res.status(OK_STATUS).send(true);
+    res.status(OK_STATUS).send({error: true});
   });
 };
 
