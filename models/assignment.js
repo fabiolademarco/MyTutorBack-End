@@ -225,20 +225,25 @@ Assignment.exists = (assignment, result) => {
  */
 Assignment.search = (filter, result) => {
   let query = `SELECT * FROM ${table} WHERE true `;
+  const params = [];
   if (filter.code) {
-    query = `${query} AND code LIKE \'${filter.code}%\'`;
+    query = `${query} AND code LIKE ?`;
+    params[params.length] = filter.code+'%';
   }
   if (filter.noticeProtocol) {
-    query = `${query} AND notice_protocol=${filter.noticeProtocol}`;
+    query = `${query} AND notice_protocol=?`;
+    params[params.length] = filter.noticeProtocol;
   }
   if (filter.state) {
-    query = `${query} AND state=${filter.state}`;
+    query = `${query} AND state=?`;
+    params[params.length] = filter.state;
   }
   if (filter.student) {
-    query = `${query} AND student=${filter.student}`;
+    query = `${query} AND student=?`;
+    params[params.length] = filter.student;
   }
 
-  pool.query(query, (err, data) => {
+  pool.query(query, params, (err, data) => {
     if (err) {
       return result(err, null);
     }

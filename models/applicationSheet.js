@@ -1,3 +1,14 @@
+/**
+ * Application Sheet
+ *
+ * This class represents an Application Sheet
+ *
+ * @author Giannandrea Vicidomini
+ * @version
+ * @since
+ *
+ * 2019 - Copyright by Gang Of Four Eyes
+ */
 const pool = require('../db');
 const table = 'application_sheet';
 
@@ -7,8 +18,7 @@ const table = 'application_sheet';
  */
 const ApplicationSheet = function(applicationSheet) {
   this.noticeProtocol = applicationSheet.noticeProtocol;
-  this.penalInformation = applicationSheet.penalInformation;
-  this.privacyPolicy = applicationSheet.privacyPolicy;
+  this.documentsToAttach = applicationSheet.documentsToAttach;
 };
 
 /** Creates an application sheet
@@ -64,7 +74,7 @@ ApplicationSheet.remove = (applicationSheet, result) => {
   }
   pool.query(`DELETE FROM ${table} WHERE notice_protocol = 
   ${applicationSheet.noticeProtocol}`,
-  (err, res)=>{
+  (err, data)=>{
     if (err) {
       return result(err, null);
     }
