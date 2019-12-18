@@ -355,7 +355,7 @@ Notice.findAll = (result) => {
 /**
  * Check if a notice exists.
  * @param {Notice} notice The notice to check.
- * @param {callback} result The callback that handles the repsonse.
+ * @param {callback} result The callback that handles the response.
  */
 Notice.exists = (notice, result) => {
   pool.query(`SELECT *
