@@ -1,7 +1,7 @@
 /**
- * Application Sheet
+ * ApplicationSheet
  *
- * This class represents an Application Sheet
+ * This class represents the Application Sheet controller
  *
  * @author Giannandrea Vicidomini
  * @version
