@@ -14,8 +14,8 @@
  *
  */
 const pool = require('../db');
-const applicationSheet = require('./application_sheet');
-const evaluationCriterion = require('./evalutation_criterion');
+const applicationSheet = require('./applicationSheet');
+const evaluationCriterion = require('./evalutationCriterion');
 const article = require('./article');
 const assignment = require('./assignment');
 const comment = require('./comment');
