@@ -9,7 +9,7 @@
  *
  * 2019 - Copyright by Gang Of Four Eyes
  */
-const ApplicationSheet = require('../models/application_sheet');
+const ApplicationSheet = require('../models/applicationSheet');
 
 /** Handles the request for the creation of an application
  * @param {Request} req
