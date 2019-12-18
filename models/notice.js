@@ -7,13 +7,18 @@
  * @version
  * @since
  *
- * 2019 - Copyright by Gang Of Four Eyes
+ * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 
+/**
+ *
+ */
 const pool = require('../db');
 const applicationSheet = require('./application_sheet');
 const evaluationCriterion = require('./evalutation_criterion');
 const article = require('./article');
+const assignment = require('./assignment');
+const comment = require('./comment');
 
 const table = 'notice';
 
@@ -42,6 +47,11 @@ const Notice = function(notice) {
   this.deadline = notice.deadline;
   this.noticeFile = notice.noticeFile;
   this.gradedListFile = notice.gradedListFile;
+  this.articles = notice.articles;
+  this.evaluationCriterions = notice.evaluationCriterions;
+  this.applicationSheet = notice.applicationSheet;
+  this.assignments = notice.assignments;
+  this.comment = notice.comment;
 };
 
 /**
@@ -75,6 +85,10 @@ Notice.create = (notice, result) => {
       return result(err, null);
     }
 
+    // If the create of notice is successful then create the others
+    // entities correlate to that
+
+    // Create application sheet correlate to the notice
     applicationSheet.create(notice.applicationSheet, (err, data) => {
       if (err) {
         return err;
@@ -82,19 +96,39 @@ Notice.create = (notice, result) => {
       return data;
     });
 
-    evaluationCriterion.create(notice.evaluationCriterion, (err, data) => {
-      if (err) {
-        return err;
-      }
-      return data;
-    });
 
-    article.create(notice.article, (err, data) => {
-      if (err) {
-        return err;
-      }
-      return data;
-    });
+    // Create all evaluation criterions correlate to the notice
+    for (const tempEvalCrit of notice.evaluationCriterions) {
+      evaluationCriterion.create(tempEvalCrit, (err, data) => {
+        if (err) {
+          return err;
+        }
+        return data;
+      });
+    }
+
+
+    // Create all articles correlate to the notice
+    for (const tempArticle of notice.articles) {
+      article.create(tempArticle, (err, data) => {
+        if (err) {
+          return err;
+        }
+        return data;
+      });
+    }
+
+    // Create all articles correlate to the notice
+    for (const tempAssignment of notice.assignments) {
+      assignment.create(tempAssignment, (err, data) => {
+        if (err) {
+          return result(err, null);
+        }
+
+        result(null, data);
+      },
+      );
+    }
 
     result(null, data);
   });
@@ -108,13 +142,18 @@ Notice.create = (notice, result) => {
 Notice.update = (notice, result) => {
   pool.query(`UPDATE ${table} 
               SET ? 
-              WHERE protocol = ${notice.protocol}`,
-  notice,
+              WHERE protocol = ?`,
+  [notice,
+    notice.protocol],
   (err, data) => {
     if (err) {
-      result(err, null);
+      return result(err, null);
     }
 
+    // If the update of notice is successful then update the others
+    // entities correlate to that
+
+    // Update application sheet correlate to the notice if it's necessary
     if (notice.applicationSheet) {
       applicationSheet.update(notice.applicationSheet, (err, data) => {
         if (err) {
@@ -124,23 +163,30 @@ Notice.update = (notice, result) => {
       });
     }
 
-    if (notice.evaluationCriterion) {
-      evaluationCriterion.update(notice.evaluationCriterion,
-          (err, data) => {
-            if (err) {
-              return err;
-            }
-            return data;
-          });
+    // Update all evaluation criterions correlate to the notice if it's
+    // necessary
+    if (notice.evaluationCriterions) {
+      for (const tempEvalCrit of notice.evaluationCriterions) {
+        evaluationCriterion.update(tempEvalCrit,
+            (err, data) => {
+              if (err) {
+                return err;
+              }
+              return data;
+            });
+      }
     }
 
-    if (notice.article) {
-      article.update(notice.article, (err, data) => {
-        if (err) {
-          return err;
-        }
-        return data;
-      });
+    // Update all articles correlate to the notice if it's necessary
+    if (notice.articles) {
+      for (const tempArticle of notice.articles) {
+        article.update(tempArticle, (err, data) => {
+          if (err) {
+            return err;
+          }
+          return data;
+        });
+      }
     }
 
     result(null, data);
@@ -156,11 +202,12 @@ Notice.remove = (notice, result) => {
   pool.query(`DELETE 
               FROM ${table} 
               WHERE protocol = ?`,
-  notice.prtocol,
+  notice.protocol,
   (err, data) => {
     if (err) {
       result(err, null);
     }
+
     result(null, data);
   });
 };
@@ -183,13 +230,15 @@ Notice.findByProtocol = (noticeProtocol, result) => {
     const tempNotice = data[0];
     const {
       applicationSheet,
-      evaluationCriterion,
-      article,
+      evaluationCriterions,
+      articles,
+      comment,
     } = getOtherFields(protocol);
 
     tempNotice.applicationSheet = applicationSheet;
-    tempNotice.evaluationCriterion = evaluationCriterion;
-    tempNotice.article = article;
+    tempNotice.evaluationCriterions = evaluationCriterions;
+    tempNotice.articles = articles;
+    tempNotice.comment = comment;
 
     result(null, tempNotice);
   });
@@ -215,18 +264,110 @@ Notice.findByState = (state, result) => {
     for (const el of data) {
       const {
         applicationSheet,
-        evaluationCriterion,
-        article,
+        evaluationCriterions,
+        articles,
+        comment,
       } = getOtherFields(el.protocol);
 
       el.applicationSheet = applicationSheet;
-      el.evaluationCriterion = evaluationCriterion;
-      el.article = article;
+      el.evaluationCriterions = evaluationCriterions;
+      el.articles = articles;
+      el.comment = comment;
 
       noticesArray.append(el);
     }
 
     result(null, noticesArray);
+  });
+};
+
+/**
+ * Finds the notices with the specific refernt.
+ *  @param {User} referent The referent professor of the notice.
+ *  @param {callback} result The callback that handles the response.
+ */
+Notice.findByReferent = (referent, result) => {
+  pool.query(`SELECT *
+              FROM ${table}
+              WHERE referent_professor = ?`,
+  referent,
+  (err, data) =>{
+    if (err) {
+      return result(err, null);
+    }
+
+    noticesArray = [];
+
+    for (const el of data) {
+      const {
+        applicationSheet,
+        evaluationCriterions,
+        articles,
+        comment,
+      } = getOtherFields(el.protocol);
+
+      el.applicationSheet = applicationSheet;
+      el.evaluationCriterions = evaluationCriterions;
+      el.articles = articles;
+      el.comment = comment;
+
+      noticesArray.append(el);
+    }
+
+    result(null, noticesArray);
+  });
+};
+
+/**
+ * Finds all the notices.
+ * @param {callback} result The callback that handles the response.
+ */
+Notice.findAll = (result) => {
+  pool.query(`SELECT *
+              FROM ${table}`,
+  (err, data) =>{
+    if (err) {
+      return result(err, null);
+    }
+
+    noticesArray = [];
+
+    for (const el of data) {
+      const {
+        applicationSheet,
+        evaluationCriterions,
+        articles,
+        comment,
+      } = getOtherFields(el.protocol);
+
+      el.applicationSheet = applicationSheet;
+      el.evaluationCriterions = evaluationCriterions;
+      el.articles = articles;
+      el.comment = comment;
+
+      noticesArray.append(el);
+    }
+
+    result(null, data);
+  });
+};
+
+/**
+ * Check if a notice exists.
+ * @param {Notice} notice The notice to check.
+ * @param {callback} result The callback that handles the repsonse.
+ */
+Notice.exists = (notice, result) => {
+  pool.query(`SELECT *
+              FROM ${table}
+              WHERE protocol = ?`,
+  notice.protocol,
+  (err, data) => {
+    if (err) {
+      return result(err, null);
+    }
+
+    result(null, data.length > 0);
   });
 };
 
@@ -238,8 +379,9 @@ Notice.findByState = (state, result) => {
 function getOtherFields(noticeProtocol) {
   otherFileds = {
     applicationSheet: [],
-    evaluationCriterion: [],
-    article: [],
+    evaluationCriterions: [],
+    articles: [],
+    comment: '',
   };
 
   applicationSheet.findByNotice(noticeProtocol, (err, data) => {
@@ -256,7 +398,7 @@ function getOtherFields(noticeProtocol) {
       return err;
     }
     for (const l of data) {
-      otherFileds.evaluationCriterion.append(l);
+      otherFileds.evaluationCriterions.append(l);
     }
   });
 
@@ -265,8 +407,15 @@ function getOtherFields(noticeProtocol) {
       return err;
     }
     for (const l of data) {
-      otherFileds.article.append(l);
+      otherFileds.articles.append(l);
     }
+  });
+
+  comment.findByProtocol(noticeProtocol, (err, data) =>{
+    if (err) {
+      return err;
+    }
+    otherFileds.comment = data;
   });
 
   return otherFileds;
