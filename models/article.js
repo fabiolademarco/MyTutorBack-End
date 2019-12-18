@@ -34,7 +34,7 @@ Article.create = (article, result) => {
   pool.query(`INSERT INTO ${table}
               SET ?`,
   article,
-  (err, data) =>{
+  (err, data) => {
     if (err) {
       return result(err, null);
     }
@@ -52,8 +52,9 @@ Article.update = (article, result) => {
               SET ?
               WHERE id = ?`,
   [article,
-    article.id],
-  (err, data) =>{
+    article.id,
+  ],
+  (err, data) => {
     if (err) {
       return result(err, null);
     }
@@ -71,12 +72,16 @@ Article.remove = (article, result) => {
               FROM ${table}
               WHERE id = ?`,
   article.id,
-  (err, data) =>{
+  (err, data) => {
     if (err) {
       return result(err, null);
     }
     result(null, data);
   });
+};
+
+Article.findById = (id, result) => {
+  // TODO
 };
 
 /**
@@ -94,6 +99,32 @@ Article.findByNotice = (noticeProtocol, result) => {
       return result(err, null);
     }
     result(null, data);
+  });
+};
+
+Article.findAll = (result) => {
+  pool.query(`SELECT *
+              FROM ${table}`,
+  (err, data) => {
+    if (err) {
+      return result(err, null);
+    }
+
+    result(null, data);
+  });
+};
+
+Article.exists = (article, result) =>{
+  pool.query(`SELECT *
+              FROM ${table}
+              WHERE id = ?`,
+  article.id,
+  (err, data) => {
+    if (err) {
+      return result(err, null);
+    }
+
+    result(null, data.length > 0);
   });
 };
 
