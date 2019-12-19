@@ -1,17 +1,19 @@
 const AssignmentControl = require('../controllers/assignmentControl');
 
 module.exports = (app) => {
-  app.post('/api/admin/assignments/sendRequest', AssignmentControl.sendRequest);
+  app.post('/api/assignments/request', AssignmentControl.sendRequest);
 
-  app.post('/api/student/assignments/book', AssignmentControl.book);
+  app.post('/api/assignments/book', AssignmentControl.book);
 
   /**
    * Search Route
    */
   app.get('/api/assignments/search', AssignmentControl.search);
 
-  app.post('/api/student/assignments/decline', AssignmentControl.decline);
+  app.post('/api/assignments/decline', AssignmentControl.decline);
 
-  app.get('/api/assignment/:id', AssignmentControl.find);
+  app.get('/api/assignments/:id', AssignmentControl.find);
+
+  app.post('/api/assignments/close', AssignmentControl.close);
 };
 

@@ -14,8 +14,8 @@
  *
  */
 const pool = require('../db');
-const applicationSheet = require('./application_sheet');
-const evaluationCriterion = require('./evalutation_criterion');
+const applicationSheet = require('./applicationSheet');
+const evaluationCriterion = require('./evalutationCriterion');
 const article = require('./article');
 const assignment = require('./assignment');
 const comment = require('./comment');
@@ -122,10 +122,10 @@ Notice.create = (notice, result) => {
     for (const tempAssignment of notice.assignments) {
       assignment.create(tempAssignment, (err, data) => {
         if (err) {
-          return result(err, null);
+          return err;
         }
 
-        result(null, data);
+        return data;
       },
       );
     }
@@ -189,6 +189,18 @@ Notice.update = (notice, result) => {
       }
     }
 
+    // Update all assignments correlate to the notice if it's necessary
+    if (notice.assignments) {
+      for (const assignment of notice.assignments) {
+        assignment.update(assignment, (err, data) => {
+          if (err) {
+            return err;
+          }
+          return data;
+        });
+      }
+    }
+
     result(null, data);
   });
 };
@@ -229,12 +241,14 @@ Notice.findByProtocol = (noticeProtocol, result) => {
 
     const tempNotice = data[0];
     const {
+      assignments,
       applicationSheet,
       evaluationCriterions,
       articles,
       comment,
     } = getOtherFields(protocol);
 
+    tempNotice.assignments = assignments;
     tempNotice.application_sheet = applicationSheet;
     tempNotice.evaluation_criterions = evaluationCriterions;
     tempNotice.articles = articles;
@@ -263,12 +277,14 @@ Notice.findByState = (state, result) => {
 
     for (const el of data) {
       const {
+        assignments,
         applicationSheet,
         evaluationCriterions,
         articles,
         comment,
       } = getOtherFields(el.protocol);
 
+      el.assignments = assignments;
       el.application_sheet = applicationSheet;
       el.evaluation_criterions = evaluationCriterions;
       el.articles = articles;
@@ -300,12 +316,14 @@ Notice.findByReferent = (referent, result) => {
 
     for (const el of data) {
       const {
+        assignments,
         applicationSheet,
         evaluationCriterions,
         articles,
         comment,
       } = getOtherFields(el.protocol);
 
+      el.assignments = assignments;
       el.application_sheet = applicationSheet;
       el.evaluation_criterions = evaluationCriterions;
       el.articles = articles;
@@ -334,21 +352,23 @@ Notice.findAll = (result) => {
 
     for (const el of data) {
       const {
+        assignments,
         applicationSheet,
         evaluationCriterions,
         articles,
         comment,
       } = getOtherFields(el.protocol);
 
+      el.assignments = assignments;
       el.application_sheet = applicationSheet;
       el.evaluation_criterions = evaluationCriterions;
       el.articles = articles;
       el.comment = comment;
 
-      noticesArray.append(el);
+      noticesArray.push(el);
     }
 
-    result(null, data);
+    result(null, noticesArray);
   });
 };
 
@@ -377,48 +397,56 @@ Notice.exists = (notice, result) => {
  * @return {Object} The object with the other fields stored in.
  */
 function getOtherFields(noticeProtocol) {
-  otherFileds = {
-    applicationSheet: [],
+  const otherFields = {
+    assignments: [],
+    applicationSheet: '',
     evaluationCriterions: [],
     articles: [],
     comment: '',
   };
 
+  assignment.findByNotice(noticeProtocol, (err, data) => {
+    if (err) {
+      return err;
+    }
+    for (const assignment of data) {
+      otherFields.assignments.push(assignment);
+    }
+  });
+
   applicationSheet.findByNotice(noticeProtocol, (err, data) => {
     if (err) {
       return err;
     }
-    for (const l of data) {
-      otherFileds.applicationSheet.append(l);
-    }
+    otherFields.applicationSheet = data[0];
   });
 
-  evaluationCriterion.findByNotice(noticeProtocol, (err, data) =>{
+  evaluationCriterion.findByNotice(noticeProtocol, (err, data) => {
     if (err) {
       return err;
     }
     for (const l of data) {
-      otherFileds.evaluationCriterions.append(l);
+      otherFields.evaluationCriterions.push(l);
     }
   });
 
-  article.findByNotice(noticeProtocol, (err, data) =>{
+  article.findByNotice(noticeProtocol, (err, data) => {
     if (err) {
       return err;
     }
     for (const l of data) {
-      otherFileds.articles.append(l);
+      otherFields.articles.push(l);
     }
   });
 
-  comment.findByProtocol(noticeProtocol, (err, data) =>{
+  comment.findByProtocol(noticeProtocol, (err, data) => {
     if (err) {
       return err;
     }
-    otherFileds.comment = data;
+    otherFields.comment = data[0];
   });
 
-  return otherFileds;
+  return otherFields;
 }
 
 module.exports = Notice;

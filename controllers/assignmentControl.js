@@ -22,7 +22,6 @@ const ERR_SERVER_STATUS = 500;
  */
 exports.sendRequest = (req, res) => {
   res.set('Content-Type', 'application/json');
-  console.log(req.body);
   const assignment = new Assignment(req.body.assignment);
   const emailStudent = req.body.emailStudent;
   // Bisogna  controllare che esista anche lo studente
@@ -34,14 +33,14 @@ exports.sendRequest = (req, res) => {
   }
   assignment.student = emailStudent;
   assignment.state = Assignment.states.WAITING;
-  Assignment.update(assignment, (err, data) => {
-    if (err) {
-      res.status(ERR_SERVER_STATUS).send({error: 'Aggiornamento fallito'});
-      return;
-    }
-    res.status(OK_STATUS).send(data);
-    // Inviare email
-  });
+  Assignment.update(assignment)
+      .then((data) => {
+        res.status(OK_STATUS).send(data);
+        // Inviare email
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS).send({error: 'Aggiornamento fallito'});
+      });
 };
 
 /**
@@ -60,14 +59,14 @@ exports.book = (req, res) => {
     return;
   }
   assignment.state = Assignment.states.BOOKED;
-  Assignment.update(assignment, (err, data) => {
-    if (err) {
-      res.status(ERR_SERVER_STATUS).send({error: false});
-      return;
-    }
-    res.status(OK_STATUS).send({result: true});
-    // Inviare email
-  });
+  Assignment.update(assignment)
+      .then((data) => {
+        res.status(OK_STATUS).send({result: true});
+        // Inviare email
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS).send({error: false});
+      });
 };
 
 /**
@@ -86,14 +85,14 @@ exports.assign = (req, res) => {
     return;
   }
   assignment.state = Assignment.states.BOOKED;
-  Assignment.update(assignment, (err, data) => {
-    if (err) {
-      res.status(ERR_SERVER_STATUS).send({error: false});
-      return;
-    }
-    res.status(OK_STATUS).send({result: true});
-    // Inviare email
-  });
+  Assignment.update(assignment)
+      .then((data) => {
+        res.status(OK_STATUS).send({result: true});
+        // Inviare email
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS).send({error: false});
+      });
 };
 
 /**
@@ -109,13 +108,13 @@ exports.search = (req, res) => {
     state: req.query.state,
     student: req.query.student,
   };
-  Assignment.search(filter, (err, data) => {
-    if (err) {
-      res.status(ERR_SERVER_STATUS).send({error: err});
-      return;
-    }
-    res.status(OK_STATUS).send({list: data});
-  });
+  Assignment.search(filter)
+      .then((data) => {
+        res.status(OK_STATUS).send({list: data});
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS).send({error: err});
+      });
 };
 
 /**
@@ -134,14 +133,14 @@ exports.decline = (req, res) => {
   }
   assignment.state = Assignment.states.UNASSIGNED;
   assignment.student = null;
-  Assignment.update(assignment, (err, data) => {
-    if (err) {
-      res.status(ERR_SERVER_STATUS).send({error: false});
-      return;
-    }
-    res.status(OK_STATUS).send({result: true});
-    // Inviare email
-  });
+  Assignment.update(assignment)
+      .then((data) => {
+        res.status(OK_STATUS).send({result: true});
+      // Inviare email
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS).send({error: false});
+      });
 };
 
 /**
@@ -158,15 +157,14 @@ exports.find = (req, res) => {
     res.status(ERR_CLIENT_STATUS).send({error: 'Id non passato'});
     return null;
   }
-  Assignment.findById(id, (err, data) => {
-    if (err) {
-      res.status(ERR_SERVER_STATUS).send({error: err});
-      return null;
-    }
-    data = data === undefined ? null : data;
-    res.status(OK_STATUS).send({assignment: data});
-    return data;
-  });
+  Assignment.findById(id)
+      .then((data) => {
+        data = data === undefined ? null : data;
+        res.status(OK_STATUS).send({assignment: data});
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS).send({error: err});
+      });
 };
 
 /**
@@ -184,13 +182,13 @@ exports.close = (req, res) => {
     return;
   }
   assignment.state = Assignment.states.OVER;
-  Assignment.update(assignment, (err, data) => {
-    if (err) {
-      res.status(ERR_SERVER_STATUS).send({error: false});
-      return;
-    }
-    res.status(OK_STATUS).send({error: true});
-  });
+  Assignment.update(assignment)
+      .then((data) => {
+        res.status(OK_STATUS).send({error: true});
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS).send({error: false});
+      });
 };
 
 
