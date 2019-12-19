@@ -10,6 +10,9 @@
  * 2019 - Copyright by Gang Of Four Eyes
  */
 const ApplicationSheet = require('../models/applicationSheet');
+const OK_STATUS = 200;
+const ERR_CLIENT_STATUS = 412;
+const ERR_SERVER_STATUS = 500;
 
 /** Handles the request for the creation of an application
  * @param {Request} req
@@ -17,17 +20,22 @@ const ApplicationSheet = require('../models/applicationSheet');
  *
  */
 exports.create = (req, res)=>{
+  res.set('Content-Type', 'application/json');
   const applicationSheet = req.body;
 
   if (applicationSheet == null) {
-    res.send(new Error('The application must not be null.'));
+    res.status(ERR_CLIENT_STATUS);
+    res.send({error: 'La domanda non può essere nulla.'});
+    return;
   }
 
   ApplicationSheet.create(applicationSheet, (err, data)=>{
     if (err) {
-      res.send(false);
+      res.status(ERR_SERVER_STATUS);
+      res.send({error: false});
+      return;
     }
-    res.send(true);
+    res.status(OK_STATUS).send({result: true});
   });
 };
 
@@ -38,17 +46,22 @@ exports.create = (req, res)=>{
  *
  */
 exports.update = (req, res)=>{
+  res.set('Content-Type', 'application/json');
   const applicationSheet=req.body;
 
   if (applicationSheet == null) {
-    res.send(new Error('The application must not be null.'));
+    res.status(ERR_CLIENT_STATUS);
+    res.send({error: 'La domanda non può essere nulla.'});
+    return;
   }
 
   ApplicationSheet.update(applicationSheet, (err, data)=>{
     if (err) {
-      res.send(new Error('The update could not be executed.'));
+      res.status(ERR_SERVER_STATUS);
+      res.send({error: 'The update could not be executed.'});
+      return;
     }
-    res.send(data);
+    res.status(OK_STATUS).send(data);
   });
 };
 
@@ -59,10 +72,13 @@ exports.update = (req, res)=>{
  *
  */
 exports.delete = (req, res)=>{
+  res.set('Content-Type', 'application/json');
   const noticeProtocol= req.body;
 
   if (applicationSheet == null) {
-    res.send(new Error('The application must not be null.'));
+    res.status(ERR_CLIENT_STATUS);
+    res.send({error: 'La domanda non può essere nulla.'});
+    return;
   }
   const applicationObject= new ApplicationSheet();
 
@@ -70,8 +86,10 @@ exports.delete = (req, res)=>{
 
   ApplicationSheet.remove(applicationObject, (err, data)=>{
     if (err) {
-      res.send(false);
+      res.status(ERR_SERVER_STATUS);
+      res.send({error: false});
+      return;
     }
-    res.send(true);
+    res.status(OK_STATUS).send({result: true});
   });
 };

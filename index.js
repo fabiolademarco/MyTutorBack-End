@@ -9,11 +9,10 @@ const bodyParser = require('body-parser');
 // let mysql = require('mysql');
 // Initialize the app
 const app = express();
-// Import db
-const pool = require('./db');
 // import services
 // ...
 const assignmentService = require('./services/assignmentService');
+const noticeService = require('./services/noticeService');
 
 app.use(function(req, res, next) {
   // Website you wish to allow to connect,
@@ -61,3 +60,5 @@ app.listen(port, function() {
 
 // AssignmentService routes
 assignmentService(app);
+noticeService(app);
+

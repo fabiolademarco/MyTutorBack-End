@@ -1,19 +1,15 @@
-/*
-+create(b : Bando): boolean
-+update(b : Bando): Bando
-+setStatus(b : Bando, status : int): boolean
-+delete(b : Bando): boolean
-+search(filter : string): List<Bando>
-+find(protocollo : string): Bando
-+findAll(): List<Bando>
-+getFileBando(protocollo : string): File
-+setFileBando(protocollo : string, f : File): File
-+getFileGraduatoria(protocollo : string): File
-+setFileGraduatoria(protocollo : string, f : File): boolean
-+generateBandoPdf(protocollo : string): boolean
-+generateGraduatoriaPdf(protocollo : string): boolean
-*/
+const NoticeControl = require('../controllers/noticeControl');
 
-const app = require('../index');
-
-const noticeControl = require('../controllers/noticeController');
+module.exports = (app) => {
+  app.put('/api/notices/create', NoticeControl.create);
+  app.patch('/api/notices/update', NoticeControl.update);
+  app.patch('/api/notices/state', NoticeControl.setStatus);
+  app.delete('/api/notices/:id', NoticeControl.delete);
+  app.get('/api/notices/search', NoticeControl.search);
+  app.get('/api/notices/search', NoticeControl.findAll);
+  app.get('/api/notices/:id', NoticeControl.find);
+  app.get('/api/notices/:id/pdf', NoticeControl.downloadNotice);
+  app.put('/api/notices/:id/pdf', NoticeControl.uploadNotice);
+  app.get('/api/notices/:id/grades', NoticeControl.downloadGradedList);
+  app.put('/api/notices/:id/grades', NoticeControl.uploadGradedList);
+};
