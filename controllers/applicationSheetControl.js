@@ -29,14 +29,15 @@ exports.create = (req, res)=>{
     return;
   }
 
-  ApplicationSheet.create(applicationSheet, (err, data)=>{
-    if (err) {
-      res.status(ERR_SERVER_STATUS);
-      res.send({error: false});
-      return;
-    }
-    res.status(OK_STATUS).send({result: true});
-  });
+  ApplicationSheet.create(applicationSheet)
+      .then((data)=>{
+        res.status(OK_STATUS).send({result: true});
+      })
+      .catch((err)=>{
+        res.status(ERR_SERVER_STATUS);
+        res.send({error: false});
+        return;
+      });
 };
 
 
@@ -55,14 +56,15 @@ exports.update = (req, res)=>{
     return;
   }
 
-  ApplicationSheet.update(applicationSheet, (err, data)=>{
-    if (err) {
-      res.status(ERR_SERVER_STATUS);
-      res.send({error: 'The update could not be executed.'});
-      return;
-    }
-    res.status(OK_STATUS).send(data);
-  });
+  ApplicationSheet.update(applicationSheet)
+      .then((data)=>{
+        res.status(OK_STATUS).send(data);
+      })
+      .catch((err)=>{
+        res.status(ERR_SERVER_STATUS);
+        res.send({error: 'The update could not be executed.'});
+        return;
+      });
 };
 
 
@@ -84,12 +86,13 @@ exports.delete = (req, res)=>{
 
   applicationObject.noticeProtocol=noticeProtocol;
 
-  ApplicationSheet.remove(applicationObject, (err, data)=>{
-    if (err) {
-      res.status(ERR_SERVER_STATUS);
-      res.send({error: false});
-      return;
-    }
-    res.status(OK_STATUS).send({result: true});
-  });
+  ApplicationSheet.remove(applicationObject)
+      .then((data)=>{
+        res.status(OK_STATUS).send({result: true});
+      })
+      .catch((err)=>{
+        res.status(ERR_SERVER_STATUS);
+        res.send({error: false});
+        return;
+      });
 };
