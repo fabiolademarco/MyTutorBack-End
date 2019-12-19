@@ -27,102 +27,107 @@ class Article {
   /**
    * Creates a new article in database.
    * @param {Article} article The article to save.
-   * @return {Promise} Promise object that represents the created Article
+   * @return {Promise<Article>} Promise object that represents the created Article
    */
   static create(article) {
     return pool.query(`INSERT INTO ${table} SET ?`, article)
-        .then((data) => {
-          article.id = data.insertId;
+        .then(([resultSetHeader]) => {
+          article.id = resultSetHeader.insertId;
           return article;
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
+
   /**
    * Update an article in database.
    * @param {Article} article The article to update.
-   * @return {Promise} Promise object that represents the updated Article
+   * @return {Promise<Article>} Promise object that represents the updated Article
    */
   static update(article) {
     return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [article, article.id])
-        .then((data) => {
-          return data;
+        .then(([resultSetHeader]) => {
+          return article;
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
+
   /**
    * Remove an article from database.
    * @param {Article} article The article to remove.
-   * @return {Promise} Promise that is true if the removal went right else it's false
+   * @return {Promise<boolean>} Promise that is true if the removal went right else it's false
    */
   static remove(article) {
     return pool.query(`DELETE FROM ${table} WHERE id = ?`, article.id)
-        .then((data) => {
-          return data.affectedRows > 0;
+        .then(([resultSetHeader]) => {
+          return resultSetHeader.affectedRows > 0;
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
+
   /**
    * Find the article with the specific id.
    * @param {Number} id The id of the article.
-   * @return {Promise} Promise that represents the Article having the passed id
+   * @return {Promise<Article>} Promise that represents the Article having the passed id
    */
   static findById(id) {
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, id)
-        .then((data) => {
-          return data;
+        .then(([rows, fields]) => {
+          return rows[0];
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
+
   /**
    * Finds the articles correlate to the specified notice.
    * @param {string} noticeProtocol The protocol of the notice.
-   * @return {Promise} Promise that represents the Articles related to the passed Notice protocol
+   * @return {Promise<Article[]>} Promise that represents the Articles related to the passed Notice protocol
    */
   static findByNotice(noticeProtocol) {
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
-        .then((data) => {
-          return data;
+        .then(([rows, fields]) => {
+          return rows;
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
+
   /**
    * Finds all the articles.
-   * @return {Promise} Promise that represents a list of all the Articles
+   * @return {Promise<Article[]>} Promise that represents a list of all the Articles
    */
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
-        .then((data) => {
-          return data;
+        .then(([rows, fields]) => {
+          return rows;
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
+
   /**
    * Check if an article exists.
    * @param {Article} article The article to check.
-   * @return {Promise} Promise that is true if the Article is in the db, else it's false
+   * @return {Promise<boolean>} Promise that is true if the Article is in the db, else it's false
    */
   static exists(article) {
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, article.id)
-        .then((data) => {
+        .then(([data]) => {
           return data.affectedRows > 0;
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
 }
-
 
 module.exports = Article;
