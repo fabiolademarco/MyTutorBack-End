@@ -22,7 +22,6 @@ const ERR_SERVER_STATUS = 500;
  */
 exports.sendRequest = (req, res) => {
   res.set('Content-Type', 'application/json');
-  console.log(req.body);
   const assignment = new Assignment(req.body.assignment);
   const emailStudent = req.body.emailStudent;
   // Bisogna  controllare che esista anche lo studente

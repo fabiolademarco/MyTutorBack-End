@@ -57,7 +57,7 @@ class Assignment {
     }
     return pool.query(`INSERT INTO ${table} SET ? `, assignment)
         .then((data) => {
-          assignment.id = data.insertId;
+          assignment.id = data[0].insertId;
           return assignment;
         })
         .catch((err) => {
@@ -89,7 +89,7 @@ class Assignment {
       return null;
     }
     return pool.query(`DELETE FROM ${table} WHERE id = ?`, assignment.id)
-        .then((data) => data.affectedRows > 0)
+        .then((data) => data[0].affectedRows > 0)
         .catch((err) => {
           throw err;
         });
@@ -104,7 +104,7 @@ class Assignment {
       return null;
     }
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, id)
-        .then((data) => new Assignment(data[0]))
+        .then((data) => new Assignment(data[0][0]))
         .catch((err) => {
           throw err;
         });
@@ -119,7 +119,7 @@ class Assignment {
       return null;
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
-        .then((data) => data.map((el) => new Assignment(el)))
+        .then((data) => data[0].map((el) => new Assignment(el)))
         .catch((err) => {
           throw err;
         });
@@ -134,7 +134,7 @@ class Assignment {
       return null;
     }
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, emailStudent)
-        .then((data) => data.map((i) => new Assignment(i)))
+        .then((data) => data[0].map((i) => new Assignment(i)))
         .catch((err) => {
           throw err;
         });
@@ -161,7 +161,7 @@ class Assignment {
       return null;
     }
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, assignment.id)
-        .then((data) => data.length > 0)
+        .then((data) => data[0].length > 0)
         .catch((err) => {
           throw err;
         });
@@ -199,7 +199,7 @@ class Assignment {
       params[params.length] = filter.student;
     }
     return pool.query(query, params)
-        .then((data) => data.map((a) => new Assignment(a)))
+        .then((data) => data[0].map((a) => new Assignment(a)))
         .catch((err) => {
           throw err;
         });
