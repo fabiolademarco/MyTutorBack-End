@@ -12,7 +12,7 @@
 
 const pool = require('../db');
 
-const table = 'evaulation_criterion';
+const table = 'evaluation_criterion';
 
 /**
  * EvaluationCriterion object constructor
@@ -126,7 +126,7 @@ EvalutationCriterion.findByNotice = (noticeProtocol, result) => {
   noticeProtocol,
   (err, data) => {
     if (err) {
-      return result(err. null);
+      return result(err, null);
     }
 
     result(null, data);
