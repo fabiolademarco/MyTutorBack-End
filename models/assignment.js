@@ -27,7 +27,7 @@ const titles = {
 class Assignment {
   /**
  * Assignment object constructor
- * @param {Assignment} assignment
+ * @param {Assignment} assignment The JS object that contains field for setting new Assignment object
  */
   constructor(assignment) {
     this.id = assignment.id;
@@ -49,15 +49,15 @@ class Assignment {
   /**
    * Creates a new Assignment.
    * @param {Assignment} assignment The assignment to save.
-   * @return {Promise} Promise object that represents the created Assignment.
+   * @return {Promise<Assignment>} Promise object that represents the created Assignment.
    */
   static create(assignment) {
-    if (assignment == null) {
+    if (assignment === null) {
       return null;
     }
     return pool.query(`INSERT INTO ${table} SET ? `, assignment)
-        .then((data) => {
-          assignment.id = data[0].insertId;
+        .then(([resultSetHeader]) => {
+          assignment.id = resultSetHeader.insertId;
           return assignment;
         })
         .catch((err) => {
@@ -67,14 +67,14 @@ class Assignment {
   /**
    * Updates an Assignment.
    * @param {Assignment} assignment The assignment to update.
-   * @return {Promise} Promise object that represents the updated Assignment.
+   * @return {Promise<Assignment>} Promise object that represents the updated Assignment.
    */
   static update(assignment) {
-    if (assignment == null) {
+    if (assignment === null) {
       return null;
     }
     return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [assignment, assignment.id])
-        .then((data) => assignment)
+        .then(([resultSetHeader]) => assignment)
         .catch((err) => {
           throw err;
         });
@@ -82,14 +82,14 @@ class Assignment {
   /**
    * Removes an Assignment.
    * @param {Assignment} assignment The assignment to remove.
-   * @return {Promise} Promise object that represents the result of the remove.
+   * @return {Promise<boolean>} Promise that is true if the removal went right else it's false.
    */
   static remove(assignment) {
-    if (assignment == null) {
+    if (assignment === null) {
       return null;
     }
     return pool.query(`DELETE FROM ${table} WHERE id = ?`, assignment.id)
-        .then((data) => data[0].affectedRows > 0)
+        .then(([resultSetHeader]) => resultSetHeader.affectedRows > 0)
         .catch((err) => {
           throw err;
         });
@@ -97,14 +97,14 @@ class Assignment {
   /**
    * Finds the assignment with the specified id.
    * @param {Number} id The id of an existing assignment.
-   * @return {Promise} Promise object that represents the result of the select.
+   * @return {Promise<Assignment>} Promise object that represents the assignment having the passed id.
    */
   static findById(id) {
-    if (id == null) {
+    if (id === null) {
       return null;
     }
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, id)
-        .then((data) => new Assignment(data[0][0]))
+        .then(([rows]) => new Assignment(rows[0]))
         .catch((err) => {
           throw err;
         });
@@ -112,14 +112,14 @@ class Assignment {
   /**
    * Finds the assignments of the specified notice.
    * @param {string} noticeProtocol The protocol of a notice.
-   * @return {Promise} Promise object that represents the result of the select.
+   * @return {Promise<Assignment[]>} Promise that represents the Assignments related to the passed Notice protocol.
    */
   static findByNotice(noticeProtocol) {
-    if (noticeProtocol == null) {
+    if (noticeProtocol === null) {
       return null;
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
-        .then((data) => data[0].map((el) => new Assignment(el)))
+        .then(([rows]) => rows.map((el) => new Assignment(el)))
         .catch((err) => {
           throw err;
         });
@@ -127,14 +127,14 @@ class Assignment {
   /**
    * Finds the assignments of a student.
    * @param {string} emailStudent The email of the student.
-   * @return {Promise} Promise object that represents the result of the select.
+   * @return {Promise<Assignment[]>} Promise that represents the Assignments related to the passed email Student.
    */
   static findByStudent(emailStudent) {
-    if (emailStudent == null) {
+    if (emailStudent === null) {
       return null;
     }
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, emailStudent)
-        .then((data) => data[0].map((i) => new Assignment(i)))
+        .then(([rows]) => rows.map((i) => new Assignment(i)))
         .catch((err) => {
           throw err;
         });
@@ -142,11 +142,11 @@ class Assignment {
   /**
    * Finds all the assignments.
    * @param {modelsCallback} result The callback that handles the response.
-   * @return {Promise} Promise object that represents the result of the select.
+   * @return {Promise<Assignment[]>} Promise that represents the list of all Assignments.
    */
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
-        .then((data) => data[0].map((a) => new Assignment(a)))
+        .then(([rows]) => rows.map((a) => new Assignment(a)))
         .catch((err) => {
           throw err;
         });
@@ -154,14 +154,14 @@ class Assignment {
   /**
    * Checks if an assignment exists.
    * @param {Assignment} assignment The assignment to check.
-   * @return {Promise} Promise object that represents the boolean value of the query.
+   * @return {Promise<boolean>} Promise that is true if the assignment is in the db, else it's false.
    */
   static exists(assignment) {
-    if (assignment == null) {
+    if (assignment === null) {
       return null;
     }
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, assignment.id)
-        .then((data) => data[0].length > 0)
+        .then(([rows]) => rows.length > 0)
         .catch((err) => {
           throw err;
         });
@@ -177,7 +177,7 @@ class Assignment {
   /**
    * Searches a list of assignments
    * @param {filter} filter An object specifying the search criteria.
-   * @return {Promise} Promise object that represents the result of the search.
+   * @return {Promise<Assignment[]>} Promise that represents the list of Assignments which respects the search criteria.
    */
   static search(filter) {
     let query = `SELECT * FROM ${table} WHERE true `;
@@ -199,7 +199,7 @@ class Assignment {
       params[params.length] = filter.student;
     }
     return pool.query(query, params)
-        .then((data) => data[0].map((a) => new Assignment(a)))
+        .then(([rows]) => rows[0].map((a) => new Assignment(a)))
         .catch((err) => {
           throw err;
         });
