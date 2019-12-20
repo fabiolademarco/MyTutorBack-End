@@ -121,8 +121,8 @@ class Article {
    */
   static exists(article) {
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, article.id)
-        .then(([data]) => {
-          return data.affectedRows > 0;
+        .then(([rows, fields]) => {
+          return rows.length > 0;
         })
         .catch((err) => {
           throw err.message;
