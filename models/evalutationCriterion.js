@@ -24,7 +24,7 @@ class EvalutationCriterion {
   constructor(evaluationCriterion) {
     this.notice_protocol = evaluationCriterion.notice_protocol;
     this.name = evaluationCriterion.name;
-    this.maxScore = evaluationCriterion.maxScore;
+    this.maxScore = evaluationCriterion.max_score;
   }
 
   /**
@@ -95,8 +95,9 @@ class EvalutationCriterion {
               WHERE notice_protocol = ?
                 AND name = ?`, [noticeProtocol,
       name])
-        .then((data) => {
-          return data;
+        .then(([rows]) => {
+          // return rows.map((criterion)=>new EvalutationCriterion(criterion));
+          return new EvalutationCriterion(rows[0]);
         })
         .catch((err) => {
           throw err;
@@ -111,8 +112,8 @@ class EvalutationCriterion {
     return pool.query(`SELECT *
               FROM ${table}
               WHERE notice_protocol = ?`, noticeProtocol)
-        .then((data) => {
-          return data;
+        .then(([rows]) => {
+          return rows.map((criterion)=>new EvalutationCriterion(criterion));
         })
         .catch((err) => {
           throw err;
@@ -126,8 +127,8 @@ class EvalutationCriterion {
   static findAll() {
     return pool.query(`SELECT *
               FROM ${table}`)
-        .then((data) => {
-          return data;
+        .then(([rows]) => {
+          return rows.map((criterion)=> new EvalutationCriterion(criterion));
         })
         .catch((err) => {
           throw err;
