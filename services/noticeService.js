@@ -6,7 +6,7 @@ module.exports = (app) => {
   app.patch('/api/notices/state', NoticeControl.setStatus);
   app.delete('/api/notices/:id', NoticeControl.delete);
   app.post('/api/notices/search', NoticeControl.search);
-  app.get('/api/notices/search', NoticeControl.findAll);
+  app.get('/api/notices', NoticeControl.findAll);
   app.get('/api/notices/:id', NoticeControl.find);
   app.get('/api/notices/:id/pdf', NoticeControl.downloadNotice);
   app.put('/api/notices/:id/pdf', NoticeControl.uploadNotice);
