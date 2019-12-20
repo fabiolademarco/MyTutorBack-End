@@ -78,7 +78,7 @@ class Article {
   static findById(id) {
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, id)
         .then(([rows, fields]) => {
-          return rows[0];
+          return new Article(rows[0]);
         })
         .catch((err) => {
           throw err.message;
@@ -93,7 +93,7 @@ class Article {
   static findByNotice(noticeProtocol) {
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
         .then(([rows, fields]) => {
-          return rows;
+          return rows.map((el) => new Article(el));
         })
         .catch((err) => {
           throw err.message;
@@ -107,7 +107,7 @@ class Article {
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows, fields]) => {
-          return rows;
+          return rows.map((er) => new Article(el));
         })
         .catch((err) => {
           throw err.message;
