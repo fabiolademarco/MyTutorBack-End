@@ -52,8 +52,8 @@ class Assignment {
    * @return {Promise<Assignment>} Promise object that represents the created Assignment.
    */
   static create(assignment) {
-    if (assignment === null) {
-      return null;
+    if (assignment === null || assignment === undefined) {
+      throw new Error('No Parameters');
     }
     return pool.query(`INSERT INTO ${table} SET ? `, assignment)
         .then(([resultSetHeader]) => {
@@ -61,7 +61,7 @@ class Assignment {
           return assignment;
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /**
@@ -70,13 +70,13 @@ class Assignment {
    * @return {Promise<Assignment>} Promise object that represents the updated Assignment.
    */
   static update(assignment) {
-    if (assignment === null) {
-      return null;
+    if (assignment === null || assignment === undefined) {
+      throw new Error('No Parameters');
     }
     return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [assignment, assignment.id])
         .then(([resultSetHeader]) => assignment)
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /**
@@ -85,13 +85,13 @@ class Assignment {
    * @return {Promise<boolean>} Promise that is true if the removal went right else it's false.
    */
   static remove(assignment) {
-    if (assignment === null) {
-      return null;
+    if (assignment === null || assignment === undefined) {
+      throw new Error('No Parameters');
     }
     return pool.query(`DELETE FROM ${table} WHERE id = ?`, assignment.id)
         .then(([resultSetHeader]) => resultSetHeader.affectedRows > 0)
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /**
@@ -100,13 +100,18 @@ class Assignment {
    * @return {Promise<Assignment>} Promise object that represents the assignment having the passed id.
    */
   static findById(id) {
-    if (id === null) {
-      return null;
+    if (id === null || id === undefined) {
+      throw new Error('No Parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, id)
-        .then(([rows]) => new Assignment(rows[0]))
+        .then(([rows]) => {
+          if (rows.length < 1) {
+            throw new Error(`No result found: ${id}`);
+          }
+          return new Assignment(rows[0]);
+        })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /**
@@ -115,13 +120,13 @@ class Assignment {
    * @return {Promise<Assignment[]>} Promise that represents the Assignments related to the passed Notice protocol.
    */
   static findByNotice(noticeProtocol) {
-    if (noticeProtocol === null) {
-      return null;
+    if (noticeProtocol === null || noticeProtocol === undefined) {
+      throw new Error('No Parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
         .then(([rows]) => rows.map((el) => new Assignment(el)))
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /**
@@ -130,25 +135,24 @@ class Assignment {
    * @return {Promise<Assignment[]>} Promise that represents the Assignments related to the passed email Student.
    */
   static findByStudent(emailStudent) {
-    if (emailStudent === null) {
-      return null;
+    if (emailStudent === null || emailStudent === undefined) {
+      throw new Error('No Parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, emailStudent)
         .then(([rows]) => rows.map((i) => new Assignment(i)))
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /**
    * Finds all the assignments.
-   * @param {modelsCallback} result The callback that handles the response.
    * @return {Promise<Assignment[]>} Promise that represents the list of all Assignments.
    */
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => rows.map((a) => new Assignment(a)))
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /**
@@ -157,13 +161,13 @@ class Assignment {
    * @return {Promise<boolean>} Promise that is true if the assignment is in the db, else it's false.
    */
   static exists(assignment) {
-    if (assignment === null) {
-      return null;
+    if (assignment === null || assignment === undefined) {
+      throw new Error('No parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, assignment.id)
         .then(([rows]) => rows.length > 0)
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /**
@@ -199,7 +203,7 @@ class Assignment {
       params[params.length] = filter.student;
     }
     return pool.query(query, params)
-        .then(([rows]) => rows[0].map((a) => new Assignment(a)))
+        .then(([rows]) => rows.map((a) => new Assignment(a)))
         .catch((err) => {
           throw err;
         });

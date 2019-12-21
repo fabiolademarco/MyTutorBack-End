@@ -29,15 +29,15 @@ class Comment {
    * @return {Promise<Comment>} Promise object that represents the created comment.
    */
   static create(comment) {
-    if (comment === null ) {
-      return null;
+    if (comment === null || comment === undefined) {
+      throw new Error('No parameters');
     }
     return pool.query(`INSERT INTO ${table} SET ?`, comment)
         .then(([resultSetHeader]) => {
           return comment;
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
 
@@ -47,13 +47,13 @@ class Comment {
    * @return {Promise<Comment>} Promise object that represents the updated comment.
    */
   static update(comment) {
-    if (comment === null) {
-      return null;
+    if (comment === null || comment === undefined) {
+      throw new Error('No parameters');
     }
     return pool.query(`UPDATE ${table} SET ? WHERE notice = ?`, [comment, comment.notice])
         .then(([resultSetHeader]) => comment)
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
 
@@ -63,13 +63,13 @@ class Comment {
    * @return {Promise<boolean>}  Promise that is true if the removal went right else it's false.
    */
   static remove(comment) {
-    if (comment === null) {
-      return null;
+    if (comment === null || comment === undefined) {
+      throw new Error('No parameters');
     }
     return pool.query(`DELETE FROM ${table} WHERE notice = ?`, comment.notice)
         .then(([resultSetHeader]) => resultSetHeader.affectedRows > 0)
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
 
@@ -79,13 +79,13 @@ class Comment {
    * @return {Promise<boolean>} Promise that is true if the comment exists in the db, else it's false
    */
   static exists(comment) {
-    if (comment === null) {
-      return null;
+    if (comment === null || comment === undefined) {
+      throw new Error('No parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice = ?`, comment.notice)
         .then(([rows]) => rows.lenght > 0)
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /**
@@ -94,15 +94,15 @@ class Comment {
    * @return {Promise<Comment>} Promise object that represents the Comment of the passed notice.
    */
   static findByProtocol(noticeProtocol) {
-    if (noticeProtocol === null) {
-      return null;
+    if (noticeProtocol === null || noticeProtocol === undefined) {
+      throw new Error('No parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice = ?`, noticeProtocol)
         .then(([rows]) => {
           return rows.lenght > 0 ? new Comment(rows[0]) : null;
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
 
@@ -114,7 +114,7 @@ class Comment {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => rows.map((c) => new Comment(c)))
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
 }
