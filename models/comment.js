@@ -98,7 +98,9 @@ class Comment {
       return null;
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice = ?`, noticeProtocol)
-        .then(([rows]) => new Comment(rows[0]))
+        .then(([rows]) => {
+          return rows.lenght > 0 ? new Comment(rows[0]) : null;
+        })
         .catch((err) => {
           throw err;
         });
