@@ -8,11 +8,28 @@ const Comment = require('./comment');
 const table = 'notice';
 
 /**
+ * Enum for all possible states of a notice
+ * @readonly
+ * @enum {string}
+ */
+const States = {
+  DRAFT: 'Draft',
+  IN_ACCEPTANCE: 'In Acceptance',
+  ACCEPTED: 'Accepted',
+  IN_APPROVAL: 'In Approval',
+  APPROVED: 'Approved',
+  PUBLISHED: 'Published',
+  EXPIRED: 'Expired',
+  WAITING_FOR_GRADED_LIST: 'Waiting for Graded List',
+  CLOSED: 'Closed',
+};
+
+/**
  * Notice
  *
  * This class represents a Notice
  *
- * @author Francesco Migliaro
+ * @author Francesco Migliaro, Marco D'Antonio
  * @version
  * @since
  *
@@ -54,10 +71,12 @@ class Notice {
    * Creates a new notice in database.
    * @param {Notice} notice The notice to save.
    * @return {Promise<Notice>} Promise that represents the created Notice
+   *
+   * @todo Sistemare: capire bene cosa occorre creare e cosa non è responsabilità della classe
+   *
    */
   static create(notice) {
     return pool.query(`INSERT INTO ${table} SET ?`, notice)
-        .then(([resultSetHeader]) => article.id = resultSetHeader.insertId)
         .then(() => ApplicationSheet.create(notice.application_sheet))
         .then(() => notice.evaluation_criterions.forEach((ec) => EvaluationCriterion.create(ec)))
         .then(() => notice.articles.forEach((art) => Article.create(art)))
@@ -72,6 +91,9 @@ class Notice {
    * Update a notice in database.
    * @param {Notice} notice The notice to update.
    * @return {Promise<Notice>} Promise that represents the updated notice
+   *
+   * @todo Sistemare: capire se funziona e se bisogna aggiornare eliminare o creare cose
+   *
    */
   static update(notice) {
     return pool.query(`UPDATE ${table} SET ? WHERE protocol = ?`, [notice, notice.protocol])
@@ -124,15 +146,21 @@ class Notice {
   static findByProtocol(noticeProtocol) {
     return pool.query(`SELECT * FROM ${table} WHERE protocol = ?`, noticeProtocol)
         .then(([rows]) => {
-          const tempNotice = rows[0];
-          return getOtherFields(protocol)
+          const notice = rows[0];
+          if (notice === undefined) {
+            throw new Error('0 results found for protocol: ' + noticeProtocol);
+          }
+          return getOtherFields(notice.protocol)
               .then(({assignments, applicationSheet, evaluationCriterions, articles, comment}) => {
-                tempNotice.assignments = assignments;
-                tempNotice.application_sheet = applicationSheet;
-                tempNotice.evaluation_criterions = evaluationCriterions;
-                tempNotice.articles = articles;
-                tempNotice.comment = comment;
-                return new Notice(tempNotice);
+                notice.assignments = assignments;
+                notice.application_sheet = applicationSheet;
+                notice.evaluation_criterions = evaluationCriterions;
+                notice.articles = articles;
+                notice.comment = comment;
+                return new Notice(notice);
+              })
+              .catch((err) => {
+                throw err;
               });
         })
         .catch((err) => {
@@ -148,9 +176,8 @@ class Notice {
   static findByState(state) {
     return pool.query(`SELECT * FROM ${table} WHERE state = ?`, state)
         .then(([rows]) => {
-          const notices = [];
-          rows.forEach((notice) => {
-            notices.push(getOtherFields(notice.protocol)
+          return Promise.all(rows.map((notice) =>
+            getOtherFields(notice.protocol)
                 .then(({assignments, applicationSheet, evaluationCriterions, articles, comment}) => {
                   notice.assignments = assignments;
                   notice.application_sheet = applicationSheet;
@@ -158,11 +185,15 @@ class Notice {
                   notice.articles = articles;
                   notice.comment = comment;
                   return new Notice(notice);
-                }));
-          });
-        })
-        .catch((err) => {
-          throw err.message;
+                })
+                .catch((err) => {
+                  throw err;
+                }),
+          ),
+          )
+              .catch((err) => {
+                throw err.message;
+              });
         });
   }
 
@@ -174,9 +205,8 @@ class Notice {
   static findByReferent(referent) {
     return pool.query(`SELECT * FROM ${table} WHERE referent_professor = ?`, referent)
         .then(([rows]) => {
-          const notices = [];
-          rows.forEach((notice) => {
-            notices.push(getOtherFields(notice.protocol)
+          return Promise.all(rows.map((notice) =>
+            getOtherFields(notice.protocol)
                 .then(({assignments, applicationSheet, evaluationCriterions, articles, comment}) => {
                   notice.assignments = assignments;
                   notice.application_sheet = applicationSheet;
@@ -184,11 +214,15 @@ class Notice {
                   notice.articles = articles;
                   notice.comment = comment;
                   return new Notice(notice);
-                }));
-          });
-        })
-        .catch((err) => {
-          throw err.message;
+                })
+                .catch((err) => {
+                  throw err;
+                }),
+          ),
+          )
+              .catch((err) => {
+                throw err.message;
+              });
         });
   }
 
@@ -199,9 +233,8 @@ class Notice {
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => {
-          const notices = [];
-          rows.forEach((notice) => {
-            notices.push(getOtherFields(notice.protocol)
+          return Promise.all(rows.map((notice) =>
+            getOtherFields(notice.protocol)
                 .then(({assignments, applicationSheet, evaluationCriterions, articles, comment}) => {
                   notice.assignments = assignments;
                   notice.application_sheet = applicationSheet;
@@ -209,11 +242,15 @@ class Notice {
                   notice.articles = articles;
                   notice.comment = comment;
                   return new Notice(notice);
-                }));
-          });
-        })
-        .catch((err) => {
-          throw err.message;
+                })
+                .catch((err) => {
+                  throw err;
+                }),
+          ),
+          )
+              .catch((err) => {
+                throw err.message;
+              });
         });
   }
 
@@ -222,7 +259,7 @@ class Notice {
    * @param {Notice} notice The notice to check.
    * @param {callback} result The callback that handles the response.
    */
-  static exists(notice, result) {
+  static exists(notice) {
     pool.query(`SELECT * FROM ${table} WHERE protocol = ?`, notice.protocol)
         .then(([rows]) => {
           return rows.length > 0;
@@ -232,24 +269,6 @@ class Notice {
         });
   }
 }
-
-/**
- * Enum for all possible states of a notice
- * @readonly
- * @enum {string}
- */
-Notice.States = {
-  DRAFT: 'Draft',
-  IN_ACCEPTANCE: 'In Acceptance',
-  ACCEPTED: 'Accepted',
-  IN_APPROVAL: 'In Approval',
-  APPROVED: 'Approved',
-  PUBLISHED: 'Published',
-  EXPIRED: 'Expired',
-  WAITING_FOR_GRADED_LIST: 'Waiting for Graded List',
-  CLOSED: 'Closed',
-};
-
 
 /**
  * This function retrieve other fields of a notice.
@@ -267,11 +286,11 @@ function getOtherFields(noticeProtocol) {
 
   return Promise.all([
 
-    Assignment.findByNotice(noticeProtocol).then((assignments) => assignments.forEach((a) => otherFields.assignments.push(a))),
-    ApplicationSheet.findByNotice(noticeProtocol).then((applicationSheet) => otherFields.applicationSheet = applicationSheet),
-    EvaluationCriterion.findByNotice((criteria) => criteria.forEach((c) => otherFields.evaluationCriterions.push(c))),
-    Article.findByNotice(noticeProtocol).then((articles) => articles.forEach((a) => otherFields.articles.push(a))),
-    Comment.findByNotice(noticeProtocol).then((comment) => otherFields.comment = comment),
+    Assignment.findByNotice(noticeProtocol).then((assignments) => assignments.forEach((a) => otherFields.assignments.push(a))).catch((err) => console.log(err)),
+    ApplicationSheet.findByNotice(noticeProtocol).then((applicationSheet) => otherFields.applicationSheet = applicationSheet).catch((err) => console.log(err)),
+    EvaluationCriterion.findByNotice(noticeProtocol).then((criteria) => criteria.forEach((c) => otherFields.evaluationCriterions.push(c))).catch((err) => console.log(err)),
+    Article.findByNotice(noticeProtocol).then((articles) => articles.forEach((a) => otherFields.articles.push(a))).catch((err) => console.log(err)),
+    Comment.findByProtocol(noticeProtocol).then((comment) => otherFields.comment = comment).catch((err) => console.log(err)),
 
   ])
       .then(() => otherFields)
@@ -279,5 +298,7 @@ function getOtherFields(noticeProtocol) {
         throw err.message;
       });
 }
+
+Notice.States = States;
 
 module.exports = Notice;

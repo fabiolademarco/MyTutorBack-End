@@ -31,11 +31,11 @@ class ApplicationSheet {
       return 'Il parametro passato è nullo';
     }
     return pool.query(`INSERT INTO ${table} SET`, applicationSheet)
-        .then((data) => {
+        .then(([resultSetHeader]) => {
           return applicationSheet;
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /** Updates an applicatin sheet
@@ -49,11 +49,11 @@ class ApplicationSheet {
     }
     return pool.query(`UPDATE ${table} SET ? where notice_protocol = 
   ${applicationSheet.noticeProtocol}`, applicationSheet)
-        .then((data) => {
+        .then(([resultSetHeader]) => {
           return applicationSheet;
         })
         .then((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /** Removes an application sheet
@@ -67,11 +67,11 @@ class ApplicationSheet {
     }
     return pool.query(`DELETE FROM ${table} WHERE notice_protocol = 
   ${applicationSheet.noticeProtocol}`)
-        .then(((data) => {
-          return applicationSheet;
+        .then((([resultSetHeader]) => {
+          return resultSetHeader.affectedRows > 0;
         }))
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /** Finds an application sheet based on the protocol
@@ -84,11 +84,11 @@ class ApplicationSheet {
       return null;
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
-        .then((data) => {
-          return data;
+        .then(([rows]) => {
+          return new ApplicationSheet(rows[0]);
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
   /** Returns application sheet table content
@@ -97,11 +97,11 @@ class ApplicationSheet {
    */
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
-        .then((data) => {
-          return data;
+        .then(([rows]) => {
+          return rows.map((as) => new ApplicationSheet(as));
         })
         .catch((err) => {
-          throw err;
+          throw err.message;
         });
   }
 }

@@ -6,7 +6,7 @@ const table = 'article';
  *
  * This class represents an article
  *
- * @author Francesco Migliaro
+ * @author Francesco Migliaro, Marco D'Antonio
  * @version
  * @since
  *
