@@ -55,7 +55,7 @@ const port = process.env.EXPRESS_PORT;
 
 // Launch app to listen to specified port
 app.listen(port, function() {
-  console.log('Running RestHub on port ' + port);
+  console.log('Running MyTutor-Back on port ' + port);
 });
 
 // AssignmentService routes

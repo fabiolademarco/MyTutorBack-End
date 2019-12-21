@@ -70,7 +70,7 @@ exports.find = (req, res) => {
 
   const id = req.params.protocol;
   if (id === null || Number.parseInt(protocol) === NaN) {
-    res.status(412)
+    res.status(ERR_CLIENT_STATUS)
         .send({error: 'Invalid protocol number'});
     return;
   }
