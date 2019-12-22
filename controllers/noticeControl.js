@@ -70,9 +70,7 @@ exports.find = (req, res) => {
 
   const id = req.params.id;
   if (id === null || Number.parseInt(id) === NaN) {
-    res.status(ERR_CLIENT_STATUS)
-        .send({error: 'Invalid protocol number'});
-    return;
+    return res.status(ERR_CLIENT_STATUS).send({error: 'Invalid protocol number'});
   }
 
   Notice.findByProtocol(id)
@@ -92,7 +90,7 @@ exports.findAll = (req, res) => {
         return res.send({notices: notices});
       })
       .catch((err) => {
-        res.send(ERR_SERVER_STATUS).send({error: err});
+        return res.status(ERR_SERVER_STATUS).send({error: err});
       });
 };
 
