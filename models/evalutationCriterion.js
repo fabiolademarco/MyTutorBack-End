@@ -96,8 +96,7 @@ class EvalutationCriterion {
                 AND name = ?`, [noticeProtocol,
       name])
         .then(([rows]) => {
-          // return rows.map((criterion)=>new EvalutationCriterion(criterion));
-          return new EvalutationCriterion(rows[0]);
+          return (rows[0] === undefined)?rows:new EvalutationCriterion(rows[0]);
         })
         .catch((err) => {
           throw err;
