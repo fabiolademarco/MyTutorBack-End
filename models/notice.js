@@ -286,11 +286,25 @@ function getOtherFields(noticeProtocol) {
 
   return Promise.all([
 
-    Assignment.findByNotice(noticeProtocol).then((assignments) => assignments.forEach((a) => otherFields.assignments.push(a))).catch((err) => console.log(err)),
-    ApplicationSheet.findByNotice(noticeProtocol).then((applicationSheet) => otherFields.applicationSheet = applicationSheet).catch((err) => console.log(err)),
-    EvaluationCriterion.findByNotice(noticeProtocol).then((criteria) => criteria.forEach((c) => otherFields.evaluationCriterions.push(c))).catch((err) => console.log(err)),
-    Article.findByNotice(noticeProtocol).then((articles) => articles.forEach((a) => otherFields.articles.push(a))).catch((err) => console.log(err)),
-    Comment.findByProtocol(noticeProtocol).then((comment) => otherFields.comment = comment).catch((err) => console.log(err)),
+    Assignment.findByNotice(noticeProtocol)
+        .then((assignments) => assignments.forEach((a) => otherFields.assignments.push(a)))
+        .catch((err) => console.log(err)),
+
+    ApplicationSheet.findByNotice(noticeProtocol)
+        .then((applicationSheet) => otherFields.applicationSheet = applicationSheet)
+        .catch((err) => console.log(err)),
+
+    EvaluationCriterion.findByNotice(noticeProtocol)
+        .then((criteria) => criteria.forEach((c) => otherFields.evaluationCriterions.push(c)))
+        .catch((err) => console.log(err)),
+
+    Article.findByNotice(noticeProtocol)
+        .then((articles) => articles.forEach((a) => otherFields.articles.push(a)))
+        .catch((err) => console.log(err)),
+
+    Comment.findByProtocol(noticeProtocol)
+        .then((comment) => otherFields.comment = comment)
+        .catch((err) => console.log(err)),
 
   ])
       .then(() => otherFields)
