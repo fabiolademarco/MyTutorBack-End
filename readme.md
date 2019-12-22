@@ -6,6 +6,11 @@
 
 ## Running MyTutor Backend
 
+### Creating and populating the DB
+First of all, you have to create an populate the database. Scripts are located into `db_scripts` folder.
+Run `MyTutorDatabase_Script.sql` and then `MyTutorDB_script_populator.sql`. In the db creation script is
+also created a user that you can use to log in into the db (**This should not be used in production**).
+
 ### Setting up Node.js dependencies
 After you've imported the project you should run the command `npm install` in the project folder
 
