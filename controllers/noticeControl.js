@@ -68,8 +68,8 @@ exports.search = (req, res) => {
 exports.find = (req, res) => {
   res.set('Content-Type', 'application/json');
 
-  const id = req.params.protocol;
-  if (id === null || Number.parseInt(protocol) === NaN) {
+  const id = req.params.id;
+  if (id === null || Number.parseInt(id) === NaN) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Invalid protocol number'});
     return;
