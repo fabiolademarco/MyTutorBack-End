@@ -61,7 +61,7 @@ class Notice {
     this.notice_file = notice.notice_file;
     this.graded_list_file = notice.graded_list_file;
     this.articles = notice.articles;
-    this.evaluation_criterions = notice.evaluation_criterions;
+    this.evaluation_criteria = notice.evaluation_criteria;
     this.application_sheet = notice.application_sheet;
     this.assignments = notice.assignments;
     this.comment = notice.comment;
@@ -78,7 +78,7 @@ class Notice {
   static create(notice) {
     return pool.query(`INSERT INTO ${table} SET ?`, notice)
         .then(() => ApplicationSheet.create(notice.application_sheet))
-        .then(() => notice.evaluation_criterions.forEach((ec) => EvaluationCriterion.create(ec)))
+        .then(() => notice.evaluation_criteria.forEach((ec) => EvaluationCriterion.create(ec)))
         .then(() => notice.articles.forEach((art) => Article.create(art)))
         .then(() => notice.assignments.forEach((assign) => Assignment.create(assign)))
         .then(() => notice)
@@ -103,8 +103,8 @@ class Notice {
           }
         })
         .then(() => {
-          if (notice.evaluation_criterions) {
-            return notice.evaluation_criterions.forEach(((ec) => EvaluationCriterion.update(ec)));
+          if (notice.evaluation_criteria) {
+            return notice.evaluation_criteria.forEach(((ec) => EvaluationCriterion.update(ec)));
           }
         })
         .then(() => {
