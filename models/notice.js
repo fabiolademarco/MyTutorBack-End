@@ -42,7 +42,7 @@ class Notice {
    */
   constructor(notice) {
     this.protocol = notice.protocol;
-    this.referent_professor = notice.referent_professor ? new User(notice.referent_professor) : null;
+    this.referent_professor = notice.referent_professor;
     this.description = notice.description;
     this.notice_subject = notice.notice_subject;
     this.admission_requirements = notice.admission_requirements;
@@ -60,7 +60,7 @@ class Notice {
     this.notice_file = notice.notice_file;
     this.graded_list_file = notice.graded_list_file;
     this.articles = notice.articles ? notice.articles.map((art) => new Article(art)) : null;
-    this.evaluation_criteria = notice.evaluation_criteria ? notice.evaluation_criteria.map((ec) => new EvaluationCriterion(ec)) : null;
+    this.evaluation_criterion = notice.evaluation_criterion ? notice.evaluation_criterion.map((ec) => new EvaluationCriterion(ec)) : null;
     this.application_sheet = notice.application_sheet ? new ApplicationSheet(notice.application_sheet) : null;
     this.assignments = notice.assignments ? notice.assignments.map((assign) => new Assignment(assign)) : null;
     this.comment = notice.comment ? new Comment(notice.comment) : null;
@@ -71,16 +71,34 @@ class Notice {
    * @param {Notice} notice The notice to save.
    * @return {Promise<Notice>} Promise that represents the created Notice
    *
-   * @todo Sistemare: capire bene cosa occorre creare e cosa non è responsabilità della classe
+   * @todo Sistemare
    *
    */
   static create(notice) {
+    const articles = JSON.parse(JSON.stringify(notice.articles));
+    const evaluationCriteria = JSON.parse(JSON.stringify(notice.evaluation_criterion));
+    const assignments = JSON.parse(JSON.stringify(notice.assignments));
+    const applicationSheet = JSON.parse(JSON.stringify(notice.application_sheet));
+
+    delete notice.articles;
+    delete notice.evaluation_criterion;
+    delete notice.assignments;
+    delete notice.application_sheet;
+    delete notice.comment;
+
     return pool.query(`INSERT INTO ${table} SET ?`, notice)
-        .then(() => notice.articles.forEach((art) => Article.create(art)))
-        .then(() => notice.evaluation_criteria.forEach((ec) => EvaluationCriterion.create(ec)))
-        .then(() => notice.assignments.forEach((assign) => Assignment.create(assign)))
-        .then(() => ApplicationSheet.create(notice.application_sheet))
-        .then(() => notice)
+        .then(() => articles.forEach((art) => Article.create(art)))
+        .then(() => evaluationCriteria.forEach((ec) => EvaluationCriterion.create(ec)))
+        .then(() => assignments.forEach((assign) => Assignment.create(assign)))
+        .then(() => ApplicationSheet.create(applicationSheet))
+        .then(() => {
+          notice.articles = articles;
+          notice.evaluation_criterion = evaluationCriteria;
+          notice.assignments = assignments;
+          notice.application_sheet = applicationSheet;
+
+          return notice;
+        })
         .catch((err) => {
           throw err.message;
         });
@@ -91,47 +109,67 @@ class Notice {
    * @param {Notice} notice The notice to update.
    * @return {Promise<Notice>} Promise that represents the updated notice
    *
-   * @todo Sistemare: capire se funziona e se bisogna aggiornare eliminare o creare cose
+   * @todo Sistemare
    *
    */
   static update(notice) {
+    const articles = JSON.parse(JSON.stringify(notice.articles));
+    const evaluationCriteria = JSON.parse(JSON.stringify(notice.evaluation_criterion));
+    const assignments = JSON.parse(JSON.stringify(notice.assignments));
+    const applicationSheet = JSON.parse(JSON.stringify(notice.application_sheet));
+
+    delete notice.articles;
+    delete notice.evaluation_criterion;
+    delete notice.assignments;
+    delete notice.application_sheet;
+    delete notice.comment;
+
     return pool.query(`UPDATE ${table} SET ? WHERE protocol = ?`, [notice, notice.protocol])
         .then(() => {
           if (notice.application_sheet) {
-            return ApplicationSheet.update(notice.application_sheet);
+            return ApplicationSheet.update(applicationSheet);
           }
         })
         .then(() => {
-          if (notice.evaluation_criteria) {
-            const dbEvaluationCriteria = EvaluationCriterion.findByNotice(notice.protocol);
+          if (evaluationCriteria) {
+            return EvaluationCriterion.findByNotice(notice.protocol)
+                .then((dbEvaluationCriteria) => {
+                  const actions = getActionsToPerform(dbEvaluationCriteria, evaluationCriteria);
 
-            const dbECNames = dbEvaluationCriteria.map((ec) => ec.name);
-            const ecNames = notice.evaluation_criteria.map((ec) => name);
-
-            const criteriaToUpdate = notice.evaluation_criteria.filter((ec) => dbECNames.includes(ec.name));
-            const criteriaToCreate = notice.evaluation_criteria.filter((ec) => !dbECNames.includes(ec.name));
-            const criteriaToRemove = dbEvaluationCriteria.filter((ec) => !ecNames.includes(ec.name));
-
-            return Promise.all([
-              Promise.all(criteriaToUpdate.map((c) => EvaluationCriterion.update(c))),
-              Promise.all(criteriaToCreate.map((c) => EvaluationCriterion.create(c))),
-              Promise.all(criteriaToRemove.map((c) => EvaluationCriterion.remove(c))),
-            ]);
+                  return Promise.all(performActions(EvaluationCriterion, actions));
+                });
           }
         })
         .then(() => {
-          if (notice.articles) {
-            return notice.articles.forEach((art) => Article.update(art));
+          if (articles) {
+            return Article.findByNotice(notice.protocol)
+                .then((dbArticles) => {
+                  const actions = getActionsToPerform(dbArticles, articles);
+
+                  return Promise.all(performActions(Article, actions));
+                });
           }
         })
         .then(() => {
-          if (notice.assignments) {
-            return notice.assignments.forEach((assign) => Assignment.update(assign));
+          if (assignments) {
+            return Assignment.findByNotice(notice.protocol)
+                .then((dbAssignments) => {
+                  const actions = getActionsToPerform(dbAssignments, assignments);
+
+                  return Promise.all(performActions(Assignment, actions));
+                });
           }
         })
-        .then(() => notice)
+        .then(() => {
+          notice.articles = articles;
+          notice.evaluation_criterion = evaluationCriteria;
+          notice.assignments = assignments;
+          notice.application_sheet = applicationSheet;
+
+          return notice;
+        })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -323,6 +361,64 @@ function getOtherFields(noticeProtocol) {
       .catch((err) => {
         throw err.message;
       });
+}
+
+/**
+ * This function is used to decide which actions are to perform on the db and the received objects
+ * @param {*[]} dbElements
+ * @param {*[]} receivedElements
+ * @return {Map<*>}
+ */
+function getActionsToPerform(dbElements, receivedElements) {
+  const map = new Map();
+
+  let field = '';
+
+  if (dbElements[0].name) {
+    field = 'name';
+  } else {
+    field = 'id';
+  }
+
+  if (dbElements.length > 0) {
+    dbElements.forEach((el) => map.set(el[field], {action: 'REMOVE', element: el}));
+  }
+
+  receivedElements.forEach((el) => {
+    if (map.has(el[field])) {
+      map.set(el[field], {action: 'UPDATE', element: el});
+    } else {
+      map.set(el[field], {action: 'CREATE', element: el});
+    }
+  });
+
+  return map;
+}
+
+/**
+ * This function performs the CRUD actions.
+ * @param {class} Class
+ * @param {*[]} actions
+ * @return {Promise[]}
+ */
+function performActions(Class, actions) {
+  const promises = [];
+
+  actions.forEach((value) => {
+    switch (value.action) {
+      case 'CREATE':
+        promises.push(Class.create(value.element));
+        break;
+      case 'UPDATE':
+        promises.push(Class.update(value.element));
+        break;
+      case 'REMOVE':
+        promises.push(Class.remove(value.element));
+        break;
+    }
+  });
+
+  return promises;
 }
 
 Notice.States = States;
