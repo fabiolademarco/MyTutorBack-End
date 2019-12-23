@@ -1,5 +1,11 @@
 const pool = require('../db');
 const table = 'user';
+const role = {
+  STUDENT: 'Student',
+  PROFESSOR: 'Professor',
+  DDI: 'DDI',
+  TEACHING_OFFICE: 'Teaching Office',
+};
 
 /*
 +create(u : Utente): Utente
@@ -29,7 +35,7 @@ class User {
  */
   constructor(user) {
     this.email = user.email,
-    this.passwors = user.password,
+    this.password = user.password,
     this.name = user.name,
     this.surname = user.surname,
     this.role = user.role,
@@ -117,7 +123,7 @@ class User {
           throw err;
         });
   }
-  /** Finds user by role
+  /** Finds users by role
    * @param {string} role The role used to find the user
    * @return {Promise} The promise reresenting the fulfillment of the search request
    */
@@ -128,7 +134,7 @@ class User {
 
     return pool.query(`SELECT * FROM ${table} WHERE role=?`, role)
         .then(([rows])=>{
-          return rows.map((user)=>new User(user));
+          return rows.map((u) => new User(u));
         })
         .catch((err)=>{
           throw err;
@@ -167,6 +173,7 @@ class User {
   }
 }
 
+User.Role = role;
 
 module.exports=User;
 

@@ -22,7 +22,7 @@ class Student extends User {
   constructor(student) {
     super(student);
     this.registration_number = student.registration_number;
-    this.birth_date = student.birth_date;
+    this.birth_date = student.birth_date.getTime() !== NaN ? student.birth_date : null;
   }
 
   /**
@@ -32,13 +32,14 @@ class Student extends User {
    */
   static create(student) {
     if (student === null || student === undefined) {
-      throw new Error('No parameters');
+      throw new Error('The parameter student can not be null or undefined');
     }
-    return User.create(student)
-        .then((student) => {
-          return pool.query(`INSERT INTO ${table} SET ?`, [student.email, student])
+    const user = new User(student);
+    return super.create(user)
+        .then((user) => {
+          return pool.query(`INSERT INTO ${table} VALUES(?, ?, ?)`, [student.email, student.registration_number, student.birth_date])
               .then(([resultSetHeader]) => {
-                return student;
+                return new Student(student);
               })
               .catch((err) => {
                 throw err.message;
@@ -56,13 +57,14 @@ class Student extends User {
    */
   static update(student) {
     if (student === null || student === undefined) {
-      throw new Error('No parameters');
+      throw new Error('The parameter student can not be null or undefined');
     }
-    return User.update(student)
+    const user = new User(student);
+    return super.update(user)
         .then((user) => {
-          return pool.query(`UPDATE ${table} SET ? WHERE user_mail = ?`, [student, student.email])
-              .then(([resultSetHeader]) => {
-                return student;
+          return pool.query(`UPDATE ${table} SET registration_number = ?, birth_date = ?  WHERE user_email = ?`, [student.registration_number, student.birth_date, student.email])
+              .then(() => {
+                return new Student(student);
               })
               .catch((err) => {
                 throw err.message;
@@ -80,11 +82,11 @@ class Student extends User {
    */
   static findByEmail(email) {
     if (email === null || email === undefined) {
-      throw new Error('No email passed');
+      throw new Error('The parameter email can not be null or undefined');
     }
     return User.findByEmail(email)
         .then((user) => {
-          return pool.query(`SELECT * FROM ${table} WHERE user_mail = ?`, email)
+          return pool.query(`SELECT * FROM ${table} WHERE user_email = ?`, email)
               .then(([rows]) => {
                 if (rows.length < 1) {
                   throw new Error(`No result found: ${email}`);
@@ -106,7 +108,7 @@ class Student extends User {
    * @return {Promise<Student[]>} Promise object that returns the list of Student.
    */
   static findAll() {
-    return User.findByRole(User.STUDENT)
+    return User.findByRole(User.Role.STUDENT)
         .then((users) => {
           return Promise.all(users.map((user) => {
             return this.findByEmail(user.email);
