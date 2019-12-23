@@ -46,6 +46,7 @@ class User {
     }
     return pool.query(`INSERT INTO ${table} SET ?`, user )
         .then((data)=>{
+          return new User(user);
         })
         .catch((err)=>{
           throw err;
