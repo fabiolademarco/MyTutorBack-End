@@ -46,7 +46,7 @@ class User {
 
   /** Creates an user
    * @param {User} user The user to create
-   * @return {Promise} The promise reresenting the fulfillment of the creation request
+   * @return {Promise<User>} The promise reresenting the fulfillment of the creation request
    */
   static create(user) {
     if (user===null || user===undefined) {
@@ -63,7 +63,7 @@ class User {
   }
   /** Updates an user
    * @param {User} user The user to update
-   * @return {Promise} The promise reresenting the fulfillment of the update request
+   * @return {Promise<User>} The promise reresenting the fulfillment of the update request
    */
   static update(user) {
     if (user===null || user===undefined) {
@@ -81,7 +81,7 @@ class User {
 
   /** Removes an user
    * @param {User} user The user to remove
-   * @return {Promise} The promise reresenting the fulfillment of the deletion request
+   * @return {Promise<boolean>} The promise reresenting the fulfillment of the deletion request
    */
   static remove(user) {
     if (user===null || user===undefined) {
@@ -96,7 +96,7 @@ class User {
   }
   /** Checks if a given user exists
    * @param {User} user The user whose existence is checked
-   * @return {Promise} The promise reresenting the fulfillment of the verification request
+   * @return {Promise<boolean>} The promise reresenting the fulfillment of the verification request
    */
   static exists(user) {
     if (user===null || user===undefined) {
@@ -111,7 +111,7 @@ class User {
   }
   /** Finds user by email
    * @param {string} email The email used to find the user
-   * @return {Promise} The promise reresenting the fulfillment of the search request
+   * @return {Promise<User>} The promise reresenting the fulfillment of the search request
    */
   static findByEmail(email) {
     if (email===null || email===undefined) {
@@ -120,7 +120,10 @@ class User {
 
     return pool.query(`SELECT * FROM ${table} WHERE email=?`, email)
         .then(([rows])=>{
-          return (rows[0] === undefined)?rows:new User(rows[0]);
+          if (rows.length < 1) {
+            return null;
+          }
+          return new User(rows[0]);
         })
         .catch((err)=>{
           throw err;
@@ -128,7 +131,7 @@ class User {
   }
   /** Finds users by role
    * @param {string} role The role used to find the user
-   * @return {Promise} The promise reresenting the fulfillment of the search request
+   * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static findByRole(role) {
     if (role===null || role===undefined) {
@@ -145,7 +148,7 @@ class User {
   }
   /** Finds user by verified
    * @param {string} verified The state used to find the user
-   * @return {Promise} The promise reresenting the fulfillment of the search request
+   * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static findByVerified(verified) {
     if (verified===null || verified===undefined) {
@@ -163,7 +166,7 @@ class User {
 
   /**
    * Finds all users in the database
-   * @return {Promise} The promise reresenting the fulfillment of the creation request
+   * @return {Promise<User[]>} The promise reresenting the fulfillment of the creation request
   */
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
@@ -175,6 +178,44 @@ class User {
         });
   }
 
+  /** Finds user by parameter
+   * @param {Object} filter The object containing the logic to use for the search
+   * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
+   */
+  static search(filter) {
+    const query=`SELECT * FROM ${table} WHERE true`;
+    const params=[];
+
+    if (filter.password) {
+      query =`${query} AND password = ?`;
+      params.push(filter.password);
+    }
+    if (filter.name) {
+      query =`${query} AND name = ?`;
+      params.push(filter.name);
+    }
+
+    if (filter.surname) {
+      query =`${query} AND surname = ?`;
+      params.push(filter.surname);
+    }
+    if (filter.role) {
+      query =`${query} AND role = ?`;
+      params.push(filter.role);
+    }
+    if (filter.verified) {
+      query =`${query} AND verified = ?`;
+      params.push(filter.verified);
+    }
+
+    return pool.query(query, params)
+        .then(([rows])=>{
+          return rows.map((user)=>new User(user));
+        })
+        .catch((err)=>{
+          throw err;
+        });
+  }
   /**
    * Check if exists an User with the email and the password passed.
    * @param {string} email The user email.

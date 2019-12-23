@@ -31,6 +31,20 @@ const ERR_SERVER_STATUS = 500;
 module.exports.delete=function(req, res) {
   res.set('Content-Type', 'application/json');
   const user=req.body;
+  if (user===null || user===undefined) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({error: 'L\'utente non puo essere nullo'});
+    return;
+  }
+
+  User.delete(user)
+      .then((data)=>{
+        res.status(OK_STATUS).send({result: true});
+      })
+      .catch((err)=>{
+        res.status(ERR_SERVER_STATUS).send({error: false});
+        return;
+      });
 };
 
 /**
@@ -40,6 +54,27 @@ module.exports.delete=function(req, res) {
 module.exports.search=function(req, res) {
   res.set('Content-Type', 'application/json');
   const param=req.body;
+  if (param===null || param===undefined) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({error: 'L\'utente non puo essere nullo'});
+    return;
+  }
+
+  const filter={
+    password: param.password,
+    name: param.name,
+    surname: param.surname,
+    role: param.role,
+    verified: param.verified,
+  };
+
+  User.search(filter)
+      .then((users)=>{
+        res.status(OK_STATUS).send({list: users});
+      })
+      .catch((err)=>{
+        res.status(ERR_SERVER_STATUS).send({error: err});
+      });
 };
 
 /**
@@ -49,6 +84,18 @@ module.exports.search=function(req, res) {
 module.exports.update=function(req, res) {
   res.set('Content-Type', 'application/json');
   const user=req.body;
+  if (user===null || user===undefined) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({error: 'L\'utente non puo essere nullo'});
+    return;
+  }
+  User.update(user)
+      .then((newUser)=>{
+        res.status(OK_STATUS).send({user: newUser});
+      })
+      .catch((err)=>{
+        res.status(ERR_SERVER_STATUS).send({error: err});
+      });
 };
 
 /**
@@ -58,6 +105,18 @@ module.exports.update=function(req, res) {
 module.exports.find=function(req, res) {
   res.set('Content-Type', 'application/json');
   const email=req.body;
+  if (email===null || email===undefined) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({error: 'L\'email non puo essere nullo'});
+    return;
+  }
+  User.findByEmail(email)
+      .then((user)=>{
+        res.status(OK_STATUS).send({user: user});
+      })
+      .catch((err)=>{
+        res.status(ERR_SERVER_STATUS).send({error: err});
+      });
 };
 
 /**
@@ -66,4 +125,11 @@ module.exports.find=function(req, res) {
  */
 module.exports.findAll=function(req, res) {
   res.set('Content-Type', 'application/json');
+  User.findAll()
+      .then((userList)=>{
+        res.status(OK_STATUS).send({list: userList});
+      })
+      .catch((err)=>{
+        res.statusText(ERR_SERVER_STATUS).send({error: err});
+      });
 };
