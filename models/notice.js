@@ -42,7 +42,7 @@ class Notice {
    */
   constructor(notice) {
     this.protocol = notice.protocol;
-    this.referent_professor = notice.referent_professor;
+    this.referent_professor = notice.referent_professor ? new User(notice.referent_professor) : null;
     this.description = notice.description;
     this.notice_subject = notice.notice_subject;
     this.admission_requirements = notice.admission_requirements;
@@ -54,17 +54,16 @@ class Notice {
     this.termination_of_the_assignment = notice.termination_of_the_assignment;
     this.nature_of_the_assignment = notice.nature_of_the_assignment;
     this.unused_funds = notice.unused_funds;
-    this.state = Object.values(States).includes(notice.state) ?
-      notice.state : null;
+    this.state = Object.values(States).includes(notice.state) ? notice.state : null;
     this.type = notice.type;
     this.deadline = notice.deadline;
     this.notice_file = notice.notice_file;
     this.graded_list_file = notice.graded_list_file;
-    this.articles = notice.articles;
-    this.evaluation_criteria = notice.evaluation_criteria;
-    this.application_sheet = notice.application_sheet;
-    this.assignments = notice.assignments;
-    this.comment = notice.comment;
+    this.articles = notice.articles ? notice.articles.map((art) => new Article(art)) : null;
+    this.evaluation_criteria = notice.evaluation_criteria ? notice.evaluation_criteria.map((ec) => new EvaluationCriterion(ec)) : null;
+    this.application_sheet = notice.application_sheet ? new ApplicationSheet(notice.application_sheet) : null;
+    this.assignments = notice.assignments ? notice.assignments.map((assign) => new Assignment(assign)) : null;
+    this.comment = notice.comment ? new Comment(notice.comment) : null;
   }
 
   /**
@@ -77,10 +76,10 @@ class Notice {
    */
   static create(notice) {
     return pool.query(`INSERT INTO ${table} SET ?`, notice)
-        .then(() => ApplicationSheet.create(notice.application_sheet))
-        .then(() => notice.evaluation_criteria.forEach((ec) => EvaluationCriterion.create(ec)))
         .then(() => notice.articles.forEach((art) => Article.create(art)))
+        .then(() => notice.evaluation_criteria.forEach((ec) => EvaluationCriterion.create(ec)))
         .then(() => notice.assignments.forEach((assign) => Assignment.create(assign)))
+        .then(() => ApplicationSheet.create(notice.application_sheet))
         .then(() => notice)
         .catch((err) => {
           throw err.message;
@@ -151,10 +150,10 @@ class Notice {
             throw new Error('0 results found for protocol: ' + noticeProtocol);
           }
           return getOtherFields(notice.protocol)
-              .then(({assignments, applicationSheet, evaluationCriterions, articles, comment}) => {
+              .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {
                 notice.assignments = assignments;
                 notice.application_sheet = applicationSheet;
-                notice.evaluation_criterions = evaluationCriterions;
+                notice.evaluation_criteria = evaluationCriteria;
                 notice.articles = articles;
                 notice.comment = comment;
                 return new Notice(notice);
@@ -178,10 +177,10 @@ class Notice {
         .then(([rows]) => {
           return Promise.all(rows.map((notice) =>
             getOtherFields(notice.protocol)
-                .then(({assignments, applicationSheet, evaluationCriterions, articles, comment}) => {
+                .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {
                   notice.assignments = assignments;
                   notice.application_sheet = applicationSheet;
-                  notice.evaluation_criterions = evaluationCriterions;
+                  notice.evaluation_criteria = evaluationCriteria;
                   notice.articles = articles;
                   notice.comment = comment;
                   return new Notice(notice);
@@ -207,10 +206,10 @@ class Notice {
         .then(([rows]) => {
           return Promise.all(rows.map((notice) =>
             getOtherFields(notice.protocol)
-                .then(({assignments, applicationSheet, evaluationCriterions, articles, comment}) => {
+                .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {
                   notice.assignments = assignments;
                   notice.application_sheet = applicationSheet;
-                  notice.evaluation_criterions = evaluationCriterions;
+                  notice.evaluation_criteria = evaluationCriteria;
                   notice.articles = articles;
                   notice.comment = comment;
                   return new Notice(notice);
@@ -235,10 +234,10 @@ class Notice {
         .then(([rows]) => {
           return Promise.all(rows.map((notice) =>
             getOtherFields(notice.protocol)
-                .then(({assignments, applicationSheet, evaluationCriterions, articles, comment}) => {
+                .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {
                   notice.assignments = assignments;
                   notice.application_sheet = applicationSheet;
-                  notice.evaluation_criterions = evaluationCriterions;
+                  notice.evaluation_criteria = evaluationCriteria;
                   notice.articles = articles;
                   notice.comment = comment;
                   return new Notice(notice);
@@ -279,7 +278,7 @@ function getOtherFields(noticeProtocol) {
   const otherFields = {
     assignments: [],
     applicationSheet: '',
-    evaluationCriterions: [],
+    evaluationCriteria: [],
     articles: [],
     comment: '',
   };
@@ -295,7 +294,7 @@ function getOtherFields(noticeProtocol) {
         .catch((err) => console.log(err)),
 
     EvaluationCriterion.findByNotice(noticeProtocol)
-        .then((criteria) => criteria.forEach((c) => otherFields.evaluationCriterions.push(c)))
+        .then((criteria) => criteria.forEach((c) => otherFields.evaluationCriteria.push(c)))
         .catch((err) => console.log(err)),
 
     Article.findByNotice(noticeProtocol)
