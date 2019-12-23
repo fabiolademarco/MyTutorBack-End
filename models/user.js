@@ -211,6 +211,8 @@ class User {
         })
         .catch((err)=>{
           throw err;
+        });
+  }
   /**
    * Check if exists an User with the email and the password passed.
    * @param {string} email The user email.
