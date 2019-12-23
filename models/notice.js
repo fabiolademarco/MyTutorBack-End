@@ -103,7 +103,20 @@ class Notice {
         })
         .then(() => {
           if (notice.evaluation_criteria) {
-            return notice.evaluation_criteria.forEach(((ec) => EvaluationCriterion.update(ec)));
+            const dbEvaluationCriteria = EvaluationCriterion.findByNotice(notice.protocol);
+
+            const dbECNames = dbEvaluationCriteria.map((ec) => ec.name);
+            const ecNames = notice.evaluation_criteria.map((ec) => name);
+
+            const criteriaToUpdate = notice.evaluation_criteria.filter((ec) => dbECNames.includes(ec.name));
+            const criteriaToCreate = notice.evaluation_criteria.filter((ec) => !dbECNames.includes(ec.name));
+            const criteriaToRemove = dbEvaluationCriteria.filter((ec) => !ecNames.includes(ec.name));
+
+            return Promise.all([
+              Promise.all(criteriaToUpdate.map((c) => EvaluationCriterion.update(c))),
+              Promise.all(criteriaToCreate.map((c) => EvaluationCriterion.create(c))),
+              Promise.all(criteriaToRemove.map((c) => EvaluationCriterion.remove(c))),
+            ]);
           }
         })
         .then(() => {
@@ -256,10 +269,10 @@ class Notice {
   /**
    * Check if a notice exists.
    * @param {Notice} notice The notice to check.
-   * @param {callback} result The callback that handles the response.
+   * @return {Promise<boolean>} Promise that resolves to true if the notice exists or false if it doesn't exist
    */
   static exists(notice) {
-    pool.query(`SELECT * FROM ${table} WHERE protocol = ?`, notice.protocol)
+    return pool.query(`SELECT * FROM ${table} WHERE protocol = ?`, notice.protocol)
         .then(([rows]) => {
           return rows.length > 0;
         })
