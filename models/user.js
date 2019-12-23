@@ -128,7 +128,7 @@ class User {
 
     return pool.query(`SELECT * FROM ${table} WHERE role=?`, role)
         .then(([rows])=>{
-          return (rows[0] === undefined)?rows:new User(rows[0]);
+          return rows.map((user)=>new User(user));
         })
         .catch((err)=>{
           throw err;
@@ -145,7 +145,7 @@ class User {
 
     return pool.query(`SELECT * FROM ${table} WHERE verified=?`, role)
         .then(([rows])=>{
-          return (rows[0] === undefined)?rows:new User(rows[0]);
+          return rows.map((user)=>new User(user));
         })
         .catch((err)=>{
           throw err;
