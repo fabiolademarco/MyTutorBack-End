@@ -120,7 +120,10 @@ class User {
 
     return pool.query(`SELECT * FROM ${table} WHERE email=?`, email)
         .then(([rows])=>{
-          return (rows[0] === undefined)?rows:new User(rows[0]);
+          if (rows.length < 1) {
+            return null;
+          }
+          return new User(rows[0]);
         })
         .catch((err)=>{
           throw err;
