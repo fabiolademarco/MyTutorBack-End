@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS user;
 
 CREATE TABLE user (
   email      varchar(125) NOT NULL, 
-  password   varchar(30) NOT NULL, 
+  password   varchar(255) NOT NULL, 
   name       varchar(40) NOT NULL, 
   surname    varchar(50) NOT NULL, 
   role       Enum('Student', 'Professor', 'DDI', 'Teaching Office') NOT NULL default 'Student', 

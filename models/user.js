@@ -1,5 +1,7 @@
 const pool = require('../db');
+const bcrypt = require('bcrypt');
 const table = 'user';
+const SALT = 8;
 const role = {
   STUDENT: 'Student',
   PROFESSOR: 'Professor',
@@ -50,6 +52,7 @@ class User {
     if (user===null || user===undefined) {
       throw new Error('User must not be null');
     }
+    user.password = bcrypt.hashSync(user.password, SALT);
     return pool.query(`INSERT INTO ${table} SET ?`, user )
         .then((data)=>{
           return new User(user);
@@ -101,7 +104,7 @@ class User {
     }
 
     return pool.query(`SELECT * FROM ${table} WHERE email=?`, user.email)
-        .then(([rows])=> rows.length>0)
+        .then(([rows])=> rows.length > 0)
         .catch((err)=>{
           throw err;
         });
@@ -169,6 +172,28 @@ class User {
         })
         .catch((err)=>{
           throw err;
+        });
+  }
+
+  /**
+   * Check if exists an User with the email and the password passed.
+   * @param {string} email The user email.
+   * @param {string} password The password encrypted.
+   * @return {Promise<User>} Promise Object that represents the User if there is a match or else it's null.
+   */
+  static matchUser(email, password) {
+    if (email === undefined || email === null || password === undefined || password === null) {
+      throw new Error('Email or Password can not be null or undefined');
+    }
+    return pool.query(`SELECT * FROM ${table} WHERE email = ?`, email)
+        .then(([rows]) => {
+          if (rows.length < 1 || !bcrypt.compareSync(password, rows[0].password)) {
+            return null;
+          }
+          return new User(rows[0]);
+        })
+        .catch((err) => {
+          throw err.message;
         });
   }
 }
