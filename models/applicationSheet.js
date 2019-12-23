@@ -18,8 +18,8 @@ class ApplicationSheet {
  * @param {ApplicationSheet} applicationSheet
  */
   constructor(applicationSheet) {
-    this.noticeProtocol = applicationSheet.noticeProtocol;
-    this.documentsToAttach = applicationSheet.documentsToAttach;
+    this.notice_protocol = applicationSheet.notice_protocol;
+    this.documents_to_attach = applicationSheet.documents_to_attach;
   }
   /** Creates an application sheet
    * @param {ApplicationSheet} applicationSheet The application sheet to create
@@ -48,7 +48,7 @@ class ApplicationSheet {
       return null;
     }
     return pool.query(`UPDATE ${table} SET ? where notice_protocol = 
-  ${applicationSheet.noticeProtocol}`, applicationSheet)
+  ${applicationSheet.notice_protocol}`, applicationSheet)
         .then(([resultSetHeader]) => {
           return applicationSheet;
         })
@@ -66,7 +66,7 @@ class ApplicationSheet {
       return null;
     }
     return pool.query(`DELETE FROM ${table} WHERE notice_protocol = 
-  ${applicationSheet.noticeProtocol}`)
+  ${applicationSheet.notice_protocol}`)
         .then((([resultSetHeader]) => {
           return resultSetHeader.affectedRows > 0;
         }))
