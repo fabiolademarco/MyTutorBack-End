@@ -46,7 +46,7 @@ class User {
 
   /** Creates an user
    * @param {User} user The user to create
-   * @return {Promise} The promise reresenting the fulfillment of the creation request
+   * @return {Promise<User>} The promise reresenting the fulfillment of the creation request
    */
   static create(user) {
     if (user===null || user===undefined) {
@@ -63,7 +63,7 @@ class User {
   }
   /** Updates an user
    * @param {User} user The user to update
-   * @return {Promise} The promise reresenting the fulfillment of the update request
+   * @return {Promise<User>} The promise reresenting the fulfillment of the update request
    */
   static update(user) {
     if (user===null || user===undefined) {
@@ -81,7 +81,7 @@ class User {
 
   /** Removes an user
    * @param {User} user The user to remove
-   * @return {Promise} The promise reresenting the fulfillment of the deletion request
+   * @return {Promise<boolean>} The promise reresenting the fulfillment of the deletion request
    */
   static remove(user) {
     if (user===null || user===undefined) {
@@ -96,7 +96,7 @@ class User {
   }
   /** Checks if a given user exists
    * @param {User} user The user whose existence is checked
-   * @return {Promise} The promise reresenting the fulfillment of the verification request
+   * @return {Promise<boolean>} The promise reresenting the fulfillment of the verification request
    */
   static exists(user) {
     if (user===null || user===undefined) {
@@ -111,7 +111,7 @@ class User {
   }
   /** Finds user by email
    * @param {string} email The email used to find the user
-   * @return {Promise} The promise reresenting the fulfillment of the search request
+   * @return {Promise<User>} The promise reresenting the fulfillment of the search request
    */
   static findByEmail(email) {
     if (email===null || email===undefined) {
@@ -131,7 +131,7 @@ class User {
   }
   /** Finds users by role
    * @param {string} role The role used to find the user
-   * @return {Promise} The promise reresenting the fulfillment of the search request
+   * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static findByRole(role) {
     if (role===null || role===undefined) {
@@ -148,7 +148,7 @@ class User {
   }
   /** Finds user by verified
    * @param {string} verified The state used to find the user
-   * @return {Promise} The promise reresenting the fulfillment of the search request
+   * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static findByVerified(verified) {
     if (verified===null || verified===undefined) {
@@ -166,7 +166,7 @@ class User {
 
   /**
    * Finds all users in the database
-   * @return {Promise} The promise reresenting the fulfillment of the creation request
+   * @return {Promise<User[]>} The promise reresenting the fulfillment of the creation request
   */
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
@@ -180,7 +180,7 @@ class User {
 
   /** Finds user by parameter
    * @param {Object} filter The object containing the logic to use for the search
-   * @return {Promise} The promise reresenting the fulfillment of the search request
+   * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static search(filter) {
     const query=`SELECT * FROM ${table} WHERE true`;
