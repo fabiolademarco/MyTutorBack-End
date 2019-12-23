@@ -171,6 +171,45 @@ class User {
           throw err;
         });
   }
+
+  /** Finds user by parameter
+   * @param {Object} filter The object containing the logic to use for the search
+   * @return {Promise} The promise reresenting the fulfillment of the search request
+   */
+  static search(filter) {
+    const query=`SELECT * FROM ${table} WHERE true`;
+    const params=[];
+
+    if (filter.password) {
+      query =`${query} AND password = ?`;
+      params.push(filter.password);
+    }
+    if (filter.name) {
+      query =`${query} AND name = ?`;
+      params.push(filter.name);
+    }
+
+    if (filter.surname) {
+      query =`${query} AND surname = ?`;
+      params.push(filter.surname);
+    }
+    if (filter.role) {
+      query =`${query} AND role = ?`;
+      params.push(filter.role);
+    }
+    if (filter.verified) {
+      query =`${query} AND verified = ?`;
+      params.push(filter.verified);
+    }
+
+    return pool.query(query, params)
+        .then(([rows])=>{
+          return rows.map((user)=>new User(user));
+        })
+        .catch((err)=>{
+          throw err;
+        });
+  }
 }
 
 User.Role = role;
