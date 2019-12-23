@@ -83,7 +83,7 @@ class Comment {
       throw new Error('No parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice = ?`, comment.notice)
-        .then(([rows]) => rows.lenght > 0)
+        .then(([rows]) => rows.length > 0)
         .catch((err) => {
           throw err.message;
         });
@@ -99,7 +99,7 @@ class Comment {
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice = ?`, noticeProtocol)
         .then(([rows]) => {
-          return rows.lenght > 0 ? new Comment(rows[0]) : null;
+          return rows.length > 0 ? new Comment(rows[0]) : null;
         })
         .catch((err) => {
           throw err.message;
