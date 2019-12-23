@@ -37,6 +37,7 @@ class Student extends User {
     const user = new User(student);
     return super.create(user)
         .then((user) => {
+          student.password = user.password;
           return pool.query(`INSERT INTO ${table} VALUES(?, ?, ?)`, [student.email, student.registration_number, student.birth_date])
               .then(([resultSetHeader]) => {
                 return new Student(student);
@@ -96,11 +97,11 @@ class Student extends User {
                 return new Student(user);
               })
               .catch((err) => {
-                throw err.message;
+                throw err;
               });
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /**
@@ -114,8 +115,27 @@ class Student extends User {
             return this.findByEmail(user.email);
           }))
               .catch((err) => {
-                throw err.message;
+                throw err;
               });
+        });
+  }
+
+  /**
+   * Check if exists an User with the email and the password passed.
+   * @param {string} email
+   * @param {string} password
+   * @return {Promise<Student>} Promise Object that represents the Student if there is a match or else it's null
+   */
+  static matchUser(email, password) {
+    return super.matchUser(email, password)
+        .then((user) => {
+          if (user === null) {
+            return null;
+          }
+          return this.findByEmail(user.email);
+        })
+        .catch((err) => {
+          throw err;
         });
   }
 }
