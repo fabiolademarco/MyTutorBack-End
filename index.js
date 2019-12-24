@@ -13,6 +13,7 @@ const app = express();
 // ...
 const assignmentService = require('./services/assignmentService');
 const noticeService = require('./services/noticeService');
+const userService = require('./services/userService');
 
 app.use(function(req, res, next) {
   // Website you wish to allow to connect,
@@ -61,4 +62,5 @@ app.listen(port, function() {
 // AssignmentService routes
 assignmentService(app);
 noticeService(app);
+userService(app);
 
