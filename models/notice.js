@@ -87,17 +87,33 @@ class Notice {
     delete notice.comment;
 
     return pool.query(`INSERT INTO ${table} SET ?`, notice)
-        .then(() => articles.forEach((art) => Article.create(art)))
-        .then(() => evaluationCriteria.forEach((ec) => EvaluationCriterion.create(ec)))
-        .then(() => assignments.forEach((assign) => Assignment.create(assign)))
-        .then(() => ApplicationSheet.create(applicationSheet))
+        .then(() => {
+          if (articles) {
+            articles.forEach((art) => Article.create(art));
+          }
+        })
+        .then(() => {
+          if (evaluationCriteria) {
+            evaluationCriteria.forEach((ec) => EvaluationCriterion.create(ec));
+          }
+        })
+        .then(() => {
+          if (assignments) {
+            assignments.forEach((assign) => Assignment.create(assign));
+          }
+        })
+        .then(() => {
+          if (applicationSheet) {
+            ApplicationSheet.create(applicationSheet);
+          }
+        })
         .then(() => {
           notice.articles = articles;
           notice.evaluation_criterion = evaluationCriteria;
           notice.assignments = assignments;
           notice.application_sheet = applicationSheet;
 
-          return notice;
+          return new Notice(notice);
         })
         .catch((err) => {
           throw err.message;
@@ -126,12 +142,14 @@ class Notice {
 
     return pool.query(`UPDATE ${table} SET ? WHERE protocol = ?`, [notice, notice.protocol])
         .then(() => {
-          if (notice.application_sheet) {
+          if (!applicationSheet) {
+            return ApplicationSheet.remove(applicationSheet);
+          } else if (Object.entries(applicationSheet).length !== 0) {
             return ApplicationSheet.update(applicationSheet);
           }
         })
         .then(() => {
-          if (evaluationCriteria) {
+          if (evaluationCriteria && Object.entries(evaluationCriteria).length !== 0) {
             return EvaluationCriterion.findByNotice(notice.protocol)
                 .then((dbEvaluationCriteria) => {
                   const actions = getActionsToPerform(dbEvaluationCriteria, evaluationCriteria);
@@ -141,7 +159,7 @@ class Notice {
           }
         })
         .then(() => {
-          if (articles) {
+          if (articles && Object.entries(articles).length !== 0) {
             return Article.findByNotice(notice.protocol)
                 .then((dbArticles) => {
                   const actions = getActionsToPerform(dbArticles, articles);
@@ -151,7 +169,7 @@ class Notice {
           }
         })
         .then(() => {
-          if (assignments) {
+          if (assignments && Object.entries(assignments).length !== 0) {
             return Assignment.findByNotice(notice.protocol)
                 .then((dbAssignments) => {
                   const actions = getActionsToPerform(dbAssignments, assignments);
@@ -166,7 +184,7 @@ class Notice {
           notice.assignments = assignments;
           notice.application_sheet = applicationSheet;
 
-          return notice;
+          return new Notice(notice);
         })
         .catch((err) => {
           throw err;
@@ -207,6 +225,7 @@ class Notice {
                 notice.evaluation_criteria = evaluationCriteria;
                 notice.articles = articles;
                 notice.comment = comment;
+
                 return new Notice(notice);
               })
               .catch((err) => {
@@ -234,6 +253,7 @@ class Notice {
                   notice.evaluation_criteria = evaluationCriteria;
                   notice.articles = articles;
                   notice.comment = comment;
+
                   return new Notice(notice);
                 })
                 .catch((err) => {
@@ -263,6 +283,7 @@ class Notice {
                   notice.evaluation_criteria = evaluationCriteria;
                   notice.articles = articles;
                   notice.comment = comment;
+
                   return new Notice(notice);
                 })
                 .catch((err) => {
@@ -291,6 +312,7 @@ class Notice {
                   notice.evaluation_criteria = evaluationCriteria;
                   notice.articles = articles;
                   notice.comment = comment;
+
                   return new Notice(notice);
                 })
                 .catch((err) => {
