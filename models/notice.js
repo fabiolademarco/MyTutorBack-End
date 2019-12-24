@@ -60,7 +60,7 @@ class Notice {
     this.notice_file = notice.notice_file;
     this.graded_list_file = notice.graded_list_file;
     this.articles = notice.articles ? notice.articles.map((art) => new Article(art)) : null;
-    this.evaluation_criterion = notice.evaluation_criterion ? notice.evaluation_criterion.map((ec) => new EvaluationCriterion(ec)) : null;
+    this.evaluation_criteria = notice.evaluation_criteria ? notice.evaluation_criteria.map((ec) => new EvaluationCriterion(ec)) : null;
     this.application_sheet = notice.application_sheet ? new ApplicationSheet(notice.application_sheet) : null;
     this.assignments = notice.assignments ? notice.assignments.map((assign) => new Assignment(assign)) : null;
     this.comment = notice.comment ? new Comment(notice.comment) : null;
@@ -76,12 +76,12 @@ class Notice {
    */
   static create(notice) {
     const articles = JSON.parse(JSON.stringify(notice.articles));
-    const evaluationCriteria = JSON.parse(JSON.stringify(notice.evaluation_criterion));
+    const evaluationCriteria = JSON.parse(JSON.stringify(notice.evaluation_criteria));
     const assignments = JSON.parse(JSON.stringify(notice.assignments));
     const applicationSheet = JSON.parse(JSON.stringify(notice.application_sheet));
 
     delete notice.articles;
-    delete notice.evaluation_criterion;
+    delete notice.evaluation_criteria;
     delete notice.assignments;
     delete notice.application_sheet;
     delete notice.comment;
@@ -109,7 +109,7 @@ class Notice {
         })
         .then(() => {
           notice.articles = articles;
-          notice.evaluation_criterion = evaluationCriteria;
+          notice.evaluation_criteria = evaluationCriteria;
           notice.assignments = assignments;
           notice.application_sheet = applicationSheet;
 
@@ -130,12 +130,12 @@ class Notice {
    */
   static update(notice) {
     const articles = JSON.parse(JSON.stringify(notice.articles));
-    const evaluationCriteria = JSON.parse(JSON.stringify(notice.evaluation_criterion));
+    const evaluationCriteria = JSON.parse(JSON.stringify(notice.evaluation_criteria));
     const assignments = JSON.parse(JSON.stringify(notice.assignments));
     const applicationSheet = JSON.parse(JSON.stringify(notice.application_sheet));
 
     delete notice.articles;
-    delete notice.evaluation_criterion;
+    delete notice.evaluation_criteria;
     delete notice.assignments;
     delete notice.application_sheet;
     delete notice.comment;
@@ -180,7 +180,7 @@ class Notice {
         })
         .then(() => {
           notice.articles = articles;
-          notice.evaluation_criterion = evaluationCriteria;
+          notice.evaluation_criteria = evaluationCriteria;
           notice.assignments = assignments;
           notice.application_sheet = applicationSheet;
 
