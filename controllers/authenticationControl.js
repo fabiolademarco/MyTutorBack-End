@@ -199,7 +199,7 @@ createToken = (payload) => {
 checkStudent = (student) => {
   const nameExp = /^[A-Za-z ‘]+$/;
   const surnameExp = /^[A-Za-z ‘]+$/;
-  const emailExp = /^[a-z]\.[a-z]+[1-9]*\@studenti.unisa.it$/;
+  const emailExp = /^[a-z]\.[a-z]+[1-9]*\@studenti\.unisa\.it$/;
   const registrationNumberExp = /^[0-9A-Za-z ‘]*$/;
   const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
   const birthDateExp = '';
@@ -229,7 +229,7 @@ checkStudent = (student) => {
 checkProfessor = (professor) => {
   const nameExp = /^[A-Za-z ‘]+$/;
   const surnameExp = /^[A-Za-z ‘]+$/;
-  const emailExp = /^[a-z]\.[a-z]*\@unisa.it$/;
+  const emailExp = /^[a-z]\.[a-z]*\@unisa\.it$/;
   const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
 
   if (!emailExp.test(professor.email)) {
@@ -253,7 +253,7 @@ checkProfessor = (professor) => {
  * @return {boolean} True if the email respects the format, else it's false.
  */
 checkVerifiedEmail = (email) => {
-  const emailExp = /^[a-z]\.[a-z]*\@unisa.it$/;
+  const emailExp = /^[a-z]\.[a-z]*\@unisa\.it$/;
   return emailExp.test(email);
 };
 
@@ -263,8 +263,8 @@ checkVerifiedEmail = (email) => {
  * @return {boolean} True if the email respects the format, else it's false.
  */
 checkEmail = (email) => {
-  const emailExpStudent = /^[a-z]\.[a-z]+[1-9]*\@studenti.unisa.it$'/;
-  const emailExpProfessor = /^[a-z]\.[a-z]*\@unisa.it$/;
+  const emailExpStudent = /^[a-z]\.[a-z]+[1-9]*\@studenti\.unisa\.it$/;
+  const emailExpProfessor = /^[a-z]\.[a-z]*\@unisa\.it$/;
   return emailExpProfessor.test(email) || emailExpStudent.test(email);
 };
 
