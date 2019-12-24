@@ -23,6 +23,7 @@ DB_NAME=your_db_name
 DB_USER=your_db_username
 DB_PASSWORD=your_db_password
 EXPRESS_PORT=your_express_port
+PRIVATE_KEY=your_private_key
 ```
 
 ### Starting the server

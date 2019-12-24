@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 const app = express();
 // import services
 // ...
+const auth = require('./controllers/auth')();
 const assignmentService = require('./services/assignmentService');
 const noticeService = require('./services/noticeService');
 const userService = require('./services/userService');
@@ -48,7 +49,7 @@ app.use(
     }),
 );
 app.use(bodyParser.json());
-
+app.use(auth.initialize());
 // Setup server port
 const port = process.env.EXPRESS_PORT;
 
@@ -61,7 +62,7 @@ app.listen(port, function() {
 });
 
 // AssignmentService routes
-assignmentService(app);
+assignmentService(app, auth); // Look for first example of authentication
 noticeService(app);
 userService(app);
 authService(app);

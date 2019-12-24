@@ -6,14 +6,15 @@
  * @author Roberto Bruno
  * @version
  * @since
+ * @todo Bisogna definire l'autenticazione ed l'invio delle email
  *
  * 2019 - Copyright by Gang Of Four Eyes
  */
 const Assignment = require('../models/assignment');
+const User = require('../models/user');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
-// Bisogna definire l'autenticazione ed l'invio delle email
 
 /**
  * Allows to send a request of an assignment
@@ -35,7 +36,9 @@ exports.sendRequest = (req, res) => {
   assignment.state = Assignment.states.WAITING;
   Assignment.update(assignment)
       .then((data) => {
-        res.status(OK_STATUS).send(data);
+        res.status(OK_STATUS).send({
+          assignment: data,
+        });
         // Inviare email
       })
       .catch((err) => {
@@ -84,7 +87,7 @@ exports.assign = (req, res) => {
         .send({error: 'L\'incarico non può essere assegnato'});
     return;
   }
-  assignment.state = Assignment.states.BOOKED;
+  assignment.state = Assignment.states.ASSIGNED;
   Assignment.update(assignment)
       .then((data) => {
         res.status(OK_STATUS).send({result: true});
@@ -102,12 +105,16 @@ exports.assign = (req, res) => {
  */
 exports.search = (req, res) => {
   res.set('Content-Type', 'application/json');
+  const user = req.user;
   const filter = {
     code: req.query.code,
     noticeProtocol: req.query.noticeProtocol,
     state: req.query.state,
     student: req.query.student,
   };
+  if (user.role === User.Role.STUDENT) {
+    filter.student= user.id;
+  }
   Assignment.search(filter)
       .then((data) => {
         res.status(OK_STATUS).send({list: data});
@@ -125,8 +132,8 @@ exports.search = (req, res) => {
 exports.decline = (req, res) => {
   res.set('Content-Type', 'application/json');
   const assignment = new Assignment(req.body.assignment);
-
-  if (assignment === null || assignment.state !== Assignment.states.WAITING) {
+  const user = req.user;
+  if (assignment === null || assignment.state !== Assignment.states.WAITING || assignment.student !== user.id) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere rifiutato'});
     return;
@@ -152,7 +159,6 @@ exports.decline = (req, res) => {
 exports.find = (req, res) => {
   res.set('Content-Type', 'application/json');
   const id = req.params.id;
-  console.log(id);
   if (id === null || Number.parseInt(id) === NaN) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Id non passato'});
     return null;
@@ -174,7 +180,7 @@ exports.find = (req, res) => {
  */
 exports.close = (req, res) => {
   res.set('Content-Type', 'application/json');
-  const assignment = new Assignment(req.body);
+  const assignment = new Assignment(req.body.assignment);
 
   if (assignment === null || assignment.state !== Assignment.states.ASSIGNED) {
     res.status(ERR_CLIENT_STATUS)
