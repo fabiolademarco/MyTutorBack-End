@@ -9,7 +9,8 @@
 // Settings e moduli
 const passport = require('passport');
 const passportJWT = require('passport-jwt');
-const User = require('./models/user');
+const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 const ExtractJwt = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;
 const params = {
@@ -22,14 +23,17 @@ const params = {
 module.exports = function() {
   const strategy = new Strategy(params, (payload, done) => {
     // Funzione chiamata per controllare il token (il payload è il token già decriptato)
-    console.log(payload);
     // Chiamata di controllo al db
     User.findByEmail(payload.id)
         .then((result) => {
           if (result === null) {
             return done(new Error('User not found'), null);
           }
-          return done(null, {id: result.email}); // Non ho ancora capito bene a chi ritorni tale valore -- Controllare se lo ritorna alla funzione successiva, se sì potrebbe essere utile
+          // L'oggetto viene passato alla funzione successiva
+          return done(null, {
+            id: result.email,
+            role: result.role,
+          });
         })
         .catch((err) => {
           return done(new Error('User not found'), null);
@@ -55,6 +59,60 @@ module.exports = function() {
     },
     authenticate: () => {
       return passport.authenticate('jwt', process.env.PRIVATE_KEY);
+    },
+    isLogged: (req, res, next) => {
+      const token = req.get('Authorization');
+      if (token !== null && jwt.verify(token.substring(4), process.env.PRIVATE_KEY)) {
+        res.send({
+          error: 'User is already logged.',
+        });
+      } else {
+        next();
+      }
+    },
+    isProfessor: (req, res, next) => {
+      const role = req.user.role;
+      if (role !== null && role === User.Role.PROFESSOR) {
+        next();
+      } else {
+        res.status(401);
+        res.send({
+          error: 'Access denied',
+        });
+      }
+    },
+    isStudent: (req, res, next) => {
+      const role = req.user.role;
+      if (role !== null && role === User.Role.STUDENT) {
+        next();
+      } else {
+        res.status(401);
+        res.send({
+          error: 'Access denied',
+        });
+      }
+    },
+    isDDI: (req, res, next) => {
+      const role = req.user.role;
+      if (role !== null && role === User.Role.DDI) {
+        next();
+      } else {
+        res.status(401);
+        res.send({
+          error: 'Access denied',
+        });
+      }
+    },
+    isTeachingOffice: (req, res, next) => {
+      const role = req.user.role;
+      if (role !== null && role === User.Role.TEACHING_OFFICE) {
+        next();
+      } else {
+        res.status(401);
+        res.send({
+          error: 'Access denied',
+        });
+      }
     },
   };
 };
