@@ -23,7 +23,7 @@ exports.create = (req, res) => {
   res.set('Content-Type', 'application/json');
   const notice = req.body;
 
-  if (notice == null || notice == undefined) {
+  if (notice == null) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
 
@@ -40,7 +40,7 @@ exports.update = (req, res) => {
   res.set('Content-Type', 'application/json');
   const notice = req.body;
 
-  if (notice == null || notice == undefined) {
+  if (notice == null) {
     return res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
 
