@@ -1,4 +1,11 @@
-// auth.js
+/**
+ * Authentication Module
+ *
+ * @author Roberto Bruno
+ * @version
+ * @since
+ * 2019 - Copyright by Gang Of Four Eyes
+ */
 // Settings e moduli
 const passport = require('passport');
 const passportJWT = require('passport-jwt');
@@ -16,6 +23,7 @@ module.exports = function() {
   const strategy = new Strategy(params, (payload, done) => {
     // Funzione chiamata per controllare il token (il payload è il token già decriptato)
     console.log(payload);
+    // Chiamata di controllo al db
     User.findByEmail(payload.id)
         .then((result) => {
           if (result === null) {
