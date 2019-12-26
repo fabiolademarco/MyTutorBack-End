@@ -408,7 +408,11 @@ function getActionsToPerform(dbElements, receivedElements) {
 
   receivedElements.forEach((el) => {
     if (map.has(el[field])) {
-      map.set(el[field], {action: 'UPDATE', element: el});
+      if (JSON.stringify(map.get(el[field])) == JSON.stringify(el)) {
+        map.set(el[field], {action: 'UPDATE', element: el});
+      } else {
+        map.delete(el[field]);
+      }
     } else {
       map.set(el[field], {action: 'CREATE', element: el});
     }
