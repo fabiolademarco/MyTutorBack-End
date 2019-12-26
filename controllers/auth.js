@@ -72,47 +72,48 @@ module.exports = function() {
     },
     isProfessor: (req, res, next) => {
       const role = req.user.role;
-      if (role !== null && role === User.Role.PROFESSOR) {
+      if (check(role, User.Role.PROFESSOR)) {
         next();
       } else {
-        res.status(401);
-        res.send({
-          error: 'Access denied',
-        });
+        setError(res);
       }
     },
     isStudent: (req, res, next) => {
       const role = req.user.role;
-      if (role !== null && role === User.Role.STUDENT) {
+      if (check(role, User.Role.STUDENT)) {
         next();
       } else {
-        res.status(401);
-        res.send({
-          error: 'Access denied',
-        });
+        setError(res);
       }
     },
     isDDI: (req, res, next) => {
       const role = req.user.role;
-      if (role !== null && role === User.Role.DDI) {
+      if (check(role, User.Role.DDI)) {
         next();
       } else {
-        res.status(401);
-        res.send({
-          error: 'Access denied',
-        });
+        setError(res);
       }
     },
     isTeachingOffice: (req, res, next) => {
       const role = req.user.role;
-      if (role !== null && role === User.Role.TEACHING_OFFICE) {
+      if (check(role, User.Role.TEACHING_OFFICE)) {
         next();
       } else {
-        res.status(401);
-        res.send({
-          error: 'Access denied',
-        });
+        setError(res);
       }
     },
   };
+};
+
+// Utilities Functions
+
+const check = (realRole, expectedRole) => {
+  return (realRole !== null && realRole === expectedRole);
+};
+
+const setError = (res) => {
+  res.status(401);
+  res.send({
+    error: 'Access denied',
+  });
 };

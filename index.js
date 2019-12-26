@@ -64,6 +64,6 @@ app.listen(port, function() {
 // AssignmentService routes
 assignmentService(app, auth); // Look for first example of authentication
 noticeService(app);
-userService(app);
-authService(app);
+userService(app, auth);
+authService(app, auth);
 
