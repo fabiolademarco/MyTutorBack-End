@@ -54,9 +54,9 @@ class Document {
     return pool.query(`UPDATE ${table} SET ? WHERE student = ? 
                                               AND notice_protocol = ? 
                                               AND file_name = ?`,
-    aDocument, aDocument.student, aDocument.notice_protocol, aDocument.file_name)
+    [aDocument, aDocument.student, aDocument.notice_protocol, aDocument.file_name])
         .then(() => {
-          return aDocument;
+          return new Document(aDocument);
         })
         .catch((err) => {
           throw err.message;
@@ -70,13 +70,10 @@ class Document {
  * @return {Promise<boolean>} Promise that represents the value of the action.
  */
   static remove(aDocument, candidature) {
-    aDocument.notice_protocol = candidature.notice_protocol;
-    aDocument.student = candidature.student;
-
     return pool.query(`DELETE FROM ${table} WHERE student = ?
                                               AND notice_protocol = ?
                                               AND file_name = ?`,
-    aDocument.student, aDocument.notice_protocol, aDocument.file_name)
+    [candidature.student, candidature.notice_protocol, aDocument.file_name])
         .then(([resultSetHeader]) => {
           return resultSetHeader.affectedRow > 0;
         })
@@ -92,13 +89,10 @@ class Document {
    * @return {Promise<boolean>} Promise that represents the value of the action.
    */
   static exists(aDocument, candidature) {
-    aDocument.notice_protocol = candidature.notice_protocol;
-    aDocument.student = candidature.student;
-
     return pool.query(`SELECT FROM ${table} WHERE student = ?
                                               AND notice_protocol = ?
                                               AND file_name = ?`,
-    aDocument.student, aDocument.notice_protocol, aDocument.file_name)
+    [candidature.student, candidature.notice_protocol, aDocument.file_name])
         .then(([rows]) => {
           return rows.lenght > 0;
         })
@@ -118,7 +112,7 @@ class Document {
     return pool.query(`SELECT * FROM ${table} WHERE student = ?
                                                 AND notice_protocol = ?
                                                 AND file_name = ?`,
-    studentEmail, noticeProtocol, name)
+    [studentEmail, noticeProtocol, name])
         .then(([rows]) => {
           return new Document(rosw[0]);
         })
@@ -150,7 +144,7 @@ class Document {
   static findByCandidature(candidature) {
     return pool.query(`SELECT FROM ${table} WHERE student = ?
                                               AND notice_protocol = ?`,
-    candidature.student, candidature.notice_protocol)
+    [candidature.student, candidature.notice_protocol])
         .then(([rows]) => {
           return rows.map((el) => new Document(el));
         })
