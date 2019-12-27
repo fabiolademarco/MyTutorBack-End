@@ -4,8 +4,7 @@
  * This class represents the Assignment Controller
  *
  * @author Roberto Bruno
- * @version
- * @since
+ * @version 1.0
  * @todo Bisogna definire l'autenticazione ed l'invio delle email
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes

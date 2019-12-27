@@ -9,8 +9,7 @@ const table = 'student';
  * This class represents a Student
  *
  * @author Roberto Bruno
- * @version
- * @since
+ * @version 1.0
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */

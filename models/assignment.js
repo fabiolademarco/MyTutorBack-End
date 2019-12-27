@@ -19,8 +19,7 @@ const titles = {
  * This class represents a Assignment
  *
  * @author Roberto Bruno
- * @version
- * @since
+ * @version 1.0
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */

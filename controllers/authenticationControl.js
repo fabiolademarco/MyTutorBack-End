@@ -4,8 +4,7 @@
  * This class represents the Authentication Controller
  *
  * @author Roberto Bruno
- * @version
- * @since
+ * @version 1.0
  *
  * @todo Finire password recovery e registrazione del professore
  * @copyright 2019 - Copyright by Gang Of Four Eyes

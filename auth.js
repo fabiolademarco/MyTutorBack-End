@@ -2,9 +2,8 @@
  * Authentication Module
  *
  * @author Roberto Bruno
- * @version
- * @since
- * 2019 - Copyright by Gang Of Four Eyes
+ * @version 1.0
+ * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 // Settings e moduli
 const passport = require('passport');
@@ -20,6 +19,23 @@ const params = {
 };
 
 // Funzione da esportare
+/**
+ * @typedef {Object} Authentication
+ *
+ * @property {function} initialize -Represents the function to initialize the passport authentication.
+ * @property {function} authenticate -The function to check if the user is authenticate.
+ * @property {function} isLogged -Function to check if the user is already logged.
+ * @property {function} isProfessor -Fuction to check if the user is a Professor.
+ * @property {function} isStudent -Fuction to check if the user is a Student.
+ * @property {function} isDDI -Fuction to check if the user is a DDI.
+ * @property {function} isTeachingOffice -Fuction to check if the user is a TeachingOffice
+ *
+ */
+
+/**
+ * Function the return the Authentication object.
+ * @return {Authentication} Object containing the following functions: initialize, authenticate, isLogged, isDDI, isTeachingOffice, isStudent, isProfessor
+ */
 module.exports = function() {
   const strategy = new Strategy(params, (payload, done) => {
     // Funzione chiamata per controllare il token (il payload è il token già decriptato)
