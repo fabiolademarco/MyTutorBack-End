@@ -211,7 +211,7 @@ exports.insertVerifiedEmail = (req, res) => {
  * @return {String} The encrypted token
  */
 createToken = (payload) => {
-  token = jwt.sign(payload, process.env.PRIVATE_KEY);
+  token = jwt.sign(payload, process.env.PRIVATE_KEY, {expiresIn: '1h'});
   return 'JWT ' + token;
 };
 
