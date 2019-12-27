@@ -2,7 +2,12 @@ const pool = require('../db');
 const bcrypt = require('bcrypt');
 const table = 'user';
 const SALT = 8;
-const role = {
+/**
+ * Enum for all possible states of a role
+ * @readonly
+ * @enum {string}
+ */
+const Role = {
   STUDENT: 'Student',
   PROFESSOR: 'Professor',
   DDI: 'DDI',
@@ -226,7 +231,7 @@ class User {
   }
 }
 
-User.Role = role;
+User.Role = Role;
 
 module.exports=User;
 

@@ -17,7 +17,7 @@ module.exports = (app, auth) => {
   app.patch('/api/notices/state', auth.authenticate(), NoticeControl.setStatus);
 
 
-  app.post('/api/notices/search', NoticeControl.search);
+  app.post('/api/notices/search', auth.setUser, NoticeControl.search);
 
 
   app.get('/api/notices/:id/pdf', NoticeControl.downloadNotice);
