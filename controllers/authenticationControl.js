@@ -24,7 +24,7 @@ const ERR_NOT_AUTHORIZED = 401;
  * @param {Response} res
  */
 exports.login = (req, res) => {
-  user = new User(req.body.user);
+  user = (req.body.user != null) ? new User(req.body.user) : null;
   if (user == null || !checkEmail(user.email) || !checkPassword(user.password)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
@@ -79,7 +79,7 @@ exports.logout = (req, res) => {
  * @todo Controlliamo anche che non esista ?
  */
 exports.registerStudent = (req, res) => {
-  student = new Student(req.body.student);
+  student = (req.body.student != null ) ? new Student(req.body.student) : null;
   if (student == null || !checkStudent(student)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
@@ -107,7 +107,7 @@ exports.registerStudent = (req, res) => {
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
         res.send({
-          error: err.message,
+          error: err,
         });
       });
 };
@@ -119,7 +119,7 @@ exports.registerStudent = (req, res) => {
  * @todo Implementare il meccanismo di iscrizione
  */
 exports.registerProfessor = (req, res) => {
-  professor = new User(req.body.professor);
+  professor = (req.body.professor != null) ? new User(req.body.professor) : null;
   // Bisogna controllare che la sua email sia verificata
   if (professor == null || !checkProfessor(professor)) {
     res.status(ERR_CLIENT_STATUS);
@@ -158,7 +158,7 @@ exports.registerProfessor = (req, res) => {
         res.status(ERR_SERVER_STATUS);
         res.send({
           status: false,
-          error: err.message,
+          error: err,
         });
       });
 };
@@ -224,10 +224,10 @@ createToken = (payload) => {
 checkStudent = (student) => {
   const nameExp = /^[A-Za-z ‘]+$/;
   const surnameExp = /^[A-Za-z ‘]+$/;
-  const emailExp = /^[a-z]\.[a-z]+[1-9]*[\@studenti]?\.unisa\.it$/;
+  const emailExp = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
   const registrationNumberExp = /^[0-9A-Za-z ‘]*$/;
   const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
-  const birthDateExp = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])( (2[0-3]|[01][0-9]):[0-5][0-9])?/; // Non so se deve essere cosi
+  const birthDateExp = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/; // Non so se deve essere cosi
   if (!emailExp.test(student.email)) {
     return false;
   }
@@ -291,7 +291,7 @@ checkVerifiedEmail = (email) => {
  * @return {boolean} True if the email respects the format, else it's false.
  */
 checkEmail = (email) => {
-  const emailExpStudent = /^[a-z]\.[a-z]+[1-9]*\@studenti\.unisa\.it$/;
+  const emailExpStudent = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
   const emailExpProfessor = /^[a-z]\.[a-z]*\@unisa\.it$/;
   return emailExpProfessor.test(email) || emailExpStudent.test(email);
 };

@@ -20,7 +20,7 @@ class Student extends User {
   constructor(student) {
     super(student);
     this.registration_number = student.registration_number;
-    this.birth_date = new Date(student.birth_date);
+    this.birth_date = student.birth_date;
   }
 
   /**
