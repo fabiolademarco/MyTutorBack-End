@@ -1,18 +1,16 @@
-/*
+const Notice = require('../models/notice');
+const Comment = require('../models/comment');
+
+/**
  * NoticeControl
  *
  * This module represents the Notice Controller
  *
- * @author Marco D'Antonio
- * @version
- * @since
+ * @module
+ * @author Marco D'Antonio, Francesco Migliaro
  *
  * 2019 - Copyright by Gang Of Four Eyes
  */
-const Notice = require('../models/notice');
-const Comment = require('../models/comment');
-const ERR_CLIENT_STATUS = 412;
-const ERR_SERVER_STATUS = 500;
 
 /**
  *  Handles the request for the creation of a notice
@@ -21,41 +19,42 @@ const ERR_SERVER_STATUS = 500;
  * @param {Response} res
  */
 exports.create = (req, res) => {
-  res.set('Content-Type', 'application/json');
-  const notice = req.body;
+  const notice = req.body.notice;
 
   if (notice == null) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
+    res.status(412).send({error: 'Request body must be defined'});
+    return;
   }
 
   Notice.create(notice)
       .then((notice) => {
-        return res.send({notice: notice});
+        res.send({notice: notice});
       })
       .catch((err) => {
-        return res.status(ERR_SERVER_STATUS).send({error: err});
+        res.status(500).send({error: err});
       });
 };
 
+
 exports.update = (req, res) => {
-  res.set('Content-Type', 'application/json');
-  const notice = req.body;
+  const notice = req.body.notice;
 
   if (notice == null) {
-    return res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
+    res.status(412).send({error: 'Request body must be defined'});
+    return;
   }
 
   Notice.update(notice)
       .then((notice) => {
-        return res.send({notice: notice});
+        res.send({notice: notice});
       })
       .catch((err) => {
-        return res.status(ERR_SERVER_STATUS).send({error: err});
+        res.status(500).send({error: err});
       });
 };
 
 exports.setStatus = (req, res) => {
-  const notice = req.body;
+  const notice = req.body.notice;
   notice = new Notice();
 
   switch (notice.status) {
@@ -101,11 +100,9 @@ exports.search = (req, res) => {
 };
 
 exports.find = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
   const id = req.params.id;
   if (id === null || Number.parseInt(id) === NaN) {
-    return res.status(ERR_CLIENT_STATUS).send({error: 'Invalid protocol number'});
+    return res.status(412).send({error: 'Invalid protocol number'});
   }
 
   Notice.findByProtocol(id)
@@ -113,19 +110,17 @@ exports.find = (req, res) => {
         return res.send({notice: notice});
       })
       .catch((err) => {
-        return res.status(ERR_CLIENT_STATUS).send({error: err});
+        return res.status(500).send({error: err});
       });
 };
 
 exports.findAll = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
   Notice.findAll()
       .then((notices) => {
         return res.send({notices: notices});
       })
       .catch((err) => {
-        return res.status(ERR_SERVER_STATUS).send({error: err});
+        return res.status(500).send({error: err});
       });
 };
 

@@ -1,18 +1,18 @@
-/**
- * ApplicationSheet
- *
- * This class represents the Application Sheet controller
- *
- * @author Giannandrea Vicidomini
- * @version
- * @since
- *
- * 2019 - Copyright by Gang Of Four Eyes
- */
 const ApplicationSheet = require('../models/applicationSheet');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
+
+/**
+ * ApplicationSheet
+ *
+ * This module represents the Application Sheet controller
+ *
+ * @module
+ * @author Giannandrea Vicidomini
+ *
+ * 2019 - Copyright by Gang Of Four Eyes
+ */
 
 /** Handles the request for the creation of an application
  * @param {Request} req
@@ -20,7 +20,6 @@ const ERR_SERVER_STATUS = 500;
  *
  */
 exports.create = (req, res)=>{
-  res.set('Content-Type', 'application/json');
   const applicationSheet = req.body.applicationSheet;
 
   if (applicationSheet == null) {
@@ -47,7 +46,6 @@ exports.create = (req, res)=>{
  *
  */
 exports.update = (req, res)=>{
-  res.set('Content-Type', 'application/json');
   const applicationSheet=req.body.applicationSheet;
 
   if (applicationSheet == null) {
@@ -74,7 +72,6 @@ exports.update = (req, res)=>{
  *
  */
 exports.delete = (req, res)=>{
-  res.set('Content-Type', 'application/json');
   const noticeProtocol= req.body.noticeProtocol;
 
   if (applicationSheet == null) {

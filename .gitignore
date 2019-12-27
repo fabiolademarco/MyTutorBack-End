@@ -111,3 +111,5 @@ test.js
 
 # Mochawesome directory
 mochawesome-report 
+
+out
