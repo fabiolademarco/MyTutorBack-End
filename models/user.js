@@ -213,7 +213,7 @@ class User {
     if (email == null || password == null) {
       throw new Error('Email or Password can not be null or undefined');
     }
-    return pool.query(`SELECT * FROM ${table} WHERE email = ?`, email)
+    return pool.query(`SELECT * FROM ${table} WHERE email = ? AND verified = 1`, email)
         .then(([rows]) => {
           if (rows.length < 1 || !bcrypt.compareSync(password, rows[0].password)) {
             return null;
