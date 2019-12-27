@@ -2,7 +2,12 @@ const pool = require('../db');
 const bcrypt = require('bcrypt');
 const table = 'user';
 const SALT = 8;
-const role = {
+/**
+ * Enum for all possible states of a role
+ * @readonly
+ * @enum {string}
+ */
+const Role = {
   STUDENT: 'Student',
   PROFESSOR: 'Professor',
   DDI: 'DDI',
@@ -213,7 +218,7 @@ class User {
     if (email == null || password == null) {
       throw new Error('Email or Password can not be null or undefined');
     }
-    return pool.query(`SELECT * FROM ${table} WHERE email = ?`, email)
+    return pool.query(`SELECT * FROM ${table} WHERE email = ? AND verified = 1`, email)
         .then(([rows]) => {
           if (rows.length < 1 || !bcrypt.compareSync(password, rows[0].password)) {
             return null;
@@ -226,7 +231,7 @@ class User {
   }
 }
 
-User.Role = role;
+User.Role = Role;
 
 module.exports=User;
 

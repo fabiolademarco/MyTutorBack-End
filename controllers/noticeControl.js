@@ -1,5 +1,12 @@
 const Notice = require('../models/notice');
 const Comment = require('../models/comment');
+const User = require('../models/user');
+
+const accessList = new Map();
+accessList.set(User.Role.STUDENT, [Notice.States.PUBLISHED, Notice.States.EXPIRED, Notice.States.WAITING_FOR_GRADED_LIST, Notice.States.CLOSED]);
+accessList.set(User.Role.PROFESSOR, accessList.get(User.Role.STUDENT).concat([Notice.States.IN_ACCEPTANCE, Notice.States.ACCEPTED]));
+accessList.set(User.Role.DDI, accessList.get(User.Role.STUDENT).concat([Notice.States.IN_APPROVAL, Notice.States.APPROVED]));
+accessList.set(User.Role.TEACHING_OFFICE, Object.values(Notice.States));
 
 /**
  * NoticeControl
@@ -107,6 +114,12 @@ exports.find = (req, res) => {
 
   Notice.findByProtocol(id)
       .then((notice) => {
+        const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
+
+        if (!accessList.get(userRole).includes(notice.state)) {
+          return res.status(403);
+        }
+
         return res.send({notice: notice});
       })
       .catch((err) => {
