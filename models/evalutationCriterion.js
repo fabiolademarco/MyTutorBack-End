@@ -15,9 +15,7 @@ const table = 'evaluation_criterion';
 class EvalutationCriterion {
   /**
  * EvaluationCriterion object constructor
- * @param {EvaluationCriterion} evaluationCriterion The JS object that contains
- *                                                   fields for setting new
- *                                                   EvaluationCriterion object
+ * @param {EvaluationCriterion} evaluationCriterion The JS object that contains fields for setting new EvaluationCriterion object
  */
   constructor(evaluationCriterion) {
     this.notice_protocol = evaluationCriterion.notice_protocol;
@@ -27,53 +25,43 @@ class EvalutationCriterion {
 
   /**
    * Creates a new evaluation criterion in the database.
-   * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion
-   *                                                  to save.
-   * @return {Promise} Promise representing the future fulfillment of the evaluation criterion creation
+   * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion to save.
+   * @return {Promise} Promise that represents the created evaluation criterion.
    */
   static create(evaluationCriterion) {
-    return pool.query(`INSERT INTO ${table}
-              SET ?`, evaluationCriterion)
-        .then((data) => {
-          return data;
+    return pool.query(`INSERT INTO ${table} SET ?`, evaluationCriterion)
+        .then(([resultSetHeader]) => {
+          return new EvalutationCriterion(evaluationCriterion);
         })
         .catch((err) => {
           throw err;
         });
   }
   /**
-   * Update an evaluation criterion in database.
-   * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion
-   *                                                  to save.
-   * @return {Promise} Promise representing the future fulfillment of the evaluation criterion update
+   * Updates an evaluation criterion in database.
+   * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion to update.
+   * @return {Promise} Promise that represents the updated evaluation criterion.
    */
   static update(evaluationCriterion) {
-    return pool.query(`UPDATE ${table}
-              SET ?
-              WHERE name = ? AND notice_protocol = ?`, [evaluationCriterion,
-      evaluationCriterion.name,
-      evaluationCriterion.notice_protocol])
-        .then((data) => {
-          return data;
+    return pool.query(`UPDATE ${table} SET ? WHERE name = ? AND notice_protocol = ?`,
+        [evaluationCriterion, evaluationCriterion.name, evaluationCriterion.notice_protocol])
+        .then(([resultSetHeader]) => {
+          return new EvalutationCriterion(evaluationCriterion);
         })
         .catch((err) => {
           throw err;
         });
   }
   /**
-   * Remove an evaluation criterion from database.
-   * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion
-   *                                                  to remove.
-   * @return {Promise} Promise representing the future fulfillment of the evaluation criterion removal
+   * Removes an evaluation criterion from database.
+   * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion to remove.
+   * @return {Promise}  Promise that represents the value of the action.
    */
   static remove(evaluationCriterion) {
-    return pool.query(`DELETE
-              FROM ${table}
-              WHERE name = ? 
-                AND notice_protocol = ?`, [evaluationCriterion.name,
-      evaluationCriterion.notice_protocol])
-        .then((data) => {
-          return data;
+    return pool.query(`DELETE FROM ${table} WHERE name = ? AND notice_protocol = ?`,
+        [evaluationCriterion.name, evaluationCriterion.notice_protocol])
+        .then(([resultSetHeader]) => {
+          return resultSetHeader.affectedRows > 0;
         })
         .catch((err) => {
           throw err;
@@ -82,17 +70,12 @@ class EvalutationCriterion {
   /**
    * Find the evaluation criterion with the specific id.
    * @param {string} name The name of the evaluation criterion.
-   * @param {string} noticeProtocol The protocol of the notice
-   *                                to which the evaluation criterion
-   *                                is related.
-   * @return {Promise} Promise representing the future fulfillment of the evaluation criterion retrieval
+   * @param {string} noticeProtocol The protocol of the notice to which the evaluation criterion is related.
+   * @return {Promise} Promise that represent the evaluation criterion.
    */
   static findById(name, noticeProtocol) {
-    return pool.query(`SELECT *
-              FROM ${table}
-              WHERE notice_protocol = ?
-                AND name = ?`, [noticeProtocol,
-      name])
+    return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ? AND name = ?`,
+        [noticeProtocol, name])
         .then(([rows]) => {
           return (rows[0] == undefined) ? rows : new EvalutationCriterion(rows[0]);
         })
@@ -103,14 +86,12 @@ class EvalutationCriterion {
   /**
    * Finds the evaluation criterions correlate to the specified notice.
    * @param {string} noticeProtocol The protocol of the notice.
-   * @return {Promise} Promise representing the future fulfillment of the evaluation criterion retrieval
+   * @return {Promise} Promise that represent the evaluation criterion.
    */
   static findByNotice(noticeProtocol) {
-    return pool.query(`SELECT *
-              FROM ${table}
-              WHERE notice_protocol = ?`, noticeProtocol)
+    return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
         .then(([rows]) => {
-          return rows.map((criterion)=>new EvalutationCriterion(criterion));
+          return rows.map((criterion) => new EvalutationCriterion(criterion));
         })
         .catch((err) => {
           throw err;
@@ -118,33 +99,27 @@ class EvalutationCriterion {
   }
   /**
    * Finds allthe evaluation criterions in the database.
-   *
-   * @return {Promise} Promise representing the future fulfillment of the evaluation criterions retrieval
+   * @return {Promise} Promise that respresents all the Documents.
    */
   static findAll() {
-    return pool.query(`SELECT *
-              FROM ${table}`)
+    return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => {
-          return rows.map((criterion)=> new EvalutationCriterion(criterion));
+          return rows.map((criterion) => new EvalutationCriterion(criterion));
         })
         .catch((err) => {
           throw err;
         });
   }
   /**
-   * Check if an evaluation criterion exists.
-   * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion
-   *                                                  to check.
-   * @return {Promise} Promise representing the future fulfillment of the request checking whether or not a criterion exists
+   * Checks if an evaluation criterion exists.
+   * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion to check.
+   * @return {Promise} Promise that represents the value of the action.
    */
   static exists(evaluationCriterion) {
-    return pool.query(`SELECT *
-              FROM ${table}
-              WHERE notice_protocol = ?
-                AND name = ?`, [evaluationCriterion.notice_protocol,
-      evaluationCriterion.name])
-        .then((data) => {
-          return data;
+    return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ? AND name = ?`,
+        [evaluationCriterion.notice_protocol, evaluationCriterion.name])
+        .then(([rows]) => {
+          return rows.length > 0;
         })
         .catch((err) => {
           throw err;
