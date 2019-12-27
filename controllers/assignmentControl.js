@@ -1,15 +1,3 @@
-/**
- * AssignmentControl
- *
- * This class represents the Assignment Controller
- *
- * @author Roberto Bruno
- * @version
- * @since
- * @todo Bisogna definire l'autenticazione ed l'invio delle email
- *
- * 2019 - Copyright by Gang Of Four Eyes
- */
 const Assignment = require('../models/assignment');
 const User = require('../models/user');
 const OK_STATUS = 200;
@@ -17,12 +5,23 @@ const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
 
 /**
+ * AssignmentControl
+ *
+ * This class represents the Assignment Controller
+ *
+ * @module
+ * @author Roberto Bruno
+ * @todo Bisogna definire l'autenticazione ed l'invio delle email
+ *
+ * 2019 - Copyright by Gang Of Four Eyes
+ */
+
+/**
  * Allows to send a request of an assignment
  * @param {Request} req
  * @param {Response} res
  */
 exports.sendRequest = (req, res) => {
-  res.set('Content-Type', 'application/json');
   const assignment = new Assignment(req.body.assignment);
   const emailStudent = req.body.emailStudent;
   // Bisogna  controllare che esista anche lo studente
@@ -53,7 +52,6 @@ exports.sendRequest = (req, res) => {
  */
 
 exports.book = (req, res) => {
-  res.set('Content-Type', 'application/json');
   const assignment = new Assignment(req.body.assignment);
 
   if (assignment === null || assignment.state !== Assignment.states.WAITING) {
@@ -79,7 +77,6 @@ exports.book = (req, res) => {
  */
 
 exports.assign = (req, res) => {
-  res.set('Content-Type', 'application/json');
   const assignment = new Assignment(req.body.assignment);
 
   if (assignment.state !== Assignment.states.BOOKED) {
@@ -104,7 +101,6 @@ exports.assign = (req, res) => {
  * @param {Response} res
  */
 exports.search = (req, res) => {
-  res.set('Content-Type', 'application/json');
   const user = req.user;
   if (user.role !== User.Role.STUDENT && user.role !== User.Role.TEACHING_OFFICE) {
     res.status(401).send({error: 'Non sei autorizzato'});
@@ -134,7 +130,6 @@ exports.search = (req, res) => {
  * @param {Response} res
  */
 exports.decline = (req, res) => {
-  res.set('Content-Type', 'application/json');
   const assignment = new Assignment(req.body.assignment);
   const user = req.user;
   if (assignment === null || assignment.state !== Assignment.states.WAITING || assignment.student !== user.id) {
@@ -161,7 +156,6 @@ exports.decline = (req, res) => {
  */
 
 exports.find = (req, res) => {
-  res.set('Content-Type', 'application/json');
   const id = req.params.id;
   const user = req.user;
   if (id === null || Number.parseInt(id) === NaN) {
@@ -201,7 +195,6 @@ exports.find = (req, res) => {
  * @param {Response} res
  */
 exports.close = (req, res) => {
-  res.set('Content-Type', 'application/json');
   const assignment = new Assignment(req.body.assignment);
 
   if (assignment === null || assignment.state !== Assignment.states.ASSIGNED) {

@@ -38,6 +38,8 @@ app.use(function(req, res, next) {
   // to the API (e.g. in case you use sessions)
   res.setHeader('Access-Control-Allow-Credentials', true);
 
+  res.set('Content-Type', 'application/json');
+
   // Pass to next layer of middleware
   next();
 });
@@ -63,7 +65,7 @@ app.listen(port, function() {
 
 // AssignmentService routes
 assignmentService(app, auth); // Look for first example of authentication
-noticeService(app);
+noticeService(app, auth);
 userService(app, auth);
 authService(app, auth);
 
