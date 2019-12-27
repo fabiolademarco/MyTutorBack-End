@@ -30,8 +30,8 @@ const ERR_SERVER_STATUS = 500;
  */
 module.exports.delete=function(req, res) {
   res.set('Content-Type', 'application/json');
-  const user=req.body;
-  if (user===null || user===undefined) {
+  const user=req.body.user;
+  if (user==null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente non puo essere nullo'});
     return;
@@ -53,8 +53,8 @@ module.exports.delete=function(req, res) {
  */
 module.exports.search=function(req, res) {
   res.set('Content-Type', 'application/json');
-  const param=req.body;
-  if (param===null || param===undefined) {
+  const param=req.body.param;
+  if (param==null ) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente non puo essere nullo'});
     return;
@@ -83,8 +83,8 @@ module.exports.search=function(req, res) {
  */
 module.exports.update=function(req, res) {
   res.set('Content-Type', 'application/json');
-  const user=req.body;
-  if (user===null || user===undefined) {
+  const user=req.body.user;
+  if (user==null ) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente non puo essere nullo'});
     return;
@@ -104,8 +104,8 @@ module.exports.update=function(req, res) {
  */
 module.exports.find=function(req, res) {
   res.set('Content-Type', 'application/json');
-  const email=req.body;
-  if (email===null || email===undefined) {
+  const email=req.query.email;
+  if (email==null ) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'email non puo essere nullo'});
     return;
