@@ -104,7 +104,7 @@ module.exports.update=function(req, res) {
  */
 module.exports.find=function(req, res) {
   res.set('Content-Type', 'application/json');
-  const email=req.body.email;
+  const email=req.query.email;
   if (email==null ) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'email non puo essere nullo'});
