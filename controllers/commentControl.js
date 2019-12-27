@@ -18,41 +18,34 @@ const ERR_SERVER_STATUS = 500;
   * @param {Request} req
   * @param {Response} res
   */
-exports.create = (req, res) => {
+exports.set = (req, res) => {
   if (!req.body.comment) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
 
   const comment = req.body.comment;
 
-  Comment.create(comment)
-      .then((comment) => {
-        return res.send({comment: comment});
+  Comment.exists(comment)
+      .then((exist) => {
+        if (exist) {
+          Comment.update(comment)
+              .then((comment) => {
+                return res.send({comment: comment});
+              })
+              .catch((err) => {
+                return res.status(ERR_SERVER_STATUS).send({error: err});
+              });
+        } else {
+          Comment.create(comment)
+              .then((comment) => {
+                return res.send({comment: comment});
+              })
+              .catch((err) => {
+                return res.status(ERR_SERVER_STATUS).send({error: err});
+              });
+        }
       })
-      .catch((err) => {
-        return res.status(ERR_SERVER_STATUS).send({error: err});
-      });
-};
-
-/**
- * Handles the request for update a comment.
- * @param {Request} req
- * @param {Response} res
- */
-exports.update = (req, res) => {
-  if (!req.body.comment) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
-  }
-
-  const comment = req.body.comment;
-
-  Comment.update(comment)
-      .then((comment) => {
-        return res.send({comment: comment});
-      })
-      .catch((err) => {
-        return res.status(ERR_SERVER_STATUS).send({error: err});
-      });
+      .catch((err) => res.status(ERR_SERVER_STATUS).send({error: err}));
 };
 
 /**
@@ -60,7 +53,7 @@ exports.update = (req, res) => {
  * @param {Request} req
  * @param {Reponse} res
  */
-exports.remove = (req, res) => {
+exports.delete = (req, res) => {
   if (!req.body.comment) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
@@ -77,32 +70,11 @@ exports.remove = (req, res) => {
 };
 
 /**
- * Handles the request for check if a comment exists.
- * @param {Request} req
- * @param {Response} res
- */
-exports.exists = (req, res) => {
-  if (!req.body.comment) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
-  }
-
-  const comment = req.body.comment;
-
-  Comment.exists(comment)
-      .then((exists) => {
-        return res.send({exists: exists});
-      })
-      .catch((err) => {
-        return res.status(ERR_SERVER_STATUS).send({error: err});
-      });
-};
-
-/**
  * Handles the request for search a comment by notice's protocol.
  * @param {Request} req
  * @param {Response} res
  */
-exports.findByProtocol = (req, res) => {
+exports.get = (req, res) => {
   if (!req.body.noticeProtocol) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
@@ -112,21 +84,6 @@ exports.findByProtocol = (req, res) => {
   Comment.findByProtocol(noticeProtocol)
       .then((comment) => {
         return res.send({comment: comment});
-      })
-      .catch((err) => {
-        return res.status(ERR_SERVER_STATUS).send({error: err});
-      });
-};
-
-/**
- * Handles the request for get all comment.
- * @param {Request} req
- * @param {Response} res
- */
-exports.findAll = (req, res) => {
-  Comment.findAll()
-      .then((comments) => {
-        return res.send({comments: comments});
       })
       .catch((err) => {
         return res.status(ERR_SERVER_STATUS).send({error: err});
