@@ -8,7 +8,6 @@ const table = 'verified_email';
  * This class represents a VerifiedEmail
  *
  * @author Roberto Bruno
- * @version 1.0
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */

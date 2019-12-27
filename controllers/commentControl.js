@@ -18,8 +18,6 @@ const ERR_SERVER_STATUS = 500;
   * @param {Response} res
   */
 exports.create = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
   if (!req.body) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
@@ -41,8 +39,6 @@ exports.create = (req, res) => {
  * @param {Response} res
  */
 exports.update = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
   if (!req.body) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
@@ -64,8 +60,6 @@ exports.update = (req, res) => {
  * @param {Reponse} res
  */
 exports.remove = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
   if (!req.body) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
@@ -87,8 +81,6 @@ exports.remove = (req, res) => {
  * @param {Response} res
  */
 exports.exists = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
   if (!req.body) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
@@ -110,8 +102,6 @@ exports.exists = (req, res) => {
  * @param {Response} res
  */
 exports.findByProtocol = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
   if (!req.body) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
@@ -133,8 +123,6 @@ exports.findByProtocol = (req, res) => {
  * @param {Response} res
  */
 exports.findAll = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
   Comment.findAll()
       .then((comments) => {
         return res.send({comments: comments});

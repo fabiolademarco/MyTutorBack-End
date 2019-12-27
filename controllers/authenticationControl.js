@@ -25,7 +25,6 @@ const ERR_NOT_AUTHORIZED = 401;
  * @param {Response} res
  */
 exports.login = (req, res) => {
-  res.set('Content-Type', 'application/json');
   user = new User(req.body.user);
   if (user == null || !checkEmail(user.email) || !checkPassword(user.password)) {
     res.status(ERR_CLIENT_STATUS);
@@ -66,7 +65,6 @@ exports.login = (req, res) => {
  * @param {Response} res
  */
 exports.logout = (req, res) => {
-  res.set('Content-Type', 'application/json');
   res.set('Authorization', '');
   res.status(OK_STATUS);
   res.send({
@@ -82,7 +80,6 @@ exports.logout = (req, res) => {
  * @todo Controlliamo anche che non esista ?
  */
 exports.registerStudent = (req, res) => {
-  res.set('Content-Type', 'application/json');
   student = new Student(req.body.student);
   if (student == null || !checkStudent(student)) {
     res.status(ERR_CLIENT_STATUS);
@@ -123,7 +120,6 @@ exports.registerStudent = (req, res) => {
  * @todo Implementare il meccanismo di iscrizione
  */
 exports.registerProfessor = (req, res) => {
-  res.set('Content-Type', 'application/json');
   professor = new User(req.body.professor);
   // Bisogna controllare che la sua email sia verificata
   if (professor == null || !checkProfessor(professor)) {
@@ -184,7 +180,6 @@ exports.passwordRecovery = (req, res) => {
  * @todo Completare con l'aggiunta del model VerifiedEmail e controllare che l'email non esista già
  */
 exports.insertVerifiedEmail = (req, res) => {
-  res.set('Content-Type', 'application/json');
   email = req.body.email;
   if (email == null || !checkVerifiedEmail(email)) {
     res.status(ERR_CLIENT_STATUS);

@@ -9,7 +9,7 @@ const Comment = require('../models/comment');
  * @module
  * @author Marco D'Antonio, Francesco Migliaro
  *
- * 2019 - Copyright by Gang Of Four Eyes
+ * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 
 /**
@@ -101,7 +101,7 @@ exports.search = (req, res) => {
 
 exports.find = (req, res) => {
   const id = req.params.id;
-  if (id === null || Number.parseInt(id) === NaN) {
+  if (id == null || Number.parseInt(id) === NaN) {
     return res.status(412).send({error: 'Invalid protocol number'});
   }
 

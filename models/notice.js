@@ -30,8 +30,6 @@ const States = {
  * This class represents a Notice
  *
  * @author Francesco Migliaro, Marco D'Antonio
- * @version
- * @since
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
@@ -217,7 +215,7 @@ class Notice {
     return pool.query(`SELECT * FROM ${table} WHERE protocol = ?`, noticeProtocol)
         .then(([rows]) => {
           const notice = rows[0];
-          if (notice === undefined) {
+          if (notice == undefined) {
             throw new Error('0 results found for protocol: ' + noticeProtocol);
           }
           return getOtherFields(notice.protocol)

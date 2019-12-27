@@ -9,10 +9,8 @@ const table = 'evaluation_criterion';
  * This class represents an evaluation criterion
  *
  * @author Francesco Migliaro
- * @version
- * @since
  *
- * 2019 - Copyright by Gang Of Four Eyes
+ * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 class EvalutationCriterion {
   /**
@@ -96,7 +94,7 @@ class EvalutationCriterion {
                 AND name = ?`, [noticeProtocol,
       name])
         .then(([rows]) => {
-          return (rows[0] === undefined)?rows:new EvalutationCriterion(rows[0]);
+          return (rows[0] == undefined) ? rows : new EvalutationCriterion(rows[0]);
         })
         .catch((err) => {
           throw err;
