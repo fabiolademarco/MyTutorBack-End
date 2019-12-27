@@ -7,8 +7,6 @@ const table = 'comment';
  * This class represents a Comment
  *
  * @author Francesco Migliaro, Roberto Bruno
- * @version
- * @since
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
@@ -29,7 +27,7 @@ class Comment {
    * @return {Promise<Comment>} Promise object that represents the created comment.
    */
   static create(comment) {
-    if (comment === null || comment === undefined) {
+    if (comment == null) {
       throw new Error('No parameters');
     }
     return pool.query(`INSERT INTO ${table} SET ?`, comment)
@@ -47,7 +45,7 @@ class Comment {
    * @return {Promise<Comment>} Promise object that represents the updated comment.
    */
   static update(comment) {
-    if (comment === null || comment === undefined) {
+    if (comment == null) {
       throw new Error('No parameters');
     }
     return pool.query(`UPDATE ${table} SET ? WHERE notice = ?`, [comment, comment.notice])
@@ -63,7 +61,7 @@ class Comment {
    * @return {Promise<boolean>}  Promise that is true if the removal went right else it's false.
    */
   static remove(comment) {
-    if (comment === null || comment === undefined) {
+    if (comment == null) {
       throw new Error('No parameters');
     }
     return pool.query(`DELETE FROM ${table} WHERE notice = ?`, comment.notice)
@@ -79,7 +77,7 @@ class Comment {
    * @return {Promise<boolean>} Promise that is true if the comment exists in the db, else it's false
    */
   static exists(comment) {
-    if (comment === null || comment === undefined) {
+    if (comment == null) {
       throw new Error('No parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice = ?`, comment.notice)
@@ -94,7 +92,7 @@ class Comment {
    * @return {Promise<Comment>} Promise object that represents the Comment of the passed notice.
    */
   static findByProtocol(noticeProtocol) {
-    if (noticeProtocol === null || noticeProtocol === undefined) {
+    if (noticeProtocol == null) {
       throw new Error('No parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice = ?`, noticeProtocol)

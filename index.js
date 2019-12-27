@@ -1,41 +1,40 @@
+// Import dotenv
 const dotenv = require('dotenv');
-dotenv.config();// FileName: index.js
+
+// Configure dotenv
+dotenv.config();
+
 // Import express
 const express = require('express');
 
 // Import Body parser
 const bodyParser = require('body-parser');
-// Import MySql
-// let mysql = require('mysql');
+
 // Initialize the app
 const app = express();
-// import services
-// ...
+
+// Import auth
 const auth = require('./auth')();
+
+// Import services
 const assignmentService = require('./services/assignmentService');
 const noticeService = require('./services/noticeService');
 const userService = require('./services/userService');
 const authService = require('./services/authenticationService');
 
 app.use(function(req, res, next) {
-  // Website you wish to allow to connect,
-  // * means that all the website are allowed
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  // Request methods you wish to allow
   res.setHeader(
       'Access-Control-Allow-Methods',
       'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   );
 
-  // Request headers you wish to allow
   res.setHeader(
       'Access-Control-Allow-Headers',
       'X-Requested-With,content-type',
   );
 
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   res.set('Content-Type', 'application/json');
@@ -52,11 +51,9 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(auth.initialize());
+
 // Setup server port
 const port = process.env.EXPRESS_PORT;
-
-// Import routes
-// NomeVariabileImportServices(app);
 
 // Launch app to listen to specified port
 app.listen(port, function() {
@@ -64,8 +61,14 @@ app.listen(port, function() {
 });
 
 // AssignmentService routes
-assignmentService(app, auth); // Look for first example of authentication
+assignmentService(app, auth);
+
+// NoticeService routes
 noticeService(app, auth);
+
+// UserService routes
 userService(app, auth);
+
+// AuthenticationService routes
 authService(app, auth);
 

@@ -7,6 +7,7 @@ const ERR_SERVER_STATUS = 500;
  *
  * This module represents the Comment Controller
  *
+ * @module
  * @author Francesco Migliaro
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
@@ -18,13 +19,11 @@ const ERR_SERVER_STATUS = 500;
   * @param {Response} res
   */
 exports.create = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
-  if (!req.body) {
+  if (!req.body.comment) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
 
-  const comment = req.body;
+  const comment = req.body.comment;
 
   Comment.create(comment)
       .then((comment) => {
@@ -41,13 +40,11 @@ exports.create = (req, res) => {
  * @param {Response} res
  */
 exports.update = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
-  if (!req.body) {
+  if (!req.body.comment) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
 
-  const comment = req.body;
+  const comment = req.body.comment;
 
   Comment.update(comment)
       .then((comment) => {
@@ -64,13 +61,11 @@ exports.update = (req, res) => {
  * @param {Reponse} res
  */
 exports.remove = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
-  if (!req.body) {
+  if (!req.body.comment) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
 
-  const comment = req.body;
+  const comment = req.body.comment;
 
   Comment.remove(comment)
       .then((comment) => {
@@ -87,13 +82,11 @@ exports.remove = (req, res) => {
  * @param {Response} res
  */
 exports.exists = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
-  if (!req.body) {
+  if (!req.body.comment) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
 
-  const comment = req.body;
+  const comment = req.body.comment;
 
   Comment.exists(comment)
       .then((exists) => {
@@ -110,13 +103,11 @@ exports.exists = (req, res) => {
  * @param {Response} res
  */
 exports.findByProtocol = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
-  if (!req.body) {
+  if (!req.body.noticeProtocol) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
   }
 
-  const noticeProtocol = req.body;
+  const noticeProtocol = req.body.noticeProtocol;
 
   Comment.findByProtocol(noticeProtocol)
       .then((comment) => {
@@ -133,8 +124,6 @@ exports.findByProtocol = (req, res) => {
  * @param {Response} res
  */
 exports.findAll = (req, res) => {
-  res.set('Content-Type', 'application/json');
-
   Comment.findAll()
       .then((comments) => {
         return res.send({comments: comments});

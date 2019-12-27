@@ -30,8 +30,6 @@ const States = {
  * This class represents a Notice
  *
  * @author Francesco Migliaro, Marco D'Antonio
- * @version
- * @since
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
@@ -142,14 +140,16 @@ class Notice {
 
     return pool.query(`UPDATE ${table} SET ? WHERE protocol = ?`, [notice, notice.protocol])
         .then(() => {
-          if (!applicationSheet) {
-            return ApplicationSheet.remove(applicationSheet);
-          } else if (Object.entries(applicationSheet).length !== 0) {
-            return ApplicationSheet.update(applicationSheet);
+          if (applicationSheet) {
+            if (Object.entries(applicationSheet).length != 0) {
+              return ApplicationSheet.update(applicationSheet);
+            } else {
+              return ApplicationSheet.remove(applicationSheet);
+            }
           }
         })
         .then(() => {
-          if (evaluationCriteria && Object.entries(evaluationCriteria).length !== 0) {
+          if (evaluationCriteria) {
             return EvaluationCriterion.findByNotice(notice.protocol)
                 .then((dbEvaluationCriteria) => {
                   const actions = getActionsToPerform(dbEvaluationCriteria, evaluationCriteria);
@@ -159,7 +159,7 @@ class Notice {
           }
         })
         .then(() => {
-          if (articles && Object.entries(articles).length !== 0) {
+          if (articles) {
             return Article.findByNotice(notice.protocol)
                 .then((dbArticles) => {
                   const actions = getActionsToPerform(dbArticles, articles);
@@ -169,7 +169,7 @@ class Notice {
           }
         })
         .then(() => {
-          if (assignments && Object.entries(assignments).length !== 0) {
+          if (assignments) {
             return Assignment.findByNotice(notice.protocol)
                 .then((dbAssignments) => {
                   const actions = getActionsToPerform(dbAssignments, assignments);
@@ -215,7 +215,7 @@ class Notice {
     return pool.query(`SELECT * FROM ${table} WHERE protocol = ?`, noticeProtocol)
         .then(([rows]) => {
           const notice = rows[0];
-          if (notice === undefined) {
+          if (notice == undefined) {
             throw new Error('0 results found for protocol: ' + noticeProtocol);
           }
           return getOtherFields(notice.protocol)
