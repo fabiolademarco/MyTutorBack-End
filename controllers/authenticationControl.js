@@ -80,7 +80,6 @@ exports.logout = (req, res) => {
  */
 exports.registerStudent = (req, res) => {
   student = (req.body.student != null ) ? new Student(req.body.student) : null;
-  console.log(student);
   if (student == null || !checkStudent(student)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
@@ -108,7 +107,7 @@ exports.registerStudent = (req, res) => {
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
         res.send({
-          error: err.message,
+          error: err,
         });
       });
 };
@@ -159,7 +158,7 @@ exports.registerProfessor = (req, res) => {
         res.status(ERR_SERVER_STATUS);
         res.send({
           status: false,
-          error: err.message,
+          error: err,
         });
       });
 };
