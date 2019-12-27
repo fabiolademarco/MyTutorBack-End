@@ -7,6 +7,7 @@ const ERR_SERVER_STATUS = 500;
  *
  * This module represents the Comment Controller
  *
+ * @module
  * @author Francesco Migliaro
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
