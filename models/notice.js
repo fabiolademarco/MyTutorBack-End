@@ -143,9 +143,11 @@ class Notice {
     return pool.query(`UPDATE ${table} SET ? WHERE protocol = ?`, [notice, notice.protocol])
         .then(() => {
           if (applicationSheet) {
-            return ApplicationSheet.update(applicationSheet);
-          } else if (Object.entries(applicationSheet).length == 0) {
-            return ApplicationSheet.remove(applicationSheet);
+            if (Object.entries(applicationSheet).length != 0) {
+              return ApplicationSheet.update(applicationSheet);
+            } else {
+              return ApplicationSheet.remove(applicationSheet);
+            }
           }
         })
         .then(() => {
