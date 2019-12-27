@@ -12,6 +12,7 @@
  */
 const User = require('../models/user');
 const Student = require('../models/student');
+const VerifiedEmail = require('../models/verifiedEmail');
 const jwt = require('jsonwebtoken');
 
 const OK_STATUS = 200;
@@ -136,11 +137,28 @@ exports.registerProfessor = (req, res) => {
   }
   professor.role = User.Role.PROFESSOR;
   professor.verified = 0;
-  User.create(professor)
-      .then((professor) => {
-        // Bisogna inviare la mail per effettuare il controllo del professore
-        // Cosa facciamo se non viene più convalidato ?
-        // Permettiamo un operazione per cancellare tutti i non verificati, una sorta di batch ?
+  VerifiedEmail.isVerified(professor.email)
+      .then((exists) => {
+        if (exists) {
+          User.create(professor)
+              .then((professor) => {
+              // Bisogna inviare la mail per effettuare il controllo del professore
+              // Cosa facciamo se non viene più convalidato ?
+              // Permettiamo un operazione per cancellare tutti i non verificati, una sorta di batch ?
+              })
+              .catch((err) => {
+                res.status(ERR_SERVER_STATUS);
+                res.send({
+                  status: false,
+                  error: err.message,
+                });
+              });
+        } else {
+          res.send({
+            status: false,
+            error: 'Email non autorizzata',
+          });
+        }
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
@@ -168,7 +186,7 @@ exports.passwordRecovery = (req, res) => {
  */
 exports.insertVerifiedEmail = (req, res) => {
   res.set('Content-Type', 'application/json');
-  email = req.params.email;
+  email = req.body.email;
   if (email === undefined || email === null || !checkVerifiedEmail(email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
@@ -177,7 +195,21 @@ exports.insertVerifiedEmail = (req, res) => {
     });
     return;
   }
-  // TODO
+  const verifiedEmail = new VerifiedEmail({email: email, signed_up: 0});
+  VerifiedEmail.create(verifiedEmail)
+      .then((result) => {
+        res.status(OK_STATUS).send({
+          status: true,
+          message: 'Email inserita correttamente',
+        });
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS);
+        res.send({
+          status: false,
+          error: 'Email non inserita',
+        });
+      });
 };
 
 /**
