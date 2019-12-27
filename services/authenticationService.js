@@ -6,5 +6,5 @@ module.exports = (app, auth) => {
   app.post('/api/auth/registerStudent', auth.isLogged, AuthenticationControl.registerStudent);
   app.post('/api/auth/registerProfessor', auth.isLogged, AuthenticationControl.registerProfessor);
   app.post('/api/auth/recovery', auth.isLogged, AuthenticationControl.passwordRecovery);
-  app.get('/api/auth/verified', auth.authenticate(), auth.isTeachingOffice, AuthenticationControl.insertVerifiedEmail);
+  app.post('/api/auth/verified', auth.authenticate(), auth.isTeachingOffice, AuthenticationControl.insertVerifiedEmail);
 };
