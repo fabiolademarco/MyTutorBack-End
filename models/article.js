@@ -39,7 +39,7 @@ class Article {
   }
 
   /**
-   * Update an article in database.
+   * Updates an article in database.
    * @param {Article} article The article to update.
    * @return {Promise<Article>} Promise object that represents the updated Article
    */
@@ -54,7 +54,7 @@ class Article {
   }
 
   /**
-   * Remove an article from database.
+   * Removes an article from database.
    * @param {Article} article The article to remove.
    * @return {Promise<boolean>} Promise that is true if the removal went right else it's false
    */
@@ -69,7 +69,7 @@ class Article {
   }
 
   /**
-   * Find the article with the specific id.
+   * Finds the article with the specific id.
    * @param {Number} id The id of the article.
    * @return {Promise<Article>} Promise that represents the Article having the passed id
    */
@@ -113,7 +113,7 @@ class Article {
   }
 
   /**
-   * Check if an article exists.
+   * Checks if an article exists.
    * @param {Article} article The article to check.
    * @return {Promise<boolean>} Promise that is true if the Article is in the db, else it's false
    */
