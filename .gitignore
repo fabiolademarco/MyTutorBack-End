@@ -107,9 +107,10 @@ dist
 .vscode
 
 # test file for development
-test.js
+test.*
 
 # Mochawesome directory
 mochawesome-report 
 
+#jsdoc output
 out
