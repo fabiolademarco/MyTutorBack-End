@@ -22,13 +22,14 @@ const params = {
 /**
  * @typedef {Object} Authentication
  *
- * @property {function} initialize -Represents the function to initialize the passport authentication.
- * @property {function} authenticate -The function to check if the user is authenticate.
- * @property {function} isLogged -Function to check if the user is already logged.
- * @property {function} isProfessor -Fuction to check if the user is a Professor.
- * @property {function} isStudent -Fuction to check if the user is a Student.
- * @property {function} isDDI -Fuction to check if the user is a DDI.
- * @property {function} isTeachingOffice -Fuction to check if the user is a TeachingOffice
+ * @property {function} initialize Represents the function to initialize the passport authentication.
+ * @property {function} authenticate The function to check if the user is authenticate.
+ * @property {function} isNotLogged Function to check if the user is already logged and stops it if it is.
+ * @property {function} setUser Function which set user in the request if it is logged.
+ * @property {function} isProfessor Fuction to check if the user is a Professor.
+ * @property {function} isStudent Fuction to check if the user is a Student.
+ * @property {function} isDDI Fuction to check if the user is a DDI.
+ * @property {function} isTeachingOffice Fuction to check if the user is a TeachingOffice
  *
  */
 
@@ -76,13 +77,29 @@ module.exports = function() {
     authenticate: () => {
       return passport.authenticate('jwt', process.env.PRIVATE_KEY);
     },
-    isLogged: (req, res, next) => {
+    isNotLogged: (req, res, next) => {
       const token = req.get('Authorization');
-      if (token !== null && jwt.verify(token.substring(4), process.env.PRIVATE_KEY)) {
-        res.send({
-          error: 'User is already logged.',
-        });
-      } else {
+      try {
+        const payload = token != null ? jwt.verify(token.substring(4), process.env.PRIVATE_KEY) : null;
+        if (payload) {
+          res.send({
+            error: 'User is already logged.',
+          });
+        } else {
+          next();
+        }
+      } catch (err) {
+        next();
+      }
+    },
+    setUser: (req, res, next) => {
+      const token = req.get('Authorization');
+      try {
+        const payload = token != null ? jwt.verify(token.substring(4), process.env.PRIVATE_KEY) : null;
+        if (payload) {
+          req.user = payload;
+        }
+      } finally {
         next();
       }
     },
