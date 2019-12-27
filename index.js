@@ -11,7 +11,7 @@ const bodyParser = require('body-parser');
 const app = express();
 // import services
 // ...
-const auth = require('./controllers/auth')();
+const auth = require('./auth')();
 const assignmentService = require('./services/assignmentService');
 const noticeService = require('./services/noticeService');
 const userService = require('./services/userService');

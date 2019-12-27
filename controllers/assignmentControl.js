@@ -106,6 +106,10 @@ exports.assign = (req, res) => {
 exports.search = (req, res) => {
   res.set('Content-Type', 'application/json');
   const user = req.user;
+  if (user.role !== User.Role.STUDENT && user.role !== User.Role.TEACHING_OFFICE) {
+    res.status(401).send({error: 'Non sei autorizzato'});
+    return;
+  }
   const filter = {
     code: req.query.code,
     noticeProtocol: req.query.noticeProtocol,
@@ -159,18 +163,36 @@ exports.decline = (req, res) => {
 exports.find = (req, res) => {
   res.set('Content-Type', 'application/json');
   const id = req.params.id;
+  const user = req.user;
   if (id === null || Number.parseInt(id) === NaN) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Id non passato'});
     return null;
   }
-  Assignment.findById(id)
-      .then((data) => {
-        data = data === undefined ? null : data;
-        res.status(OK_STATUS).send({assignment: data});
-      })
-      .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: err});
-      });
+  if (user.role === User.Role.TEACHING_OFFICE) {
+    Assignment.findById(id)
+        .then((data) => {
+          data = data === undefined ? null : data;
+          res.status(OK_STATUS).send({assignment: data});
+        })
+        .catch((err) => {
+          res.status(ERR_SERVER_STATUS).send({error: err});
+        });
+  } else if (user.role === User.Role.STUDENT) {
+    Assignment.findByStudent(user.id)
+        .then((assignments) => {
+          const assignment = assignments.filter((el) => el.id === id);
+          if (assignment.length === 1) {
+            res.status(OK_STATUS).send({assignment: assignment[0]});
+          } else {
+            res.status(OK_STATUS).send({assignment: null});
+          }
+        })
+        .catch((err) => {
+          res.status(ERR_SERVER_STATUS).send({error: err});
+        });
+  } else {
+    res.status(401).send({error: 'Non sei autorizzato'});
+  }
 };
 
 /**
