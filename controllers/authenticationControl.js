@@ -26,7 +26,7 @@ const ERR_NOT_AUTHORIZED = 401;
  */
 exports.login = (req, res) => {
   res.set('Content-Type', 'application/json');
-  user = new User(req.body);
+  user = new User(req.body.user);
   if (user === null || user === undefined || !checkEmail(user.email) || !checkPassword(user.password)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
@@ -83,7 +83,7 @@ exports.logout = (req, res) => {
  */
 exports.registerStudent = (req, res) => {
   res.set('Content-Type', 'application/json');
-  student = new Student(req.body);
+  student = new Student(req.body.student);
   if (student === null || student === undefined || !checkStudent(student)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
@@ -124,7 +124,7 @@ exports.registerStudent = (req, res) => {
  */
 exports.registerProfessor = (req, res) => {
   res.set('Content-Type', 'application/json');
-  professor = new User(req.body);
+  professor = new User(req.body.professor);
   // Bisogna controllare che la sua email sia verificata
   if (professor === null || professor === undefined || !checkProfessor(professor)) {
     res.status(ERR_CLIENT_STATUS);
@@ -199,7 +199,7 @@ createToken = (payload) => {
 checkStudent = (student) => {
   const nameExp = /^[A-Za-z ‘]+$/;
   const surnameExp = /^[A-Za-z ‘]+$/;
-  const emailExp = /^[a-z]\.[a-z]+[1-9]*\@studenti\.unisa\.it$/;
+  const emailExp = /^[a-z]\.[a-z]+[1-9]*[\@studenti]?\.unisa\.it$/;
   const registrationNumberExp = /^[0-9A-Za-z ‘]*$/;
   const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
   const birthDateExp = '';
