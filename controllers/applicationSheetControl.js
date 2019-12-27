@@ -20,7 +20,7 @@ const ERR_SERVER_STATUS = 500;
  *
  */
 exports.create = (req, res)=>{
-  const applicationSheet = req.body;
+  const applicationSheet = req.body.applicationSheet;
 
   if (applicationSheet == null) {
     res.status(ERR_CLIENT_STATUS);
@@ -46,7 +46,7 @@ exports.create = (req, res)=>{
  *
  */
 exports.update = (req, res)=>{
-  const applicationSheet=req.body;
+  const applicationSheet=req.body.applicationSheet;
 
   if (applicationSheet == null) {
     res.status(ERR_CLIENT_STATUS);
@@ -72,7 +72,7 @@ exports.update = (req, res)=>{
  *
  */
 exports.delete = (req, res)=>{
-  const noticeProtocol= req.body;
+  const noticeProtocol= req.body.noticeProtocol;
 
   if (applicationSheet == null) {
     res.status(ERR_CLIENT_STATUS);

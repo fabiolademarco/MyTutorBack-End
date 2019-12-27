@@ -20,8 +20,8 @@ const ERR_SERVER_STATUS = 500;
  * @param {Response} res
  */
 module.exports.delete=function(req, res) {
-  const user=req.body;
-  if (user===null || user===undefined) {
+  const user=req.body.user;
+  if (user==null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente non puo essere nullo'});
     return;
@@ -42,14 +42,15 @@ module.exports.delete=function(req, res) {
  * @param {Response} res
  */
 module.exports.search=function(req, res) {
-  const param=req.body;
-  if (param===null || param===undefined) {
+  const param=req.body.param;
+
+  if (param == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente non puo essere nullo'});
     return;
   }
 
-  const filter={
+  const filter = {
     password: param.password,
     name: param.name,
     surname: param.surname,
@@ -71,12 +72,14 @@ module.exports.search=function(req, res) {
  * @param {Response} res
  */
 module.exports.update=function(req, res) {
-  const user=req.body;
-  if (user===null || user===undefined) {
+  const user=req.body.user;
+
+  if (user == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente non puo essere nullo'});
     return;
   }
+
   User.update(user)
       .then((newUser)=>{
         res.status(OK_STATUS).send({user: newUser});
@@ -91,8 +94,8 @@ module.exports.update=function(req, res) {
  * @param {Response} res
  */
 module.exports.find=function(req, res) {
-  const email=req.body;
-  if (email===null || email===undefined) {
+  const email = req.query.email;
+  if (email == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'email non puo essere nullo'});
     return;

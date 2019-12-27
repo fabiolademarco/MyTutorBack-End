@@ -4,14 +4,14 @@
  * This class represents the Authentication Controller
  *
  * @author Roberto Bruno
- * @version
- * @since
+ * @version 1.0
  *
- * @todo Controllare i formati di email e password
- * 2019 - Copyright by Gang Of Four Eyes
+ * @todo Finire password recovery e registrazione del professore
+ * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 const User = require('../models/user');
 const Student = require('../models/student');
+const VerifiedEmail = require('../models/verifiedEmail');
 const jwt = require('jsonwebtoken');
 
 const OK_STATUS = 200;
@@ -27,7 +27,7 @@ const ERR_NOT_AUTHORIZED = 401;
 exports.login = (req, res) => {
   res.set('Content-Type', 'application/json');
   user = new User(req.body.user);
-  if (user === null || user === undefined || !checkEmail(user.email) || !checkPassword(user.password)) {
+  if (user == null || !checkEmail(user.email) || !checkPassword(user.password)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -38,7 +38,7 @@ exports.login = (req, res) => {
 
   User.matchUser(user.email, user.password)
       .then((user) => {
-        if (user === null) {
+        if (user == null) {
           res.status(ERR_NOT_AUTHORIZED);
           res.send({
             status: false,
@@ -84,7 +84,7 @@ exports.logout = (req, res) => {
 exports.registerStudent = (req, res) => {
   res.set('Content-Type', 'application/json');
   student = new Student(req.body.student);
-  if (student === null || student === undefined || !checkStudent(student)) {
+  if (student == null || !checkStudent(student)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -126,7 +126,7 @@ exports.registerProfessor = (req, res) => {
   res.set('Content-Type', 'application/json');
   professor = new User(req.body.professor);
   // Bisogna controllare che la sua email sia verificata
-  if (professor === null || professor === undefined || !checkProfessor(professor)) {
+  if (professor == null || !checkProfessor(professor)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -136,11 +136,28 @@ exports.registerProfessor = (req, res) => {
   }
   professor.role = User.Role.PROFESSOR;
   professor.verified = 0;
-  User.create(professor)
-      .then((professor) => {
-        // Bisogna inviare la mail per effettuare il controllo del professore
-        // Cosa facciamo se non viene più convalidato ?
-        // Permettiamo un operazione per cancellare tutti i non verificati, una sorta di batch ?
+  VerifiedEmail.isVerified(professor.email)
+      .then((exists) => {
+        if (exists) {
+          User.create(professor)
+              .then((professor) => {
+              // Bisogna inviare la mail per effettuare il controllo del professore
+              // Cosa facciamo se non viene più convalidato ?
+              // Permettiamo un operazione per cancellare tutti i non verificati, una sorta di batch ?
+              })
+              .catch((err) => {
+                res.status(ERR_SERVER_STATUS);
+                res.send({
+                  status: false,
+                  error: err.message,
+                });
+              });
+        } else {
+          res.send({
+            status: false,
+            error: 'Email non autorizzata',
+          });
+        }
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
@@ -168,8 +185,8 @@ exports.passwordRecovery = (req, res) => {
  */
 exports.insertVerifiedEmail = (req, res) => {
   res.set('Content-Type', 'application/json');
-  email = req.params.email;
-  if (email === undefined || email === null || !checkVerifiedEmail(email)) {
+  email = req.body.email;
+  if (email == null || !checkVerifiedEmail(email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -177,7 +194,21 @@ exports.insertVerifiedEmail = (req, res) => {
     });
     return;
   }
-  // TODO
+  const verifiedEmail = new VerifiedEmail({email: email, signed_up: 0});
+  VerifiedEmail.create(verifiedEmail)
+      .then((result) => {
+        res.status(OK_STATUS).send({
+          status: true,
+          message: 'Email inserita correttamente',
+        });
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS);
+        res.send({
+          status: false,
+          error: 'Email non inserita',
+        });
+      });
 };
 
 /**
@@ -202,7 +233,7 @@ checkStudent = (student) => {
   const emailExp = /^[a-z]\.[a-z]+[1-9]*[\@studenti]?\.unisa\.it$/;
   const registrationNumberExp = /^[0-9A-Za-z ‘]*$/;
   const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
-  const birthDateExp = '';
+  const birthDateExp = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])( (2[0-3]|[01][0-9]):[0-5][0-9])?/; // Non so se deve essere cosi
   if (!emailExp.test(student.email)) {
     return false;
   }
@@ -216,6 +247,9 @@ checkStudent = (student) => {
     return false;
   }
   if (!passwordExp.test(student.password)) {
+    return false;
+  }
+  if (!birthDateExp.test(student.birth_date)) {
     return false;
   }
   return true;
