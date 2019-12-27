@@ -68,9 +68,6 @@ class Notice {
    * Creates a new notice in database.
    * @param {Notice} notice The notice to save.
    * @return {Promise<Notice>} Promise that represents the created Notice
-   *
-   * @todo Sistemare
-   *
    */
   static create(notice) {
     const articles = JSON.parse(JSON.stringify(notice.articles));
@@ -122,9 +119,6 @@ class Notice {
    * Update a notice in database.
    * @param {Notice} notice The notice to update.
    * @return {Promise<Notice>} Promise that represents the updated notice
-   *
-   * @todo Sistemare
-   *
    */
   static update(notice) {
     const articles = JSON.parse(JSON.stringify(notice.articles));
