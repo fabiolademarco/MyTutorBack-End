@@ -108,3 +108,6 @@ dist
 
 # test file for development
 test.js
+
+# Mochawesome directory
+mochawesome-report 
