@@ -250,6 +250,6 @@ const checkAssignment = (assignment) => {
   return true;
 };
 
-const checkEmail = (email) {
+const checkEmail = (email) => {
   return /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/.test(email);
-}
+};
