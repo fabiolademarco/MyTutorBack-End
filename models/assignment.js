@@ -19,7 +19,6 @@ const titles = {
  * This class represents a Assignment
  *
  * @author Roberto Bruno
- * @version 1.0
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
@@ -31,7 +30,7 @@ class Assignment {
   constructor(assignment) {
     this.id = assignment.id;
     this.notice_protocol = assignment.notice_protocol;
-    this.student = assignment.student === undefined ? null : assignment.student;
+    this.student = assignment.student == undefined ? null : assignment.student;
     this.code = assignment.code;
     this.activity_description = assignment.activity_description;
     this.total_number_hours = Number.isInteger(assignment.total_number_hours) ?

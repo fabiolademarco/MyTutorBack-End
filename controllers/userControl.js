@@ -11,7 +11,7 @@ const ERR_SERVER_STATUS = 500;
  * @module
  * @author Giannandrea Vicidomini
  *
- * 2019 - Copyright by Gang Of Four Eyes
+ * @copyright 2019 - Copyright by Gang Of Four Eyes
 */
 
 

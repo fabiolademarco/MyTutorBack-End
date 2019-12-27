@@ -7,10 +7,8 @@ const table = 'application_sheet';
  * This class represents an Application Sheet
  *
  * @author Giannandrea Vicidomini
- * @version
- * @since
  *
- * 2019 - Copyright by Gang Of Four Eyes
+ * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 class ApplicationSheet {
   /**

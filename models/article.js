@@ -7,10 +7,8 @@ const table = 'article';
  * This class represents an article
  *
  * @author Francesco Migliaro, Marco D'Antonio
- * @version
- * @since
  *
- * 2019 - Copyright by Gang Of Four Eyes
+ * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 class Article {
   /**

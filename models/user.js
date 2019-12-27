@@ -9,24 +9,11 @@ const role = {
   TEACHING_OFFICE: 'Teaching Office',
 };
 
-/*
-+create(u : Utente): Utente
-+update(u : Utente): Utente
-+remove(u : Utente): boolean
-+exists(u : Utente): boolean
-+findByEmail(email : string): Utente
-+findByRuolo(ruolo : int): List<Utente>
-+findByVerificato(verificato : boolean): List<Utente>
-+findAll(): List<Utente>
-*/
-
 /**
  * User
  *
  * This class represents an User
  * @author Giannandrea Vicidomini
- * @version
- * @since
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
@@ -223,7 +210,7 @@ class User {
    * @return {Promise<User>} Promise Object that represents the User if there is a match or else it's null.
    */
   static matchUser(email, password) {
-    if (email === undefined || email === null || password === undefined || password === null) {
+    if (email == null || password == null) {
       throw new Error('Email or Password can not be null or undefined');
     }
     return pool.query(`SELECT * FROM ${table} WHERE email = ?`, email)
