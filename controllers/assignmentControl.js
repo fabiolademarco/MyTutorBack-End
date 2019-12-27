@@ -26,7 +26,7 @@ exports.sendRequest = (req, res) => {
   const emailStudent = req.body.emailStudent;
   // Bisogna  controllare che esista anche lo studente
   // e forse che sia in graduatoria
-  if (emailStudent == null || assignment == null) {
+  if (emailStudent == null || assignment == null || assignment.state !== Assignment.states.UNASSIGNED || !checkAssignment(assignment) || !checkEmail(emailStudent)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'Non è stato specificato lo studente o l\'incarico'});
     return;
@@ -54,7 +54,7 @@ exports.sendRequest = (req, res) => {
 exports.book = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
 
-  if (assignment == null || assignment.state !== Assignment.states.WAITING) {
+  if (assignment == null || assignment.state !== Assignment.states.WAITING || !checkAssignment(assignment)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'incarico non può essere prenotato'});
     return;
@@ -79,7 +79,7 @@ exports.book = (req, res) => {
 exports.assign = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
 
-  if (assignment == null || assignment.state !== Assignment.states.BOOKED) {
+  if (assignment == null || assignment.state !== Assignment.states.BOOKED || !checkAssignment(assignment)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere assegnato'});
     return;
@@ -132,7 +132,7 @@ exports.search = (req, res) => {
 exports.decline = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
   const user = req.user;
-  if (assignment == null || assignment.state !== Assignment.states.WAITING || assignment.student !== user.id) {
+  if (assignment == null || assignment.state !== Assignment.states.WAITING || assignment.student !== user.id || !checkAssignment(assignment)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere rifiutato'});
     return;
@@ -197,7 +197,7 @@ exports.find = (req, res) => {
 exports.close = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
 
-  if (assignment == null || assignment.state !== Assignment.states.ASSIGNED) {
+  if (assignment == null || assignment.state !== Assignment.states.ASSIGNED || !checkAssignment(assignment)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere chiuso'});
     return;
@@ -213,3 +213,43 @@ exports.close = (req, res) => {
 };
 
 
+const checkAssignment = (assignment) => {
+  const noticeProtocolExp = /Prot. n. [0-9]+/;
+  const studentExp = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
+  const codeExp = /Cod\/[A-Z]+[1-9]+/;
+  const idExp = /[1-9]+/;
+  const totalNumberHoursExp = /[0-9]+/;
+  const title = /PhD|Master/;
+  const hourlyCostExp = /[0-9]+(.[0-9]{2})?/;
+  const stateExp = /Unassigned|Waiting|Booked|Assigned|Over/;
+  if (!noticeProtocolExp.test(assignment.notice_protocol)) {
+    return false;
+  }
+  if (assignment.student != null && !studentExp.test(assignment.student)) {
+    return false;
+  }
+  if (!codeExp.test(assignment.code)) {
+    return false;
+  }
+  if (assignment.id != null && !idExp.test(assignment.id)) {
+    return false;
+  }
+  if (!totalNumberHoursExp.test(assignment.total_number_hours)) {
+    return false;
+  }
+  if (!title.test(assignment.title)) {
+    return false;
+  }
+  if (!hourlyCostExp.test(assignment.hourly_cost)) {
+    return false;
+  }
+  if (!stateExp.test(assignment.state)) {
+    return false;
+  }
+
+  return true;
+};
+
+const checkEmail = (email) => {
+  return /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/.test(email);
+};

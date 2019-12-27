@@ -1,7 +1,7 @@
 const NoticeControl = require('../controllers/noticeControl');
 
 module.exports = (app, auth) => {
-  app.get('/api/notices/:id', NoticeControl.find);
+  app.get('/api/notices/:id', auth.setUser, NoticeControl.find);
 
   app.delete('/api/notices/:id', auth.authenticate(), auth.isTeachingOffice, NoticeControl.delete);
 
