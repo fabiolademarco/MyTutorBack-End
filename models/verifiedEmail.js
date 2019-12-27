@@ -29,7 +29,7 @@ class VerifiedEmail {
    * @return {Promise<VerifiedEmail>} Promise Object representing the created VerifiedEmail.
    */
   static create(verifiedEmail) {
-    if (verifiedEmail === null || verifiedEmail === undefined) {
+    if (verifiedEmail == null) {
       throw new Error('Parameter can not be null or undefined');
     }
     verifiedEmail.signed_up = 0;
@@ -48,7 +48,7 @@ class VerifiedEmail {
    * @return {Promise<VerifiedEmail>} Promise object representing the updated VerifiedEmail.
    */
   static update(verifiedEmail) {
-    if (verifiedEmail === null || verifiedEmail === undefined) {
+    if (verifiedEmail == null) {
       throw new Error('Parameter can not be null or undefined');
     }
     return pool.query(`UPDATE ${table} SET ? WHERE email=?`, [verifiedEmail, verifiedEmail.email])
@@ -64,7 +64,7 @@ class VerifiedEmail {
    * @return {Promise<boolean>} Promise object that it's true if the verifiedEmail it's been removed or else it's false.
    */
   static remove(verifiedEmail) {
-    if (verifiedEmail === null || verifiedEmail === undefined) {
+    if (verifiedEmail == null) {
       throw new Error('Parameter can not be null or undefined');
     }
     return pool.query(`DELETE FROM ${table} WHERE email = ?`, verifiedEmail.email)
@@ -82,7 +82,7 @@ class VerifiedEmail {
    * @return {Promise<boolean>} Promise object that it's true if the verifiedEmail exists in the db, or else it's false.
    */
   static exists(verifiedEmail) {
-    if (verifiedEmail === null || verifiedEmail === undefined) {
+    if (verifiedEmail == null) {
       throw new Error('Parameter can not be null or undefined');
     }
     return pool.query(`SELECT * FROM ${table} WHERE email = ?`, verifiedEmail.email)
@@ -98,7 +98,7 @@ class VerifiedEmail {
    * @return {Promise<VerifiedEmail>} Promise object representing the VerifiedEmail with the passed email.
    */
   static findByEmail(email) {
-    if (email === null || email === undefined) {
+    if (email == null) {
       throw new Error('Parameter can not be null or undefined');
     }
     return pool.query(`SELECT * FROM ${table} WHERE email = ?`, email)
@@ -133,7 +133,7 @@ class VerifiedEmail {
    * @return {Promise<boolean>} Promise object that it's true if the passed email it's verified, or else it's false.
    */
   static isVerified(email) {
-    if (email === null || email === undefined) {
+    if (email == null) {
       throw new Error('Parameter can not be null or undefined');
     }
     return pool.query(`SELECT * FROM ${table} WHERE email = ? AND signed_up = 0`, email)
@@ -143,6 +143,5 @@ class VerifiedEmail {
         });
   }
 }
-
 
 module.exports = VerifiedEmail;

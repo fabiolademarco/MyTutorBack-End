@@ -22,7 +22,7 @@ const titles = {
  * @version
  * @since
  *
- * 2019 - Copyright by Gang Of Four Eyes
+ * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 class Assignment {
   /**
@@ -52,7 +52,7 @@ class Assignment {
    * @return {Promise<Assignment>} Promise object that represents the created Assignment.
    */
   static create(assignment) {
-    if (assignment === null || assignment === undefined) {
+    if (assignment == null) {
       throw new Error('No Parameters');
     }
     return pool.query(`INSERT INTO ${table} SET ? `, assignment)
@@ -70,7 +70,7 @@ class Assignment {
    * @return {Promise<Assignment>} Promise object that represents the updated Assignment.
    */
   static update(assignment) {
-    if (assignment === null || assignment === undefined) {
+    if (assignment == null) {
       throw new Error('No Parameters');
     }
     return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [assignment, assignment.id])
@@ -85,7 +85,7 @@ class Assignment {
    * @return {Promise<boolean>} Promise that is true if the removal went right else it's false.
    */
   static remove(assignment) {
-    if (assignment === null || assignment === undefined) {
+    if (assignment == null) {
       throw new Error('No Parameters');
     }
     return pool.query(`DELETE FROM ${table} WHERE id = ?`, assignment.id)
@@ -100,7 +100,7 @@ class Assignment {
    * @return {Promise<Assignment>} Promise object that represents the assignment having the passed id.
    */
   static findById(id) {
-    if (id === null || id === undefined) {
+    if (id == null) {
       throw new Error('No Parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, id)
@@ -120,7 +120,7 @@ class Assignment {
    * @return {Promise<Assignment[]>} Promise that represents the Assignments related to the passed Notice protocol.
    */
   static findByNotice(noticeProtocol) {
-    if (noticeProtocol === null || noticeProtocol === undefined) {
+    if (noticeProtocol == null) {
       throw new Error('No Parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
@@ -135,7 +135,7 @@ class Assignment {
    * @return {Promise<Assignment[]>} Promise that represents the Assignments related to the passed email Student.
    */
   static findByStudent(emailStudent) {
-    if (emailStudent === null || emailStudent === undefined) {
+    if (emailStudent == null) {
       throw new Error('No Parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, emailStudent)
@@ -161,7 +161,7 @@ class Assignment {
    * @return {Promise<boolean>} Promise that is true if the assignment is in the db, else it's false.
    */
   static exists(assignment) {
-    if (assignment === null || assignment === undefined) {
+    if (assignment == null) {
       throw new Error('No parameters');
     }
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, assignment.id)

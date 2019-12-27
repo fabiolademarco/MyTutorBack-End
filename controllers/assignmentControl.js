@@ -8,7 +8,7 @@
  * @since
  * @todo Bisogna definire l'autenticazione ed l'invio delle email
  *
- * 2019 - Copyright by Gang Of Four Eyes
+ * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 const Assignment = require('../models/assignment');
 const User = require('../models/user');
@@ -27,7 +27,7 @@ exports.sendRequest = (req, res) => {
   const emailStudent = req.body.emailStudent;
   // Bisogna  controllare che esista anche lo studente
   // e forse che sia in graduatoria
-  if (emailStudent === null || assignment == null) {
+  if (emailStudent == null || assignment == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'Non è stato specificato lo studente o l\'incarico'});
     return;
@@ -56,7 +56,7 @@ exports.book = (req, res) => {
   res.set('Content-Type', 'application/json');
   const assignment = new Assignment(req.body.assignment);
 
-  if (assignment === null || assignment.state !== Assignment.states.WAITING) {
+  if (assignment == null || assignment.state !== Assignment.states.WAITING) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'incarico non può essere prenotato'});
     return;
@@ -82,7 +82,7 @@ exports.assign = (req, res) => {
   res.set('Content-Type', 'application/json');
   const assignment = new Assignment(req.body.assignment);
 
-  if (assignment.state !== Assignment.states.BOOKED) {
+  if (assignment == null || assignment.state !== Assignment.states.BOOKED) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere assegnato'});
     return;
@@ -137,7 +137,7 @@ exports.decline = (req, res) => {
   res.set('Content-Type', 'application/json');
   const assignment = new Assignment(req.body.assignment);
   const user = req.user;
-  if (assignment === null || assignment.state !== Assignment.states.WAITING || assignment.student !== user.id) {
+  if (assignment == null || assignment.state !== Assignment.states.WAITING || assignment.student !== user.id) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere rifiutato'});
     return;
@@ -164,7 +164,7 @@ exports.find = (req, res) => {
   res.set('Content-Type', 'application/json');
   const id = req.params.id;
   const user = req.user;
-  if (id === null || Number.parseInt(id) === NaN) {
+  if (id == null || Number.parseInt(id) === NaN) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Id non passato'});
     return null;
   }
@@ -204,7 +204,7 @@ exports.close = (req, res) => {
   res.set('Content-Type', 'application/json');
   const assignment = new Assignment(req.body.assignment);
 
-  if (assignment === null || assignment.state !== Assignment.states.ASSIGNED) {
+  if (assignment == null || assignment.state !== Assignment.states.ASSIGNED) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere chiuso'});
     return;

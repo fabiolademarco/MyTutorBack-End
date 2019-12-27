@@ -12,7 +12,7 @@ const table = 'student';
  * @version
  * @since
  *
- * 2019 - Copyright by Gang Of Four Eyes
+ * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 class Student extends User {
   /**
@@ -31,7 +31,7 @@ class Student extends User {
    * @return {Promise<Student>} Promise object that represents the created Student.
    */
   static create(student) {
-    if (student === null || student === undefined) {
+    if (student == null) {
       throw new Error('The parameter student can not be null or undefined');
     }
     const user = new User(student);
@@ -57,7 +57,7 @@ class Student extends User {
    * @return {Promise<Student>} Promise Object that represents the updated Student.
    */
   static update(student) {
-    if (student === null || student === undefined) {
+    if (student == null) {
       throw new Error('The parameter student can not be null or undefined');
     }
     const user = new User(student);
@@ -82,7 +82,7 @@ class Student extends User {
    * @return {Promise<Student>} Promise object that represents the Student with the given email.
    */
   static findByEmail(email) {
-    if (email === null || email === undefined) {
+    if (email == null) {
       throw new Error('The parameter email can not be null or undefined');
     }
     return User.findByEmail(email)
