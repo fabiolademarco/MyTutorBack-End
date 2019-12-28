@@ -4,7 +4,7 @@ module.exports = (app, auth) => {
   /**
    * Middleware of authentication control
    */
-  app.use('/api/assignments', auth.authenticate());
+  app.use(/\/api\/assignments\.*/, auth.authenticate());
 
   /**
    * Allows to send a request
