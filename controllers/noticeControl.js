@@ -114,12 +114,12 @@ exports.find = (req, res) => {
 
   Notice.findByProtocol(id)
       .then((notice) => {
-        const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
+        /* Non penso serva qui
+         const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
 
-        if (!accessList.get(userRole).includes(notice.state)) {
+         if (!accessList.get(userRole).includes(notice.state)) {
           return res.status(403);
-        }
-
+        } */
         return res.send({notice: notice});
       })
       .catch((err) => {
