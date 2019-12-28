@@ -39,7 +39,7 @@ class Article {
   }
 
   /**
-   * Update an article in database.
+   * Updates an article in database.
    * @param {Article} article The article to update.
    * @return {Promise<Article>} Promise object that represents the updated Article
    */
@@ -54,7 +54,7 @@ class Article {
   }
 
   /**
-   * Remove an article from database.
+   * Removes an article from database.
    * @param {Article} article The article to remove.
    * @return {Promise<boolean>} Promise that is true if the removal went right else it's false
    */
@@ -69,13 +69,13 @@ class Article {
   }
 
   /**
-   * Find the article with the specific id.
+   * Finds the article with the specific id.
    * @param {Number} id The id of the article.
    * @return {Promise<Article>} Promise that represents the Article having the passed id
    */
   static findById(id) {
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, id)
-        .then(([rows, fields]) => {
+        .then(([rows]) => {
           return new Article(rows[0]);
         })
         .catch((err) => {
@@ -90,7 +90,7 @@ class Article {
    */
   static findByNotice(noticeProtocol) {
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
-        .then(([rows, fields]) => {
+        .then(([rows]) => {
           return rows.map((el) => new Article(el));
         })
         .catch((err) => {
@@ -104,7 +104,7 @@ class Article {
    */
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
-        .then(([rows, fields]) => {
+        .then(([rows]) => {
           return rows.map((er) => new Article(el));
         })
         .catch((err) => {
@@ -113,13 +113,13 @@ class Article {
   }
 
   /**
-   * Check if an article exists.
+   * Checks if an article exists.
    * @param {Article} article The article to check.
    * @return {Promise<boolean>} Promise that is true if the Article is in the db, else it's false
    */
   static exists(article) {
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, article.id)
-        .then(([rows, fields]) => {
+        .then(([rows]) => {
           return rows.length > 0;
         })
         .catch((err) => {
