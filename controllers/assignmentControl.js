@@ -102,7 +102,8 @@ exports.assign = (req, res) => {
  */
 exports.search = (req, res) => {
   const user = req.user;
-  if (user.role !== User.Role.STUDENT && user.role !== User.Role.TEACHING_OFFICE) {
+  console.log(user);
+  if (user == null || (user.role !== User.Role.STUDENT && user.role !== User.Role.TEACHING_OFFICE)) {
     res.status(401).send({error: 'Non sei autorizzato'});
     return;
   }
@@ -113,7 +114,7 @@ exports.search = (req, res) => {
     student: req.query.student,
   };
   if (user.role === User.Role.STUDENT) {
-    filter.student= user.id;
+    filter.student = user.id;
   }
   Assignment.search(filter)
       .then((data) => {

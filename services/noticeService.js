@@ -5,27 +5,28 @@ module.exports = (app, auth) => {
 
   app.delete('/api/notices/:id', auth.authenticate(), auth.isTeachingOffice, NoticeControl.delete);
 
+  app.put(/\/api\/notices\.*/, auth.authenticate());
+  app.patch(/\/api\/notices\.*/, auth.authenticate());
 
-  app.get('/api/notices', auth.authenticate());
-  app.get('/api/notices', auth.isTeachingOffice, NoticeControl.findAll);
+  app.get('/api/notices', auth.authenticate(), auth.isTeachingOffice, NoticeControl.findAll);
 
   app.put('/api/notices', auth.isTeachingOffice, NoticeControl.create);
 
   app.patch('/api/notices', auth.isTeachingOffice, NoticeControl.update);
 
 
-  app.patch('/api/notices/state', auth.authenticate(), NoticeControl.setStatus);
+  app.patch('/api/notices/state', NoticeControl.setStatus);
 
 
   app.post('/api/notices/search', auth.setUser, NoticeControl.search);
 
 
-  app.get('/api/notices/:id/pdf', NoticeControl.downloadNotice);
+  app.get('/api/notices/:id/pdf', NoticeControl.downloadNotice); // Probabilmente anche questo è in conflitto
 
-  app.put('/api/notices/:id/pdf', auth.authenticate(), auth.isDDI, NoticeControl.uploadNotice);
+  app.put('/api/notices/:id/pdf', auth.isDDI, NoticeControl.uploadNotice);
 
 
-  app.get('/api/notices/:id/grades', NoticeControl.downloadGradedList);
+  app.get('/api/notices/:id/grades', NoticeControl.downloadGradedList); // Probabilmente anche questo è in conflitto
 
-  app.put('/api/notices/:id/grades', auth.authenticate(), auth.isDDI, NoticeControl.uploadGradedList);
+  app.put('/api/notices/:id/grades', auth.isDDI, NoticeControl.uploadGradedList);
 };
