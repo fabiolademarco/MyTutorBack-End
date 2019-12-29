@@ -62,6 +62,8 @@ class Notice {
     this.termination_of_the_assignment = notice.termination_of_the_assignment;
     this.nature_of_the_assignment = notice.nature_of_the_assignment;
     this.unused_funds = notice.unused_funds;
+    this.responsible_for_the_procedure = notice.responsible_for_the_procedure;
+    this.notice_funds = notice.notice_funds;
     this.state = Object.values(States).includes(notice.state) ? notice.state : null;
     this.type = Object.values(Types).includes(notice.type) ? notice.type : null;
     this.deadline = notice.deadline;
