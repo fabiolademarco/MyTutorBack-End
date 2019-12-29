@@ -46,7 +46,7 @@ CREATE TABLE notice (
   responsible_for_the_procedure           text, 
   notice_funds                            float, 
   state                                   Enum('Draft', 'In Acceptance', 'Accepted', 'In Approval', 'Approved', 'Published', 'Expired', 'Waiting for Graded List', 'Closed') NOT NULL default 'Draft', 
-  type                                    varchar(50), 
+  type                                    Enum('Help Teaching', 'Tutoring'), 
   deadline                                timestamp, 
   notice_file                             varchar(255), 
   graded_list_file                        varchar(255), 
