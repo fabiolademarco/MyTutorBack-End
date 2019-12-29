@@ -21,6 +21,7 @@ const assignmentService = require('./services/assignmentService');
 const noticeService = require('./services/noticeService');
 const userService = require('./services/userService');
 const authService = require('./services/authenticationService');
+const candidatureService = require('./services/candidatureService');
 
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -71,4 +72,7 @@ userService(app, auth);
 
 // AuthenticationService routes
 authService(app, auth);
+
+// CandidatureService routes
+candidatureService(app, auth);
 
