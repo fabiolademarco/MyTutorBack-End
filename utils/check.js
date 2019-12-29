@@ -141,3 +141,16 @@ exports.checkNoticeProtocol = (noticeProtocol) => {
   const noticeProtocolExp = /Prot. n. [0-9]+/;
   return noticeProtocolExp.test(noticeProtocol) && noticeProtocol.length <= 125;
 };
+
+/**
+ * Checks if a comment respect the format.
+ * @param {Comment} comment Comment to check.
+ * @return {boolean} True if it respects the format, False otherwise.
+ */
+exports.checkComment = (comment) => {
+  if (comment.text < 1 || comment.text > 500) {
+    return false;
+  }
+
+  return true;
+};
