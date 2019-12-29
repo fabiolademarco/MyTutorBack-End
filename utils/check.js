@@ -138,22 +138,32 @@ exports.checkAssignment = (assignment) => {
   return true;
 };
 
+/**
+ * Checks if a notice protocol respects the format.
+ * @param {string} noticeProtocol Protocol to check.
+ * @return {boolean} True if it respects the format, false otherwirse.
+ */
 exports.checkNoticeProtocol = (noticeProtocol) => {
   const noticeProtocolExp = /Prot. n. [0-9]+/;
   return noticeProtocolExp.test(noticeProtocol) && noticeProtocol.length <= 125;
 };
 
 /**
- * Checks if a comment respect the format.
+ * Checks if a comment respects the format.
  * @param {Comment} comment Comment to check.
- * @return {boolean} True if it respects the format, False otherwise.
+ * @return {boolean} True if it respects the format, false otherwise.
  */
 exports.checkComment = (comment) => {
-  if (comment.text < 1 || comment.text > 500) {
-    return false;
-  }
+  return comment.text < 1 || comment.text > 500;
+};
 
-  return true;
+/**
+ * Checks if an application sheet respects the format.
+ * @param {ApplicationSheet} applicationSheet Application sheet to check.
+ * @return {boolean} True if it resepcts the format, false otherwise.
+ */
+exports.checkApplicationSheet = (applicationSheet) => {
+  return applicationSheet.documents_to_attach < 1 || applicationSheet.documents_to_attach > 5000;
 };
 
 /**
