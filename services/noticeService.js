@@ -79,10 +79,10 @@ module.exports = (app, auth) => {
    * @apiGroup Notice
    * @apiPermission everyone
    *
-   * @apiParam {String} protocol [protocol] Part or all notice protocol
-   * @apiParam {String} state [state] One state that should be searched
-   * @apiParam {String} professor [professor] Professor email
-   * @apiParam {String} type [type] Type of notice
+   * @apiParam {String} [protocol] Part or all notice protocol
+   * @apiParam {String} [state] One state that should be searched
+   * @apiParam {String} [professor] Professor email
+   * @apiParam {String} [type] Type of notice
    */
   app.post('/api/notices/search', auth.setUser, NoticeControl.search);
 
