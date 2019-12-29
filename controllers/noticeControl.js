@@ -163,10 +163,6 @@ exports.search = async (req, res) => {
   const type = req.body.type;
 
   if (!protocol && !state && !professor && !type) {
-    if (userRole !== User.Role.TEACHING_OFFICE) {
-      res.status(403).send();
-      return;
-    }
     return this.findAll(req, res);
   }
 
@@ -246,13 +242,17 @@ exports.find = (req, res) => {
 
 /**
  *  Handles the request for the retrieval of all notices
- *  must be a Teaching Office to perform this action
+ *  different roles may perform this action
  *
  * @param {Request} req
  * @param {Response} res
  */
 exports.findAll = (req, res) => {
-  Notice.findAll()
+  const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
+
+  userAccessList = accessList.get(userRole);
+
+  Notice.findByState(userAccessList)
       .then((notices) => {
         return res.send({notices: notices});
       })
