@@ -1,5 +1,6 @@
 const Candidature = require('../models/candidature');
 const User = require('../models/user');
+const Check = require('../utils/check');
 const Document = require('../models/document');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
@@ -24,7 +25,7 @@ const ERR_SERVER_STATUS = 500;
 exports.create = (req, res) => {
   user = req.user;
   candidature = (req.body.candidature != null) ? new Candidature(req.body.candidature) : null;
-  if (candidature == null || user == null) {
+  if (candidature == null || user == null || !Check.checkNoticeProtocol(candidature.notice_protocol)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -64,7 +65,7 @@ exports.create = (req, res) => {
 exports.update = (req, res) => {
   user = req.user;
   candidature = (req.body.candidature != null) ? new Candidature(req.body.candidature) : null;
-  if (candidature == null) {
+  if (candidature == null || !Check.checkNoticeProtocol(candidature.notice_protocol)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -104,7 +105,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   user = req.user;
   candidature = (req.body.candidature != null) ? new Candidature(req.body.candidature) : null;
-  if (candidature == null || user == null || user.id !== candidature.student) {
+  if (candidature == null || user == null || user.id !== candidature.student || !Check.checkNoticeProtocol(candidature.notice_protocol)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -174,6 +175,13 @@ exports.search = (req, res) => {
 exports.dowloadDocumentFile = (req, res) => {
   const candidature = req.body.candidature;
   const fileName = req.body.fileName;
+  if (!Check.checkNoticeProtocol(candidature.notice_protocol) || !Check.checkEmail(candidature.student)) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({
+      error: 'I parametri non rispettano il formato',
+    });
+    return;
+  }
   Document.findById(fileName, candidature.student, candidature.notice_protocol)
       .then((doc) => {
         res.send(doc.file);
