@@ -114,3 +114,6 @@ mochawesome-report
 
 #jsdoc output
 out
+
+#apidocjs output
+doc

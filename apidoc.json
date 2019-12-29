@@ -1,0 +1,8 @@
+{
+  "name": "MyTutor",
+  "version": "1.0.0",
+  "description": "MyTutor Web API documentation",
+  "apidoc": {
+    "title": "MyTutor API"
+  }
+}

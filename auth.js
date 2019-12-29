@@ -99,6 +99,8 @@ module.exports = function() {
         if (payload) {
           req.user = payload;
         }
+      } catch (err) {
+        res.send({error: err});
       } finally {
         next();
       }
