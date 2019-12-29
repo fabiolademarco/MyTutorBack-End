@@ -281,7 +281,7 @@ checkProfessor = (professor) => {
  * @return {boolean} True if the email respects the format, else it's false.
  */
 checkVerifiedEmail = (email) => {
-  const emailExp = /^[a-z]\.[a-z]*\@unisa\.it$/;
+  const emailExp = /^[a-z]*\@unisa\.it$/;
   return emailExp.test(email);
 };
 
@@ -292,7 +292,7 @@ checkVerifiedEmail = (email) => {
  */
 checkEmail = (email) => {
   const emailExpStudent = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
-  const emailExpProfessor = /^[a-z]\.[a-z]*\@unisa\.it$/;
+  const emailExpProfessor = /^[a-z]*\@unisa\.it$/;
   return emailExpProfessor.test(email) || emailExpStudent.test(email);
 };
 

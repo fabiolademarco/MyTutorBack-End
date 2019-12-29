@@ -102,7 +102,6 @@ exports.assign = (req, res) => {
  */
 exports.search = (req, res) => {
   const user = req.user;
-  console.log(user);
   if (user == null || (user.role !== User.Role.STUDENT && user.role !== User.Role.TEACHING_OFFICE)) {
     res.status(401).send({error: 'Non sei autorizzato'});
     return;
