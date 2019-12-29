@@ -25,6 +25,16 @@ const States = {
 };
 
 /**
+ * Enum for all possible types of a notice
+ * @readonly
+ * @enum {string}
+ */
+const Types = {
+  HELP_TEACHING: 'Help Teaching',
+  TUTORING: 'Tutoring',
+};
+
+/**
  * Notice
  *
  * This class represents a Notice
@@ -53,7 +63,7 @@ class Notice {
     this.nature_of_the_assignment = notice.nature_of_the_assignment;
     this.unused_funds = notice.unused_funds;
     this.state = Object.values(States).includes(notice.state) ? notice.state : null;
-    this.type = notice.type;
+    this.type = Object.values(Types).includes(notice.type) ? notice.type : null;
     this.deadline = notice.deadline;
     this.notice_file = notice.notice_file;
     this.graded_list_file = notice.graded_list_file;
@@ -69,7 +79,7 @@ class Notice {
    * @param {Notice} notice The notice to save.
    * @return {Promise<Notice>} Promise that represents the created Notice
    */
-  static create(notice) {
+  static async create(notice) {
     const articles = JSON.parse(JSON.stringify(notice.articles));
     const evaluationCriteria = JSON.parse(JSON.stringify(notice.evaluation_criteria));
     const assignments = JSON.parse(JSON.stringify(notice.assignments));
@@ -120,7 +130,7 @@ class Notice {
    * @param {Notice} notice The notice to update.
    * @return {Promise<Notice>} Promise that represents the updated notice
    */
-  static update(notice) {
+  static async update(notice) {
     const articles = JSON.parse(JSON.stringify(notice.articles));
     const evaluationCriteria = JSON.parse(JSON.stringify(notice.evaluation_criteria));
     const assignments = JSON.parse(JSON.stringify(notice.assignments));
@@ -190,7 +200,7 @@ class Notice {
    * @param {Notice} notice The notice to remove.
    * @return {Promise<boolean>} Promise that is true if the removal went right else it's false
    */
-  static remove(notice) {
+  static async remove(notice) {
     return pool.query(`DELETE FROM ${table} WHERE protocol = ?`, notice.protocol)
         .then(([resultSetHeader]) => {
           return resultSetHeader.affectedRows > 0;
@@ -200,44 +210,50 @@ class Notice {
         });
   }
 
+
   /**
    * Finds the notice with the specific protocol.
    * @param {string} noticeProtocol The protocol of the notice.
    * @return {Promise<Notice>} Promise that represents the Notice having the passed id.
    */
-  static findByProtocol(noticeProtocol) {
-    return pool.query(`SELECT * FROM ${table} WHERE protocol = ?`, noticeProtocol)
+  static async findByProtocol(noticeProtocol) {
+    return pool.query(`SELECT * FROM ${table} WHERE protocol LIKE ?`, '%' + noticeProtocol + '%')
         .then(([rows]) => {
-          const notice = rows[0];
-          if (notice == undefined) {
+          if (rows[0] == undefined) {
             throw new Error('0 results found for protocol: ' + noticeProtocol);
           }
-          return getOtherFields(notice.protocol)
-              .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {
-                notice.assignments = assignments;
-                notice.application_sheet = applicationSheet;
-                notice.evaluation_criteria = evaluationCriteria;
-                notice.articles = articles;
-                notice.comment = comment;
+          return Promise.all(rows.map((notice) =>
+            getOtherFields(notice.protocol)
+                .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {
+                  notice.assignments = assignments;
+                  notice.application_sheet = applicationSheet;
+                  notice.evaluation_criteria = evaluationCriteria;
+                  notice.articles = articles;
+                  notice.comment = comment;
 
-                return new Notice(notice);
-              })
+                  return new Notice(notice);
+                })
+                .catch((err) => {
+                  throw err;
+                }),
+          ),
+          )
               .catch((err) => {
-                throw err;
+                throw err.message;
               });
-        })
-        .catch((err) => {
-          throw err.message;
         });
   }
 
   /**
    * Finds the notices with the specific state.
-   * @param {Notice.States} state The state of the notice.
+   * @param {Notice.States[]} states The states of the notice.
    * @return {Promise<Notice[]>} Promise that represents the Notice array having the passed State.
    */
-  static findByState(state) {
-    return pool.query(`SELECT * FROM ${table} WHERE state = ?`, state)
+  static async findByState(states) {
+    let query = `SELECT * FROM ${table} WHERE false`;
+    states.forEach((state) => query += ' OR state = ?');
+
+    return pool.query(query, states)
         .then(([rows]) => {
           return Promise.all(rows.map((notice) =>
             getOtherFields(notice.protocol)
@@ -266,7 +282,7 @@ class Notice {
    * @param {User} referent The referent professor of the notice.
    * @return {Promise<Notice[]>} Promise that represents the Notice array having the passed referent.
    */
-  static findByReferent(referent) {
+  static async findByReferent(referent) {
     return pool.query(`SELECT * FROM ${table} WHERE referent_professor = ?`, referent)
         .then(([rows]) => {
           return Promise.all(rows.map((notice) =>
@@ -295,7 +311,7 @@ class Notice {
    * Finds all the notices.
    * @return {Promise<Notice[]>} Promise that represents the Notice array.
    */
-  static findAll() {
+  static async findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => {
           return Promise.all(rows.map((notice) =>
@@ -325,7 +341,7 @@ class Notice {
    * @param {Notice} notice The notice to check.
    * @return {Promise<boolean>} Promise that resolves to true if the notice exists or false if it doesn't exist
    */
-  static exists(notice) {
+  static async exists(notice) {
     return pool.query(`SELECT * FROM ${table} WHERE protocol = ?`, notice.protocol)
         .then(([rows]) => {
           return rows.length > 0;
@@ -442,5 +458,6 @@ function performActions(Class, actions) {
 }
 
 Notice.States = States;
+Notice.Types = Types;
 
 module.exports = Notice;

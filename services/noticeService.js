@@ -8,7 +8,7 @@ module.exports = (app, auth) => {
   app.put(/\/api\/notices\.*/, auth.authenticate());
   app.patch(/\/api\/notices\.*/, auth.authenticate());
 
-  app.get('/api/notices', auth.authenticate(), auth.isTeachingOffice, NoticeControl.findAll);
+  app.get('/api/notices', auth.isTeachingOffice, NoticeControl.findAll);
 
   app.put('/api/notices', auth.isTeachingOffice, NoticeControl.create);
 

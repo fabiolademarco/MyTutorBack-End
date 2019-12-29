@@ -21,6 +21,7 @@ accessList.set(User.Role.TEACHING_OFFICE, Object.values(Notice.States));
 
 /**
  *  Handles the request for the creation of a notice
+ *  must be a Teaching Office to perform this action
  *
  * @param {Request} req
  * @param {Response} res
@@ -35,14 +36,20 @@ exports.create = (req, res) => {
 
   Notice.create(notice)
       .then((notice) => {
-        res.send({notice: notice});
+        res.status(201).send({notice: notice});
       })
       .catch((err) => {
         res.status(500).send({error: err});
       });
 };
 
-
+/**
+ *  Handles the request for the modification of a notice
+ *  must be a Teaching Office to perform this action
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.update = (req, res) => {
   const notice = req.body.notice;
 
@@ -60,8 +67,21 @@ exports.update = (req, res) => {
       });
 };
 
+/**
+ *  Handles the request to change the Status of a notice
+ *  must be a Teaching Office/Professor/DDI to perform some of these actions
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.setStatus = (req, res) => {
   const notice = req.body.notice;
+
+  if (notice == null) {
+    res.status(412).send({error: 'Request body must be defined'});
+    return;
+  }
+
   notice = new Notice();
 
   switch (notice.status) {
@@ -98,35 +118,139 @@ exports.setStatus = (req, res) => {
   }
 };
 
+/**
+ *  Handles the request for the cancellation of a notice
+ *  must be a Teaching Office to perform this action
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.delete = (req, res) => {
+  const notice = req.body.notice;
 
-};
-
-exports.search = (req, res) => {
-
-};
-
-exports.find = (req, res) => {
-  const id = req.params.id;
-  if (id == null || Number.parseInt(id) === NaN) {
-    return res.status(412).send({error: 'Invalid protocol number'});
+  if (notice == null) {
+    res.status(412).send({error: 'Request body must be defined'});
+    return;
   }
 
-  Notice.findByProtocol(id)
-      .then((notice) => {
-        /* Non penso serva qui
-         const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
-
-         if (!accessList.get(userRole).includes(notice.state)) {
-          return res.status(403);
-        } */
-        return res.send({notice: notice});
+  Notice.remove(notice)
+      .then((success) => {
+        if (success) {
+          res.send({result: success, message: 'Notice deleted'});
+        }
+        if (!success) {
+          res.send({result: success, message: 'Notice not found'});
+        }
       })
       .catch((err) => {
         return res.status(500).send({error: err});
       });
 };
 
+/**
+ *  Handles the request for searching the notices
+ *  different roles may perform this action, if Unauthorized, will return 403
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
+exports.search = async (req, res) => {
+  const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
+
+  const protocol = req.body.protocol;
+  const state = req.body.state;
+  const professor = req.body.professor;
+  const type = req.body.type;
+
+  if (!protocol && !state && !professor && !type) {
+    if (userRole !== User.Role.TEACHING_OFFICE) {
+      res.status(403).send();
+      return;
+    }
+    return this.findAll(req, res);
+  }
+
+  if (protocol && !state && !professor && !type) {
+    req.params.id = protocol;
+    return this.find(req, res);
+  }
+
+  if (professor && (userRole !== User.Role.PROFESSOR || userRole !== User.Role.TEACHING_OFFICE)) {
+    res.status(403).send();
+    return;
+  }
+
+  const userAccessList = accessList.get(userRole);
+
+  let notices = [];
+  if (protocol) {
+    notices = await Notice.findByProtocol(protocol);
+    notices = notices.filter((notice) => userAccessList.includes(notice.state));
+  }
+
+  if (state) {
+    if (!userAccessList.includes(state)) {
+      res.status(403).send();
+      return;
+    }
+
+    if (!protocol) {
+      notices = await Notice.findByState([state]);
+    } else {
+      notices = notices.filter((notice) => notice.state === state);
+    }
+  } else if (!protocol) {
+    notices = await Notice.findByState(userAccessList);
+  }
+
+
+  if (professor) {
+    professor = professor.toLowerCase();
+    notices = notices.filter((notice) => notice.referent_professor.toLowerCase().includes(professor));
+  }
+
+  if (type) {
+    notices = notices.filter((notice) => notice.type === type);
+  }
+
+  return res.send({notices: notices});
+};
+
+/**
+ *  Handles the request for the cancellation of a notice
+ *  different roles may perform this action, if Unauthorized, will return 403
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
+exports.find = (req, res) => {
+  const id = req.params.id;
+  if (id == null || Number.parseInt(id) === NaN) {
+    res.status(412).send({error: 'Invalid protocol number'});
+    return;
+  }
+
+  Notice.findByProtocol(id)
+      .then((notices) => {
+        const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
+
+        const userAccessList = accessList.get(userRole);
+        const authorizedNotices = notices.filter((notice) => userAccessList.includes(notice.state));
+
+        return res.send({notices: authorizedNotices});
+      })
+      .catch((err) => {
+        return res.status(500).send({error: err});
+      });
+};
+
+/**
+ *  Handles the request for the retrieval of all notices
+ *  must be a Teaching Office to perform this action
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.findAll = (req, res) => {
   Notice.findAll()
       .then((notices) => {
