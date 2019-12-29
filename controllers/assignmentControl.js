@@ -216,7 +216,7 @@ exports.close = (req, res) => {
 const checkAssignment = (assignment) => {
   const noticeProtocolExp = /Prot. n. [0-9]+/;
   const studentExp = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
-  const codeExp = /Cod\/[A-Z]+[1-9]+/;
+  const codeExp = /[A-Z]+\/[1-9]+/;
   const idExp = /[1-9]+/;
   const totalNumberHoursExp = /[0-9]+/;
   const title = /PhD|Master/;

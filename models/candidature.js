@@ -1,4 +1,5 @@
 const pool = require('../db');
+const Document = require('./document');
 const table = 'candidature';
 /**
  * Enum for all possible states of a notice
@@ -20,6 +21,7 @@ const States = {
  * @author Roberto Bruno
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
+ * @todo Controllare che la find funzioni...
  */
 class Candidature {
   /**
@@ -31,6 +33,7 @@ class Candidature {
     this.notice_protocol = candidature.notice_protocol;
     this.state = Object.values(States).includes(candidature.state) ? candidature.state : null;
     this.last_edit = candidature.last_edit;
+    this.documents = candidature.documents.map((d) => new Document(d));
   }
 
   /**
@@ -42,10 +45,9 @@ class Candidature {
     if (candidature == null) {
       throw new Error('Parameter can not be null or undefined');
     }
-    return pool.query(`INSERT INTO ${table} SET ?`, candidature)
-        .then(([resultSetHeader]) => {
-          return new Candidature(candidature);
-        })
+    return pool.query(`INSERT INTO ${table} VALUES(?, ?, ?, ?)`, [candidature.student, candidature.notice_protocol, candidature.state, candidature.last_edit])
+        .then(() => candidature.documents.forEach((d) => Document.create(d, candidature)))
+        .then(() => new Candidature(candidature))
         .catch((err) => {
           throw err.message;
         });
@@ -60,8 +62,28 @@ class Candidature {
     if (candidature == null) {
       throw new Error('Parameter can not be null or undefined');
     }
-    return pool.query(`UPDATE ${table} SET ? WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol])
-        .then(([resultSetHeader]) => new Candidature(candidature))
+    return pool.query(`UPDATE ${table} SET state = ?, last_edit = ? WHERE student = ? AND notice_protocol = ?`, [candidature.state, candidature.last_edit, candidature.student, candidature.notice_protocol])
+        .then(() => Document.findByCandidature(candidature))
+        .then((documents) => {
+          const map = new Map();
+          const toUpdate = [];
+          const toCreate = [];
+          documents.forEach((d) => map.set(d.file_name, d));
+          candidature.forEach((doc) => {
+            if (map.has(doc.file_name)) {
+              map.delete(doc.file_name);
+              toUpdate.push(doc);
+            } else {
+              toCreate.push(doc);
+            }
+          });
+          return Promise.all(
+              toUpdate.map((doc) => Document.update(doc, candidature)),
+              toCreate.map((doc) => Document.create(doc, candidature)),
+              map.map((doc) => Document.remove(doc, candidature)),
+          );
+        })
+        .then(() => new Candidature(candidature))
         .catch((err) => {
           throw err.message;
         });
@@ -109,12 +131,18 @@ class Candidature {
     if (email == null || protocol == null) {
       throw new Error('Parameters can not be null or undefined');
     }
+    let candidature = '';
     return pool.query(`SELECT * FROM ${table} WHERE student = ? AND notice_protocol = ?`, [email, protocol])
         .then(([rows]) => {
           if (rows.length < 1) {
             throw new Error(`No result found: ${email} and ${protocol}`);
           }
-          return new Candidature(rows[0]);
+          candidature = new Candidature(rows[0]);
+          return Document.findByCandidature(candidature);
+        })
+        .then((documents) => {
+          candidature.documents = documents;
+          return candidature;
         })
         .catch((err) => {
           throw err.message;
@@ -130,8 +158,16 @@ class Candidature {
     if (email == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+    let candidatures = [];
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, email)
-        .then(([rows]) => rows.map((c) => new Candidature(c)))
+        .then(([rows]) => {
+          candidatures = rows.map((c) => new Candidature(c));
+          return Promise.all(candidatures.map((c) => Document.findByCandidature(c)));
+        })
+        .then((documents) => {
+          documents.forEach((doc, i) => candidatures[i].documents = doc);
+          return candidatures;
+        })
         .catch((err) => {
           throw err.message;
         });
@@ -146,8 +182,16 @@ class Candidature {
     if (protocol == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+    let candidatures = [];
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, protocol)
-        .then(([rows]) => rows.map((c) => new Candidature(c)))
+        .then(([rows]) => {
+          candidatures = rows.map((c) => new Candidature(c));
+          return Promise.all(candidatures.map((c) => Document.findByCandidature(c)));
+        })
+        .then((documents) => {
+          documents.forEach((doc, i) => candidatures[i].documents = doc);
+          return candidatures;
+        })
         .catch((err) => {
           throw err.message;
         });
@@ -158,12 +202,22 @@ class Candidature {
    * @return {Promise<Candidature[]>} Promise object representing all the candidatures.
    */
   static findAll() {
+    let candidatures;
     return pool.query(`SELECT * FROM ${table}`)
-        .then(([rows]) => rows.map((c) => new Candidature(c)))
+        .then(([rows]) => {
+          candidatures = rows.map((c) => new Candidature(c));
+          return Promise.all(candidatures.map((c) => Document.findByCandidature(c)));
+        })
+        .then((documents) => {
+          documents.forEach((doc, i) => candidatures[i].documents = doc);
+          return candidatures;
+        })
         .catch((err) => {
           throw err.message;
         });
   }
 }
+
+Candidature.States = States;
 
 module.exports = Candidature;
