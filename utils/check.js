@@ -258,6 +258,8 @@ exports.checkNotice = (notice) => {
   const noticeFundsExp = /[0-9]+(.[0-9]{2})?/;
   const noticeDeadlineExp = /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/;
 
+  let value;
+
   if (!this.checkNoticeProtocol(notice.protocol)) {
     return false;
   }
@@ -276,9 +278,13 @@ exports.checkNotice = (notice) => {
 
   notice.assignments.forEach((assignment) => {
     if (!this.checkAssignment(assignment)) {
-      return false;
+      value = false;
     }
   });
+
+  if (!value) {
+    return false;
+  }
 
   if (notice.admission_requirements.length < 1 || notice.admission_requirements.length > 5000) {
     return false;
@@ -290,9 +296,13 @@ exports.checkNotice = (notice) => {
 
   notice.evaluation_criteria.forEach((evaluationCriterion) => {
     if (!this.checkEvaluationCriterion(evaluationCriterion)) {
-      return false;
+      value = false;
     }
   });
+
+  if (!value) {
+    return false;
+  }
 
   if (notice.assessable_titles.length < 1 || notice.assessable_titles.length > 5000) {
     return false;
@@ -346,11 +356,15 @@ exports.checkNotice = (notice) => {
     return false;
   }
 
-  notice.articles.forEach((articlee) => {
+  notice.articles.forEach((article) => {
     if (!this.checkArticle(article)) {
-      return false;
+      value = false;
     }
   });
+
+  if (!value) {
+    return false;
+  }
 
   return true;
 };
