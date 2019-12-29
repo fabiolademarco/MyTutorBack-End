@@ -48,7 +48,7 @@ exports.create = (req, res) => {
       .catch((err) => {
         res.status(ERR_SERVER_STATUS).
             send({
-              error: 'Creazione del bando fallito.',
+              error: 'Creazione del bando fallita.',
               exception: err,
             });
       });
@@ -150,7 +150,7 @@ exports.delete = (req, res) => {
 
   if (notice == null || !Check.checkNotice(notice)) {
     res.status(ERR_CLIENT_STATUS)
-        .send({error: 'Deve essere inserita un bando valido.'});
+        .send({error: 'Deve essere inserito un bando valido.'});
 
     return;
   }
@@ -231,7 +231,8 @@ exports.search = async (req, res) => {
     notices = notices.filter((notice) => notice.type === type);
   }
 
-  return res.send({notices: notices});
+  res.status(OK_STATUS).
+      send({notices: notices});
 };
 
 /**
