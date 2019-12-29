@@ -1,6 +1,10 @@
 const Notice = require('../models/notice');
 const Comment = require('../models/comment');
 const User = require('../models/user');
+const Check = require('../utils/check');
+const OK_STATUS = 200;
+const ERR_CLIENT_STATUS = 412;
+const ERR_SERVER_STATUS = 500;
 
 const accessList = new Map();
 accessList.set(User.Role.STUDENT, [Notice.States.PUBLISHED, Notice.States.EXPIRED, Notice.States.WAITING_FOR_GRADED_LIST, Notice.States.CLOSED]);
@@ -29,17 +33,24 @@ accessList.set(User.Role.TEACHING_OFFICE, Object.values(Notice.States));
 exports.create = (req, res) => {
   const notice = req.body.notice;
 
-  if (notice == null) {
-    res.status(412).send({error: 'Request body must be defined'});
+  if (notice == null || !Check.checkNotice(notice)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un bando valido.'});
+
     return;
   }
 
   Notice.create(notice)
       .then((notice) => {
-        res.status(201).send({notice: notice});
+        res.status(OK_STATUS).
+            send({notice: notice});
       })
       .catch((err) => {
-        res.status(500).send({error: err});
+        res.status(ERR_SERVER_STATUS).
+            send({
+              error: 'Creazione del bando fallito.',
+              exception: err,
+            });
       });
 };
 
@@ -53,17 +64,24 @@ exports.create = (req, res) => {
 exports.update = (req, res) => {
   const notice = req.body.notice;
 
-  if (notice == null) {
-    res.status(412).send({error: 'Request body must be defined'});
+  if (notice == null || !Check.checkNotice(notice)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un bando valido'});
+
     return;
   }
 
   Notice.update(notice)
       .then((notice) => {
-        res.send({notice: notice});
+        res.status(OK_STATUS)
+            .send({notice: notice});
       })
       .catch((err) => {
-        res.status(500).send({error: err});
+        res.status(ERR_SERVER_STATUS)
+            .send({
+              error: 'Aggiornamento del bando fallito.',
+              exception: err,
+            });
       });
 };
 
@@ -77,8 +95,10 @@ exports.update = (req, res) => {
 exports.setStatus = (req, res) => {
   const notice = req.body.notice;
 
-  if (notice == null) {
-    res.status(412).send({error: 'Request body must be defined'});
+  if (notice == null || !Check.checkNotice(notice)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un bando valido.'});
+
     return;
   }
 
@@ -128,22 +148,24 @@ exports.setStatus = (req, res) => {
 exports.delete = (req, res) => {
   const notice = req.body.notice;
 
-  if (notice == null) {
-    res.status(412).send({error: 'Request body must be defined'});
+  if (notice == null || !Check.checkNotice(notice)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserita un bando valido.'});
+
     return;
   }
 
   Notice.remove(notice)
-      .then((success) => {
-        if (success) {
-          res.send({result: success, message: 'Notice deleted'});
-        }
-        if (!success) {
-          res.send({result: success, message: 'Notice not found'});
-        }
+      .then((value) => {
+        res.status(OK_STATUS)
+            .send({result: value});
       })
       .catch((err) => {
-        return res.status(500).send({error: err});
+        res.status(ERR_SERVER_STATUS)
+            .send({
+              error: 'Rimozione del bando fallita.',
+              exception: err,
+            });
       });
 };
 
@@ -221,8 +243,11 @@ exports.search = async (req, res) => {
  */
 exports.find = (req, res) => {
   const id = req.params.id;
-  if (id == null || Number.parseInt(id) === NaN) {
-    res.status(412).send({error: 'Invalid protocol number'});
+
+  if (id == null || !Check.checkNoticeProtocol(id)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un protocollo valido.'});
+
     return;
   }
 
@@ -233,10 +258,14 @@ exports.find = (req, res) => {
         const userAccessList = accessList.get(userRole);
         const authorizedNotices = notices.filter((notice) => userAccessList.includes(notice.state));
 
-        return res.send({notices: authorizedNotices});
+        res.send({notices: authorizedNotices});
       })
       .catch((err) => {
-        return res.status(500).send({error: err});
+        res.status(ERR_SERVER_STATUS)
+            .send({
+              error: 'Fetch del bando fallito.',
+              exception: err,
+            });
       });
 };
 
@@ -254,10 +283,15 @@ exports.findAll = (req, res) => {
 
   Notice.findByState(userAccessList)
       .then((notices) => {
-        return res.send({notices: notices});
+        res.status(OK_STATUS)
+            .send({notices: notices});
       })
       .catch((err) => {
-        return res.status(500).send({error: err});
+        res.status(ERR_SERVER_STATUS)
+            .send({
+              error: 'Fetch del bando fallito.',
+              exception: err,
+            });
       });
 };
 
