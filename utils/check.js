@@ -1,3 +1,4 @@
+const Rating=require('../models/rating');
 /**
  * Checks the student params.
  * @param {Student} student The student to check.
@@ -137,20 +138,77 @@ exports.checkAssignment = (assignment) => {
   return true;
 };
 
+/**
+ * Checks if a notice protocol respects the format.
+ * @param {string} noticeProtocol Protocol to check.
+ * @return {boolean} True if it respects the format, false otherwirse.
+ */
 exports.checkNoticeProtocol = (noticeProtocol) => {
   const noticeProtocolExp = /Prot. n. [0-9]+/;
   return noticeProtocolExp.test(noticeProtocol) && noticeProtocol.length <= 125;
 };
 
 /**
- * Checks if a comment respect the format.
+ * Checks if a comment respects the format.
  * @param {Comment} comment Comment to check.
- * @return {boolean} True if it respects the format, False otherwise.
+ * @return {boolean} True if it respects the format, false otherwise.
  */
 exports.checkComment = (comment) => {
-  if (comment.text < 1 || comment.text > 500) {
+  return comment.text < 1 || comment.text > 500;
+};
+
+/**
+ * Checks if an application sheet respects the format.
+ * @param {ApplicationSheet} applicationSheet Application sheet to check.
+ * @return {boolean} True if it resepcts the format, false otherwise.
+ */
+exports.checkApplicationSheet = (applicationSheet) => {
+  return applicationSheet.documents_to_attach < 1 || applicationSheet.documents_to_attach > 5000;
+};
+
+/**
+ * Checks if a comment respect the format.
+ * @param {Rating} rating Comment to check.
+ * @return {boolean} True if it respects the format, False otherwise.
+ */
+exports.checkRating=(rating)=>{
+  const assignmentIdExp = /[1-9]+/;
+  const studentExp = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
+  const titleScoreExp=/^[0-9]+$/;
+  const interviewScoreExp=/^[0-9]+$/;
+
+  if (!assignmentIdExp.test(rating.assignment_id)) {
+    return false;
+  }
+  if (!studentExp.test(rating.student)) {
     return false;
   }
 
+  if (!titleScoreExp.test(rating.titles_score)) {
+    return false;
+  }
+
+  if (!interviewScoreExp.test(rating.interview_score)) {
+    return false;
+  }
+
+  if (!Rating.exists(rating)) {
+    return false;
+  }
+
+  return true;
+};
+
+/**
+ * Checks if a comment respect the format.
+ * @param {Rating[]} ratingList Comment to check.
+ * @return {boolean} True if it respects the format, False otherwise.
+ */
+exports.checkRatingList=(ratingList)=>{
+  for (const rating of ratingList) {
+    if (!this.checkRating(rating)) {
+      return false;
+    }
+  }
   return true;
 };

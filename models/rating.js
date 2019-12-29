@@ -21,9 +21,9 @@ class Rating {
   */
   constructor(rating) {
     this.student = rating.student;
-    this.assignmentId = rating.assignment_id;
-    this.titlesScore = rating.titles_score;
-    this.interviewScore = rating.interview_score;
+    this.assignment_id = rating.assignment_id;
+    this.titles_score = rating.titles_score;
+    this.interview_score = rating.interview_score;
   }
   /**
    * @param {Rating} rating The ratind to create
