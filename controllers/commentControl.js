@@ -1,4 +1,6 @@
 const Comment = require('../models/comment');
+const Check = require('../utils/check');
+const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
 
@@ -14,38 +16,55 @@ const ERR_SERVER_STATUS = 500;
  */
 
 /**
-  * Handles the request for create a comment.
+  * Handles the request for create and update a comment.
   * @param {Request} req
   * @param {Response} res
   */
 exports.set = (req, res) => {
-  if (!req.body.comment) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
-  }
-
   const comment = req.body.comment;
+
+  if (!comment || !Check.checkComment(comment)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un commento valido.'});
+
+    return;
+  }
 
   Comment.exists(comment)
       .then((exist) => {
         if (exist) {
           Comment.update(comment)
               .then((comment) => {
-                return res.send({comment: comment});
+                return res.status(OK_STATUS)
+                    .send({comment: comment});
               })
               .catch((err) => {
-                return res.status(ERR_SERVER_STATUS).send({error: err});
+                return res.status(ERR_SERVER_STATUS)
+                    .send({
+                      error: 'Aggiornamento del commento fallito.',
+                      exception: err,
+                    });
               });
         } else {
           Comment.create(comment)
               .then((comment) => {
-                return res.send({comment: comment});
+                return res.status(OK_STATUS)
+                    .send({comment: comment});
               })
               .catch((err) => {
-                return res.status(ERR_SERVER_STATUS).send({error: err});
+                return res.status(ERR_SERVER_STATUS)
+                    .send({
+                      error: 'Creazione del commento fallita.',
+                      exception: err,
+                    });
               });
         }
       })
-      .catch((err) => res.status(ERR_SERVER_STATUS).send({error: err}));
+      .catch((err) => res.status(ERR_SERVER_STATUS)
+          .send({
+            error: 'Controllo sull\'esistenza del commento fallito.',
+            exception: err,
+          }));
 };
 
 /**
@@ -54,18 +73,26 @@ exports.set = (req, res) => {
  * @param {Reponse} res
  */
 exports.delete = (req, res) => {
-  if (!req.body.comment) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
-  }
-
   const comment = req.body.comment;
+
+  if (!comment || !Check.checkComment(comment)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un commento valido'});
+
+    return;
+  }
 
   Comment.remove(comment)
       .then((comment) => {
-        return res.send({comment: comment});
+        return res.status(OK_STATUS)
+            .send({comment: comment});
       })
       .catch((err) => {
-        return res.status(ERR_SERVER_STATUS).send({error: err});
+        return res.status(ERR_SERVER_STATUS)
+            .send({
+              error: 'Rimozione del commento fallita.',
+              exception: err,
+            });
       });
 };
 
@@ -76,16 +103,24 @@ exports.delete = (req, res) => {
  */
 exports.get = (req, res) => {
   if (!req.body.noticeProtocol) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Request body must be defined'});
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un protocollo valido'});
+
+    return;
   }
 
   const noticeProtocol = req.body.noticeProtocol;
 
   Comment.findByProtocol(noticeProtocol)
       .then((comment) => {
-        return res.send({comment: comment});
+        return res.status(OK_STATUS)
+            .send({comment: comment});
       })
       .catch((err) => {
-        return res.status(ERR_SERVER_STATUS).send({error: err});
+        return res.status(ERR_SERVER_STATUS)
+            .send({
+              error: 'Fetch del commento fallito.',
+              exception: err,
+            });
       });
 };

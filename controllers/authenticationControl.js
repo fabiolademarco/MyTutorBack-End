@@ -11,6 +11,7 @@
 const User = require('../models/user');
 const Student = require('../models/student');
 const VerifiedEmail = require('../models/verifiedEmail');
+const Check = require('../utils/check');
 const jwt = require('jsonwebtoken');
 
 const OK_STATUS = 200;
@@ -25,7 +26,7 @@ const ERR_NOT_AUTHORIZED = 401;
  */
 exports.login = (req, res) => {
   user = (req.body.user != null) ? new User(req.body.user) : null;
-  if (user == null || !checkEmail(user.email) || !checkPassword(user.password)) {
+  if (user == null || !Check.checkEmail(user.email) || !Check.checkPassword(user.password)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -80,7 +81,7 @@ exports.logout = (req, res) => {
  */
 exports.registerStudent = (req, res) => {
   student = (req.body.student != null ) ? new Student(req.body.student) : null;
-  if (student == null || !checkStudent(student)) {
+  if (student == null || !Check.checkStudent(student)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -121,7 +122,7 @@ exports.registerStudent = (req, res) => {
 exports.registerProfessor = (req, res) => {
   professor = (req.body.professor != null) ? new User(req.body.professor) : null;
   // Bisogna controllare che la sua email sia verificata
-  if (professor == null || !checkProfessor(professor)) {
+  if (professor == null || !Check.checkProfessor(professor)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -180,7 +181,7 @@ exports.passwordRecovery = (req, res) => {
  */
 exports.insertVerifiedEmail = (req, res) => {
   email = req.body.email;
-  if (email == null || !checkVerifiedEmail(email)) {
+  if (email == null || !Check.checkVerifiedEmail(email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -213,95 +214,4 @@ exports.insertVerifiedEmail = (req, res) => {
 createToken = (payload) => {
   token = jwt.sign(payload, process.env.PRIVATE_KEY, {expiresIn: '1h'});
   return 'JWT ' + token;
-};
-
-/**
- * Check the student params.
- * @param {Student} student The student to check.
- * @return {boolean} True if the student attributes respect the format, or else it's false.
- * @todo Implementare la regex per la data di nascita
- */
-checkStudent = (student) => {
-  const nameExp = /^[A-Za-z ‘]+$/;
-  const surnameExp = /^[A-Za-z ‘]+$/;
-  const emailExp = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
-  const registrationNumberExp = /^[0-9A-Za-z ‘]*$/;
-  const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
-  const birthDateExp = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/; // Non so se deve essere cosi
-  if (!emailExp.test(student.email)) {
-    return false;
-  }
-  if (!nameExp.test(student.name)) {
-    return false;
-  }
-  if (!surnameExp.test(student.surname)) {
-    return false;
-  }
-  if (!registrationNumberExp.test(student.registration_number)) {
-    return false;
-  }
-  if (!passwordExp.test(student.password)) {
-    return false;
-  }
-  if (!birthDateExp.test(student.birth_date)) {
-    return false;
-  }
-  return true;
-};
-
-/**
- * Check the User params.
- * @param {User} professor The User to check.
- * @return {boolean} True if the user attributes respect the format, or else it's false.
- */
-checkProfessor = (professor) => {
-  const nameExp = /^[A-Za-z ‘]+$/;
-  const surnameExp = /^[A-Za-z ‘]+$/;
-  const emailExp = /^[a-z]\.[a-z]*\@unisa\.it$/;
-  const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
-
-  if (!emailExp.test(professor.email)) {
-    return false;
-  }
-  if (!nameExp.test(professor.name)) {
-    return false;
-  }
-  if (!surnameExp.test(professor.surname)) {
-    return false;
-  }
-  if (!passwordExp.test(professor.password)) {
-    return false;
-  }
-  return true;
-};
-
-/**
- * Check if the email respect the standard of ProfessorEmail
- * @param {string} email The email to check
- * @return {boolean} True if the email respects the format, else it's false.
- */
-checkVerifiedEmail = (email) => {
-  const emailExp = /^[a-z]*\@unisa\.it$/;
-  return emailExp.test(email);
-};
-
-/**
- * Check if the email respect the standards.
- * @param {string} email The email to check.
- * @return {boolean} True if the email respects the format, else it's false.
- */
-checkEmail = (email) => {
-  const emailExpStudent = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
-  const emailExpProfessor = /^[a-z]*\@unisa\.it$/;
-  return emailExpProfessor.test(email) || emailExpStudent.test(email);
-};
-
-/**
- * Check if the password respect the format.
- * @param {string} password The password to check.
- * @return {boolean} True if the password respects the format, else it's false.
- */
-checkPassword = (password) => {
-  const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
-  return passwordExp.test(password);
 };
