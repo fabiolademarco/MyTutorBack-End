@@ -148,3 +148,15 @@ CREATE TABLE application_sheet (
   PRIMARY KEY (notice_protocol),
   FOREIGN KEY (notice_protocol) REFERENCES notice(protocol) ON UPDATE Cascade ON DELETE Cascade );
 
+DROP EVENT IF EXISTS checkNoticeDeadline;
+
+DELIMITER //
+CREATE EVENT checkNoticeDeadline
+   ON schedule every 24 HOUR
+   DO 
+	BEGIN
+    
+		update notice set state = 'Expired' WHERE deadline < now() ; 
+        update candidature, notice set candidature.state = 'In Evaluation' WHERE notice.protocol = candidature.notice_protocol AND notice.state = 'Expired';
+	
+    END;
