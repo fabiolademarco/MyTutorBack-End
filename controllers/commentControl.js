@@ -102,14 +102,14 @@ exports.delete = (req, res) => {
  * @param {Response} res
  */
 exports.get = (req, res) => {
-  if (!req.body.noticeProtocol) {
+  const noticeProtocol = req.body.noticeProtocol;
+
+  if (!noticeProtocol || !Check.checkNoticeProtocol(noticeProtocol)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un protocollo valido'});
 
     return;
   }
-
-  const noticeProtocol = req.body.noticeProtocol;
 
   Comment.findByProtocol(noticeProtocol)
       .then((comment) => {
