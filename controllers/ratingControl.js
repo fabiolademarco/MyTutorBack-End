@@ -1,5 +1,6 @@
 const Rating=require('../models/rating');
 const Assignment=require('../models/assignment');
+const check=require('../utils/check');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -23,7 +24,7 @@ const ERR_SERVER_STATUS = 500;
  */
 module.exports.createTable=function(req, res) {
   const ratingList=req.body.ratingList;
-  if (ratingList==null) {
+  if (ratingList==null ||check.checkRatingList()) {
     res.status(ERR_CLIENT_STATUS).send({error: 'La rating list non può essere nulla'});
     return;
   }
@@ -47,7 +48,7 @@ module.exports.createTable=function(req, res) {
  */
 module.exports.getTable=async function(req, res) {
   const noticeProtocol=req.body.noticeProtocol;
-  if (noticeProtocol==null) {
+  if (noticeProtocol==null || check.checkNoticeProtocol(noticeProtocol)==false) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Il protocollo non può essere nullo'});
     return;
   }

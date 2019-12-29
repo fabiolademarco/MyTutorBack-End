@@ -1,3 +1,4 @@
+const Rating=require('../models/rating');
 /**
  * Checks the student params.
  * @param {Student} student The student to check.
@@ -152,5 +153,52 @@ exports.checkComment = (comment) => {
     return false;
   }
 
+  return true;
+};
+
+/**
+ * Checks if a comment respect the format.
+ * @param {Rating} rating Comment to check.
+ * @return {boolean} True if it respects the format, False otherwise.
+ */
+exports.checkRating=(rating)=>{
+  const assignmentIdExp = /[1-9]+/;
+  const studentExp = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
+  const titleScoreExp=/^[0-9]+$/;
+  const interviewScoreExp=/^[0-9]+$/;
+
+  if (!assignmentIdExp.test(rating.assignment_id)) {
+    return false;
+  }
+  if (!studentExp.test(rating.student)) {
+    return false;
+  }
+
+  if (!titleScoreExp.test(rating.titles_score)) {
+    return false;
+  }
+
+  if (!interviewScoreExp.test(rating.interview_score)) {
+    return false;
+  }
+
+  if (!Rating.exists(rating)) {
+    return false;
+  }
+
+  return true;
+};
+
+/**
+ * Checks if a comment respect the format.
+ * @param {Rating[]} ratingList Comment to check.
+ * @return {boolean} True if it respects the format, False otherwise.
+ */
+exports.checkRatingList=(ratingList)=>{
+  for (const rating of ratingList) {
+    if (!this.checkRating(rating)) {
+      return false;
+    }
+  }
   return true;
 };
