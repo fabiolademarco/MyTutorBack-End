@@ -54,6 +54,7 @@ exports.login = (req, res) => {
           res.send({
             status: true,
             token: token,
+            user: user,
           });
         }
       });
