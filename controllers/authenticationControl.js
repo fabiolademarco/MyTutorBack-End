@@ -34,7 +34,6 @@ exports.login = (req, res) => {
     });
     return;
   }
-
   User.matchUser(user.email, user.password)
       .then((user) => {
         if (user == null) {
@@ -50,6 +49,7 @@ exports.login = (req, res) => {
           };
           token = createToken(payload);
           res.set('Authorization', token);
+          delete user.password;
           res.status(OK_STATUS);
           res.send({
             status: true,
