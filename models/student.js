@@ -54,9 +54,12 @@ class Student extends User {
    * @param {Student} student The Student to update.
    * @return {Promise<Student>} Promise Object that represents the updated Student.
    */
-  static update(student) {
+  static async update(student) {
     if (student == null) {
       throw new Error('The parameter student can not be null or undefined');
+    }
+    if (!await this.exists(student)) {
+      throw new Error('The student doesn\'t exist');
     }
     const user = new User(student);
     return super.update(user)
