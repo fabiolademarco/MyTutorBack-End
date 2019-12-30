@@ -46,10 +46,14 @@ class Rating {
    * @param {Rating} rating The rating to update
    * @return {Promise<Rating>} Promise representing the fulfillment of Rating update
    */
-  static update(rating) {
+  static async update(rating) {
     if (rating==null) {
       throw new Error('The rating must not be null');
     }
+    if (!await this.exists(rating)) {
+      throw new Error('The rating doesn\'t exists');
+    }
+
     return pool.query(`UPDATE ${table} SET ? WHERE student=? AND assignment_id=?`, [rating, rating.student, rating.assignment_id])
         .then(([resultSetHeader])=>{
           return new Rating(rating);
