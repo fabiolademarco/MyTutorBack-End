@@ -22,6 +22,8 @@ const noticeService = require('./services/noticeService');
 const userService = require('./services/userService');
 const authService = require('./services/authenticationService');
 const candidatureService = require('./services/candidatureService');
+const commentService = require('./services/commentService');
+const applicationSheetService = require('./services/applicationSheetService');
 
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -75,4 +77,10 @@ authService(app, auth);
 
 // CandidatureService routes
 candidatureService(app, auth);
+
+// CommentService routes
+commentService(app, auth);
+
+// ApplicationSheetService routes
+applicationSheetService(app, auth);
 
