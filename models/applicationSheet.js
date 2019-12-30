@@ -19,6 +19,7 @@ class ApplicationSheet {
     this.notice_protocol = applicationSheet.notice_protocol;
     this.documents_to_attach = applicationSheet.documents_to_attach;
   }
+
   /** Creates an application sheet
    * @param {ApplicationSheet} applicationSheet The application sheet to create
    * @return {Promise} Promise representing the fulfillment
@@ -36,6 +37,7 @@ class ApplicationSheet {
           throw err.message;
         });
   }
+
   /** Updates an applicatin sheet
    * @param {ApplicationSheet} applicationSheet The application sheet to update
    * @return {Promise} Promise representing the fulfillment
@@ -45,8 +47,7 @@ class ApplicationSheet {
     if (applicationSheet == null) {
       return null;
     }
-    return pool.query(`UPDATE ${table} SET ? where notice_protocol = 
-  ${applicationSheet.notice_protocol}`, applicationSheet)
+    return pool.query(`UPDATE ${table} SET ? WHERE notice_protocol = ${applicationSheet.notice_protocol}`, applicationSheet)
         .then(([resultSetHeader]) => {
           return applicationSheet;
         })
@@ -54,6 +55,7 @@ class ApplicationSheet {
           throw err.message;
         });
   }
+
   /** Removes an application sheet
    * @param {ApplicationSheet} applicationSheet The application sheet to remove
    * @return {Promise} Promise representing the fulfillment
@@ -63,8 +65,7 @@ class ApplicationSheet {
     if (applicationSheet == null) {
       return null;
     }
-    return pool.query(`DELETE FROM ${table} WHERE notice_protocol = 
-  ${applicationSheet.notice_protocol}`)
+    return pool.query(`DELETE FROM ${table} WHERE notice_protocol = ${applicationSheet.notice_protocol}`)
         .then((([resultSetHeader]) => {
           return resultSetHeader.affectedRows > 0;
         }))
@@ -72,6 +73,7 @@ class ApplicationSheet {
           throw err.message;
         });
   }
+
   /** Finds an application sheet based on the protocol
    * @param {NoticeProtocol} noticeProtocol The notice protocol on which to filter
    * @return {Promise} Promise representing the fulfillment
@@ -92,6 +94,7 @@ class ApplicationSheet {
           throw err.message;
         });
   }
+
   /** Returns application sheet table content
    * @return {Promise} Promise representing the fulfillment
    *                   of the application sheet search
