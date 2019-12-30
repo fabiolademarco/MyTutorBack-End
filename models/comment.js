@@ -40,14 +40,18 @@ class Comment {
   }
 
   /**
-   * Updates a Comment
+   * Updates a Comment.
    * @param {Comment} comment The comment to save.
    * @return {Promise<Comment>} Promise object that represents the updated comment.
    */
-  static update(comment) {
+  static async update(comment) {
     if (comment == null) {
       throw new Error('No parameters');
     }
+    if (!await this.exists(comment)) {
+      throw new Error('The comment doesn\'t exists');
+    }
+
     return pool.query(`UPDATE ${table} SET ? WHERE notice = ?`, [comment, comment.notice])
         .then(([resultSetHeader]) => comment)
         .catch((err) => {
@@ -56,7 +60,7 @@ class Comment {
   }
 
   /**
-   * Removes a Comment from database
+   * Removes a Comment from database.
    * @param {Comment} comment The comment to remove.
    * @return {Promise<boolean>}  Promise that is true if the removal went right else it's false.
    */
@@ -105,7 +109,7 @@ class Comment {
   }
 
   /**
-   * Finds all the comments
+   * Finds all the comments.
    * @return {Promise<Comment[]>} Promise object that represents the list of all Comments.
    */
   static findAll() {
