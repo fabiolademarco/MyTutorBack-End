@@ -28,6 +28,9 @@ class Article {
    * @return {Promise<Article>} Promise object that represents the created Article
    */
   static create(article) {
+    if (article == null) {
+      throw new Error('The article cannot be null.');
+    }
     return pool.query(`INSERT INTO ${table} SET ?`, article)
         .then(([resultSetHeader]) => {
           article.id = resultSetHeader.insertId;
@@ -44,6 +47,9 @@ class Article {
    * @return {Promise<Article>} Promise object that represents the updated Article
    */
   static update(article) {
+    if (article==null || !this.exists(article)) {
+      throw new Error('The article is either invalid or not present in the database');
+    }
     return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [article, article.id])
         .then(([resultSetHeader]) => {
           return article;
@@ -59,6 +65,9 @@ class Article {
    * @return {Promise<boolean>} Promise that is true if the removal went right else it's false
    */
   static remove(article) {
+    if (article == null) {
+      throw new Error('The article cannot be null');
+    }
     return pool.query(`DELETE FROM ${table} WHERE id = ?`, article.id)
         .then(([resultSetHeader]) => {
           return resultSetHeader.affectedRows > 0;
@@ -70,11 +79,15 @@ class Article {
 
   /**
    * Finds the article with the specific id.
-   * @param {Number} id The id of the article.
+   * @param {String} id The id of the article.
+   * @param {String} noticeProtocol The protocol number
    * @return {Promise<Article>} Promise that represents the Article having the passed id
    */
-  static findById(id) {
-    return pool.query(`SELECT * FROM ${table} WHERE id = ?`, id)
+  static findById(id, noticeProtocol) {
+    if (id == null || noticeProtocol==null) {
+      throw new Error('The protocol/id must not be null');
+    }
+    return pool.query(`SELECT * FROM ${table} WHERE id = ? AND notice_protocol = ?`, [id, noticeProtocol])
         .then(([rows]) => {
           return new Article(rows[0]);
         })
@@ -89,6 +102,9 @@ class Article {
    * @return {Promise<Article[]>} Promise that represents the Articles related to the passed Notice protocol
    */
   static findByNotice(noticeProtocol) {
+    if ( noticeProtocol==null) {
+      throw new Error('The protocol must not be null');
+    }
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
         .then(([rows]) => {
           return rows.map((el) => new Article(el));
