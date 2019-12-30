@@ -57,10 +57,14 @@ class User {
    * @param {User} user The user to update
    * @return {Promise<User>} The promise reresenting the fulfillment of the update request
    */
-  static update(user) {
+  static async update(user) {
     if (user===null || user===undefined) {
       throw new Error('User must not be null');
     }
+    if (!await this.exists(user)) {
+      throw new Error('The user doesn\'t exists');
+    }
+
     let promise;
     if (user.password == null) {
       promise = pool.query(`UPDATE ${table} SET name = ?, surname = ?, role = ?, verified = ? WHERE email = ?`, [user.name, user.surname, user.role, user.verified, user.email]);
