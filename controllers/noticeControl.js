@@ -1,5 +1,4 @@
 const Notice = require('../models/notice');
-const Comment = require('../models/comment');
 const User = require('../models/user');
 const Check = require('../utils/check');
 const OK_STATUS = 200;
@@ -92,7 +91,19 @@ exports.update = (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-exports.setStatus = (req, res) => {
+exports.setState = (req, res) => {
+  const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
+
+  const statusAccessList = new Map();
+  statusAccessList.put(User.Role.PROFESSOR, [Notice.States.DRAFT, Notice.States.ACCEPTED]);
+  statusAccessList.put(User.Role.DDI, [Notice.States.DRAFT, Notice.States.APPROVED, Notice.States.CLOSED]);
+  statusAccessList.put(User.Role.TEACHING_OFFICE, [Notice.States.IN_ACCEPTANCE, Notice.States.IN_APPROVAL, Notice.States.PUBLISHED, Notice.States.WAITING_FOR_GRADED_LIST]);
+
+  if (!statusAccessList.get(userRole).includes(notice.state)) {
+    res.status(403).send();
+    return;
+  }
+
   const notice = req.body.notice;
 
   if (notice == null || !Check.checkNotice(notice)) {
@@ -102,40 +113,15 @@ exports.setStatus = (req, res) => {
     return;
   }
 
+
   notice = new Notice();
 
-  switch (notice.status) {
-    case Notice.States.DRAFT: // solo professore o ddi (quando rifiutano o disapprovano il bando)
-      Comment.create(notice.comment);
-      Notice.update(notice);
-      break;
-
-    case Notice.States.IN_ACCEPTANCE: // solo ufficio didattica (quando inoltra il bando al professore referente)
-      Notice.update(notice);
-      break;
-
-    case Notice.States.ACCEPTED: // solo professore (quando accetta il bando)
-      Notice.update(notice);
-      break;
-
-    case Notice.States.IN_APPROVAL: // solo ufficio didattica (quando inoltra il bando al ddi)
-      break;
-
-    case Notice.States.APPROVED: // solo ddi (quando approva il bando)
-      break;
-
-    case Notice.States.PUBLISHED: // solo ufficio didattica (quando pubblica il bando)
-      break;
-
-    case Notice.States.EXPIRED: // trigger nel db? (quando scade il termine)
-      break;
-
-    case Notice.States.WAITING_FOR_GRADED_LIST: // solo ufficio didattica (quando inoltra la graduatoria a ddi)
-      break;
-
-    case Notice.States.CLOSED: // solo ddi (quando carica la graduatoria)
-      break;
-  }
+  Notice.update(notice)
+      .then((updatedNotice) => {
+        if (updatedNotice.state === Notice.States.IN_APPROVAL) {
+          // crea pdf
+        }
+      });
 };
 
 /**
@@ -309,5 +295,5 @@ exports.downloadGradedList = (req, res) => {
 };
 
 exports.uploadGradedList = (req, res) => {
-
+  // ricordare di fare la update dello stato del bando
 };

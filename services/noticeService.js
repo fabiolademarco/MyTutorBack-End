@@ -71,7 +71,7 @@ module.exports = (app, auth) => {
    *
    * @apiParam {Object} notice Notice which state must be changed
    */
-  app.patch('/api/notices/state', NoticeControl.setStatus);
+  app.patch('/api/notices/state', auth.setUser, NoticeControl.setState);
 
   /**
    * @api {POST} /api/notices/search Searches Notice

@@ -24,7 +24,8 @@
     "nodemailer": "^6.4.2",
     "nodemon": "^2.0.2",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "pdfjs": "^2.3.2"
   },
   "devDependencies": {
     "mocha": "^6.2.2",
