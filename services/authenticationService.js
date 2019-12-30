@@ -36,12 +36,18 @@ module.exports = (app, auth) => {
 
   /**
    * @api {POST} /api/auth/registerProfessor Professor registration
-     Working in progress...
+   * @apiName RegisterProfessor
+   * @apiGroup Authentication
+   * @apiPermission guest
+   * Working in progress...
    */
   app.post('/api/auth/registerProfessor', auth.isNotLogged, AuthenticationControl.registerProfessor);
 
   /**
    * @api {POST} /api/auth/recovery Password recovery
+   * @apiName PasswordRecovery
+   * @apiGroup Authentication
+   * @apiPermission guest
    * Working in progress...
    */
   app.post('/api/auth/recovery', auth.isNotLogged, AuthenticationControl.passwordRecovery);

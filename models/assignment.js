@@ -71,8 +71,18 @@ class Assignment {
     if (assignment == null) {
       throw new Error('No Parameters');
     }
-    return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [assignment, assignment.id])
-        .then(([resultSetHeader]) => assignment)
+    return this.exists(assignment)
+        .then((exist) => {
+          if (exist) {
+            return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [assignment, assignment.id])
+                .then(([resultSetHeader]) => assignment)
+                .catch((err) => {
+                  throw err.message;
+                });
+          } else {
+            throw new Error('The assignment doesn\'t exists');
+          }
+        })
         .catch((err) => {
           throw err.message;
         });
