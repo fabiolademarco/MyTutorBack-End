@@ -1,4 +1,5 @@
 const User=require('../models/user');
+const Check = require('../utils/check');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -21,7 +22,7 @@ const ERR_SERVER_STATUS = 500;
  */
 module.exports.delete=function(req, res) {
   const user=req.body.user;
-  if (user==null) {
+  if (user==null || !Check.checkEmail(user.email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente non puo essere nullo'});
     return;
@@ -46,7 +47,7 @@ module.exports.search=function(req, res) {
 
   if (param == null) {
     res.status(ERR_CLIENT_STATUS);
-    res.send({error: 'L\'utente non puo essere nullo'});
+    res.send({error: 'Bisogna specificare un parametro'});
     return;
   }
 
@@ -73,13 +74,12 @@ module.exports.search=function(req, res) {
  */
 module.exports.update=function(req, res) {
   const user=req.body.user;
-
-  if (user == null) {
+  const loggedUser = req.user;
+  if (user == null || user.email !== loggedUser.id) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente non puo essere nullo'});
     return;
   }
-
   User.update(user)
       .then((newUser)=>{
         res.status(OK_STATUS).send({user: newUser});
@@ -95,9 +95,16 @@ module.exports.update=function(req, res) {
  */
 module.exports.find=function(req, res) {
   const email = req.query.email;
-  if (email == null) {
+  const user = req.user;
+  if (email == null || !Check.checkEmail(email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'email non puo essere nullo'});
+    return;
+  }
+  // Il professore e il DDI possono farla?
+  if (User.Role.STUDENT === user.role && user.id !== email) {
+    res.status(403);
+    res.send({error: 'Non sei autorizzato'});
     return;
   }
   User.findByEmail(email)

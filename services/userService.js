@@ -4,7 +4,7 @@ module.exports=function(app, auth) {
 /**
  * @todo Controllare bene chi è autorizzato a fare cosa
 */
-  app.use('/api/users', auth.authenticate());
+  app.use(/\/api\/users.*/, auth.authenticate());
 
   app.delete('/api/users/:id', auth.isTeachingOffice, UserControl.delete);
   app.get('/api/users/:id', UserControl.find);
