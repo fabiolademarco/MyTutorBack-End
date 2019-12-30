@@ -1,5 +1,6 @@
 const Comment = require('../models/comment');
 const Check = require('../utils/check');
+const User = require('../models/user');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -22,14 +23,21 @@ const ERR_SERVER_STATUS = 500;
   */
 exports.set = (req, res) => {
   const comment = req.body.comment;
+  const user = req.user;
 
   if (!comment || !Check.checkComment(comment)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un commento valido.'});
-
     return;
   }
-
+  if (user.role !== User.Role.DDI && user.role !== User.Role.PROFESSOR) {
+    res.status(403);
+    res.send({
+      error: 'Non sei autorizzato.',
+    });
+    return;
+  }
+  comment.author = user.id;
   Comment.exists(comment)
       .then((exist) => {
         if (exist) {

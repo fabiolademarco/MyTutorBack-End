@@ -2,7 +2,7 @@ const AuthenticationControl = require('../controllers/authenticationControl');
 
 module.exports = (app, auth) => {
   /**
-   * @api {POST} /api/auth/login Allows to login
+   * @api {POST} /api/auth/login Login
    * @apiName Login
    * @apiGroup Authentication
    * @apiPermission guest
@@ -14,7 +14,7 @@ module.exports = (app, auth) => {
   app.post('/api/auth/login', auth.isNotLogged, AuthenticationControl.login);
 
   /**
-   * @api {GET} /api/auth/logout Allows to logout
+   * @api {GET} /api/auth/logout Logout
    * @apiName Logout
    * @apiGroup Authentication
    * @apiPermission User
@@ -24,7 +24,7 @@ module.exports = (app, auth) => {
   app.get('/api/auth/logout', auth.authenticate(), AuthenticationControl.logout);
 
   /**
-   * @api {POST} /api/auth/registerStudent Allows to register a new Student
+   * @api {POST} /api/auth/registerStudent Student registration
    * @apiName RegisterStudent
    * @apiGroup Authentication
    * @apiPermission guest
@@ -35,19 +35,19 @@ module.exports = (app, auth) => {
   app.post('/api/auth/registerStudent', auth.isNotLogged, AuthenticationControl.registerStudent);
 
   /**
-   * @api {POST} /api/auth/registerProfessor Allows to register a new Professor
+   * @api {POST} /api/auth/registerProfessor Professor registration
      Working in progress...
    */
   app.post('/api/auth/registerProfessor', auth.isNotLogged, AuthenticationControl.registerProfessor);
 
   /**
-   * @api {POST} /api/auth/recovery Allows to recover a password.
+   * @api {POST} /api/auth/recovery Password recovery
    * Working in progress...
    */
   app.post('/api/auth/recovery', auth.isNotLogged, AuthenticationControl.passwordRecovery);
 
   /**
-   * @api {POST} /api/auth/verified Allows to insert a new verifiedEmail.
+   * @api {POST} /api/auth/verified Insert VerifiedEmail
    * @apiName InsertVerifiedEmail
    * @apiGroup Authentication
    * @apiPermission Teaching Office
