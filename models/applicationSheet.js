@@ -11,7 +11,7 @@ const table = 'application_sheet';
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 class ApplicationSheet {
-  /**
+/**
  * ApplicationSheet object constructor
  * @param {ApplicationSheet} applicationSheet
  */
@@ -20,7 +20,8 @@ class ApplicationSheet {
     this.documents_to_attach = applicationSheet.documents_to_attach;
   }
 
-  /** Creates an application sheet.
+  /**
+   * Creates an application sheet.
    * @param {ApplicationSheet} applicationSheet The application sheet to create.
    * @return {Promise<ApplicationSheet>} Promise representing the fulfillment of an application sheet creation.
    */
@@ -38,15 +39,16 @@ class ApplicationSheet {
         });
   }
 
-  /** Updates an applicatin sheet.
+  /**
+   * Updates an applicatin sheet.
    * @param {ApplicationSheet} applicationSheet The application sheet to update.
    * @return {Promise<ApplicationSheet>} Promise representing the fulfillment of the application sheet update.
    */
-  static update(applicationSheet) {
+  static async update(applicationSheet) {
     if (!applicationSheet) {
       throw new Error('No Parameters');
     }
-    if (!this.exists(applicationSheet)) {
+    if (!await this.exists(applicationSheet)) {
       throw new Error('The application sheet doesn\'t exists');
     }
 
@@ -59,7 +61,8 @@ class ApplicationSheet {
         });
   }
 
-  /** Removes an application sheet.
+  /**
+   * Removes an application sheet.
    * @param {ApplicationSheet} applicationSheet The application sheet to remove.
    * @return {Promise<boolean>} Promise representing the fulfillment of the application sheet removal.
    */
@@ -77,7 +80,7 @@ class ApplicationSheet {
   }
 
   /**
-   * Check if an application sheet exists.
+   * Checks if an application sheet exists.
    * @param {ApplicationSheet} applicationSheet The application sheet to check.
    * @return {Promise<boolean>} Promise that resolves to true if the application sheet exists, false otherwise.
    */
@@ -95,7 +98,8 @@ class ApplicationSheet {
         });
   }
 
-  /** Finds an application sheet based on the protocol.
+  /**
+   * Finds an application sheet based on the protocol.
    * @param {NoticeProtocol} noticeProtocol The notice protocol on which to filter.
    * @return {Promise<ApplicationSheet>} Promise representing the fulfillment of the rapplication sheet search.
    */
@@ -115,7 +119,8 @@ class ApplicationSheet {
         });
   }
 
-  /** Returns application sheet table content.
+  /**
+   * Returns application sheet table content.
    * @return {Promise<ApplicationSheet[]>} Promise representing the fulfillment of the application sheet search.
    */
   static findAll() {

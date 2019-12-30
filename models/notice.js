@@ -140,7 +140,7 @@ class Notice {
     if (!notice) {
       throw new Error('No Parameters');
     }
-    if (!this.exists(notice)) {
+    if (!await this.exists(notice)) {
       throw new Error('The notice doesn\'t exists');
     }
 
