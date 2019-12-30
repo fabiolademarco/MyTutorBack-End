@@ -258,8 +258,6 @@ exports.checkNotice = (notice) => {
   const noticeFundsExp = /[0-9]+(.[0-9]{2})?/;
   const noticeDeadlineExp = /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/;
 
-  let value;
-
   if (!this.checkNoticeProtocol(notice.protocol)) {
     return false;
   }
@@ -276,13 +274,7 @@ exports.checkNotice = (notice) => {
     return false;
   }
 
-  notice.assignments.forEach((assignment) => {
-    if (!this.checkAssignment(assignment)) {
-      value = false;
-    }
-  });
-
-  if (!value) {
+  if (!notice.assignments.every(this.checkAssignment)) {
     return false;
   }
 
@@ -294,13 +286,7 @@ exports.checkNotice = (notice) => {
     return false;
   }
 
-  notice.evaluation_criteria.forEach((evaluationCriterion) => {
-    if (!this.checkEvaluationCriterion(evaluationCriterion)) {
-      value = false;
-    }
-  });
-
-  if (!value) {
+  if (!notice.evaluation_criteria.every(this.checkEvaluationCriterion)) {
     return false;
   }
 
@@ -356,13 +342,7 @@ exports.checkNotice = (notice) => {
     return false;
   }
 
-  notice.articles.forEach((article) => {
-    if (!this.checkArticle(article)) {
-      value = false;
-    }
-  });
-
-  if (!value) {
+  if (!notices.articles.every(this.checkArticle)) {
     return false;
   }
 
