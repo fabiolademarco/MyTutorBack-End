@@ -34,10 +34,13 @@ module.exports.createTable=function(req, res) {
   }
   Promise.all(allPromises)
       .then((values)=>{
-        res.status(OK_STATUS).send({result: true});
+        res.status(OK_STATUS).send({status: true});
       })
       .catch((err)=>{
-        res.status(ERR_SERVER_STATUS).send({error: false});
+        res.status(ERR_SERVER_STATUS).send({
+          status: false,
+          error: err,
+        });
       });
 };
 

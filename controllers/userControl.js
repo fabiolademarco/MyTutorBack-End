@@ -30,10 +30,13 @@ module.exports.delete=function(req, res) {
 
   User.delete(user)
       .then((data)=>{
-        res.status(OK_STATUS).send({result: true});
+        res.status(OK_STATUS).send({status: data});
       })
       .catch((err)=>{
-        res.status(ERR_SERVER_STATUS).send({error: false});
+        res.status(ERR_SERVER_STATUS).send({
+          status: false,
+          error: err,
+        });
         return;
       });
 };
@@ -98,7 +101,7 @@ module.exports.find=function(req, res) {
   const user = req.user;
   if (email == null || !Check.checkEmail(email)) {
     res.status(ERR_CLIENT_STATUS);
-    res.send({error: 'L\'email non puo essere nullo'});
+    res.send({error: 'L\'email non può essere nulla'});
     return;
   }
   // Il professore e il DDI possono farla?
