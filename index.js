@@ -24,6 +24,7 @@ const authService = require('./services/authenticationService');
 const candidatureService = require('./services/candidatureService');
 const commentService = require('./services/commentService');
 const applicationSheetService = require('./services/applicationSheetService');
+const ratingService = require('./services/ratingService');
 
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -84,3 +85,5 @@ commentService(app, auth);
 // ApplicationSheetService routes
 applicationSheetService(app, auth);
 
+// RatingService routes
+ratingService(app, auth);
