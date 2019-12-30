@@ -82,6 +82,10 @@ class Notice {
    * @return {Promise<Notice>} Promise that represents the created Notice
    */
   static async create(notice) {
+    if (!notice) {
+      throw new Error('No Parameters');
+    }
+
     const articles = JSON.parse(JSON.stringify(notice.articles));
     const evaluationCriteria = JSON.parse(JSON.stringify(notice.evaluation_criteria));
     const assignments = JSON.parse(JSON.stringify(notice.assignments));
@@ -133,6 +137,13 @@ class Notice {
    * @return {Promise<Notice>} Promise that represents the updated notice
    */
   static async update(notice) {
+    if (!notice) {
+      throw new Error('No Parameters');
+    }
+    if (!this.exists(notice)) {
+      throw new Error('The notice doesn\'t exists');
+    }
+
     const articles = JSON.parse(JSON.stringify(notice.articles));
     const evaluationCriteria = JSON.parse(JSON.stringify(notice.evaluation_criteria));
     const assignments = JSON.parse(JSON.stringify(notice.assignments));
@@ -203,6 +214,10 @@ class Notice {
    * @return {Promise<boolean>} Promise that is true if the removal went right else it's false
    */
   static async remove(notice) {
+    if (!notice) {
+      throw new Error('No Parameters');
+    }
+
     return pool.query(`DELETE FROM ${table} WHERE protocol = ?`, notice.protocol)
         .then(([resultSetHeader]) => {
           return resultSetHeader.affectedRows > 0;
@@ -212,6 +227,24 @@ class Notice {
         });
   }
 
+  /**
+   * Check if a notice exists.
+   * @param {Notice} notice The notice to check.
+   * @return {Promise<boolean>} Promise that resolves to true if the notice exists or false if it doesn't exist
+   */
+  static async exists(notice) {
+    if (!notice) {
+      throw new Error('No Parameters');
+    }
+
+    return pool.query(`SELECT * FROM ${table} WHERE protocol = ?`, notice.protocol)
+        .then(([rows]) => {
+          return rows.length > 0;
+        })
+        .catch((err) => {
+          throw err.message;
+        });
+  }
 
   /**
    * Finds the notice with the specific protocol.
@@ -219,6 +252,10 @@ class Notice {
    * @return {Promise<Notice>} Promise that represents the Notice having the passed id.
    */
   static async findByProtocol(noticeProtocol) {
+    if (!noticeProtocol) {
+      throw new Error('No Parameters');
+    }
+
     return pool.query(`SELECT * FROM ${table} WHERE protocol LIKE ?`, '%' + noticeProtocol + '%')
         .then(([rows]) => {
           if (rows[0] == undefined) {
@@ -252,6 +289,10 @@ class Notice {
    * @return {Promise<Notice[]>} Promise that represents the Notice array having the passed State.
    */
   static async findByState(states) {
+    if (!states) {
+      throw new Error('No Parameters');
+    }
+
     let query = `SELECT * FROM ${table} WHERE false`;
     states.forEach((state) => query += ' OR state = ?');
 
@@ -285,6 +326,10 @@ class Notice {
    * @return {Promise<Notice[]>} Promise that represents the Notice array having the passed referent.
    */
   static async findByReferent(referent) {
+    if (!refernt) {
+      throw new Error('No Parameters');
+    }
+
     return pool.query(`SELECT * FROM ${table} WHERE referent_professor = ?`, referent)
         .then(([rows]) => {
           return Promise.all(rows.map((notice) =>
@@ -335,21 +380,6 @@ class Notice {
               .catch((err) => {
                 throw err.message;
               });
-        });
-  }
-
-  /**
-   * Check if a notice exists.
-   * @param {Notice} notice The notice to check.
-   * @return {Promise<boolean>} Promise that resolves to true if the notice exists or false if it doesn't exist
-   */
-  static async exists(notice) {
-    return pool.query(`SELECT * FROM ${table} WHERE protocol = ?`, notice.protocol)
-        .then(([rows]) => {
-          return rows.length > 0;
-        })
-        .catch((err) => {
-          throw err.message;
         });
   }
 }
