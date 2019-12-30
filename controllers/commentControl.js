@@ -35,11 +35,11 @@ exports.set = (req, res) => {
         if (exist) {
           Comment.update(comment)
               .then((comment) => {
-                return res.status(OK_STATUS)
+                res.status(OK_STATUS)
                     .send({comment: comment});
               })
               .catch((err) => {
-                return res.status(ERR_SERVER_STATUS)
+                res.status(ERR_SERVER_STATUS)
                     .send({
                       error: 'Aggiornamento del commento fallito.',
                       exception: err,
@@ -48,11 +48,11 @@ exports.set = (req, res) => {
         } else {
           Comment.create(comment)
               .then((comment) => {
-                return res.status(OK_STATUS)
+                res.status(OK_STATUS)
                     .send({comment: comment});
               })
               .catch((err) => {
-                return res.status(ERR_SERVER_STATUS)
+                res.status(ERR_SERVER_STATUS)
                     .send({
                       error: 'Creazione del commento fallita.',
                       exception: err,
@@ -60,11 +60,13 @@ exports.set = (req, res) => {
               });
         }
       })
-      .catch((err) => res.status(ERR_SERVER_STATUS)
-          .send({
-            error: 'Controllo sull\'esistenza del commento fallito.',
-            exception: err,
-          }));
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS)
+            .send({
+              error: 'Controllo sull\'esistenza del commento fallito.',
+              exception: err,
+            });
+      });
 };
 
 /**
@@ -84,11 +86,11 @@ exports.delete = (req, res) => {
 
   Comment.remove(comment)
       .then((comment) => {
-        return res.status(OK_STATUS)
+        res.status(OK_STATUS)
             .send({comment: comment});
       })
       .catch((err) => {
-        return res.status(ERR_SERVER_STATUS)
+        res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Rimozione del commento fallita.',
               exception: err,
@@ -113,11 +115,11 @@ exports.get = (req, res) => {
 
   Comment.findByProtocol(noticeProtocol)
       .then((comment) => {
-        return res.status(OK_STATUS)
+        res.status(OK_STATUS)
             .send({comment: comment});
       })
       .catch((err) => {
-        return res.status(ERR_SERVER_STATUS)
+        res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Fetch del commento fallito.',
               exception: err,
