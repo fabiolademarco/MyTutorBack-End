@@ -45,10 +45,14 @@ class VerifiedEmail {
    * @param {VerifiedEmail} verifiedEmail The verifiedEmail to update.
    * @return {Promise<VerifiedEmail>} Promise object representing the updated VerifiedEmail.
    */
-  static update(verifiedEmail) {
+  static async update(verifiedEmail) {
     if (verifiedEmail == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+    if (!await this.exists(verifiedEmail)) {
+      throw new Error('The verified email doesn\'t exists');
+    }
+
     return pool.query(`UPDATE ${table} SET ? WHERE email=?`, [verifiedEmail, verifiedEmail.email])
         .then(([resultSetHeader]) => new VerifiedEmail(verifiedEmail))
         .catch((err) => {
