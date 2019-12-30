@@ -67,22 +67,16 @@ class Assignment {
    * @param {Assignment} assignment The assignment to update.
    * @return {Promise<Assignment>} Promise object that represents the updated Assignment.
    */
-  static update(assignment) {
+  static async update(assignment) {
     if (assignment == null) {
       throw new Error('No Parameters');
     }
-    return this.exists(assignment)
-        .then((exist) => {
-          if (exist) {
-            return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [assignment, assignment.id])
-                .then(([resultSetHeader]) => assignment)
-                .catch((err) => {
-                  throw err.message;
-                });
-          } else {
-            throw new Error('The assignment doesn\'t exists');
-          }
-        })
+    exist = await this.exists(assignment);
+    if (!exist) {
+      throw new Error('The assignment doesn\'t exists');
+    }
+    return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [assignment, assignment.id])
+        .then(([resultSetHeader]) => assignment)
         .catch((err) => {
           throw err.message;
         });

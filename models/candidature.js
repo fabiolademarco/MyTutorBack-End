@@ -58,9 +58,12 @@ class Candidature {
    * @param {Candidature} candidature The candidature to update.
    * @return {Promise<Candidature>} Promise object representing the updated Candidature.
    */
-  static update(candidature) {
+  static async update(candidature) {
     if (candidature == null) {
       throw new Error('Parameter can not be null or undefined');
+    }
+    if (!await this.exists(candidature)) {
+      throw new Error('The candidature doesn\'t exist');
     }
     return pool.query(`UPDATE ${table} SET state = ?, last_edit = ? WHERE student = ? AND notice_protocol = ?`, [candidature.state, candidature.last_edit, candidature.student, candidature.notice_protocol])
         .then(() => Document.findByCandidature(candidature))
@@ -131,17 +134,13 @@ class Candidature {
     if (email == null || protocol == null) {
       throw new Error('Parameters can not be null or undefined');
     }
-    let candidature = '';
     return pool.query(`SELECT * FROM ${table} WHERE student = ? AND notice_protocol = ?`, [email, protocol])
-        .then(([rows]) => {
+        .then(async ([rows]) => {
           if (rows.length < 1) {
             throw new Error(`No result found: ${email} and ${protocol}`);
           }
-          candidature = new Candidature(rows[0]);
-          return Document.findByCandidature(candidature);
-        })
-        .then((documents) => {
-          candidature.documents = documents;
+          const candidature = new Candidature(rows[0]);
+          candidature.documents = await Document.findByCandidature(candidature);
           return candidature;
         })
         .catch((err) => {
@@ -158,14 +157,13 @@ class Candidature {
     if (email == null) {
       throw new Error('Parameter can not be null or undefined');
     }
-    let candidatures = [];
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, email)
         .then(([rows]) => {
-          candidatures = rows.map((c) => new Candidature(c));
-          return Promise.all(candidatures.map((c) => Document.findByCandidature(c)));
-        })
-        .then((documents) => {
-          documents.forEach((doc, i) => candidatures[i].documents = doc);
+          let candidatures = rows.map((c) => new Candidature(c));
+          candidatures = candidatures.map(async (c) => {
+            c.documents = await Document.findByCandidature(c);
+            return c;
+          });
           return candidatures;
         })
         .catch((err) => {
@@ -182,14 +180,13 @@ class Candidature {
     if (protocol == null) {
       throw new Error('Parameter can not be null or undefined');
     }
-    let candidatures = [];
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, protocol)
         .then(([rows]) => {
-          candidatures = rows.map((c) => new Candidature(c));
-          return Promise.all(candidatures.map((c) => Document.findByCandidature(c)));
-        })
-        .then((documents) => {
-          documents.forEach((doc, i) => candidatures[i].documents = doc);
+          let candidatures = rows.map((c) => new Candidature(c));
+          candidatures = candidatures.map(async (c) => {
+            c.documents = await Document.findByCandidature(c);
+            return c;
+          });
           return candidatures;
         })
         .catch((err) => {
@@ -202,14 +199,13 @@ class Candidature {
    * @return {Promise<Candidature[]>} Promise object representing all the candidatures.
    */
   static findAll() {
-    let candidatures;
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => {
-          candidatures = rows.map((c) => new Candidature(c));
-          return Promise.all(candidatures.map((c) => Document.findByCandidature(c)));
-        })
-        .then((documents) => {
-          documents.forEach((doc, i) => candidatures[i].documents = doc);
+          let candidatures = rows.map((c) => new Candidature(c));
+          candidatures = candidatures.map(async (c) => {
+            c.documents = await Document.findByCandidature(c);
+            return c;
+          });
           return candidatures;
         })
         .catch((err) => {
