@@ -33,7 +33,7 @@ exports.create = (req, res) => {
   ApplicationSheet.create(applicationSheet)
       .then((data) => {
         res.status(OK_STATUS)
-            .send({result: true});
+            .send({status: true});
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS)
@@ -97,7 +97,7 @@ exports.delete = (req, res) => {
   ApplicationSheet.remove(applicationObject)
       .then((data) => {
         res.status(OK_STATUS)
-            .send({result: true});
+            .send({status: data});
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS)
