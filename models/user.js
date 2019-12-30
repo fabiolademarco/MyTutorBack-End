@@ -61,8 +61,14 @@ class User {
     if (user===null || user===undefined) {
       throw new Error('User must not be null');
     }
-
-    return pool.query(`UPDATE ${table} SET ? WHERE email=?`, [user, user.email])
+    let promise;
+    if (user.password == null) {
+      promise = pool.query(`UPDATE ${table} SET name = ?, surname = ?, role = ?, verified = ? WHERE email = ?`, [user.name, user.surname, user.role, user.verified, user.email]);
+    } else {
+      user.password = bcrypt.hashSync(user.password, SALT);
+      promise = pool.query(`UPDATE ${table} SET ? WHERE email=?`, [user, user.email]);
+    }
+    return promise
         .then((data)=>{
           return new User(user);
         })
