@@ -46,16 +46,10 @@ class Article {
    * @param {Article} article The article to update.
    * @return {Promise<Article>} Promise object that represents the updated Article
    */
-  static update(article) {
-    if (article==null ) {
+  static async update(article) {
+    if (article==null ||!await this.exists(article)) {
       throw new Error('The article must not be null.');
     }
-    this.exists(article)
-        .then((exists)=>{
-          if (!exists) {
-            throw new Error('The article is not in the database.');
-          }
-        });
 
     return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [article, article.id])
         .then(([resultSetHeader]) => {

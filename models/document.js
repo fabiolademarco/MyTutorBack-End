@@ -29,6 +29,9 @@ class Document {
    * @return {Promise<Document>} Promise that represents the created document.
    */
   static create(aDocument, candidature) {
+    if (aDocument==null || candidature==null ) {
+      throw new Error('The document/candidature must not be null.');
+    }
     aDocument.notice_protocol = candidature.notice_protocol;
     aDocument.student = candidature.student;
 
@@ -47,7 +50,11 @@ class Document {
    * @param {Candidature} candidature The candidature correlates to the document.
    * @return {Promise<Document>} Promise that represents the updated document.
    */
-  static update(aDocument, candidature) {
+  static async update(aDocument, candidature) {
+    if (aDocument==null || candidature==null ||! await this.exists(aDocument, candidature)) {
+      throw new Error('The document/candidature is either null or the document is not in the database.');
+    }
+
     aDocument.notice_protocol = candidature.notice_protocol;
     aDocument.student = candidature.student;
 
@@ -70,6 +77,9 @@ class Document {
  * @return {Promise<boolean>} Promise that represents the value of the action.
  */
   static remove(aDocument, candidature) {
+    if (aDocument==null || candidature==null ) {
+      throw new Error('The document/candidature must not be null.');
+    }
     return pool.query(`DELETE FROM ${table} WHERE student = ?
                                               AND notice_protocol = ?
                                               AND file_name = ?`,
@@ -89,6 +99,9 @@ class Document {
    * @return {Promise<boolean>} Promise that represents the value of the action.
    */
   static exists(aDocument, candidature) {
+    if (aDocument==null || candidature==null ) {
+      throw new Error('The document/candidature must not be null.');
+    }
     return pool.query(`SELECT FROM ${table} WHERE student = ?
                                               AND notice_protocol = ?
                                               AND file_name = ?`,
@@ -109,6 +122,9 @@ class Document {
    * @return {Promise<Document>} Promise that represents the document.
    */
   static findById(name, studentEmail, noticeProtocol) {
+    if (name ==null||studentEmail==null||noticeProtocol==null ) {
+      throw new Error('The name/student email/notice protocol must not be null.');
+    }
     return pool.query(`SELECT * FROM ${table} WHERE student = ?
                                                 AND notice_protocol = ?
                                                 AND file_name = ?`,
@@ -127,6 +143,9 @@ class Document {
    * @return {Promise<Document[]>} Promise that respresents the Documents correlated to the specific notice.
    */
   static findByNotice(noticeProtocol) {
+    if ( noticeProtocol==null ) {
+      throw new Error('The notice protocol must not be null.');
+    }
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
         .then(([rows]) => {
           return rows.map((el) => new Document(el));
@@ -142,6 +161,9 @@ class Document {
    * @return {Promise<Document[]>} Promise that respresents the Documents correlated to the specific candidature.
    */
   static findByCandidature(candidature) {
+    if ( candidature==null ) {
+      throw new Error('The candidature must not be null.');
+    }
     return pool.query(`SELECT FROM ${table} WHERE student = ?
                                               AND notice_protocol = ?`,
     [candidature.student, candidature.notice_protocol])
@@ -159,6 +181,9 @@ class Document {
    * @return {Promise<Document[]>} Promise that respresents the Documents correlated to the specific student.
    */
   static findByStudent(studentEmail) {
+    if (studentEmail==null ) {
+      throw new Error('The student email must not be null.');
+    }
     return pool.query(`SELECT FROM ${table} WHERE student = ?`, studentEmail)
         .then(([rows]) => {
           return rows.map((el) => new Document(el));
