@@ -103,7 +103,7 @@ module.exports.update=function(req, res) {
  * @param {Response} res
  */
 module.exports.find=function(req, res) {
-  const email = req.query.email;
+  const email = req.params.id;
   const user = req.user;
   if (email == null || !Check.checkEmail(email)) {
     res.status(ERR_CLIENT_STATUS);
