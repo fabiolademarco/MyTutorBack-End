@@ -117,3 +117,6 @@ out
 
 #apidocjs output
 doc
+
+notices
+static/*.pdf

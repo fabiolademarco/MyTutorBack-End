@@ -249,7 +249,7 @@ class Notice {
   /**
    * Finds the notice with the specific protocol.
    * @param {string} noticeProtocol The protocol of the notice.
-   * @return {Promise<Notice>} Promise that represents the Notice having the passed id.
+   * @return {Promise<Notice[]>} Promise that represents the Notices having a protocol LIKE the passed protocol.
    */
   static async findByProtocol(noticeProtocol) {
     if (!noticeProtocol) {

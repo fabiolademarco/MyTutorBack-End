@@ -2,7 +2,11 @@
   "director": "IL DIRETTORE",
   "decrees": "DECRETA",
   "art1": { 
-    "title": "Art. 1 - Oggetto del bando"
+    "title": "Art. 1 - Oggetto del bando",
+    "tableHeader": {
+      "helpTeaching": ["Codice", "N° di ore", "Descrizione attività", "Requisiti di accesso", "Compenso lordo orario", "Compenso lordo percipiente complessivo", "Fondo H.T. azione"],
+      "tutoring": ["Codice", "N° di ore", "Descrizione attività", "Requisiti di accesso", "Compenso lordo orario", "Compenso lordo percipiente complessivo"]
+    }
   }, 
   "art2": {
     "title": "Art. 2 - Requisiti di ammissione"
@@ -39,44 +43,13 @@
   },  
   "art13": {
     "title": "Art. 13 - Trattamento dei dati personali dei candidati",
-    "content": "I dati personali trasmessi dai candidati saranno trattati esclusivamente per le finalità di gestione della presente procedura. Ai sensi dell'art. 13 del decreto legislativo 30 giugno 2003, n. 196 \"Codice in materia di dati personali\" viene predisposta l'informativa allegata al presente bando nella quale sono esplicitate le finalità e le modalità del trattamento dei dati personali forniti dai candidati.\nA tutti gli effetti della presente procedura comparativa è individuata quale struttura organizzativa competente il Dipartimento di Informatica, Via Giovanni Paolo II, 132 - 84084 Fisciano (Salerno) tel. 089969780 - fax 089969600."
+    "body": "I dati personali trasmessi dai candidati saranno trattati esclusivamente per le finalità di gestione della presente procedura. Ai sensi dell'art. 13 del decreto legislativo 30 giugno 2003, n. 196 \"Codice in materia di dati personali\" viene predisposta l'informativa allegata al presente bando nella quale sono esplicitate le finalità e le modalità del trattamento dei dati personali forniti dai candidati.\nA tutti gli effetti della presente procedura comparativa è individuata quale struttura organizzativa competente il Dipartimento di Informatica, Via Giovanni Paolo II, 132 - 84084 Fisciano (Salerno) tel. 089969780 - fax 089969600."
   },
   "ratification": "Il presente decreto sarà ratificato nella prima riunione utile del Consiglio di Dipartimento.",
   "sign": "Il Direttore del Dipartimento",
-  
-  "personalDataTreatment": {
-    "title": "OGGETTO: Informativa ai sensi dell'art. 13 del Decreto Legislativo 196\/2003 \"Codice in materia di protezione dei dati personali\"\n\n",
-    "subject": "Secondo quanto previsto dall'art. 13 e dall'art. 22, comma 2, del D.lgs. 196\/2003 \"Codice in materia di protezione dei dati personali\" recante disposizioni sulla tutela della persona e di altri soggetti rispetto al trattamento di dati personali, La informiamo che l'Università degli Studi di Salerno, nella propria qualità di \"Titolare del trattamento dei dati\", per il perseguimento delle proprie finalità istituzionali e in particolare per la gestione delle procedure di selezione per l'affidamento degli assegni per l'incentivazione delle attività di tutorato, didattico-integrative, propedeutiche e di recupero, deve acquisire i dati personali dei candidati, inclusi quei dati che il D.lgs. 193\/2003 definisce dati \"sensibili\" e \"giudiziari\".\n\n",
-    "contents": [
-      {"title": "Finalità del trattamento", "body": "Il trattamento dei dati personali richiesti è finalizzato all'espletamento della procedura selettiva e alla determinazione dei punteggi conseguiti a seguito dello svolgimento delle prove previste dal bando.\nSi informa, inoltre, che questa Università, come ogni altro ente pubblico, provvede al trattamento dei dati personali acquisiti per l'espletamento dei propri fini istituzionali senza la necessità di chiedere il consenso all'interessato ed è autorizzata a trattare le categorie di dati sensibili e giudiziari acquisiti per finalità di rilevante interesse pubblico individuate da espressa disposizione di legge.\n\n"},
-      {"title": "Natura del conferimento dei dati", "body": "Il conferimento dei dati personali richiesti nella domanda di partecipazione è obbligatorio per la partecipazione alla procedura selettiva e per l'attribuzione dei punteggi ottenuti ai fini della redazione della graduatoria. La mancata acquisizione dei dati anagrafici comporta l'inammissibilità della domanda.\n\n"},
-      {"title": "Modalità del trattamento", "body": "I dati personali verranno trattati con modalità sia manuale che informatizzata, mediante il loro inserimento sia in archivi (contenenti documenti cartacei) sia nelle banche dati la cui titolarità è in capo ai competenti uffici. I dati potranno essere comunicati ad altre strutture dell'Ateneo nei limiti degli adempimenti previsti per le finalità di cui alla presente informativa.\n\n"},
-      {"title": "Titolare, responsabile e incaricati del trattamento", "body": "Il titolare del trattamento è l'Università degli Studi di Salerno nella persona del legale rappresentante, Rettore pro tempore, domiciliato per la carica in Via Giovanni Paolo 11,132 84084 Fisciano (SA).\nIl responsabile del trattamento dei dati personali è il Responsabile della Struttura nell'ambito della quale i dati personali sono raccolti e\/o gestiti. Gli incaricati al trattamento sono i dipendenti e i collaboratori dell'Ateneo espressamente autorizzati all'assolvimento di tali compiti, identificati ai sensi di legge ed edotti dei vincoli imposti dal D.lgs. n. 196\/2003.\n\n"},
-      {"title": "Comunicazione e diffusione dei dati", "body": "I dati personali potranno essere comunicati solo ad Enti pubblici o a pubbliche amministrazioni che per legge ne abbiano titolo. ln particolare, potranno essere comunicati ad Istituti previdenziali, assistenziali ed assicurativi, Società assicuratrici, Avvocatura dello Stato, Centri per l'impiego, nonché all'Istituto Cassiere dell'Ateneo e ad eventuali Responsabili esterni del trattamento dei dati, limitatamente agli scopi istituzionali e nel rispetto del principio di pertinenza stabilito dal D. Lgs. 196\/2003. I dati personali possono essere diffusi solo se previsto da una norma di legge o di regolamento; i dati sanitari non possono essere diffusi. Per maggiori informazioni sulle tipologie di dati, anche sensibili e giudiziari per le quali è consentito il trattamento e sulle operazioni eseguibili in riferimento alle specifiche finalità di rilevante interesse pubblico perseguite dall'Università, si vedano i Regolamenti per il trattamento dei dati personali e per il trattamento dei dati sensibili e giudiziari adottati dall'Università degli Studi di Salerno in ottemperanza a quanto prescritto dagli artt. 20 e 21 del citato Codice, disponibili sul portale http:\/\/unisa.it. Nella sezione Regolamenti.\n\n"},
-      {"title": "Diritti dell'interessato", "body": "I soggetti interessati possono esercitare i diritti di cui all'art. 7 del D. Lgs. 1906\/2003, che di seguito si riporta, con richiesta rivolta senza formalità al titolare o al responsabile, anche per il tramite di un incaricato.\n\n"}
-    ],
-    "listTitle": "Art. 7 del D.Lgs 196\/2003 (Diritto di accesso ai dati personali ed altri diritti)", 
-    "list": [
-      "1-  L'interessato ha diritto di ottenere la conferma dell'esistenza o meno di dati personali che lo riguardano, anche se non ancora registrati e la loro comunicazione in forma intelligibile.",
-      "2-  L'interessato ha diritto di ottenere l'indicazione:",
-      [
-        "a) dell'origine dei dati personali;",
-        "b) delle finalità e modalità del trattamento;",
-        "c) della logica applicata in caso di trattamento effettuato con l'ausilio di strumenti elettronici;",
-        "d) degli estremi identificativi del titolare, dei responsabili e del rappresentante designato ai sensi dell'art. 5, comma 2;",
-        "e) dei soggetti o delle categorie di soggetti ai quali i dati personali possono essere comunicati o che possono venirne a conoscenza in qualità di rappresentante designato nel territorio dello stato, di responsabili o incaricati."
-      ],
-      "3-  L'interessato ha diritto di ottenere:",
-      [
-        "a) l'aggiornamento, la rettificazione ovvero, quando vi ha interesse, l'integrazione dei dati;",
-        "b) la cancellazione, la trasformazione in forma anonima o il blocco dei dati trattati in violazione di legge, compresi quelli di cui non è necessaria la conservazione in relazione agli scopi per i quali i dati sono stati raccolti o successivamente trattati;",
-        "c) l'attestazione che le operazioni di cui alle lettere a) e b) sono state portate a conoscenza, anche per quanto riguarda il loro contenuto, di coloro ai quali i dati sono stati comunicati o diffusi, eccettuato il caso in cui tale adempimento si rivela impossibile o comporta un impiego di mezzi manifestatamene sproporzionato rispetto al diritto tutelato."
-      ],
-      "4-  L'interessato ha diritto ad opporsi, in tutto o in parte:",
-      [
-        "a) per motivi legittimi al trattamento dei dati personali che lo riguardano, ancorché pertinenti allo scopo della raccolta;",
-        "b) al trattamento di dati personali che lo riguardano a fini di invio di materiale pubblicitario o di vendita diretta o per il compimento di ricerche di mercato o di comunicazione commerciale."
-      ] 
-    ]
-  }
+  "footer": [
+    "Ufficio Didattica, Organi Collegiali, Alta Formazione, Carriere\nResponsabile del procedimento: Carmela De Rosa\nResponsabile dell'istruttoria: Carmela De Rosa",
+    "Via Giovanni Paolo II, 132 - 84084 Fisciano (SA) ITALY\nwww.di.unisa.it",
+    "Ufficio Didattica, Organi Collegiali, Alta Formazione, Carriere\ntel: 089969780 fax: 089969606\ne-mail: carrierestudenti.di@unisa.it, didattica.di@unisa.it"
+  ]  
 }
