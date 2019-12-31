@@ -185,7 +185,7 @@ class User {
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static search(filter) {
-    const query=`SELECT * FROM ${table} WHERE true`;
+    let query=`SELECT * FROM ${table} WHERE true`;
     const params=[];
 
     if (filter.name) {

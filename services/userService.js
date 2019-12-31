@@ -6,6 +6,7 @@ module.exports=function(app, auth) {
 */
   app.use(/\/api\/users.*/, auth.authenticate());
 
+
   app.delete('/api/users/:id', auth.isTeachingOffice, UserControl.delete);
   app.get('/api/users/:id', UserControl.find);
   app.patch('/api/users', UserControl.update);
