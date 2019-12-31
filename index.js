@@ -9,7 +9,10 @@ const express = require('express');
 
 // Import Body parser
 const bodyParser = require('body-parser');
+
+// Import cors
 const cors = require('cors');
+
 // Initialize the app
 const app = express();
 
