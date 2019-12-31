@@ -145,7 +145,7 @@ class User {
     if (email===null || email===undefined) {
       throw new Error('email must not be null');
     }
-    return new Promise() // Che user dovrebbe tornare?
+    return new Promise()
         .then(() => {
           const list = stubProfessorList.concat(stubStudentList);
           list = list.filter((u) => u.email === email);
@@ -203,37 +203,27 @@ class User {
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static search(filter) {
-    const query=`SELECT * FROM ${table} WHERE true`;
-    const params=[];
-
+    list = stubStudentList.concat(stubProfessorList);
     if (filter.password) {
-      query =`${query} AND password = ?`;
-      params.push(filter.password);
+      list = list.filter((el) => el.password === filter.password);
     }
     if (filter.name) {
-      query =`${query} AND name = ?`;
-      params.push(filter.name);
+      list = list.filter((el) => el.name === filter.name);
     }
-
     if (filter.surname) {
-      query =`${query} AND surname = ?`;
-      params.push(filter.surname);
+      list = list.filter((el) => el.surname === surname);
     }
     if (filter.role) {
-      query =`${query} AND role = ?`;
-      params.push(filter.role);
+      list = list.filter((el) => el.role === filter.role);
     }
     if (filter.verified) {
-      query =`${query} AND verified = ?`;
-      params.push(filter.verified);
+      list = list.filter((el) => el.verified === filter.verified);
     }
 
-    return pool.query(query, params)
-        .then(([rows])=>{
-          return rows.map((user)=>new User(user));
-        })
-        .catch((err)=>{
-          throw err;
+    return new Promise()
+        .then(() => list)
+        .catch((err) => {
+          throw err.message;
         });
   }
   /**
