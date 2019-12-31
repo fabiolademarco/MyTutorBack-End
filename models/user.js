@@ -90,7 +90,7 @@ class User {
       throw new Error('User must not be null');
     }
 
-    return pool.query(`DELETE FROM ${table} WHERE email=?`, user.email)
+    return pool.query(`DELETE FROM ${table} WHERE email = ?`, user.email)
         .then(([resultSetHeader])=> resultSetHeader.affectedRows>0)
         .then((err)=> {
           throw err;
@@ -182,7 +182,7 @@ class User {
 
   /** Finds user by parameter
    * @param {Object} filter The object containing the logic to use for the search
-   * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
+   * @return {Promise<User[]>} The promise representing the fulfillment of the search request
    */
   static search(filter) {
     let query=`SELECT * FROM ${table} WHERE true`;

@@ -34,15 +34,10 @@ class Student extends User {
     }
     const user = new User(student);
     return super.create(user)
-        .then((user) => {
+        .then(async (user) => {
           student.password = user.password;
-          return pool.query(`INSERT INTO ${table} VALUES(?, ?, ?)`, [student.email, student.registration_number, student.birth_date])
-              .then(([resultSetHeader]) => {
-                return new Student(student);
-              })
-              .catch((err) => {
-                throw err.message;
-              });
+          await pool.query(`INSERT INTO ${table} VALUES(?, ?, ?)`, [student.email, student.registration_number, student.birth_date]);
+          return new Student(student);
         })
         .catch((err) => {
           throw err.message;
@@ -135,6 +130,21 @@ class Student extends User {
           }
           return this.findByEmail(user.email);
         })
+        .catch((err) => {
+          throw err;
+        });
+  }
+
+  /**
+   * Finds students using a filter
+   * @param {Object} filter The object containg the filter attribute.
+   * @return {Promise<Student[]>} The promise representing the list of students that respect the filter.
+   */
+  static async search(filter) {
+    filter.role = User.Role.STUDENT;
+    const users = await super.search(filter);
+    return Promise.all(users.map((u) => this.findByEmail(u.email)))
+        .then((students) => students.map((s) => new Student(s)))
         .catch((err) => {
           throw err;
         });

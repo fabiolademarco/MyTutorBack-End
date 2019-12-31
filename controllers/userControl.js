@@ -1,4 +1,5 @@
 const User=require('../models/user');
+const Student = require('../models/student');
 const Check = require('../utils/check');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
@@ -61,7 +62,13 @@ module.exports.search=function(req, res) {
     verified: param.verified,
   };
 
-  User.search(filter)
+  let promise;
+  if (filter.role != null && filter.role === User.Role.STUDENT) {
+    promise = Student.search(filter);
+  } else {
+    promise = User.search(filter);
+  }
+  promise
       .then((users)=>{
         res.status(OK_STATUS).send({list: users});
       })
