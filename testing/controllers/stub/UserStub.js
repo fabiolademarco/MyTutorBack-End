@@ -204,9 +204,6 @@ class User {
    */
   static search(filter) {
     list = stubStudentList.concat(stubProfessorList);
-    if (filter.password) {
-      list = list.filter((el) => el.password === filter.password);
-    }
     if (filter.name) {
       list = list.filter((el) => el.name === filter.name);
     }

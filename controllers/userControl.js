@@ -55,7 +55,6 @@ module.exports.search=function(req, res) {
   }
 
   const filter = {
-    password: param.password,
     name: param.name,
     surname: param.surname,
     role: param.role,

@@ -188,10 +188,6 @@ class User {
     const query=`SELECT * FROM ${table} WHERE true`;
     const params=[];
 
-    if (filter.password) {
-      query =`${query} AND password = ?`;
-      params.push(filter.password);
-    }
     if (filter.name) {
       query =`${query} AND name = ?`;
       params.push(filter.name);
