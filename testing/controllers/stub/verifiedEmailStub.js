@@ -42,7 +42,13 @@ class VerifiedEmail {
     }
     verifiedEmail.signed_up = 0;
     return new Promise()
-        .then(() => verifiedEmail)
+        .then(() => {
+          if (this.exists(verifiedEmail)) {
+            throw new Error('Email already exists');
+          }
+          emailsVerified.push(verifiedEmail);
+          return verifiedEmail;
+        })
         .catch((err) => {
           throw err.message;
         });
@@ -58,7 +64,13 @@ class VerifiedEmail {
       throw new Error('Parameter can not be null or undefined');
     }
     return new Promise()
-        .then(() => verifiedEmail)
+        .then(() => {
+          if (!this.exists(verifiedEmail)) {
+            throw new Error('Email doesn\'t exist');
+          }
+          emailsVerified[emailsVerified.indexOf(verifiedEmail)] = verifiedEmail;
+          return verifiedEmail;
+        })
         .catch((err) => {
           throw err;
         });
@@ -74,7 +86,9 @@ class VerifiedEmail {
       throw new Error('Parameter can not be null or undefined');
     }
     return new Promise()
-        .then(() => true)
+        .then(() => {
+          return emailsVerified.pop(verifiedEmail) != null;
+        })
         .catch((err) => {
           throw err.message;
         });

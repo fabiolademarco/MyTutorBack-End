@@ -5,7 +5,7 @@ const Role = {
   TEACHING_OFFICE: 'Teaching Office',
 };
 
-const stubStudentList = [
+const list = [
   {
     email: 'c.barletta@studenti.unisa.it',
     password: 'password123',
@@ -30,32 +30,31 @@ const stubStudentList = [
     role: 'Student',
     verified: '1',
   },
+  {
+    email: 'u.vaccaro@unisa.it',
+    password: 'password123',
+    name: 'Ugo',
+    surname: 'Vaccaro',
+    role: 'Professor',
+    verified: '1',
+  },
+  {
+    email: 'alberto@unisa.it',
+    password: 'password123',
+    name: 'Alberto',
+    surname: 'Negro',
+    role: 'Professor',
+    verified: '1',
+  },
+  {
+    email: 'cattaneo@unisa.it',
+    password: 'password123',
+    name: 'Pippo',
+    surname: 'Cattaneo',
+    role: 'Professor',
+    verified: '1',
+  },
 ];
-
-const stubProfessorList = [{
-  email: 'u.vaccaro@unisa.it',
-  password: 'password123',
-  name: 'Ugo',
-  surname: 'Vaccaro',
-  role: 'Professor',
-  verified: '1',
-},
-{
-  email: 'alberto@unisa.it',
-  password: 'password123',
-  name: 'Alberto',
-  surname: 'Negro',
-  role: 'Professor',
-  verified: '1',
-},
-{
-  email: 'cattaneo@unisa.it',
-  password: 'password123',
-  name: 'Pippo',
-  surname: 'Cattaneo',
-  role: 'Professor',
-  verified: '1',
-}];
 
 /**
  * User
@@ -88,7 +87,13 @@ class User {
       throw new Error('User must not be null');
     }
     return new Promise()
-        .then(() => user)
+        .then(() => {
+          if (this.exists(user)) {
+            throw new Error('The user already exists');
+          }
+          list.push(user);
+          return user;
+        })
         .catch((err) => err.message);
   }
   /** Updates an user
@@ -100,7 +105,12 @@ class User {
       throw new Error('User must not be null');
     }
     return new Promise()
-        .then(() => user)
+        .then(() => {
+          if (!this.exists(user)) {
+            throw new Error('User doesn\'t exist');
+          }
+          list[list.indexOf(user)] = user;
+        })
         .catch((err) => {
           throw err.message;
         });
@@ -115,7 +125,9 @@ class User {
       throw new Error('User must not be null');
     }
     return new Promise()
-        .then(() => true)
+        .then(() => {
+          return list.pop(user) != null;
+        })
         .catch((err) => {
           throw err.message;
         });
@@ -130,8 +142,7 @@ class User {
     }
     return new Promise()
         .then(() => {
-          const emails = stubStudentList.concat(stubProfessorList).map((el) => el.email);
-          return emails.includes(user.email);
+          return list.includes(user.email);
         })
         .catch((err) => {
           throw err.message;
@@ -147,9 +158,8 @@ class User {
     }
     return new Promise()
         .then(() => {
-          const list = stubProfessorList.concat(stubStudentList);
-          list = list.filter((u) => u.email === email);
-          return (list.length > 0) ? newUser(list[0]) : null;
+          const sublist = list.filter((u) => u.email === email);
+          return (sublist.length > 0) ? newUser(sublist[0]) : null;
         })
         .catch((err) => {
           throw err.message;
@@ -165,7 +175,7 @@ class User {
     }
 
     return new Promise()
-        .then(() => (role == User.Role.STUDENT) ? stubStudentList : stubProfessorList)
+        .then(() => list.filter((el) => el.role === role))
         .catch((err) => {
           throw err.message;
         });
@@ -180,7 +190,7 @@ class User {
     }
 
     return new Promise()
-        .then(() => stubProfessorList.concat(stubStudentList))
+        .then(() => list.filter((el) => el.verified === 1))
         .catch((err) => {
           throw err.message;
         });
@@ -192,7 +202,7 @@ class User {
   */
   static findAll() {
     return new Promise()
-        .then(() => stubProfessorList.concat(stubStudentList))
+        .then(() => list)
         .catch((err) => {
           throw err.message;
         });
@@ -203,22 +213,24 @@ class User {
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static search(filter) {
-    list = stubStudentList.concat(stubProfessorList);
+    let sublist = [];
     if (filter.name) {
-      list = list.filter((el) => el.name === filter.name);
+      sublist.concat(list.filter((el) => el.name === filter.name));
     }
     if (filter.surname) {
-      list = list.filter((el) => el.surname === surname);
+      sublist.concat(list.filter((el) => el.surname === filter.surname));
     }
     if (filter.role) {
-      list = list.filter((el) => el.role === filter.role);
+      sublist.concat(list.filter((el) => el.role === filter.role));
     }
     if (filter.verified) {
-      list = list.filter((el) => el.verified === filter.verified);
+      sublist.concat(list.filter((el) => el.verified === filter.verified));
     }
 
+    sublist = new Set(sublist);
+
     return new Promise()
-        .then(() => list)
+        .then(() => sublist)
         .catch((err) => {
           throw err.message;
         });
@@ -235,9 +247,8 @@ class User {
     }
     return new Promise()
         .then(() => {
-          const list = stubProfessorList.concat(stubStudentList);
-          list = list.filter((u) => u.email === email && u.password === password);
-          return (list.length > 0) ? newUser(list[0]) : null;
+          const sublist = list.filter((u) => u.email === email && u.password === password);
+          return (sublist.length > 0) ? newUser(sublist[0]) : null;
         })
         .catch((err) => {
           throw err.message;
