@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
       'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   );
 
-  res.setHeader(
+  res.header(
       'Access-Control-Allow-Headers',
       'Origin, X-Requested-With, Content-Type, Accept, Authorization',
   );
