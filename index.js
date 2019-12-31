@@ -27,7 +27,7 @@ const applicationSheetService = require('./services/applicationSheetService');
 const ratingService = require('./services/ratingService');
 
 app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', '*');
 
   res.setHeader(
       'Access-Control-Allow-Methods',
