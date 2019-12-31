@@ -1,4 +1,5 @@
 const User=require('../models/user');
+const Student = require('../models/student');
 const Check = require('../utils/check');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
@@ -55,14 +56,19 @@ module.exports.search=function(req, res) {
   }
 
   const filter = {
-    password: param.password,
     name: param.name,
     surname: param.surname,
     role: param.role,
     verified: param.verified,
   };
 
-  User.search(filter)
+  let promise;
+  if (filter.role != null && filter.role === User.Role.STUDENT) {
+    promise = Student.search(filter);
+  } else {
+    promise = User.search(filter);
+  }
+  promise
       .then((users)=>{
         res.status(OK_STATUS).send({list: users});
       })
@@ -97,7 +103,7 @@ module.exports.update=function(req, res) {
  * @param {Response} res
  */
 module.exports.find=function(req, res) {
-  const email = req.query.email;
+  const email = req.params.id;
   const user = req.user;
   if (email == null || !Check.checkEmail(email)) {
     res.status(ERR_CLIENT_STATUS);

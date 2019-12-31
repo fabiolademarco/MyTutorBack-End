@@ -1,12 +1,3 @@
-const pool = require('../db');
-const bcrypt = require('bcrypt');
-const table = 'user';
-const SALT = 8;
-/**
- * Enum for all possible states of a role
- * @readonly
- * @enum {string}
- */
 const Role = {
   STUDENT: 'Student',
   PROFESSOR: 'Professor',
@@ -14,10 +5,61 @@ const Role = {
   TEACHING_OFFICE: 'Teaching Office',
 };
 
+const list = [
+  {
+    email: 'c.barletta@studenti.unisa.it',
+    password: 'password123',
+    name: 'Cristian',
+    surname: 'Barletta',
+    role: 'Student',
+    verified: '1',
+  },
+  {
+    email: 'v.ventura@student.unisa.it',
+    password: 'password123',
+    name: 'Vittorio',
+    surname: 'Ventura',
+    role: 'Student',
+    verified: '1',
+  },
+  {
+    email: 'g.francone@unisa.it',
+    password: 'password123',
+    name: 'Giorgio',
+    surname: 'Francone',
+    role: 'Student',
+    verified: '1',
+  },
+  {
+    email: 'u.vaccaro@unisa.it',
+    password: 'password123',
+    name: 'Ugo',
+    surname: 'Vaccaro',
+    role: 'Professor',
+    verified: '1',
+  },
+  {
+    email: 'alberto@unisa.it',
+    password: 'password123',
+    name: 'Alberto',
+    surname: 'Negro',
+    role: 'Professor',
+    verified: '1',
+  },
+  {
+    email: 'cattaneo@unisa.it',
+    password: 'password123',
+    name: 'Pippo',
+    surname: 'Cattaneo',
+    role: 'Professor',
+    verified: '1',
+  },
+];
+
 /**
  * User
  *
- * This class represents an User
+ * This class represents an User Stub
  * @author Giannandrea Vicidomini
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
@@ -44,14 +86,15 @@ class User {
     if (user===null || user===undefined) {
       throw new Error('User must not be null');
     }
-    user.password = bcrypt.hashSync(user.password, SALT);
-    return pool.query(`INSERT INTO ${table} SET ?`, user )
-        .then((data)=>{
-          return new User(user);
+    return new Promise()
+        .then(() => {
+          if (this.exists(user)) {
+            throw new Error('The user already exists');
+          }
+          list.push(user);
+          return user;
         })
-        .catch((err)=>{
-          throw err;
-        });
+        .catch((err) => err.message);
   }
   /** Updates an user
    * @param {User} user The user to update
@@ -61,23 +104,15 @@ class User {
     if (user===null || user===undefined) {
       throw new Error('User must not be null');
     }
-    if (!await this.exists(user)) {
-      throw new Error('The user doesn\'t exists');
-    }
-
-    let promise;
-    if (user.password == null) {
-      promise = pool.query(`UPDATE ${table} SET name = ?, surname = ?, role = ?, verified = ? WHERE email = ?`, [user.name, user.surname, user.role, user.verified, user.email]);
-    } else {
-      user.password = bcrypt.hashSync(user.password, SALT);
-      promise = pool.query(`UPDATE ${table} SET ? WHERE email=?`, [user, user.email]);
-    }
-    return promise
-        .then((data)=>{
-          return new User(user);
+    return new Promise()
+        .then(() => {
+          if (!this.exists(user)) {
+            throw new Error('User doesn\'t exist');
+          }
+          list[list.indexOf(user)] = user;
         })
-        .catch((err)=>{
-          throw err;
+        .catch((err) => {
+          throw err.message;
         });
   }
 
@@ -89,11 +124,12 @@ class User {
     if (user===null || user===undefined) {
       throw new Error('User must not be null');
     }
-
-    return pool.query(`DELETE FROM ${table} WHERE email = ?`, user.email)
-        .then(([resultSetHeader])=> resultSetHeader.affectedRows>0)
-        .then((err)=> {
-          throw err;
+    return new Promise()
+        .then(() => {
+          return list.pop(user) != null;
+        })
+        .catch((err) => {
+          throw err.message;
         });
   }
   /** Checks if a given user exists
@@ -104,11 +140,12 @@ class User {
     if (user===null || user===undefined) {
       throw new Error('User must not be null');
     }
-
-    return pool.query(`SELECT * FROM ${table} WHERE email=?`, user.email)
-        .then(([rows])=> rows.length > 0)
-        .catch((err)=>{
-          throw err;
+    return new Promise()
+        .then(() => {
+          return list.includes(user.email);
+        })
+        .catch((err) => {
+          throw err.message;
         });
   }
   /** Finds user by email
@@ -119,16 +156,13 @@ class User {
     if (email===null || email===undefined) {
       throw new Error('email must not be null');
     }
-
-    return pool.query(`SELECT * FROM ${table} WHERE email=?`, email)
-        .then(([rows])=>{
-          if (rows.length < 1) {
-            return null;
-          }
-          return new User(rows[0]);
+    return new Promise()
+        .then(() => {
+          const sublist = list.filter((u) => u.email === email);
+          return (sublist.length > 0) ? newUser(sublist[0]) : null;
         })
-        .catch((err)=>{
-          throw err;
+        .catch((err) => {
+          throw err.message;
         });
   }
   /** Finds users by role
@@ -140,12 +174,10 @@ class User {
       throw new Error('role must not be null');
     }
 
-    return pool.query(`SELECT * FROM ${table} WHERE role=?`, role)
-        .then(([rows])=>{
-          return rows.map((u) => new User(u));
-        })
-        .catch((err)=>{
-          throw err;
+    return new Promise()
+        .then(() => list.filter((el) => el.role === role))
+        .catch((err) => {
+          throw err.message;
         });
   }
   /** Finds user by verified
@@ -157,12 +189,10 @@ class User {
       throw new Error('verified status must not be null');
     }
 
-    return pool.query(`SELECT * FROM ${table} WHERE verified=?`, role)
-        .then(([rows])=>{
-          return rows.map((user)=>new User(user));
-        })
-        .catch((err)=>{
-          throw err;
+    return new Promise()
+        .then(() => list.filter((el) => el.verified === 1))
+        .catch((err) => {
+          throw err.message;
         });
   }
 
@@ -171,47 +201,38 @@ class User {
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the creation request
   */
   static findAll() {
-    return pool.query(`SELECT * FROM ${table}`)
-        .then(([rows])=>{
-          return rows.map((user)=>new User(user));
-        })
-        .catch((err)=>{
-          throw err;
+    return new Promise()
+        .then(() => list)
+        .catch((err) => {
+          throw err.message;
         });
   }
 
   /** Finds user by parameter
    * @param {Object} filter The object containing the logic to use for the search
-   * @return {Promise<User[]>} The promise representing the fulfillment of the search request
+   * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static search(filter) {
-    let query=`SELECT * FROM ${table} WHERE true`;
-    const params=[];
-
+    let sublist = [];
     if (filter.name) {
-      query =`${query} AND name = ?`;
-      params.push(filter.name);
+      sublist.concat(list.filter((el) => el.name === filter.name));
     }
-
     if (filter.surname) {
-      query =`${query} AND surname = ?`;
-      params.push(filter.surname);
+      sublist.concat(list.filter((el) => el.surname === filter.surname));
     }
     if (filter.role) {
-      query =`${query} AND role = ?`;
-      params.push(filter.role);
+      sublist.concat(list.filter((el) => el.role === filter.role));
     }
     if (filter.verified) {
-      query =`${query} AND verified = ?`;
-      params.push(filter.verified);
+      sublist.concat(list.filter((el) => el.verified === filter.verified));
     }
 
-    return pool.query(query, params)
-        .then(([rows])=>{
-          return rows.map((user)=>new User(user));
-        })
-        .catch((err)=>{
-          throw err;
+    sublist = new Set(sublist);
+
+    return new Promise()
+        .then(() => sublist)
+        .catch((err) => {
+          throw err.message;
         });
   }
   /**
@@ -224,12 +245,10 @@ class User {
     if (email == null || password == null) {
       throw new Error('Email or Password can not be null or undefined');
     }
-    return pool.query(`SELECT * FROM ${table} WHERE email = ? AND verified = 1`, email)
-        .then(([rows]) => {
-          if (rows.length < 1 || !bcrypt.compareSync(password, rows[0].password)) {
-            return null;
-          }
-          return new User(rows[0]);
+    return new Promise()
+        .then(() => {
+          const sublist = list.filter((u) => u.email === email && u.password === password);
+          return (sublist.length > 0) ? newUser(sublist[0]) : null;
         })
         .catch((err) => {
           throw err.message;

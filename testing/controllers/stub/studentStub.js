@@ -1,8 +1,34 @@
-const pool = require('../db');
-const User = require('./user');
-// Utilities
-const table = 'student';
-
+const User = require('./userStub');
+const list = [{
+  email: 'c.barletta@studenti.unisa.it',
+  password: 'password123',
+  name: 'Cristian',
+  surname: 'Barletta',
+  role: 'Student',
+  verified: '1',
+  registration_number: '0512105099',
+  birth_date: '1900-03-03 ',
+},
+{
+  email: 'v.ventura@student.unisa.it',
+  password: 'password123',
+  name: 'Vittorio',
+  surname: 'Ventura',
+  role: 'Student',
+  verified: '1',
+  registration_number: '0512105098',
+  birth_date: '1900-03-03 ',
+},
+{
+  email: 'g.francone@unisa.it',
+  password: 'password123',
+  name: 'Giorgio',
+  surname: 'Francone',
+  role: 'Student',
+  verified: '1',
+  registration_number: '0512105097',
+  birth_date: '1900-03-03 ',
+}];
 /**
  * Student
  *
@@ -33,14 +59,14 @@ class Student extends User {
       throw new Error('The parameter student can not be null or undefined');
     }
     const user = new User(student);
-    return super.create(user)
-        .then(async (user) => {
-          student.password = user.password;
-          await pool.query(`INSERT INTO ${table} VALUES(?, ?, ?)`, [student.email, student.registration_number, student.birth_date]);
-          return new Student(student);
+    return new Promise()
+        .then(async () => {
+          await super.create(user);
+          list.push(student);
+          return student;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -53,22 +79,15 @@ class Student extends User {
     if (student == null) {
       throw new Error('The parameter student can not be null or undefined');
     }
-    if (!await this.exists(student)) {
-      throw new Error('The student doesn\'t exist');
-    }
     const user = new User(student);
-    return super.update(user)
-        .then((user) => {
-          return pool.query(`UPDATE ${table} SET registration_number = ?, birth_date = ?  WHERE user_email = ?`, [student.registration_number, student.birth_date, student.email])
-              .then(() => {
-                return new Student(student);
-              })
-              .catch((err) => {
-                throw err.message;
-              });
+    return new Promise()
+        .then(async () => {
+          await super.update(user);
+          list[list.indexOf(student)] = student;
+          return student;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -81,20 +100,11 @@ class Student extends User {
     if (email == null) {
       throw new Error('The parameter email can not be null or undefined');
     }
-    return User.findByEmail(email)
-        .then((user) => {
-          return pool.query(`SELECT * FROM ${table} WHERE user_email = ?`, email)
-              .then(([rows]) => {
-                if (rows.length < 1) {
-                  throw new Error(`No result found: ${email}`);
-                }
-                user.registration_number = rows[0].registration_number;
-                user.birth_date = rows[0].birth_date;
-                return new Student(user);
-              })
-              .catch((err) => {
-                throw err;
-              });
+    return new Promise()
+        .then(async () => {
+          const user = await this.findByEmail(email);
+          sublist = list.filter((el) => el.email === user.email);
+          return (sublist.length > 0) ? sublist[0] : null;
         })
         .catch((err) => {
           throw err;
@@ -105,14 +115,10 @@ class Student extends User {
    * @return {Promise<Student[]>} Promise object that returns the list of Student.
    */
   static findAll() {
-    return User.findByRole(User.Role.STUDENT)
-        .then((users) => {
-          return Promise.all(users.map((user) => {
-            return this.findByEmail(user.email);
-          }))
-              .catch((err) => {
-                throw err;
-              });
+    return new Promise()
+        .then(() => list)
+        .catch((err) => {
+          throw err;
         });
   }
 
