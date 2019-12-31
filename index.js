@@ -9,7 +9,7 @@ const express = require('express');
 
 // Import Body parser
 const bodyParser = require('body-parser');
-
+const cors = require('cors');
 // Initialize the app
 const app = express();
 
@@ -25,6 +25,8 @@ const candidatureService = require('./services/candidatureService');
 const commentService = require('./services/commentService');
 const applicationSheetService = require('./services/applicationSheetService');
 const ratingService = require('./services/ratingService');
+
+app.use(cors());
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
