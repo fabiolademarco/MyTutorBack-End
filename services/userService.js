@@ -7,7 +7,7 @@ module.exports=function(app, auth) {
   app.use(/\/api\/users.*/, auth.authenticate());
 
   /**
-   * @api {DELETE} /api/users Removes User
+   * @api {DELETE} /api/users/:id Removes User
    * @apiName DeleteUser
    * @apiGroup User
    * @apiPermission Teaching Office
