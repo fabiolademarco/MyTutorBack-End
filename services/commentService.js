@@ -14,11 +14,11 @@ module.exports = (app, auth) => {
   app.put('/api/comment', CommentControl.set);
 
   /**
-   * @api {DELETE} /api/comment Removes a comment
+   * @api {DELETE} /api/comment/:id Removes a comment
    * @apiName Delete
    * @apiGroup Comment
    * @apiPermission Teaching Office
-   * @apiParam {Comment} comment The comment to remove
+   * @apiParam {string} id The notice protocol of the comment to remove
    * @apiSuccess {Comment} comment The removed comment
    */
   app.delete('/api/comment/:id', auth.isTeachingOffice, CommentControl.delete);

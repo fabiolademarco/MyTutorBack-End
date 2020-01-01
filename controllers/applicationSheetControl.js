@@ -81,7 +81,7 @@ exports.update = (req, res) => {
  * @param {Response} res
  */
 exports.delete = (req, res) => {
-  const noticeProtocol = req.body.noticeProtocol;
+  const noticeProtocol = req.params.id;
 
   if (applicationSheet == null || !Check.checkNoticeProtocol(noticeProtocol)) {
     res.status(ERR_CLIENT_STATUS)

@@ -25,12 +25,12 @@ module.exports = (app, auth) => {
   app.patch('/api/candidatures', auth.isStudent, CandidatureControl.update);
 
   /**
-   * @api {DELETE} /api/candidatures Removes a candidature
+   * @api {DELETE} /api/candidatures/:notice Removes a candidature
    * @apiName Delete
    * @apiGroup Candidature
    * @apiPermission Student
-   * @apiParam {Candidature} candidature The candidature to remove
-   * @apiParam {boolean} status Boolean which expresses the result of the operation
+   * @apiParam {string} notice The notice protocol
+   * @apiSuccess {boolean} status Boolean which expresses the result of the operation
    */
   app.delete('/api/candidatures', auth.isStudent, CandidatureControl.delete);
 

@@ -11,7 +11,7 @@ module.exports=function(app, auth) {
    * @apiName DeleteUser
    * @apiGroup User
    * @apiPermission Teaching Office
-   * @apiParam {User} user The user to delete
+   * @apiParam {string} id The user email
    * @apiSuccess {boolean} status The status of the operation.
    */
   app.delete('/api/users/:id', auth.isTeachingOffice, UserControl.delete);

@@ -83,15 +83,15 @@ exports.set = (req, res) => {
  * @param {Reponse} res
  */
 exports.delete = (req, res) => {
-  const comment = req.body.comment;
+  const notice = req.params.id;
 
-  if (!comment || !Check.checkComment(comment)) {
+  if (!notice || !Check.checkNoticeProtocol(notice)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un commento valido'});
 
     return;
   }
-
+  const comment = new Comment({notice: notice});
   Comment.remove(comment)
       .then((comment) => {
         res.status(OK_STATUS)

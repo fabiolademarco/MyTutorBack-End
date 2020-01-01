@@ -104,8 +104,8 @@ exports.update = (req, res) => {
  */
 exports.delete = (req, res) => {
   user = req.user;
-  candidature = (req.body.candidature != null) ? new Candidature(req.body.candidature) : null;
-  if (candidature == null || user == null || user.id !== candidature.student || !Check.checkNoticeProtocol(candidature.notice_protocol)) {
+  const notice = req.params.notice;
+  if (notice == null || user == null || !Check.checkNoticeProtocol(notice)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -113,6 +113,7 @@ exports.delete = (req, res) => {
     });
     return;
   }
+  const candidature = new Candidature({student: user.id, notice_protocol: notice});
   Candidature.remove(candidature)
       .then((result) => {
         res.status(OK_STATUS);
