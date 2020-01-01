@@ -22,7 +22,7 @@ const ERR_SERVER_STATUS = 500;
  * @param {Response} res
  */
 module.exports.delete=function(req, res) {
-  console.log(req.body);
+  console.log(req);
   const user=req.body.user;
   if (user==null || !Check.checkEmail(user.email)) {
     res.status(ERR_CLIENT_STATUS);
