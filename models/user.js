@@ -92,7 +92,7 @@ class User {
 
     return pool.query(`DELETE FROM ${table} WHERE email = ?`, user.email)
         .then(([resultSetHeader])=> resultSetHeader.affectedRows>0)
-        .then((err)=> {
+        .catch((err)=> {
           throw err;
         });
   }
