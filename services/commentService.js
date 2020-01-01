@@ -21,7 +21,7 @@ module.exports = (app, auth) => {
    * @apiParam {Comment} comment The comment to remove
    * @apiSuccess {Comment} comment The removed comment
    */
-  app.delete('/api/comment', auth.isTeachingOffice, CommentControl.delete);
+  app.delete('/api/comment/:id', auth.isTeachingOffice, CommentControl.delete);
 
   /**
    * @api {POST} /api/comment Finds a comment
