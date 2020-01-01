@@ -99,10 +99,10 @@ module.exports = function() {
         if (payload) {
           req.user = payload;
         }
-      } catch (err) {
-        res.send({error: err});
-      } finally {
         next();
+      } catch (err) {
+        res.status(401);
+        res.send({error: err});
       }
     },
     isProfessor: (req, res, next) => {

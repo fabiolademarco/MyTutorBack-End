@@ -155,6 +155,11 @@ class Student extends User {
           throw err;
         });
   }
+  /**
+   *
+   * @param {Studente} student
+   * @return {Promise<boolean>} The promise returns a boolean value
+   */
   static exists(student) {
     return new Promise((resolve) => resolve())
         .then(() => {

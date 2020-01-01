@@ -180,9 +180,9 @@ exports.passwordRecovery = (req, res) => {
  * @param {Response} res
  * @todo Completare con l'aggiunta del model VerifiedEmail e controllare che l'email non esista già
  */
-exports.insertVerifiedEmail = (req, res) => {
+exports.insertVerifiedEmail = async (req, res) => {
   email = req.body.email;
-  if (email == null || !Check.checkVerifiedEmail(email)) {
+  if (email == null || !Check.checkVerifiedEmail(email) || await VerifiedEmail.exists({email: email})) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -191,7 +191,7 @@ exports.insertVerifiedEmail = (req, res) => {
     return;
   }
   const verifiedEmail = new VerifiedEmail({email: email, signed_up: 0});
-  VerifiedEmail.create(verifiedEmail)
+  return VerifiedEmail.create(verifiedEmail)
       .then((result) => {
         res.status(OK_STATUS).send({
           status: true,

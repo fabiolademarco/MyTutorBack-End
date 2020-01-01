@@ -233,4 +233,41 @@ describe('Gestione Autenticatione', function() {
       expect(res.status).to.have.been.calledWith(200);
     });
   });
+
+  describe('Test_InserisciEmailProfessore', function() {
+    it('TCS_UT.3.0', function() {
+      req = mockRequest({method: 'POST', body: {email: ''}});
+      res = mockResponse();
+      authenticationControl.insertVerifiedEmail(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.3.1', function() {
+      req = mockRequest({method: 'POST', body: {email: 'f.allegrettiaaaaaaaaaaabbbbbbbbbbccccccddddddderdsa@unisa.it'}});
+      res = mockResponse();
+      authenticationControl.insertVerifiedEmail(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.3.2', function() {
+      req = mockRequest({method: 'POST', body: {email: 'c.feggri@studenti.unisa.it'}});
+      res = mockResponse();
+      authenticationControl.insertVerifiedEmail(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.3.3', async function() {
+      req = mockRequest({method: 'POST', body: {email: 'alberto@unisa.it'}});
+      res = mockResponse();
+      await authenticationControl.insertVerifiedEmail(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.3.4', async function() {
+      req = mockRequest({method: 'POST', body: {email: 'f.allegretti@unisa.it'}});
+      res = mockResponse();
+      await authenticationControl.insertVerifiedEmail(req, res);
+      expect(res.status).to.have.been.calledWith(200);
+    });
+  });
 });

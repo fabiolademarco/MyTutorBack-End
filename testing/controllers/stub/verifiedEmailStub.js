@@ -42,8 +42,8 @@ class VerifiedEmail {
     }
     verifiedEmail.signed_up = 0;
     return new Promise((resolve) => resolve())
-        .then(() => {
-          if (this.exists(verifiedEmail)) {
+        .then(async () => {
+          if (await this.exists(verifiedEmail)) {
             throw new Error('Email already exists');
           }
           emailsVerified.push(verifiedEmail);
