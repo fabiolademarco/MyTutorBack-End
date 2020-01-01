@@ -23,6 +23,7 @@ const ERR_NOT_AUTHORIZED = 401;
  * Allows to login
  * @param {Request} req
  * @param {Response} res
+ * @return {Promise}
  */
 exports.login = (req, res) => {
   user = (req.body.user != null) ? new User(req.body.user) : null;
@@ -34,7 +35,7 @@ exports.login = (req, res) => {
     });
     return;
   }
-  User.matchUser(user.email, user.password)
+  return User.matchUser(user.email, user.password)
       .then((user) => {
         if (user == null) {
           res.status(ERR_NOT_AUTHORIZED);

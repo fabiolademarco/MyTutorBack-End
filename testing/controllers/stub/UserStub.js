@@ -54,6 +54,14 @@ const list = [
     role: 'Professor',
     verified: '1',
   },
+  {
+    email: 'ufficiodidattica@unisa.it',
+    password: 'Password123',
+    name: 'Ufficio',
+    surname: 'Didattica',
+    role: 'Teaching Office',
+    verified: '1',
+  },
 ];
 
 /**
@@ -251,7 +259,7 @@ class User {
     return new Promise((resolve) => resolve())
         .then(() => {
           const sublist = list.filter((u) => u.email === email && u.password === password);
-          return (sublist.length > 0) ? newUser(sublist[0]) : null;
+          return (sublist.length > 0) ? new User(sublist[0]) : null;
         })
         .catch((err) => {
           throw err.message;

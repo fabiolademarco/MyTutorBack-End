@@ -270,4 +270,79 @@ describe('Gestione Autenticatione', function() {
       expect(res.status).to.have.been.calledWith(200);
     });
   });
+
+  let user;
+  describe('Test_EffettuaLogin', function() {
+    beforeEach(function() {
+      user = {
+        email: 'f.allegretti@unisa.it',
+        password: '12345678Ab!',
+      };
+    });
+
+    it('TCS_UT.4.0', function() {
+      user.email = '';
+      req = mockRequest({method: 'POST', body: {user: user}});
+      res = mockResponse();
+      authenticationControl.login(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.4.1', function() {
+      user.email = 'f.allegrettiaaaaaaaaaaabbbbbbbbbbccccccddddddderdsa@unisa.it';
+      req = mockRequest({method: 'POST', body: {user: user}});
+      res = mockResponse();
+      authenticationControl.login(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.4.2', function() {
+      user.email = 'f.allegretti@studenti@unisa.it';
+      req = mockRequest({method: 'POST', body: {user: user}});
+      res = mockResponse();
+      authenticationControl.login(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.4.3', async function() {
+      user.email = 'c.feggri@unisa.it';
+      req = mockRequest({method: 'POST', body: {user: user}});
+      res = mockResponse();
+      await authenticationControl.login(req, res);
+      expect(res.status).to.have.been.calledWith(401);
+    });
+
+    it('TCS_UT.4.4', async function() {
+      user.password = '';
+      req = mockRequest({method: 'POST', body: {user: user}});
+      res = mockResponse();
+      await authenticationControl.login(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.4.5', async function() {
+      user.password = 'aaaaaaaa33aaaaaaaaaaB!';
+      req = mockRequest({method: 'POST', body: {user: user}});
+      res = mockResponse();
+      await authenticationControl.login(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.4.6', async function() {
+      user.password = '12345678!';
+      req = mockRequest({method: 'POST', body: {user: user}});
+      res = mockResponse();
+      await authenticationControl.login(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.4.7', async function() {
+      user.email = 'c.barletta@studenti.unisa.it';
+      user.password = 'Password123';
+      req = mockRequest({method: 'POST', body: {user: user}});
+      res = mockResponse();
+      await authenticationControl.login(req, res);
+      expect(res.status).to.have.been.calledWith(200);
+    });
+  });
 });
