@@ -63,7 +63,7 @@ exports.update = (req, res) => {
   ApplicationSheet.update(applicationSheet)
       .then((data) => {
         res.status(OK_STATUS)
-            .send(data);
+            .send({applicationSheet: data});
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS)
@@ -85,7 +85,7 @@ exports.delete = (req, res) => {
 
   if (applicationSheet == null || !Check.checkNoticeProtocol(noticeProtocol)) {
     res.status(ERR_CLIENT_STATUS)
-        .send({error: 'Deve essere inserita una domanda valida.'});
+        .send({error: 'Deve essere inserito un protocollo valido.'});
 
     return;
   }
