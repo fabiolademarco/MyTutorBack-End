@@ -22,14 +22,13 @@ const ERR_SERVER_STATUS = 500;
  * @param {Response} res
  */
 module.exports.delete=function(req, res) {
-  console.log(req);
-  const user=req.body.user;
-  if (user==null || !Check.checkEmail(user.email)) {
+  const email=req.params.user;
+  if (user==null || !Check.checkEmail(email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente non puo essere nullo'});
     return;
   }
-
+  const user = new User({email: email});
   User.delete(user)
       .then((data)=>{
         res.status(OK_STATUS).send({status: data});
