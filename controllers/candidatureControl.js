@@ -65,7 +65,7 @@ exports.create = (req, res) => {
 exports.update = (req, res) => {
   user = req.user;
   candidature = (req.body.candidature != null) ? new Candidature(req.body.candidature) : null;
-  if (candidature == null || !Check.checkNoticeProtocol(candidature.notice_protocol)) {
+  if (candidature == null || !Check.checkNoticeProtocol(candidature.notice_protocol) || candidature.student !== user.id) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,

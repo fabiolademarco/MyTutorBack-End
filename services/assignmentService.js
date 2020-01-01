@@ -7,50 +7,76 @@ module.exports = (app, auth) => {
   app.use(/\/api\/assignments\.*/, auth.authenticate());
 
   /**
-   * Allows to send a request
-   * @param {Request} req Contains the json with an assignment and a student email.
-   * @return {Response} Response body with an assignment json.
+   * @api {POST} /api/assignments/request Sends a request
+   * @apiName SendRequest
+   * @apiGroup Assignment
+   * @apiPermission Teaching Office
+   * @apiParam {Assignment} assignment The assignment to send in the request
+   * @apiParam {string} emailStudent The email of the student to send the request to
+   * @apiSuccess {Assignment} assignment The updated assignment
    */
   app.post('/api/assignments/request', auth.isTeachingOffice, AssignmentControl.sendRequest);
 
   /**
-   * Allows to book an assignment
-   * @param {Request} req Contains the json body with an assignment.
-   * @return {Response} Response body with a boolean result attribute.
+   * @api {POST} /api/assignments/book Books an assignment
+   * @apiName BookAssignment
+   * @apiGroup Assignment
+   * @apiPermission Student
+   * @apiParam {Assignment} assignment The assignment to book
+   * @apiSuccess {boolean} status Boolean which expresses the result of the operation
    */
   app.post('/api/assignments/book', auth.isStudent, AssignmentControl.book);
 
   /**
-   * Allows to assign an assignment
-   * @param {Request} req Contains the json body with an assignment.
-   * @return {Response} Response body with a boolean result attribute.
+   * @api {POST} /api/assignments/assign Assigns an assignment
+   * @apiName Assign
+   * @apiGroup Assignment
+   * @apiPermission Teaching Office
+   * @apiParam {Assignment} assignment The assignment to assign
+   * @apiSuccess {boolean} status Boolean which expresses the result of the operation
    */
   app.post('/api/assignments/assign', auth.isTeachingOffice, AssignmentControl.assign);
 
   /**
-   * Allows to search
-   * @param {Request} req Contains a series of params
-   * @return {Response} Response body containing a list of Assignments
+   * @api {GET} /api/assignments/search Searches assignments
+   * @apiName SearchAssignment
+   * @apiGroup Assignment
+   * @apiPermission User
+   * @apiParam {string} code The code of the assignment
+   * @apiParam {string} noticeProtocol The notice protocol
+   * @apiParam {string} state The state of the assignment
+   * @apiParam {string} student The student email (only allowed to Teaching Office)
+   * @apiSuccess {Assignment[]} list The list of the assignments which respect the search criteria
    */
   app.get('/api/assignments/search', AssignmentControl.search);
 
-  /** Allows to decline an assignment
-   * @param {Request} req Contains the json body with an assignment
-   * @return {Response} Response body containing a boolean result attribute.
+  /**
+   * @api {POST} /api/assignments/decline Declines an assignment
+   * @apiName DeclineAssignment
+   * @apiGroup Assignment
+   * @apiPermission Student
+   * @apiParam {Assignment} assignment The assignment to decline
+   * @apiSuccess {boolean} status Boolean which expresses the result of the operation
    */
   app.post('/api/assignments/decline', auth.isStudent, AssignmentControl.decline);
 
   /**
-   * Allows to find an single assignment
-   * @param {Request} req Contains the id param
-   * @return {Response} Response body containing the assignment
+   * @api {GET} /api/assignments/:id Finds an assignment
+   * @apiName Find
+   * @apiGroup Assignment
+   * @apiPermission User
+   * @apiParam {string} id The id of the assignment
+   * @apiSuccess {Assignment} assignemnt The assignment with the given id
    */
   app.get('/api/assignments/:id', AssignmentControl.find); // Non ricordo chi è autorizzato a farla
 
   /**
-   * Allows to close an assignment
-   * @param {Request} req Contains the json body with an assignment
-   * @return {Response} Response body containing a boolean result attribute.
+   * @api {POST} /api/assognments/close Closes an assignment
+   * @apiName Close
+   * @apiGroup Assignment
+   * @apiPermission Teaching Office
+   * @apiParam {Assignment} assignment The assignment to close
+   * @apiSuccess {boolean} status Boolean which expresses the result of the operation
    */
   app.post('/api/assignments/close', auth.isTeachingOffice, AssignmentControl.close);
 };

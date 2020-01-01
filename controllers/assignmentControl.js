@@ -63,7 +63,7 @@ exports.book = (req, res) => {
   assignment.state = Assignment.states.BOOKED;
   Assignment.update(assignment)
       .then((data) => {
-        res.status(OK_STATUS).send({result: true});
+        res.status(OK_STATUS).send({status: true});
         // Inviare email
       })
       .catch((err) => {
@@ -88,7 +88,7 @@ exports.assign = (req, res) => {
   assignment.state = Assignment.states.ASSIGNED;
   Assignment.update(assignment)
       .then((data) => {
-        res.status(OK_STATUS).send({result: true});
+        res.status(OK_STATUS).send({status: true});
         // Inviare email
       })
       .catch((err) => {
@@ -142,7 +142,7 @@ exports.decline = (req, res) => {
   assignment.student = null;
   Assignment.update(assignment)
       .then((data) => {
-        res.status(OK_STATUS).send({result: true});
+        res.status(OK_STATUS).send({status: true});
       // Inviare email
       })
       .catch((err) => {
@@ -206,7 +206,7 @@ exports.close = (req, res) => {
   assignment.state = Assignment.states.OVER;
   Assignment.update(assignment)
       .then((data) => {
-        res.status(OK_STATUS).send({error: true});
+        res.status(OK_STATUS).send({status: true});
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({error: false});

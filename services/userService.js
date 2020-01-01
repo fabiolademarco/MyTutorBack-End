@@ -7,7 +7,7 @@ module.exports=function(app, auth) {
   app.use(/\/api\/users.*/, auth.authenticate());
 
   /**
-   * @api {DELETE} /api/users/:id Delete User
+   * @api {DELETE} /api/users/:id Removes User
    * @apiName DeleteUser
    * @apiGroup User
    * @apiPermission Teaching Office
@@ -25,7 +25,7 @@ module.exports=function(app, auth) {
    */
   app.get('/api/users/:id', UserControl.find);
   /**
-   * @api {PATCH} /api/users Update an User
+   * @api {PATCH} /api/users Updates an User
    * @apiName UpdateUser
    * @apiGroup User
    * @apiPermission User
@@ -43,7 +43,7 @@ module.exports=function(app, auth) {
    */
   app.post('/api/users/search', auth.isTeachingOffice, UserControl.search);
   /**
-   * @api {GET} /api/users Find all users
+   * @api {GET} /api/users Finds all users
    * @apiName FindAll
    * @apiGroup User
    * @apiPermission Teaching Office
