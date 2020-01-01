@@ -8,7 +8,7 @@ const Role = {
 const list = [
   {
     email: 'c.barletta@studenti.unisa.it',
-    password: 'password123',
+    password: 'Password123',
     name: 'Cristian',
     surname: 'Barletta',
     role: 'Student',
@@ -16,7 +16,7 @@ const list = [
   },
   {
     email: 'v.ventura@student.unisa.it',
-    password: 'password123',
+    password: 'Password123',
     name: 'Vittorio',
     surname: 'Ventura',
     role: 'Student',
@@ -24,7 +24,7 @@ const list = [
   },
   {
     email: 'g.francone@unisa.it',
-    password: 'password123',
+    password: 'Password123',
     name: 'Giorgio',
     surname: 'Francone',
     role: 'Student',
@@ -32,7 +32,7 @@ const list = [
   },
   {
     email: 'u.vaccaro@unisa.it',
-    password: 'password123',
+    password: 'Password123',
     name: 'Ugo',
     surname: 'Vaccaro',
     role: 'Professor',
@@ -40,7 +40,7 @@ const list = [
   },
   {
     email: 'alberto@unisa.it',
-    password: 'password123',
+    password: 'Password123',
     name: 'Alberto',
     surname: 'Negro',
     role: 'Professor',
@@ -48,7 +48,7 @@ const list = [
   },
   {
     email: 'cattaneo@unisa.it',
-    password: 'password123',
+    password: 'Password123',
     name: 'Pippo',
     surname: 'Cattaneo',
     role: 'Professor',
@@ -86,7 +86,7 @@ class User {
     if (user===null || user===undefined) {
       throw new Error('User must not be null');
     }
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
           if (this.exists(user)) {
             throw new Error('The user already exists');
@@ -104,7 +104,7 @@ class User {
     if (user===null || user===undefined) {
       throw new Error('User must not be null');
     }
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
           if (!this.exists(user)) {
             throw new Error('User doesn\'t exist');
@@ -124,7 +124,7 @@ class User {
     if (user===null || user===undefined) {
       throw new Error('User must not be null');
     }
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
           return list.pop(user) != null;
         })
@@ -140,11 +140,12 @@ class User {
     if (user===null || user===undefined) {
       throw new Error('User must not be null');
     }
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
-          return list.includes(user.email);
+          return list.map((el) => el.email).filter((el) =>user.email === el.email).length === 1;
         })
         .catch((err) => {
+          console.log(err);
           throw err.message;
         });
   }
@@ -156,7 +157,7 @@ class User {
     if (email===null || email===undefined) {
       throw new Error('email must not be null');
     }
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
           const sublist = list.filter((u) => u.email === email);
           return (sublist.length > 0) ? newUser(sublist[0]) : null;
@@ -174,7 +175,7 @@ class User {
       throw new Error('role must not be null');
     }
 
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => list.filter((el) => el.role === role))
         .catch((err) => {
           throw err.message;
@@ -189,7 +190,7 @@ class User {
       throw new Error('verified status must not be null');
     }
 
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => list.filter((el) => el.verified === 1))
         .catch((err) => {
           throw err.message;
@@ -201,8 +202,10 @@ class User {
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the creation request
   */
   static findAll() {
-    return new Promise()
-        .then(() => list)
+    return new Promise((resolve) => resolve())
+        .then(() => {
+          return list;
+        })
         .catch((err) => {
           throw err.message;
         });
@@ -229,7 +232,7 @@ class User {
 
     sublist = new Set(sublist);
 
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => sublist)
         .catch((err) => {
           throw err.message;
@@ -245,7 +248,7 @@ class User {
     if (email == null || password == null) {
       throw new Error('Email or Password can not be null or undefined');
     }
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
           const sublist = list.filter((u) => u.email === email && u.password === password);
           return (sublist.length > 0) ? newUser(sublist[0]) : null;

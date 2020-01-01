@@ -1,7 +1,7 @@
 const User = require('./userStub');
 const list = [{
   email: 'c.barletta@studenti.unisa.it',
-  password: 'password123',
+  password: 'Password123',
   name: 'Cristian',
   surname: 'Barletta',
   role: 'Student',
@@ -11,7 +11,7 @@ const list = [{
 },
 {
   email: 'v.ventura@student.unisa.it',
-  password: 'password123',
+  password: 'Password123',
   name: 'Vittorio',
   surname: 'Ventura',
   role: 'Student',
@@ -21,7 +21,7 @@ const list = [{
 },
 {
   email: 'g.francone@unisa.it',
-  password: 'password123',
+  password: 'Password123',
   name: 'Giorgio',
   surname: 'Francone',
   role: 'Student',
@@ -59,7 +59,7 @@ class Student extends User {
       throw new Error('The parameter student can not be null or undefined');
     }
     const user = new User(student);
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(async () => {
           await super.create(user);
           list.push(student);
@@ -80,7 +80,7 @@ class Student extends User {
       throw new Error('The parameter student can not be null or undefined');
     }
     const user = new User(student);
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(async () => {
           await super.update(user);
           list[list.indexOf(student)] = student;
@@ -100,7 +100,7 @@ class Student extends User {
     if (email == null) {
       throw new Error('The parameter email can not be null or undefined');
     }
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(async () => {
           const user = await this.findByEmail(email);
           sublist = list.filter((el) => el.email === user.email);
@@ -115,7 +115,7 @@ class Student extends User {
    * @return {Promise<Student[]>} Promise object that returns the list of Student.
    */
   static findAll() {
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => list)
         .catch((err) => {
           throw err;
@@ -151,6 +151,15 @@ class Student extends User {
     const users = await super.search(filter);
     return Promise.all(users.map((u) => this.findByEmail(u.email)))
         .then((students) => students.map((s) => new Student(s)))
+        .catch((err) => {
+          throw err;
+        });
+  }
+  static exists(student) {
+    return new Promise((resolve) => resolve())
+        .then(() => {
+          return list.filter((el) => el.email === student.email).length > 0;
+        })
         .catch((err) => {
           throw err;
         });

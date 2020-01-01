@@ -21,10 +21,10 @@ exports.checkStudent = (student) => {
   if (!surnameExp.test(student.surname) || student.surname.length > 20) {
     return false;
   }
-  if (!registrationNumberExp.test(student.registration_number) || student.registration_number.length > 20) {
+  if (!registrationNumberExp.test(student.registration_number) || student.registration_number.length > 20 || student.registration_number.length < 1) {
     return false;
   }
-  if (!passwordExp.test(student.password) || student.password.length > 20) {
+  if (!passwordExp.test(student.password) || student.password.length > 20 || student.password.length < 8) {
     return false;
   }
   if (!birthDateExp.test(student.birth_date)) {
@@ -53,7 +53,7 @@ exports.checkProfessor = (professor) => {
   if (!surnameExp.test(professor.surname) || professor.surname.length > 20) {
     return false;
   }
-  if (!passwordExp.test(professor.password) || professor.password.length > 20) {
+  if (!passwordExp.test(professor.password) || professor.password.length > 20 || professor.password.length < 8) {
     return false;
   }
   return true;
@@ -87,7 +87,7 @@ exports.checkEmail = (email) => {
  */
 exports.checkPassword = (password) => {
   const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
-  return passwordExp.test(password) && password.length <= 20 && password.length >= 1;
+  return passwordExp.test(password) && password.length <= 20 && password.length >= 8;
 };
 
 /**

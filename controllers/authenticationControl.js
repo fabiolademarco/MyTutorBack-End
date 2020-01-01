@@ -80,9 +80,9 @@ exports.logout = (req, res) => {
  * @param {Response} res
  * @todo Controlliamo anche che non esista ?
  */
-exports.registerStudent = (req, res) => {
+exports.registerStudent = async (req, res) => {
   student = (req.body.student != null ) ? new Student(req.body.student) : null;
-  if (student == null || !Check.checkStudent(student)) {
+  if (student == null || !Check.checkStudent(student) || await Student.exists(student)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -92,7 +92,7 @@ exports.registerStudent = (req, res) => {
   }
   student.role = Student.Role.STUDENT;
   student.verified = 1;
-  Student.create(student)
+  return Student.create(student) // Return added for testing
       .then((student) => {
         const payload = {
           id: student.email,

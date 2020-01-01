@@ -135,6 +135,6 @@ module.exports.findAll=function(req, res) {
         res.status(OK_STATUS).send({list: userList});
       })
       .catch((err)=>{
-        res.statusText(ERR_SERVER_STATUS).send({error: err});
+        res.status(ERR_SERVER_STATUS).send({error: err});
       });
 };
