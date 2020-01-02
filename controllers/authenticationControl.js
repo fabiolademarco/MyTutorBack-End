@@ -84,7 +84,7 @@ exports.logout = (req, res) => {
  */
 exports.registerStudent = async (req, res) => {
   student = (req.body.student != null ) ? new Student(req.body.student) : null;
-  if (student == null || !Check.checkStudent(student) || await Student.exists(student)) {
+  if (student == null || !Check.checkStudent(student)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -92,6 +92,15 @@ exports.registerStudent = async (req, res) => {
     });
     return;
   }
+  if (await Student.exists(student)) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({
+      status: false,
+      error: 'L\'email è già utilizzata',
+    });
+    return;
+  }
+
   student.role = Student.Role.STUDENT;
   student.verified = 1;
   return Student.create(student) // Return added for testing
@@ -155,6 +164,14 @@ exports.registerProfessor = async (req, res) => {
     });
     return;
   }
+  if (await User.exists(professor)) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({
+      status: false,
+      error: 'L\'email risulta già in uso',
+    });
+    return;
+  }
   professor.role = User.Role.PROFESSOR;
   professor.verified = 0;
   User.create(professor)
@@ -197,7 +214,7 @@ exports.passwordRecovery = (req, res) => {
  */
 exports.insertVerifiedEmail = async (req, res) => {
   email = req.body.email;
-  if (email == null || !Check.checkVerifiedEmail(email) || await VerifiedEmail.exists({email: email})) {
+  if (email == null || !Check.checkVerifiedEmail(email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -205,6 +222,15 @@ exports.insertVerifiedEmail = async (req, res) => {
     });
     return;
   }
+  if (await VerifiedEmail.exists({email: email})) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({
+      status: false,
+      error: 'L\'email già esiste',
+    });
+    return;
+  }
+
   const verifiedEmail = new VerifiedEmail({email: email, signed_up: 0});
   return VerifiedEmail.create(verifiedEmail)
       .then((result) => {
