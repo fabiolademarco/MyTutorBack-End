@@ -159,10 +159,9 @@ class Candidature {
     }
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, email)
         .then(([rows]) => {
-          let candidatures = rows.map((c) => new Candidature(c));
-          candidatures = candidatures.map(async (c) => {
+          const candidatures = rows.map(async (c) => {
             c.documents = await Document.findByCandidature(c);
-            return c;
+            return new Candidature(c);
           });
           return candidatures;
         })
@@ -182,10 +181,9 @@ class Candidature {
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, protocol)
         .then(([rows]) => {
-          let candidatures = rows.map((c) => new Candidature(c));
-          candidatures = candidatures.map(async (c) => {
+          const candidatures = rows.map(async (c) => {
             c.documents = await Document.findByCandidature(c);
-            return c;
+            return new Candidature(c);
           });
           return candidatures;
         })
@@ -201,10 +199,9 @@ class Candidature {
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => {
-          let candidatures = rows.map((c) => new Candidature(c));
-          candidatures = candidatures.map(async (c) => {
+          const candidatures = rows.map(async (c) => {
             c.documents = await Document.findByCandidature(c);
-            return c;
+            return new Candidature(c);
           });
           return candidatures;
         })
