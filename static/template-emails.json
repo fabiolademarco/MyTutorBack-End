@@ -1,0 +1,9 @@
+{
+  "toProfessor" : {
+    "subject": "Conferma Registrazione MyTutor",
+    "body": "<h2><em>Benvenuto su <strong>My Tutor,</strong></em></h2><p>Grazie per averci scelto.<br/> Per confermare la registrazione prema sul seguente link: <br />",
+    "link": "<strong><em><a href=''>Completa la Registrazione</a></em></strong></p>",
+    "greetings": "<p>Grazie,</p><p>My Tutor Team</p><p><strong>P.S.</strong> : Non rispondere a questa email</p>"
+  }
+
+}

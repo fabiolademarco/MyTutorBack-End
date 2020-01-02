@@ -23,16 +23,7 @@ const {mockRequest, mockResponse} = require('mock-req-res');
 let req;
 let res;
 
-/* describe('Prova', function() {
-  it('Test', function(done) {
-    userControl.findAll(req, res);
-    expect(res.status).to.have.been.calledWith(412);
-    done();
-  });
-}); */
-
-
-describe('Gestione Autenticatione', function() {
+describe('Gestione Autenticazione', function() {
   let student;
   describe('Test_RegistraStudente', function() {
     beforeEach(function() {

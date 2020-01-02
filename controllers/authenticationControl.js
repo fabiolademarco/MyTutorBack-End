@@ -13,6 +13,7 @@ const Student = require('../models/student');
 const VerifiedEmail = require('../models/verifiedEmail');
 const Check = require('../utils/check');
 const jwt = require('jsonwebtoken');
+const Mail = require('../utils/mail');
 
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
@@ -119,12 +120,34 @@ exports.registerStudent = async (req, res) => {
  * Allows to register a new Professor.
  * @param {Request} req
  * @param {Response} res
- * @todo Implementare il meccanismo di iscrizione
  */
-exports.registerProfessor = (req, res) => {
+exports.registerProfessor = async (req, res) => {
+  const confirmationToken = req.query.token;
+  if (confirmationToken) {
+    try {
+      const payload = jwt.verify(token.substring(4), process.env.PRIVATE_KEY);
+      await VerifiedEmail.update({email: payload.id, signed_up: 1});
+      const professor = await User.findByEmail(payload.id);
+      professor.verified = 1;
+      await User.update(professor);
+      res.set('Authorization', confirmationToken);
+      res.status(200);
+      res.send({
+        status: true,
+        professor: professor,
+        token: confirmationToken,
+      });
+    } catch (err) {
+      res.status(401);
+      res.send({
+        status: false,
+        error: err,
+      });
+    }
+    return;
+  }
   professor = (req.body.professor != null) ? new User(req.body.professor) : null;
-  // Bisogna controllare che la sua email sia verificata
-  if (professor == null || !Check.checkProfessor(professor)) {
+  if (professor == null || !Check.checkProfessor(professor) || await !VerifiedEmail.isVerified(professor.email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -134,34 +157,24 @@ exports.registerProfessor = (req, res) => {
   }
   professor.role = User.Role.PROFESSOR;
   professor.verified = 0;
-  VerifiedEmail.isVerified(professor.email)
-      .then((exists) => {
-        if (exists) {
-          User.create(professor)
-              .then((professor) => {
-              // Bisogna inviare la mail per effettuare il controllo del professore
-              // Cosa facciamo se non viene più convalidato ?
-              // Permettiamo un operazione per cancellare tutti i non verificati, una sorta di batch ?
-              })
-              .catch((err) => {
-                res.status(ERR_SERVER_STATUS);
-                res.send({
-                  status: false,
-                  error: err.message,
-                });
-              });
-        } else {
-          res.send({
-            status: false,
-            error: 'Email non autorizzata',
-          });
-        }
+  User.create(professor)
+      .then(async (professor) => {
+        const payload = {
+          id: professor.email,
+          role: professor.role,
+        };
+        const token = createToken(payload);
+        await Mail.sendEmailToProfessor(professor.email, token);
+        res.status(200);
+        res.send({
+          status: true,
+        });
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
         res.send({
           status: false,
-          error: err,
+          error: err.message,
         });
       });
 };

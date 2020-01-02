@@ -35,11 +35,14 @@ module.exports = (app, auth) => {
   app.post('/api/auth/registerStudent', auth.isNotLogged, AuthenticationControl.registerStudent);
 
   /**
-   * @api {POST} /api/auth/registerProfessor Professor registration
+   * @api {POST} /api/auth/registerProfessor[?token=] Professor registration
    * @apiName RegisterProfessor
    * @apiGroup Authentication
    * @apiPermission guest
-   * Working in progress...
+   * @apiParam {User} professor The professor to register
+   * @apiParams {string} token Optional token sent to complete professor registration
+   * @apiSuccess {boolean} status Boolean representing the result of the operation
+   * @apiSuccess {User} professor This attribute is sent only when the token is passed
    */
   app.post('/api/auth/registerProfessor', auth.isNotLogged, AuthenticationControl.registerProfessor);
 
