@@ -147,7 +147,7 @@ exports.registerProfessor = async (req, res) => {
     return;
   }
   professor = (req.body.professor != null) ? new User(req.body.professor) : null;
-  if (professor == null || !Check.checkProfessor(professor) || await !VerifiedEmail.isVerified(professor.email)) {
+  if (professor == null || !Check.checkProfessor(professor) || !await VerifiedEmail.isVerified(professor.email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
