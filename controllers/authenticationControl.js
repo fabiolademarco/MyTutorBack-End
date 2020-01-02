@@ -171,11 +171,10 @@ exports.registerProfessor = async (req, res) => {
         });
       })
       .catch((err) => {
-        console.log(err);
         res.status(ERR_SERVER_STATUS);
         res.send({
           status: false,
-          error: err.message,
+          error: err,
         });
       });
 };

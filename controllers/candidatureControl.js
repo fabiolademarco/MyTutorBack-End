@@ -157,11 +157,9 @@ exports.search = (req, res) => {
   }
   promise
       .then((candidatures) => {
-        console.log(candidatures);
         if (!Array.isArray(candidatures)) {
           candidatures = [candidatures];
         }
-        console.log(candidatures);
         res.status(OK_STATUS).send({
           candidatures: candidatures,
         });

@@ -159,11 +159,10 @@ class Candidature {
     }
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, email)
         .then(async ([rows]) => {
-          const candidatures = await rows.map(async (c) => {
+          const candidatures = await Promise.all(rows.map(async (c) => {
             c.documents = await Document.findByCandidature(c);
-            console.log(c);
             return new Candidature(c);
-          });
+          }));
           return candidatures;
         })
         .catch((err) => {
@@ -181,11 +180,11 @@ class Candidature {
       throw new Error('Parameter can not be null or undefined');
     }
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, protocol)
-        .then(([rows]) => {
-          const candidatures = rows.map(async (c) => {
+        .then(async ([rows]) => {
+          const candidatures = await Promise.all(rows.map(async (c) => {
             c.documents = await Document.findByCandidature(c);
             return new Candidature(c);
-          });
+          }));
           return candidatures;
         })
         .catch((err) => {
@@ -199,11 +198,11 @@ class Candidature {
    */
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
-        .then(([rows]) => {
-          const candidatures = rows.map(async (c) => {
+        .then(async ([rows]) => {
+          const candidatures = await Promise.all(rows.map(async (c) => {
             c.documents = await Document.findByCandidature(c);
             return new Candidature(c);
-          });
+          }));
           return candidatures;
         })
         .catch((err) => {
