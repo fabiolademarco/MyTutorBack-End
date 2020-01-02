@@ -342,7 +342,7 @@ exports.checkNotice = (notice) => {
     return false;
   }
 
-  if (!notices.articles.every(this.checkArticle)) {
+  if (!notice.articles.every(this.checkArticle)) {
     return false;
   }
 
