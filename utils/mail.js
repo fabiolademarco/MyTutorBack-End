@@ -10,6 +10,7 @@ const user = {
   password: 'MyTutorPassword',
 };
 const domain = 'localhost:3000'; // Mettere nel .env
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 exports.sendEmailToProfessor = (receiver, token) => {
   const transport = createTransport();
