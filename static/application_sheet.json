@@ -1,26 +1,26 @@
 {
-  "titleMaster": "DOMANDA DI AMMISSIONE\nSTUDENTI ISCRITTI ALLA MAGISTRALE IN INFORMATICA\n",
-  "titlePhd": "DOMANDA DI AMMISSIONE\nSTUDENTI ISCRITTI AL DOTTORATO DI RICERCA\n",
-  "to": "Al Direttore del Dipartimento di Informatica\nUniversità di Salerno\n",
-  "subscription": "__l_) sottoscritt__ _____________________________________________________________ nat__ il ______________\na ________________________ prov. (_____) e residente in _______________________________________\nprov. (____) via/p.zza ____________________________________________________ n. _____\nC.A.P. ___________, Tel. ___________________________ Cell. ______________________________\ne-mail __________________________________ Codice Fiscale ___________________________________________\n",
-  "asks": "CHIEDE\n",
+  "titleMaster": "DOMANDA DI AMMISSIONE\nSTUDENTI ISCRITTI ALLA LAUREA MAGISTRAL\nBando ",
+  "titlePhd": "DOMANDA DI AMMISSIONE\nSTUDENTI ISCRITTI AL DOTTORATO DI RICERCA\nBando",
+  "to": "Al Direttore del Dipartimento di Informatica\nUniversità di Salerno",
+  "subscription": "__l__ sottoscritt__ _____________________________________________________ nat__ il _____________\na ________________________ prov. (_____) e residente in _______________________________________\nprov. (____) via/p.zza ____________________________________________________ n. _____\nC.A.P. ___________, Tel. ___________________________ Cell. ______________________________\ne-mail __________________________________ Codice Fiscale _____________________________________\n",
+  "asks": "CHIEDE",
   "admission1": "di essere ammess__ alla procedura selettiva per l'assegnazione di complessivi n. ",
-  "admission2": "assegni per lo\nsvolgimento delle attività di tutorato didattico finalizzata a supportare l'apprendimento degli studenti iscritti ai corsi di studio afferenti al Dipartimento di Informatica.\n",
-  "assignNo": "A tal fine dichiara di voler partecipare per n. ___ assegno/i relativo/i al codice:\n",
-  "info": "A tal fine, consapevole delle sanzioni penali per il caso di dichiarazioni mendaci nonché per il caso di\nformazione e/o uso di atti falsi previste dall'art. 76 del D.P.R. 28 dicembre 2000 n. 445, presa visione del bando di concorso ed accettate tutte le condizioni e prescrizioni in esso previste,\n",
+  "admission2": "assegni per lo\nsvolgimento delle attività di tutorato didattico finalizzata a supportare l'apprendimento degli studenti iscritti ai corsi di studio afferenti al Dipartimento di Informatica.",
+  "assignNo": "A tal fine dichiara di voler partecipare per n. ___ assegno/i relativo/i al codice:",
+  "info": "A tal fine, consapevole delle sanzioni penali per il caso di dichiarazioni mendaci nonché per il caso di\nformazione e/o uso di atti falsi previste dall'art. 76 del D.P.R. 28 dicembre 2000 n. 445, presa visione del bando di concorso ed accettate tutte le condizioni e prescrizioni in esso previste,",
   "declares": "DICHIARA",
   "declarationsMaster": [
-    "1. di essere regolarmente iscritto al seguente corso di laurea magistrale presso l'Università degli Studi\ndi Salerno in __________________________________________________________________;\n",
-    "2. di frequentare il _____ anno di corso, ovvero il _____ anno fuori-corso;\n",
-    "3. di essere in regola con i versamenti delle tasse e dei contributi universitari;\n",
-    "4. di non ricadere nelle incompatibilità previste nel bando di selezione;\n",
-    "5. di aver preso visione del bando e di accettare tutte le condizioni previste.\n"
+    "1. di essere regolarmente iscritto al seguente corso di laurea magistrale presso l'Università degli Studi\ndi Salerno in __________________________________________________________________;",
+    "2. di frequentare il _____ anno di corso, ovvero il _____ anno fuori-corso;",
+    "3. di essere in regola con i versamenti delle tasse e dei contributi universitari;",
+    "4. di non ricadere nelle incompatibilità previste nel bando di selezione;",
+    "5. di aver preso visione del bando e di accettare tutte le condizioni previste."
   ],
   "declarationsPhd": [
-    "1. di essere iscritto al _____ anno del corso di dottorato di ricerca in ________________________\ncon sede amministrativa presso l'Università degli Studi di _________________________________;\n",
-    "2. di aver conseguito la laurea in ___________________ presso l'Università degli Studi di\n________________________ in ________________________ con votazione _______;\n",
-    "3. di non ricadere nelle incompatibilità previste dall'art. 7 del bando di selezione;\n",
-    "4. di aver preso visione del bando e di accettare tutte le condizioni previste.\n"
+    "1. di essere iscritto al _____ anno del corso di dottorato di ricerca in ________________________\ncon sede amministrativa presso l'Università degli Studi di _________________________________;",
+    "2. di aver conseguito la laurea in ___________________ presso l'Università degli Studi di\n________________________ in ________________________ con votazione _______;",
+    "3. di non ricadere nelle incompatibilità previste dall'art. 7 del bando di selezione;",
+    "4. di aver preso visione del bando e di accettare tutte le condizioni previste."
   ],
-  "personalData": "__l__ sottoscritt__ dichiara di essere stato informato ai sensi dell'art. 13 del Regolamento UE 2016/679 sul\ntrattamento dei dati personali e allega alla presente domanda:\n" 
+  "personalData": "__l__ sottoscritt__ dichiara di essere stato informato ai sensi dell'art. 13 del Regolamento UE 2016/679 sul\ntrattamento dei dati personali e allega alla presente domanda:" 
 }
