@@ -256,7 +256,7 @@ exports.checkArticle = (article) => {
  */
 exports.checkNotice = (notice) => {
   const noticeFundsExp = /[0-9]+(.[0-9]{2})?/;
-  const noticeDeadlineExp = /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/;
+  const noticeDeadlineExp = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/;
 
   if (!this.checkNoticeProtocol(notice.protocol)) {
     return false;
@@ -342,7 +342,7 @@ exports.checkNotice = (notice) => {
     return false;
   }
 
-  if (!notices.articles.every(this.checkArticle)) {
+  if (!notice.articles.every(this.checkArticle)) {
     return false;
   }
 
