@@ -102,7 +102,7 @@ class Document {
     if (aDocument==null || candidature==null ) {
       throw new Error('The document/candidature must not be null.');
     }
-    return pool.query(`SELECT FROM ${table} WHERE student = ?
+    return pool.query(`SELECT * FROM ${table} WHERE student = ?
                                               AND notice_protocol = ?
                                               AND file_name = ?`,
     [candidature.student, candidature.notice_protocol, aDocument.file_name])
@@ -164,7 +164,7 @@ class Document {
     if ( candidature==null ) {
       throw new Error('The candidature must not be null.');
     }
-    return pool.query(`SELECT FROM ${table} WHERE student = ?
+    return pool.query(`SELECT * FROM ${table} WHERE student = ?
                                               AND notice_protocol = ?`,
     [candidature.student, candidature.notice_protocol])
         .then(([rows]) => {
@@ -184,7 +184,7 @@ class Document {
     if (studentEmail==null ) {
       throw new Error('The student email must not be null.');
     }
-    return pool.query(`SELECT FROM ${table} WHERE student = ?`, studentEmail)
+    return pool.query(`SELECT * FROM ${table} WHERE student = ?`, studentEmail)
         .then(([rows]) => {
           return rows.map((el) => new Document(el));
         })
@@ -198,7 +198,7 @@ class Document {
    * @return {Promise<Document[]>} Promise that respresents all the Documents.
    */
   static findAll() {
-    return pool.query(`SELECT FROM ${table}`)
+    return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => {
           return rows.map((el) => new Document(el));
         })
