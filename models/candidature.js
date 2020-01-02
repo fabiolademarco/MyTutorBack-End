@@ -158,9 +158,10 @@ class Candidature {
       throw new Error('Parameter can not be null or undefined');
     }
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, email)
-        .then(([rows]) => {
-          const candidatures = rows.map(async (c) => {
+        .then(async ([rows]) => {
+          const candidatures = await rows.map(async (c) => {
             c.documents = await Document.findByCandidature(c);
+            console.log(c);
             return new Candidature(c);
           });
           return candidatures;
