@@ -13,4 +13,12 @@ describe('NoticeModel', function() { // Nome della classe
       notices.should.have.length(3);
     });
   });
+
+  describe('findByState()', function() {
+    it('should have length 1', async function() {
+      const notices = await notice.findByState(['Published']);
+
+      notices.should.have.length(1);
+    });
+  });
 });
