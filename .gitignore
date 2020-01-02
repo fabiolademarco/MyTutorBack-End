@@ -107,7 +107,7 @@ dist
 .vscode
 
 # test file for development
-test.*
+
 
 # Mochawesome directory
 mochawesome-report 
