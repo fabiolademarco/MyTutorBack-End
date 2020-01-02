@@ -1,6 +1,7 @@
 const Assignment = require('../models/assignment');
 const User = require('../models/user');
 const Check = require('../utils/check');
+const Mail = require('../utils/mail');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -35,11 +36,11 @@ exports.sendRequest = (req, res) => {
   assignment.student = emailStudent;
   assignment.state = Assignment.states.WAITING;
   Assignment.update(assignment)
-      .then((data) => {
+      .then(async (data) => {
+        await Mail.sendEmailToStudentRequest(assignment.student);
         res.status(OK_STATUS).send({
           assignment: data,
         });
-        // Inviare email
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({error: 'Aggiornamento fallito'});
@@ -54,17 +55,19 @@ exports.sendRequest = (req, res) => {
 
 exports.book = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
-
-  if (assignment == null || assignment.state !== Assignment.states.WAITING || !Check.checkAssignment(assignment)) {
+  const user = req.user;
+  if (assignment == null || assignment.state !== Assignment.states.WAITING || !Check.checkAssignment(assignment) || assignment.student != user.id) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'incarico non può essere prenotato'});
     return;
   }
   assignment.state = Assignment.states.BOOKED;
   Assignment.update(assignment)
-      .then((data) => {
-        res.status(OK_STATUS).send({status: true});
+      .then(async (data) => {
         // Inviare email
+        const teachingOffice = (await User.findByRole(User.Role.TEACHING_OFFICE))[0];
+        await Mail.sendEmailToTeachingOfficeBook(teachingOffice.email, assignment);
+        res.status(OK_STATUS).send({status: true});
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({error: false});
@@ -87,9 +90,9 @@ exports.assign = (req, res) => {
   }
   assignment.state = Assignment.states.ASSIGNED;
   Assignment.update(assignment)
-      .then((data) => {
+      .then(async (data) => {
+        await Mail.sendEmailToStudentAssign(assignment.student, assignment.code);
         res.status(OK_STATUS).send({status: true});
-        // Inviare email
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({error: false});
@@ -141,9 +144,10 @@ exports.decline = (req, res) => {
   assignment.state = Assignment.states.UNASSIGNED;
   assignment.student = null;
   Assignment.update(assignment)
-      .then((data) => {
+      .then(async (data) => {
+        const teachingOffice = (await User.findByRole(User.Role.TEACHING_OFFICE))[0];
+        await Mail.sendEmailToTeachingOfficeDecline(teachingOffice.email, req.id, assignment.code);
         res.status(OK_STATUS).send({status: true});
-      // Inviare email
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({error: false});
