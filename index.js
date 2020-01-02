@@ -62,7 +62,7 @@ app.use(bodyParser.json());
 app.use(auth.initialize());
 
 // Setup server port
-const port = process.env.EXPRESS_PORT;
+const port = process.env.EXPRESS_PORT || process.env.PORT;
 
 // Launch app to listen to specified port
 app.listen(port, function() {
