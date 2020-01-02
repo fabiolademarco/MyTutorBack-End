@@ -3,7 +3,39 @@
     "subject": "Conferma Registrazione MyTutor",
     "body": "<h2><em>Benvenuto su <strong>My Tutor,</strong></em></h2><p>Grazie per averci scelto.<br/> Per confermare la registrazione prema sul seguente link: <br />",
     "link": "<strong><em><a href=''>Completa la Registrazione</a></em></strong></p>",
-    "greetings": "<p>Grazie,</p><p>My Tutor Team</p><p><strong>P.S.</strong> : Non rispondere a questa email</p>"
+    "greetings": "<p>Grazie,</p><p>My Tutor Team</p><p><strong>P.S.</strong> : Non rispondere a questa mail</p>"
+  },
+
+  "toRequestStudent": {
+    "subject": "Richiesta Incarico",
+    "body": "<h3><strong>Gentile Studente/essa,</strong></h3><p>Congratulazioni,<br/>ha vinto l'incarico per cui aveva effettuato domanda.<br /> La invitiamo ad accettare o eventualemente rifiutare l'assegnazione recandosi nella propria pagina personale.</p>",
+    "link": "<p>Sito: <a href=''>My Tutor</a></p>",
+    "greetings": "<p>Saluti,<br />My Tutor Team</p><p><strong>P.S.</strong>: Non rispondere a questa mail</p>"
+  },
+
+  "toTeachingOfficeBook": {
+    "subject": "Prenotazione Incarico",
+    "intro": "<h3><strong>Gentile Ufficio Didattica,</strong></h3><p>La informiamo che lo studente/essa ",
+     "body": "ha scelto di prenotare la firma per l'incarico ",
+     "end": "che gli/le era stato/a assegnato.</p>",
+     "link":"<p>Sito: <a href=''>My Tutor</a></p>",
+     "greetings": "<p>Saluti,<br />My Tutor Team</p><p><strong>P.S.</strong>: Non rispondere a questa mail</p>"
+  },
+
+  "toStudentAssign": {
+    "subject": "Pratica Incarico completata",
+    "intro": "<h3><strong>Gentile Studente/essa,</strong></h3><p>Congratulazioni, la informiamo che la pratica per l'assegnazione dell'incarico ",
+    "body": "&egrave; stata completata con successo. Pu&ograve; controllare i suoi incarichi nella propria area personale.</p>",
+    "link": "<p>Sito: <a>My Tutor</a></p>",
+    "greetings": "<p>Saluti,<br />My Tutor Team</p><p><strong>P.S.</strong>: Non rispondere a questa mail</p>"
+  },
+
+  "toTeachingOfficeDecline": {
+    "subject": "Rifiuto Incarico",
+    "intro": "<h3><strong>Gentile Ufficio Didattica,</strong></h3><p>La informiamo che lo studente/essa ",
+    "body": "ha rifiutato la richiesta per l'incarico ",
+    "link": "<p>Sito: <a>My Tutor</a></p>",
+    "greetings": "<p>Saluti,<br />My Tutor Team</p><p><strong>P.S.</strong>: Non rispondere a questa mail</p>"
   }
 
 }
