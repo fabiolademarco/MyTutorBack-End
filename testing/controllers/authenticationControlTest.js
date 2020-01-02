@@ -225,6 +225,165 @@ describe('Gestione Autenticazione', function() {
     });
   });
 
+  describe('Test_RegistraProfessore', function() {
+    let professor;
+    beforeEach(function() {
+      professor = {
+        email: 'fferrucci@unisa.it',
+        name: 'Filomena',
+        password: '123456789Ab!',
+        surname: 'Ferrucci',
+        role: 'Professor',
+        verified: '1',
+      };
+    });
+
+    it('TCS_UT.2.0', function() {
+      professor.name = '';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.2.1', function() {
+      professor.name = 'FilomenaFilomenaFilomena';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.2.2', function() {
+      professor.name = 'Filomena123';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.2.3', function() {
+      professor.surname = '';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.2.4', function() {
+      professor.surname = 'FerrucciFerrucciFerrucci';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.2.5', function() {
+      professor.surname = 'Ferrucci123';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.2.6', function() {
+      professor.email = '';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.2.7', function() {
+      professor.email = 'f.ferrucciferrucciferrucciferrucciferrucciferrucci@unisa.it';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.2.8', function() {
+      professor.email = 'f.ferrucci***@unisa.it';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.2.9', async function() {
+      professor.email = 'alberto@unisa.it';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      await authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    // Non esiste il campo Conferma Email nel back
+    it('TCS_UT.2.10', function() {
+      expect(true);
+    });
+
+    it('TCS_UT.2.11', function() {
+      expect(true);
+    });
+
+    it('TCS_UT.2.12', function() {
+      expect(true);
+    });
+
+    it('TCS_UT.2.13', function() {
+      expect(true);
+    });
+
+    it('TCS_UT.2.14', function() {
+      professor.password = '12345AB';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.2.15', function() {
+      professor.password = '123456789123456789123AB';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_UT.2.16', function() {
+      professor.password = '12345678++++';
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    // Non esiste il campo conferma password nel back
+    it('TCS_UT.2.17', function() {
+      expect(true);
+    });
+
+    it('TCS_UT.2.18', function() {
+      expect(true);
+    });
+
+    it('TCS_UT.2.19', function() {
+      expect(true);
+    });
+
+    it('TCS_UT.2.20', function() {
+      expect(true);
+    });
+
+    it('TCS_UT.2.21', async function() {
+      req = mockRequest({method: 'POST', body: {professor: professor}});
+      res = mockResponse();
+      await authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(200);
+    });
+  });
+
   describe('Test_InserisciEmailProfessore', function() {
     it('TCS_UT.3.0', function() {
       req = mockRequest({method: 'POST', body: {email: ''}});

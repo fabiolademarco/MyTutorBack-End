@@ -11,6 +11,10 @@ const emailsVerified = [
     email: 'cattaneo@unisa.it',
     signed_up: 1,
   },
+  {
+    email: 'fferrucci@unisa.it',
+    signed_up: 0,
+  },
 ];
 /**
  * VerifiedEmail

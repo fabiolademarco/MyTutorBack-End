@@ -95,14 +95,17 @@ class User {
       throw new Error('User must not be null');
     }
     return new Promise((resolve) => resolve())
-        .then(() => {
-          if (this.exists(user)) {
+        .then(async () => {
+          if (await this.exists(user)) {
             throw new Error('The user already exists');
           }
           list.push(user);
           return user;
         })
-        .catch((err) => err.message);
+        .catch((err) => {
+          console.log(err);
+          return err.message;
+        });
   }
   /** Updates an user
    * @param {User} user The user to update
@@ -150,7 +153,7 @@ class User {
     }
     return new Promise((resolve) => resolve())
         .then(() => {
-          return list.map((el) => el.email).filter((el) =>user.email === el.email).length === 1;
+          return list.filter((el) =>user.email === el.email).length > 0;
         })
         .catch((err) => {
           console.log(err);

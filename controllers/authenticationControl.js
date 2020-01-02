@@ -174,7 +174,7 @@ exports.registerProfessor = async (req, res) => {
   }
   professor.role = User.Role.PROFESSOR;
   professor.verified = 0;
-  User.create(professor)
+  return User.create(professor)
       .then(async (professor) => {
         const payload = {
           id: professor.email,
