@@ -1,6 +1,7 @@
 const Notice = require('../models/notice');
 const User = require('../models/user');
 const Check = require('../utils/check');
+const pdf = require('../utils/pdf');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -116,11 +117,22 @@ exports.setState = (req, res) => {
 
   notice = new Notice();
 
+  if (updatedNotice.state === Notice.States.IN_APPROVAL) {
+    const path = pdf.generateNotice(notice);
+    notice.notice_file = path;
+  }
+
   Notice.update(notice)
-      .then((updatedNotice) => {
-        if (updatedNotice.state === Notice.States.IN_APPROVAL) {
-          // crea pdf
-        }
+      .then((notice) => {
+        res.status()
+            .send({notice: notice});
+      })
+      .catch((err) => {
+        res.status(500)
+            .send({
+              error: 'Aggiornamento del bando fallito.',
+              exception: err,
+            });
       });
 };
 
