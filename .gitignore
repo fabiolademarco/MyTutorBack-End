@@ -107,7 +107,7 @@ dist
 .vscode
 
 # test file for development
-
+individualTest.js
 
 # Mochawesome directory
 mochawesome-report 
