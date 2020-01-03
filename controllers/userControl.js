@@ -45,22 +45,24 @@ module.exports.delete=function(req, res) {
 /**
  * @param {Request} req
  * @param {Response} res
+ * @return {Promise}
  */
 module.exports.search=function(req, res) {
   const param=req.body.param;
 
-  if (param == null) {
-    res.status(ERR_CLIENT_STATUS);
-    res.send({error: 'Bisogna specificare un parametro'});
-    return;
-  }
-
   const filter = {
+    email: param.email,
     name: param.name,
     surname: param.surname,
     role: param.role,
     verified: param.verified,
   };
+
+  if (param == null || !Check.checkUserFilter(filter)) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({error: 'Non sono stati specificati parametri o non risultano validi'});
+    return;
+  }
 
   let promise;
   if (filter.role != null && filter.role === User.Role.STUDENT) {
@@ -68,7 +70,7 @@ module.exports.search=function(req, res) {
   } else {
     promise = User.search(filter);
   }
-  promise
+  return promise
       .then((users)=>{
         res.status(OK_STATUS).send({list: users});
       })
@@ -80,16 +82,24 @@ module.exports.search=function(req, res) {
 /**
  * @param {Request} req
  * @param {Response} res
+ * @return {Promise}
  */
 module.exports.update=function(req, res) {
   const user=req.body.user;
   const loggedUser = req.user;
-  if (user == null || user.email !== loggedUser.id) {
+  if (user == null || user.email !== loggedUser.id || ((user.role === User.Role.STUDENT && !Check.checkStudent(user)) || (user.role !== User.Role.STUDENT && !Check.checkProfessor(user)))) {
     res.status(ERR_CLIENT_STATUS);
-    res.send({error: 'L\'utente non puo essere nullo'});
+    res.send({error: 'L\'utente è nullo o non valido'});
     return;
   }
-  User.update(user)
+  let promise;
+  if (loggedUser.role === User.Role.STUDENT) {
+    promise = Student.update(user);
+  } else {
+    promise = User.update(user);
+  }
+
+  return promise
       .then((newUser)=>{
         res.status(OK_STATUS).send({user: newUser});
       })
