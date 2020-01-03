@@ -46,7 +46,7 @@ describe('Rating Control', function() {
       ratingList[0].titles_score = 'ajaja';
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(rea, res);
+      ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
@@ -54,7 +54,7 @@ describe('Rating Control', function() {
       ratingList[0].titles_score = 30;
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(rea, res);
+      ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
@@ -62,27 +62,27 @@ describe('Rating Control', function() {
       ratingList[0].interview_score = 'aasdf';
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(rea, res);
+      ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
     it('TCS_GA.2.6', function() {
       ratingList[0].interview_score = 30;
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(rea, res);
+      ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
     it('TCS_GA.2.7', function() {
       ratingList[0].student = 'a.aaaa11@studenti.unisa.it';
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(rea, res);
+      ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
     it('TCS_GA.2.8', function() {
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(rea, res);
+      ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
   });
