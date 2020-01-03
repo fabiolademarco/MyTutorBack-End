@@ -10,6 +10,16 @@ const list = [{
   birth_date: '1900-03-03 ',
 },
 {
+  email: 'a.lodato1@studenti.unisa.it',
+  password: 'Password123',
+  name: 'Antonio',
+  surname: 'Lodato',
+  role: 'Student',
+  verified: '1',
+  registration_number: '0522505121',
+  birth_date: '1997-04-20 ',
+},
+{
   email: 'v.ventura@student.unisa.it',
   password: 'Password123',
   name: 'Vittorio',
@@ -29,6 +39,7 @@ const list = [{
   registration_number: '0512105097',
   birth_date: '1900-03-03 ',
 }];
+
 /**
  * Student
  *
@@ -59,10 +70,12 @@ class Student extends User {
       throw new Error('The parameter student can not be null or undefined');
     }
     const user = new User(student);
+
     return new Promise((resolve) => resolve())
         .then(async () => {
           await super.create(user);
           list.push(student);
+
           return student;
         })
         .catch((err) => {
@@ -80,10 +93,12 @@ class Student extends User {
       throw new Error('The parameter student can not be null or undefined');
     }
     const user = new User(student);
+
     return new Promise((resolve) => resolve())
         .then(async () => {
           await super.update(user);
           list[list.indexOf(student)] = student;
+
           return student;
         })
         .catch((err) => {
@@ -100,10 +115,13 @@ class Student extends User {
     if (email == null) {
       throw new Error('The parameter email can not be null or undefined');
     }
+
     return new Promise((resolve) => resolve())
         .then(async () => {
           const user = await this.findByEmail(email);
+
           sublist = list.filter((el) => el.email === user.email);
+
           return (sublist.length > 0) ? sublist[0] : null;
         })
         .catch((err) => {
@@ -134,6 +152,7 @@ class Student extends User {
           if (user === null) {
             return null;
           }
+
           return this.findByEmail(user.email);
         })
         .catch((err) => {
@@ -148,10 +167,19 @@ class Student extends User {
    */
   static async search(filter) {
     filter.role = User.Role.STUDENT;
-    const users = await super.search(filter);
+    let users;
+
+    try {
+      users = await super.search(filter);
+      console.log(users);
+    } catch (err) {
+      console.log(err);
+    }
+
     return Promise.all(users.map((u) => this.findByEmail(u.email)))
         .then((students) => students.map((s) => new Student(s)))
         .catch((err) => {
+          console.log(err);
           throw err;
         });
   }

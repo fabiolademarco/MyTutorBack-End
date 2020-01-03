@@ -188,14 +188,19 @@ class User {
     let query=`SELECT * FROM ${table} WHERE true`;
     const params=[];
 
+    if (filter.email) {
+      query =`${query} AND email LIKE ?`;
+      params.push(filter.email + '%');
+    }
+
     if (filter.name) {
-      query =`${query} AND name = ?`;
-      params.push(filter.name);
+      query =`${query} AND name LIKE ?`;
+      params.push(filter.name + '%');
     }
 
     if (filter.surname) {
-      query =`${query} AND surname = ?`;
-      params.push(filter.surname);
+      query =`${query} AND surname LIKE ?`;
+      params.push(filter.surname + '%');
     }
     if (filter.role) {
       query =`${query} AND role = ?`;

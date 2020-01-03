@@ -1,4 +1,3 @@
-const Rating=require('../models/rating');
 /**
  * Checks the student params.
  * @param {Student} student The student to check.
@@ -8,10 +7,11 @@ const Rating=require('../models/rating');
 exports.checkStudent = (student) => {
   const nameExp = /^[A-Za-z ‘]+$/;
   const surnameExp = /^[A-Za-z ‘]+$/;
-  const emailExp = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
+  const emailExp = /^[a-z]\.[a-z]+[0-9]*\@(studenti\.)?unisa\.it$/;
   const registrationNumberExp = /^[0-9A-Za-z ‘]*$/;
   const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
   const birthDateExp = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/; // Non so se deve essere cosi
+
   if (!emailExp.test(student.email) || student.email.length > 50) {
     return false;
   }
@@ -30,6 +30,7 @@ exports.checkStudent = (student) => {
   if (!birthDateExp.test(student.birth_date)) {
     return false;
   }
+
   return true;
 };
 
@@ -56,6 +57,7 @@ exports.checkProfessor = (professor) => {
   if (!passwordExp.test(professor.password) || professor.password.length > 20 || professor.password.length < 8) {
     return false;
   }
+
   return true;
 };
 
@@ -66,6 +68,7 @@ exports.checkProfessor = (professor) => {
  */
 exports.checkVerifiedEmail = (email) => {
   const emailExp = /^[a-z]*(\.[a-z]*)?\@unisa\.it$/;
+
   return emailExp.test(email) && email.length <= 50 && email.length >= 1;
 };
 
@@ -75,8 +78,9 @@ exports.checkVerifiedEmail = (email) => {
  * @return {boolean} True if the email respects the format, else it's false.
  */
 exports.checkEmail = (email) => {
-  const emailExpStudent = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
+  const emailExpStudent = /^[a-z]\.[a-z]+[0-9]*\@(studenti\.)?unisa\.it$/;
   const emailExpProfessor = /^[a-z]*(\.[a-z]*)?\@unisa\.it$/;
+
   return ((emailExpProfessor.test(email) || emailExpStudent.test(email))) && (email.length <= 50 && email.length >= 1);
 };
 
@@ -87,6 +91,7 @@ exports.checkEmail = (email) => {
  */
 exports.checkPassword = (password) => {
   const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
+
   return passwordExp.test(password) && password.length <= 20 && password.length >= 8;
 };
 
@@ -97,13 +102,14 @@ exports.checkPassword = (password) => {
  */
 exports.checkAssignment = (assignment) => {
   const noticeProtocolExp = /Prot. n. [0-9]+/;
-  const studentExp = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
+  const studentExp = /^[a-z]\.[a-z]+[0-9]*\@(studenti\.)?unisa\.it$/;
   const codeExp = /[A-Z]+\/[0-9]+/;
   const idExp = /[1-9]+/;
   const totalNumberHoursExp = /[0-9]+/;
   const title = /PhD|Master/;
   const hourlyCostExp = /[0-9]+(.[0-9]{2})?/;
   const stateExp = /Unassigned|Waiting|Booked|Assigned|Over/;
+
   if (!noticeProtocolExp.test(assignment.notice_protocol)) {
     return false;
   }
@@ -145,6 +151,7 @@ exports.checkAssignment = (assignment) => {
  */
 exports.checkNoticeProtocol = (noticeProtocol) => {
   const noticeProtocolExp = /Prot. n. [0-9]+/;
+
   return noticeProtocolExp.test(noticeProtocol) && noticeProtocol.length <= 125;
 };
 
@@ -154,7 +161,7 @@ exports.checkNoticeProtocol = (noticeProtocol) => {
  * @return {boolean} True if it respects the format, false otherwise.
  */
 exports.checkComment = (comment) => {
-  return comment.text < 1 || comment.text > 500;
+  return comment.text.length >= 1 && comment.text.length <= 500;
 };
 
 /**
@@ -163,7 +170,7 @@ exports.checkComment = (comment) => {
  * @return {boolean} True if it resepcts the format, false otherwise.
  */
 exports.checkApplicationSheet = (applicationSheet) => {
-  return applicationSheet.documents_to_attach < 1 || applicationSheet.documents_to_attach > 5000;
+  return applicationSheet.documents_to_attach.length >= 1 && applicationSheet.documents_to_attach.length <= 5000;
 };
 
 /**
@@ -171,11 +178,11 @@ exports.checkApplicationSheet = (applicationSheet) => {
  * @param {Rating} rating Comment to check.
  * @return {boolean} True if it respects the format, False otherwise.
  */
-exports.checkRating=(rating)=>{
+exports.checkRating = (rating) => {
   const assignmentIdExp = /[1-9]+/;
-  const studentExp = /^[a-z]\.[a-z]+[1-9]*\@(studenti\.)?unisa\.it$/;
-  const titleScoreExp=/^[0-9]+$/;
-  const interviewScoreExp=/^[0-9]+$/;
+  const studentExp = /^[a-z]\.[a-z]+[0-9]*\@(studenti\.)?unisa\.it$/;
+  const titleScoreExp = /^[0-9]+$/;
+  const interviewScoreExp = /^[0-9]+$/;
 
   if (!assignmentIdExp.test(rating.assignment_id)) {
     return false;
@@ -192,10 +199,6 @@ exports.checkRating=(rating)=>{
     return false;
   }
 
-  if (!Rating.exists(rating)) {
-    return false;
-  }
-
   return true;
 };
 
@@ -204,13 +207,8 @@ exports.checkRating=(rating)=>{
  * @param {Rating[]} ratingList Comment to check.
  * @return {boolean} True if it respects the format, False otherwise.
  */
-exports.checkRatingList=(ratingList)=>{
-  for (const rating of ratingList) {
-    if (!this.checkRating(rating)) {
-      return false;
-    }
-  }
-  return true;
+exports.checkRatingList = (ratingList) => {
+  return ratingList.every(this.checkRating);
 };
 
 /**
@@ -343,6 +341,41 @@ exports.checkNotice = (notice) => {
   }
 
   if (!notice.articles.every(this.checkArticle)) {
+    return false;
+  }
+
+  return true;
+};
+
+/** const filter = {
+    email: param.email,
+    name: param.name,
+    surname: param.surname,
+    role: param.role,
+    verified: param.verified,
+  };
+ * Check if user filter respects the format
+ * @param {Object} filter Filter to check.
+ * @return {boolean} True if it respects the format, false otherwise.
+ */
+exports.checkUserFilter = (filter) => {
+  const nameExp = /^[A-Za-z ‘]+$/;
+  const surnameExp = /^[A-Za-z ‘]+$/;
+  const roleExp = /Student|Teaching Office|Professor|DDI/;
+
+  if (filter.email != null && !this.checkEmail(filter.email)) {
+    return false;
+  }
+  if (filter.name != null && (!nameExp.test(filter.name) || filter.name.length > 20)) {
+    return false;
+  }
+  if (filter.surname != null && (!surnameExp.test(filter.surname) || filter.surname.length > 20)) {
+    return false;
+  }
+  if (filter.role != null && !roleExp.test(filter.role)) {
+    return false;
+  }
+  if (filter.verified != null && (filter.verified == 0 || filter.verified == 1)) {
     return false;
   }
 

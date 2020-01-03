@@ -26,11 +26,13 @@ const ERR_SERVER_STATUS = 500;
 exports.sendRequest = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
   const emailStudent = req.body.emailStudent;
+
   // Bisogna  controllare che esista anche lo studente
   // e forse che sia in graduatoria
   if (emailStudent == null || assignment == null || assignment.state !== Assignment.states.UNASSIGNED || !Check.checkAssignment(assignment) || !Check.checkEmail(emailStudent)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'Non è stato specificato lo studente o l\'incarico'});
+
     return;
   }
   assignment.student = emailStudent;
@@ -38,12 +40,12 @@ exports.sendRequest = (req, res) => {
   Assignment.update(assignment)
       .then(async (data) => {
         await Mail.sendEmailToStudentRequest(assignment.student);
-        res.status(OK_STATUS).send({
-          assignment: data,
-        });
+        res.status(OK_STATUS)
+            .send({assignment: data});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: 'Aggiornamento fallito'});
+        res.status(ERR_SERVER_STATUS)
+            .send({error: 'Aggiornamento fallito'});
       });
 };
 
@@ -56,9 +58,11 @@ exports.sendRequest = (req, res) => {
 exports.book = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
   const user = req.user;
+
   if (assignment == null || assignment.state !== Assignment.states.WAITING || !Check.checkAssignment(assignment) || assignment.student != user.id) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'incarico non può essere prenotato'});
+
     return;
   }
   assignment.state = Assignment.states.BOOKED;
@@ -66,11 +70,14 @@ exports.book = (req, res) => {
       .then(async (data) => {
         // Inviare email
         const teachingOffice = (await User.findByRole(User.Role.TEACHING_OFFICE))[0];
+
         await Mail.sendEmailToTeachingOfficeBook(teachingOffice.email, assignment);
-        res.status(OK_STATUS).send({status: true});
+        res.status(OK_STATUS)
+            .send({status: true});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: false});
+        res.status(ERR_SERVER_STATUS)
+            .send({error: false});
       });
 };
 
@@ -86,16 +93,19 @@ exports.assign = (req, res) => {
   if (assignment == null || assignment.state !== Assignment.states.BOOKED || !Check.checkAssignment(assignment)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere assegnato'});
+
     return;
   }
   assignment.state = Assignment.states.ASSIGNED;
   Assignment.update(assignment)
       .then(async (data) => {
         await Mail.sendEmailToStudentAssign(assignment.student, assignment.code);
-        res.status(OK_STATUS).send({status: true});
+        res.status(OK_STATUS)
+            .send({status: true});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: false});
+        res.status(ERR_SERVER_STATUS)
+            .send({error: false});
       });
 };
 
@@ -106,8 +116,11 @@ exports.assign = (req, res) => {
  */
 exports.search = (req, res) => {
   const user = req.user;
+
   if (user == null || (user.role !== User.Role.STUDENT && user.role !== User.Role.TEACHING_OFFICE)) {
-    res.status(401).send({error: 'Non sei autorizzato'});
+    res.status(401)
+        .send({error: 'Non sei autorizzato'});
+
     return;
   }
   const filter = {
@@ -116,15 +129,18 @@ exports.search = (req, res) => {
     state: req.query.state,
     student: req.query.student,
   };
+
   if (user.role === User.Role.STUDENT) {
     filter.student = user.id;
   }
   Assignment.search(filter)
       .then((data) => {
-        res.status(OK_STATUS).send({list: data});
+        res.status(OK_STATUS)
+            .send({list: data});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: err});
+        res.status(ERR_SERVER_STATUS)
+            .send({error: err});
       });
 };
 
@@ -136,9 +152,11 @@ exports.search = (req, res) => {
 exports.decline = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
   const user = req.user;
+
   if (assignment == null || assignment.state !== Assignment.states.WAITING || assignment.student !== user.id || !Check.checkAssignment(assignment)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere rifiutato'});
+
     return;
   }
   assignment.state = Assignment.states.UNASSIGNED;
@@ -146,11 +164,14 @@ exports.decline = (req, res) => {
   Assignment.update(assignment)
       .then(async (data) => {
         const teachingOffice = (await User.findByRole(User.Role.TEACHING_OFFICE))[0];
+
         await Mail.sendEmailToTeachingOfficeDecline(teachingOffice.email, req.id, assignment.code);
-        res.status(OK_STATUS).send({status: true});
+        res.status(OK_STATUS)
+            .send({status: true});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: false});
+        res.status(ERR_SERVER_STATUS)
+            .send({error: false});
       });
 };
 
@@ -163,34 +184,44 @@ exports.decline = (req, res) => {
 exports.find = (req, res) => {
   const id = req.params.id;
   const user = req.user;
+
   if (id == null || Number.parseInt(id) === NaN) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Id non passato'});
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Id non passato'});
+
     return null;
   }
   if (user.role === User.Role.TEACHING_OFFICE) {
     Assignment.findById(id)
         .then((data) => {
           data = data === undefined ? null : data;
-          res.status(OK_STATUS).send({assignment: data});
+          res.status(OK_STATUS)
+              .send({assignment: data});
         })
         .catch((err) => {
-          res.status(ERR_SERVER_STATUS).send({error: err});
+          res.status(ERR_SERVER_STATUS)
+              .send({error: err});
         });
   } else if (user.role === User.Role.STUDENT) {
     Assignment.findByStudent(user.id)
         .then((assignments) => {
           const assignment = assignments.filter((el) => el.id === id);
+
           if (assignment.length === 1) {
-            res.status(OK_STATUS).send({assignment: assignment[0]});
+            res.status(OK_STATUS)
+                .send({assignment: assignment[0]});
           } else {
-            res.status(OK_STATUS).send({assignment: null});
+            res.status(OK_STATUS)
+                .send({assignment: null});
           }
         })
         .catch((err) => {
-          res.status(ERR_SERVER_STATUS).send({error: err});
+          res.status(ERR_SERVER_STATUS)
+              .send({error: err});
         });
   } else {
-    res.status(401).send({error: 'Non sei autorizzato'});
+    res.status(401)
+        .send({error: 'Non sei autorizzato'});
   }
 };
 
@@ -205,14 +236,17 @@ exports.close = (req, res) => {
   if (assignment == null || assignment.state !== Assignment.states.ASSIGNED || !Check.checkAssignment(assignment)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere chiuso'});
+
     return;
   }
   assignment.state = Assignment.states.OVER;
   Assignment.update(assignment)
       .then((data) => {
-        res.status(OK_STATUS).send({status: true});
+        res.status(OK_STATUS)
+            .send({status: true});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: false});
+        res.status(ERR_SERVER_STATUS)
+            .send({error: false});
       });
 };

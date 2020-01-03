@@ -1,5 +1,5 @@
 
-const applicationStub=[
+const applicationStub = [
   {
     notice_protocol: 'Prot. n. 0275137',
     penal_information: 'A tal fine, consapevole delle sanzioni penali per il caso di dichiarazioni mendaci nonché per il caso di formazione e/o uso di atti falsi previste dall\'art.76 del D.P.R. 28 dicembre 2000 n. 445, presa visione del bando di concorso ed accettate tutte le condizioni e prescrizioni in esso previste.',
@@ -41,9 +41,10 @@ class ApplicationSheet {
       throw new Error('No Parameters');
     }
     applicationStub.push(applicationSheet);
-    return new Promise()
-        .then(()=>applicationSheet)
-        .catch((err)=>{
+
+    return new Promise((resolve) => resolve())
+        .then(() => applicationSheet)
+        .catch((err) => {
           throw err;
         });
   }
@@ -57,12 +58,17 @@ class ApplicationSheet {
     if (!applicationSheet) {
       throw new Error('No Parameters');
     }
-    const index=applicationStub.findIndex((app)=>app.notice_protocol===applicationSheet.notice_protocol);
-    if (index != -1) applicationStub[index]=applicationSheet;
-    else throw new Error('the application sheet doesn\'t exist');
-    return new Promise()
-        .then(()=>new ApplicationSheet(applicationSheet))
-        .catch((err)=>{
+    const index = applicationStub.findIndex((app) => app.notice_protocol === applicationSheet.notice_protocol);
+
+    if (index != - 1) {
+      applicationStub[index] = applicationSheet;
+    } else {
+      throw new Error('the application sheet doesn\'t exist');
+    }
+
+    return new Promise((resolve) => resolve())
+        .then(() => new ApplicationSheet(applicationSheet))
+        .catch((err) => {
           throw err;
         });
   }
@@ -76,9 +82,10 @@ class ApplicationSheet {
     if (!applicationSheet) {
       throw new Error('No Parameters');
     }
-    return new Promise()
-        .then(()=>true)
-        .catch((err)=>{
+
+    return new Promise((resolve) => resolve())
+        .then(() => true)
+        .catch((err) => {
           throw err;
         });
   }
@@ -93,12 +100,14 @@ class ApplicationSheet {
       throw new Error('No Parameters');
     }
 
-    return new Promise()
-        .then(()=>{
-          const protocols=applicationStub.map((app)=>app.notice_protocol);
+    return new Promise((resolve) => resolve())
+        .then(() => {
+          const protocols = applicationStub.map((app) => app.notice_protocol);
+
+
           return protocols.includes(applicationSheet.notice_protocol);
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -112,12 +121,15 @@ class ApplicationSheet {
     if (!noticeProtocol) {
       throw new Error('No Parameters');
     }
-    return new Promise()
-        .then(()=>{
-          const filtered=applicationStub.filter((app)=>app.notice_protocol==noticeProtocol);
-          return (filtered.length<0)?null:new ApplicationSheet(filtered[0]);
+
+    return new Promise((resolve) => resolve())
+        .then(() => {
+          const filtered = applicationStub.filter((app) => app.notice_protocol == noticeProtocol);
+
+
+          return (filtered.length < 0) ? null : new ApplicationSheet(filtered[0]);
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -127,11 +139,11 @@ class ApplicationSheet {
    * @return {Promise<ApplicationSheet[]>} Promise representing the fulfillment of the application sheet search.
    */
   static findAll() {
-    return new Promise()
-        .then(()=>{
-          return applicationStub.map((app)=>new ApplicationSheet(app));
+    return new Promise((resolve) => resolve())
+        .then(() => {
+          return applicationStub.map((app) => new ApplicationSheet(app));
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }

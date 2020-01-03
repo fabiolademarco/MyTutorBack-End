@@ -16,6 +16,7 @@ const emailsVerified = [
     signed_up: 0,
   },
 ];
+
 /**
  * VerifiedEmail
  *
@@ -45,12 +46,14 @@ class VerifiedEmail {
       throw new Error('Parameter can not be null or undefined');
     }
     verifiedEmail.signed_up = 0;
+
     return new Promise((resolve) => resolve())
         .then(async () => {
           if (await this.exists(verifiedEmail)) {
             throw new Error('Email already exists');
           }
           emailsVerified.push(verifiedEmail);
+
           return verifiedEmail;
         })
         .catch((err) => {
@@ -67,12 +70,14 @@ class VerifiedEmail {
     if (verifiedEmail == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => {
           if (!this.exists(verifiedEmail)) {
             throw new Error('Email doesn\'t exist');
           }
           emailsVerified[emailsVerified.indexOf(verifiedEmail)] = verifiedEmail;
+
           return verifiedEmail;
         })
         .catch((err) => {
@@ -89,6 +94,7 @@ class VerifiedEmail {
     if (verifiedEmail == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => {
           return emailsVerified.pop(verifiedEmail) != null;
@@ -107,6 +113,7 @@ class VerifiedEmail {
     if (verifiedEmail == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => {
           return emailsVerified.filter((el) => el.email === verifiedEmail.email).length > 0;
@@ -125,9 +132,11 @@ class VerifiedEmail {
     if (email == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => {
           const list = emailsVerified.filter((el) => el.email === email);
+
           return (list.length > 0) ? list[0] : null;
         })
         .catch((err) => {
@@ -156,6 +165,7 @@ class VerifiedEmail {
     if (email == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => {
           return emailsVerified.filter((el) => el.email === email && el.signed_up === 0).length > 0;

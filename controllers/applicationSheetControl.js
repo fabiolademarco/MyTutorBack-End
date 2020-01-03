@@ -19,6 +19,7 @@ const ERR_SERVER_STATUS = 500;
  * Handles the request for the creation of an application
  * @param {Request} req
  * @param {Response} res
+ * @return {Promise}
  */
 exports.create = (req, res) => {
   const applicationSheet = req.body.applicationSheet;
@@ -30,7 +31,7 @@ exports.create = (req, res) => {
     return;
   }
 
-  ApplicationSheet.create(applicationSheet)
+  return ApplicationSheet.create(applicationSheet)
       .then((data) => {
         res.status(OK_STATUS)
             .send({status: true});
@@ -49,6 +50,7 @@ exports.create = (req, res) => {
  * Handles the request for the update of an application
  * @param {Request} req
  * @param {Response} res
+ * @return {Promise}
  */
 exports.update = (req, res) => {
   const applicationSheet = req.body.applicationSheet;
@@ -60,7 +62,7 @@ exports.update = (req, res) => {
     return;
   }
 
-  ApplicationSheet.update(applicationSheet)
+  return ApplicationSheet.update(applicationSheet)
       .then((data) => {
         res.status(OK_STATUS)
             .send({applicationSheet: data});
@@ -79,6 +81,7 @@ exports.update = (req, res) => {
  * Handles the request for the deletion of an application
  * @param {Request} req
  * @param {Response} res
+ * @return {Promise}
  */
 exports.delete = (req, res) => {
   const noticeProtocol = req.params.id;
@@ -94,7 +97,7 @@ exports.delete = (req, res) => {
 
   applicationObject.noticeProtocol = noticeProtocol;
 
-  ApplicationSheet.remove(applicationObject)
+  return ApplicationSheet.remove(applicationObject)
       .then((data) => {
         res.status(OK_STATUS)
             .send({status: data});

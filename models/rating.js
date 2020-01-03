@@ -30,6 +30,7 @@ class Rating {
     if (rating == null) {
       throw new Error('The rating must not be null');
     }
+
     return pool.query(`INSERT INTO ${table} SET ?`, rating)
         .then(([resultSetHeader]) => {
           return new Rating(rating);
@@ -85,6 +86,7 @@ class Rating {
     if (rating == null) {
       throw new Error('The rating must not be null');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE student=? AND assignment_id=?`, [rating.student, rating.assignment_id])
         .then(([rows]) => {
           return rows.length > 0;
@@ -99,7 +101,7 @@ class Rating {
    * @return {Promise<Rating>} Promise representing the fulfillment of Rating search
    */
   static findById(emailStudent, assignmentId) {
-    if (emailStudent == null || assignmentId==null) {
+    if (emailStudent == null || assignmentId == null) {
       throw new Error('Student email and assignment id must be both valid');
     }
 
@@ -108,6 +110,7 @@ class Rating {
           if (rows.length < 1) {
             throw new Error('No result was found');
           }
+
           return new Rating(rows[0]);
         })
         .catch((err) => {
@@ -122,9 +125,10 @@ class Rating {
     if (emailStudent == null) {
       throw new Error('The student email must not be null');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE student=?`, emailStudent)
         .then(([rows]) => {
-          return rows.map((rating)=>new Rating(rating));
+          return rows.map((rating) => new Rating(rating));
         })
         .catch((err) => {
           throw err;
@@ -138,6 +142,7 @@ class Rating {
     if (assignmentId == null) {
       throw new Error('The assignment id must not be null');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE assignment_id=?`, assignmentId)
         .then(([rows]) => {
           return rows.map((rating) => new Rating(rating));
@@ -155,6 +160,7 @@ class Rating {
     if (noticeProcol == null) {
       throw new Error('The notice protocol must not be null');
     }
+
     return pool
         .query(
             `SELECT ${table}.student AS student, ${table}.assignment_id AS assignment_id, ${table}.titles_score AS titles_score, ${table}.interview_score AS interview_score FROM ${table} JOIN ${assignmentTable} ON ${table}.assignment_id = ${assignmentTable}.id WHERE ${assignmentTable}.notice_protocol = ?`,
@@ -169,6 +175,5 @@ class Rating {
   }
 }
 
-
-module.exports=Rating;
+module.exports = Rating;
 
