@@ -7,9 +7,9 @@ chai.use(sinonChai);
 const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 
-const applichationSheetStub = require('./stub/applicationSheetStub');
+const applicationSheetStub = require('./stub/applicationSheetStub');
 const path = {
-  '../models/applicationSheet': applichationSheetStub,
+  '../models/applicationSheet': applicationSheetStub,
 };
 
 const applicationSheetControl = proxy('../../controllers/applicationSheetcontrol', path);
@@ -20,7 +20,7 @@ let res;
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 
-describe('Gestion Avvio', function() {
+describe('Gestione Avvio', function() {
   let applicationSheet;
 
   describe('Test_CreaBozzaDomanda', function() {
@@ -45,8 +45,8 @@ describe('Gestion Avvio', function() {
       expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
     });
 
-    it('TCS_AV.3.2', function() {
-      applicationSheetControl.create(req, res);
+    it('TCS_AV.3.2', async function() {
+      await applicationSheetControl.create(req, res);
       expect(res.status).to.have.been.calledWith(OK_STATUS);
     });
   });
