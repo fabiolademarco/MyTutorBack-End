@@ -15,7 +15,7 @@ const path = {
   '../models/applicationSheet': applicationSheetStub,
 };
 
-const applicationSheetControl = proxy('../../controllers/applicationSheetcontrol', path);
+const applicationSheetControl = proxy('../../controllers/applicationSheetControl', path);
 const {mockRequest, mockResponse} = require('mock-req-res');
 let req;
 let res;
