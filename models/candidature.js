@@ -72,7 +72,7 @@ class Candidature {
           const toUpdate = [];
           const toCreate = [];
           documents.forEach((d) => map.set(d.file_name, d));
-          candidature.forEach((doc) => {
+          candidature.documents.forEach((doc) => {
             if (map.has(doc.file_name)) {
               map.delete(doc.file_name);
               toUpdate.push(doc);
