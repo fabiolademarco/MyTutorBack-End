@@ -95,7 +95,7 @@ exports.update = (req, res) => {
  */
 exports.setState = (req, res) => {
   const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
-  const notice = req.body.notice;
+  let notice = req.body.notice;
 
   const statusAccessList = new Map();
 
@@ -119,7 +119,7 @@ exports.setState = (req, res) => {
 
   notice = new Notice(notice);
 
-  if (updatedNotice.state === Notice.States.IN_APPROVAL) {
+  if (notice.state === Notice.States.IN_APPROVAL) {
     const path = pdf.generateNotice(notice);
 
     notice.notice_file = path;
@@ -127,14 +127,14 @@ exports.setState = (req, res) => {
 
   Notice.update(notice)
       .then((notice) => {
-        res.status()
+        res.status(OK_STATUS)
             .send({notice: notice});
       })
       .catch((err) => {
         res.status(500)
             .send({
               error: 'Aggiornamento del bando fallito.',
-              exception: err,
+              exception: err.message,
             });
       });
 };
