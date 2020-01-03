@@ -3,32 +3,32 @@ const ratingStubList = [
   {
     student: 'l.carpentieri7@studenti.unisa.it',
     assignment_id: 1,
-    titles_score: 145,
-    interview_score: 123,
+    titles_score: 30,
+    interview_score: 50,
   },
   {
     student: 'l.carpentieri7@studenti.unisa.it',
     assignment_id: 2,
-    titles_score: 107,
-    interview_score: 113,
+    titles_score: 30,
+    interview_score: 51,
   },
   {
     student: 'r.bruno20@studenti.unisa.it',
     assignment_id: 2,
-    titles_score: 105,
-    interview_score: 113,
+    titles_score: 31,
+    interview_score: 52,
   },
   {
     student: 'f.migliaro69@studenti.unisa.it',
     assignment_id: 3,
-    titles_score: 135,
-    interview_score: 116,
+    titles_score: 32,
+    interview_score: 53,
   },
   {
     student: 'm.dantonio69@studenti.unisa.it',
     assignment_id: 3,
-    titles_score: 105,
-    interview_score: 126,
+    titles_score: 33,
+    interview_score: 54,
   },
 ];
 
