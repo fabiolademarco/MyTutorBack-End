@@ -26,25 +26,31 @@ const ERR_SERVER_STATUS = 500;
  */
 module.exports.createTable = async function(req, res) {
   const ratingList = req.body.ratingList;
+
   if (ratingList == null) {
     res.status(ERR_CLIENT_STATUS).send({error: 'La lista di valutazioni non può essere nulla'});
+
     return;
   }
   if (!check.checkRatingList(ratingList)) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o più degli elementi della lista non rispettano il formato'});
+
     return;
   }
   if (!validateRatings()) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o piu valutazioni della lista non sono valide '});
+
     return;
   }
 
   if (!validateRatingsInterviewScore(ratingList)) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o piu valutazioni della lista hanno punteggi non validi'});
+
     return;
   }
   if (!validateRatingsScore(ratingList)) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o piu valutazioni della lista hanno punteggi non validi'});
+
     return;
   }
 
@@ -71,19 +77,23 @@ module.exports.createTable = async function(req, res) {
  */
 module.exports.getTable = async function(req, res) {
   const noticeProtocol = req.body.noticeProtocol;
+
   if (noticeProtocol == null || check.checkNoticeProtocol(noticeProtocol) == false) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Il protocollo non può essere nullo'});
+
     return;
   }
 
   const assignments = await Assignment.findById(noticeProtocol);
   const ratings = [];
+
   for (const assignment of assignments) {
     ratings.push(Rating.findByAssignment(assignment));
   }
   Promise.all(ratings)
       .then((lists) => {
         const assignments = lists.flatMap((ass) => ass);
+
         res.status(OK_STATUS).send({result: assignments});
       })
       .catch((err) => {
@@ -91,19 +101,18 @@ module.exports.getTable = async function(req, res) {
       });
 };
 
-/**
- *
- * UTILS FUNCTIONS
- */
+// UTIL FUNCTIONS
 const validateRatings = async function(ratingList) {
   const assignmentId = ratingList[0].assignment_id;
   const assignment = await Assignment.findById(assignmentId);
   const protocollo = assignment.notice_protocol;
   const candidatures = await Candidature.findByNotice(protocollo);
+
   for (const el of ratingList) {
     if (!candidatures.some((candidature) => candidature.student === el.student)) {
       return false;
     }
+
     return true;
   }
 };
@@ -118,6 +127,7 @@ const validateRatingsScore = async function(ratingList) {
   const protocollo = assignment.notice_protocol;
   const criterions = EvaluationCriterion.findByNotice(protocollo);
   const maxValue = criterions[0].maxScore;
+
   return ratingList.every(((rating) => rating.titles_score >= 0 && rating.titles_score <= maxValue));
 };
 
