@@ -261,6 +261,7 @@ class Notice {
           if (rows[0] == undefined) {
             throw new Error('0 results found for protocol: ' + noticeProtocol);
           }
+
           return Promise.all(rows.map((notice) =>
             getOtherFields(notice.protocol)
                 .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {
@@ -294,6 +295,7 @@ class Notice {
     }
 
     let query = `SELECT * FROM ${table} WHERE false`;
+
     states.forEach((state) => query += ' OR state = ?');
 
     return pool.query(query, states)

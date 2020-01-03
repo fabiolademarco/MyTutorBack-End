@@ -33,10 +33,12 @@ class Student extends User {
       throw new Error('The parameter student can not be null or undefined');
     }
     const user = new User(student);
+
     return super.create(user)
         .then(async (user) => {
           student.password = user.password;
           await pool.query(`INSERT INTO ${table} VALUES(?, ?, ?)`, [student.email, student.registration_number, student.birth_date]);
+
           return new Student(student);
         })
         .catch((err) => {
@@ -57,6 +59,7 @@ class Student extends User {
       throw new Error('The student doesn\'t exist');
     }
     const user = new User(student);
+
     return super.update(user)
         .then((user) => {
           return pool.query(`UPDATE ${table} SET registration_number = ?, birth_date = ?  WHERE user_email = ?`, [student.registration_number, student.birth_date, student.email])
@@ -81,6 +84,7 @@ class Student extends User {
     if (email == null) {
       throw new Error('The parameter email can not be null or undefined');
     }
+
     return User.findByEmail(email)
         .then((user) => {
           return pool.query(`SELECT * FROM ${table} WHERE user_email = ?`, email)
@@ -90,6 +94,7 @@ class Student extends User {
                 }
                 user.registration_number = rows[0].registration_number;
                 user.birth_date = rows[0].birth_date;
+
                 return new Student(user);
               })
               .catch((err) => {
@@ -128,6 +133,7 @@ class Student extends User {
           if (user === null) {
             return null;
           }
+
           return this.findByEmail(user.email);
         })
         .catch((err) => {
@@ -143,6 +149,7 @@ class Student extends User {
   static async search(filter) {
     filter.role = User.Role.STUDENT;
     const users = await super.search(filter);
+
     return Promise.all(users.map((u) => this.findByEmail(u.email)))
         .then((students) => students.map((s) => new Student(s)))
         .catch((err) => {

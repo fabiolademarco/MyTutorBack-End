@@ -45,6 +45,7 @@ class Candidature {
     if (candidature == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return pool.query(`INSERT INTO ${table} VALUES(?, ?, ?, ?)`, [candidature.student, candidature.notice_protocol, candidature.state, candidature.last_edit])
         .then(() => candidature.documents.forEach((d) => Document.create(d, candidature)))
         .then(() => new Candidature(candidature))
@@ -65,12 +66,14 @@ class Candidature {
     if (!await this.exists(candidature)) {
       throw new Error('The candidature doesn\'t exist');
     }
+
     return pool.query(`UPDATE ${table} SET state = ?, last_edit = ? WHERE student = ? AND notice_protocol = ?`, [candidature.state, candidature.last_edit, candidature.student, candidature.notice_protocol])
         .then(() => Document.findByCandidature(candidature))
         .then((documents) => {
           const map = new Map();
           const toUpdate = [];
           const toCreate = [];
+
           documents.forEach((d) => map.set(d.file_name, d));
           candidature.documents.forEach((doc) => {
             if (map.has(doc.file_name)) {
@@ -80,6 +83,7 @@ class Candidature {
               toCreate.push(doc);
             }
           });
+
           return Promise.all(
               toUpdate.map((doc) => Document.update(doc, candidature)),
               toCreate.map((doc) => Document.create(doc, candidature)),
@@ -105,6 +109,7 @@ class Candidature {
     if (candidature == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return pool.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol])
         .then(([resultSetHeader]) => resultSetHeader.affectedRows > 0)
         .catch((err) => {
@@ -121,6 +126,7 @@ class Candidature {
     if (candidature == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol])
         .then(([rows]) => rows.length > 0)
         .catch((err) => {
@@ -138,13 +144,16 @@ class Candidature {
     if (email == null || protocol == null) {
       throw new Error('Parameters can not be null or undefined');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE student = ? AND notice_protocol = ?`, [email, protocol])
         .then(async ([rows]) => {
           if (rows.length < 1) {
             throw new Error(`No result found: ${email} and ${protocol}`);
           }
           const candidature = new Candidature(rows[0]);
+
           candidature.documents = await Document.findByCandidature(candidature);
+
           return candidature;
         })
         .catch((err) => {
@@ -161,12 +170,15 @@ class Candidature {
     if (email == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, email)
         .then(async ([rows]) => {
           const candidatures = await Promise.all(rows.map(async (c) => {
             c.documents = await Document.findByCandidature(c);
+
             return new Candidature(c);
           }));
+
           return candidatures;
         })
         .catch((err) => {
@@ -183,12 +195,15 @@ class Candidature {
     if (protocol == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, protocol)
         .then(async ([rows]) => {
           const candidatures = await Promise.all(rows.map(async (c) => {
             c.documents = await Document.findByCandidature(c);
+
             return new Candidature(c);
           }));
+
           return candidatures;
         })
         .catch((err) => {
@@ -205,8 +220,10 @@ class Candidature {
         .then(async ([rows]) => {
           const candidatures = await Promise.all(rows.map(async (c) => {
             c.documents = await Document.findByCandidature(c);
+
             return new Candidature(c);
           }));
+
           return candidatures;
         })
         .catch((err) => {

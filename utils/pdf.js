@@ -21,16 +21,16 @@ const right = {textAlign: 'right'};
 const underlined = {underline: true};
 const bold = {font: timesBold};
 const paddingTop = (centimeters) => {
-  return {paddingTop: centimeters*cm};
+  return {paddingTop: centimeters * cm};
 };
 const paddingBottom = (centimeters) => {
-  return {paddingBottom: centimeters*cm};
+  return {paddingBottom: centimeters * cm};
 };
 const paddingLeft = (centimeters) => {
-  return {paddingLeft: centimeters*cm};
+  return {paddingLeft: centimeters * cm};
 };
 const padding = (centimeters) => {
-  return {padding: centimeters*cm};
+  return {padding: centimeters * cm};
 };
 
 
@@ -44,27 +44,30 @@ const generateNotice = async (notice) => {
   const documentOptions = {
     font: times,
     fontSize: 11,
-    paddingLeft: 1.7*cm,
-    paddingRight: 1.7*cm,
-    paddingTop: 0.5*cm,
-    paddingBottom: 1*cm,
+    paddingLeft: 1.7 * cm,
+    paddingRight: 1.7 * cm,
+    paddingTop: 0.5 * cm,
+    paddingBottom: 1 * cm,
     properties: {
       author: 'Unisa',
     },
   };
 
   const doc = new pdf.Document(documentOptions);
+
   doc.pipe(fs.createWriteStream(filePath));
 
   // Header
 
   const logo = new pdf.Image(fs.readFileSync('../static/logo.jpg'));
   const header = doc.header();
-  header.cell(_(paddingBottom(1))).image(logo, {height: 2*cm});
+
+  header.cell(_(paddingBottom(1))).image(logo, {height: 2 * cm});
 
   // Footer
 
   const footer = doc.footer().table({widths: [null, null, null]}).row();
+
   noticeLayout.footer.forEach((element, index) => {
     footer.cell({fontSize: 6}).text(element);
   });
@@ -79,9 +82,11 @@ const generateNotice = async (notice) => {
 
   // Articoli
 
-  const articlesTable = doc.table(_({widths: [3*cm, null]}, paddingBottom(0.5), center));
+  const articlesTable = doc.table(_({widths: [3 * cm, null]}, paddingBottom(0.5), center));
+
   notice.articles.forEach((article) => {
     const row = articlesTable.row(_(justify));
+
     row.cell().text(article.initial, _(bold));
     row.cell().text(article.text);
   });
@@ -99,30 +104,34 @@ const generateNotice = async (notice) => {
   // Tabella Incarichi
 
   let assignmentsTable;
+
   if (notice.type === Notice.Types.HELP_TEACHING) {
     assignmentsTable = doc.table({
-      widths: [1.5*cm, 1.5*cm, null, null, 2*cm, 3*cm, 3*cm],
+      widths: [1.5 * cm, 1.5 * cm, null, null, 2 * cm, 3 * cm, 3 * cm],
       borderWidth: 1,
     });
     const th = assignmentsTable.header(_(bold, padding(0.1)));
+
     noticeLayout.art1.tableHeader.helpTeaching.forEach((el) => th.cell().text(el));
   } else {
     assignmentsTable = doc.table({
-      widths: [1.5*cm, 1.5*cm, null, null, 2*cm, 3*cm],
+      widths: [1.5 * cm, 1.5 * cm, null, null, 2 * cm, 3 * cm],
       borderWidth: 1,
     });
     const th = assignmentsTable.header(_(bold, padding(0.1)));
+
     noticeLayout.art1.tableHeader.tutoring.forEach((el) => th.cell().text(el));
   }
 
   notice.assignments.forEach((assignment) => {
     const row = assignmentsTable.row(_(padding(0.1)));
+
     row.cell().text(assignment.code);
     row.cell().text(assignment.total_number_hours + '');
     row.cell().text(assignment.activity_description);
     row.cell().text(assignment.title === Assignment.titles.PHD ? 'Dottorando' : 'Studente laurea Magistrale');
     row.cell().text(assignment.hourly_cost + ' €');
-    row.cell().text(assignment.hourly_cost*assignment.total_number_hours + ' €');
+    row.cell().text(assignment.hourly_cost * assignment.total_number_hours + ' €');
     if (notice.type === Notice.Types.HELP_TEACHING) {
       row.cell().text(assignment.ht_fund);
     }
@@ -201,12 +210,13 @@ const generateNotice = async (notice) => {
       .text(noticeLayout.art13.body, _(justify));
 
   // Ratifica
-  doc.cell( _(paddingBottom(1)))
+  doc.cell(_(paddingBottom(1)))
       .text(noticeLayout.ratification);
 
   // const director = await User.findByRole(User.Role.DDI)[0];
 
   const signTable = doc.table({widths: [null, null]}).row();
+
   signTable.cell().text('');
   signTable.cell().text(_(center))
       .add(noticeLayout.sign);
@@ -214,12 +224,14 @@ const generateNotice = async (notice) => {
 
 
   await doc.end();
+
   return filePath;
 };
 
 
 const generatePersonalDataTreatment = async () => {
   const filePath = '../static/personal_data_treatment.pdf';
+
   if (fs.existsSync(filePath)) {
     return filePath;
   }
@@ -227,13 +239,14 @@ const generatePersonalDataTreatment = async () => {
   const documentOptions = {
     font: times,
     fontSize: 11,
-    padding: 1.7*cm,
+    padding: 1.7 * cm,
     properties: {
       author: 'Unisa',
     },
   };
 
   const doc = new pdf.Document(documentOptions);
+
   doc.pipe(fs.createWriteStream(filePath));
 
   doc.text(personalData.title, _(bold, justify));
@@ -259,6 +272,7 @@ const generatePersonalDataTreatment = async () => {
   });
 
   await doc.end();
+
   return filePath;
 };
 
@@ -270,16 +284,17 @@ const generateApplicationSheet = async (notice) => {
   const documentOptions = {
     font: times,
     fontSize: 11,
-    paddingTop: 1.3*cm,
-    paddingBottom: 1.3*cm,
-    paddingRight: 1.7*cm,
-    paddingLeft: 1.7*cm,
+    paddingTop: 1.3 * cm,
+    paddingBottom: 1.3 * cm,
+    paddingRight: 1.7 * cm,
+    paddingLeft: 1.7 * cm,
     properties: {
       author: 'Unisa',
     },
   };
 
   const doc = new pdf.Document(documentOptions);
+
   doc.pipe(fs.createWriteStream(filePath));
 
   const assignments = notice.assignments;
@@ -294,7 +309,7 @@ const generateApplicationSheet = async (notice) => {
     }
   }
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 2; i ++) {
     if ((i == 0 && masterAssignments.length > 0 || i == 1 && phdAssignments.length > 0)) {
       if (i == 1 && masterAssignments.length > 0) {
         doc.pageBreak();
@@ -317,6 +332,7 @@ const generateApplicationSheet = async (notice) => {
           .text(applicationSheetLayout.assignNo);
 
       const actualAssignments = i == 0 ? masterAssignments : phdAssignments;
+
       actualAssignments.forEach((assignment) => {
         doc.cell(paddingLeft(0.5)).text()
             .add('o  ')
@@ -330,6 +346,7 @@ const generateApplicationSheet = async (notice) => {
           .text(applicationSheetLayout.declares, _(center, bold));
 
       const actualDeclaration = i == 0 ? applicationSheetLayout.declarationsMaster : applicationSheetLayout.declarationsPhd;
+
       actualDeclaration.forEach((declaration) => {
         doc.text(declaration);
       });
@@ -340,12 +357,14 @@ const generateApplicationSheet = async (notice) => {
           .text(notice.application_sheet.documents_to_attach);
 
       const table = doc.table({widths: [null, null]}).row();
+
       table.cell().text('Data');
       table.cell().text('Firma', _(center));
     }
   }
 
   await doc.end();
+
   return filePath;
 };
 

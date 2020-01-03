@@ -31,9 +31,11 @@ class Article {
     if (article == null) {
       throw new Error('The article cannot be null.');
     }
+
     return pool.query(`INSERT INTO ${table} SET ?`, article)
         .then(([resultSetHeader]) => {
           article.id = resultSetHeader.insertId;
+
           return article;
         })
         .catch((err) => {
@@ -47,7 +49,7 @@ class Article {
    * @return {Promise<Article>} Promise object that represents the updated Article
    */
   static async update(article) {
-    if (article==null ||!await this.exists(article)) {
+    if (article == null || !await this.exists(article)) {
       throw new Error('The article must not be null.');
     }
 
@@ -69,6 +71,7 @@ class Article {
     if (article == null) {
       throw new Error('The article cannot be null');
     }
+
     return pool.query(`DELETE FROM ${table} WHERE id = ?`, article.id)
         .then(([resultSetHeader]) => {
           return resultSetHeader.affectedRows > 0;
@@ -85,9 +88,10 @@ class Article {
    * @return {Promise<Article>} Promise that represents the Article having the passed id
    */
   static findById(id, noticeProtocol) {
-    if (id == null || noticeProtocol==null) {
+    if (id == null || noticeProtocol == null) {
       throw new Error('The protocol/id must not be null');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE id = ? AND notice_protocol = ?`, [id, noticeProtocol])
         .then(([rows]) => {
           return new Article(rows[0]);
@@ -103,9 +107,10 @@ class Article {
    * @return {Promise<Article[]>} Promise that represents the Articles related to the passed Notice protocol
    */
   static findByNotice(noticeProtocol) {
-    if ( noticeProtocol==null) {
+    if (noticeProtocol == null) {
       throw new Error('The protocol must not be null');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
         .then(([rows]) => {
           return rows.map((el) => new Article(el));

@@ -53,9 +53,11 @@ class Assignment {
     if (assignment == null) {
       throw new Error('No Parameters');
     }
+
     return pool.query(`INSERT INTO ${table} SET ? `, assignment)
         .then(([resultSetHeader]) => {
           assignment.id = resultSetHeader.insertId;
+
           return assignment;
         })
         .catch((err) => {
@@ -75,6 +77,7 @@ class Assignment {
     if (!exist) {
       throw new Error('The assignment doesn\'t exists');
     }
+
     return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [assignment, assignment.id])
         .then(([resultSetHeader]) => assignment)
         .catch((err) => {
@@ -90,6 +93,7 @@ class Assignment {
     if (assignment == null) {
       throw new Error('No Parameters');
     }
+
     return pool.query(`DELETE FROM ${table} WHERE id = ?`, assignment.id)
         .then(([resultSetHeader]) => resultSetHeader.affectedRows > 0)
         .catch((err) => {
@@ -105,11 +109,13 @@ class Assignment {
     if (id == null) {
       throw new Error('No Parameters');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, id)
         .then(([rows]) => {
           if (rows.length < 1) {
             throw new Error(`No result found: ${id}`);
           }
+
           return new Assignment(rows[0]);
         })
         .catch((err) => {
@@ -125,6 +131,7 @@ class Assignment {
     if (noticeProtocol == null) {
       throw new Error('No Parameters');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
         .then(([rows]) => rows.map((el) => new Assignment(el)))
         .catch((err) => {
@@ -140,6 +147,7 @@ class Assignment {
     if (emailStudent == null) {
       throw new Error('No Parameters');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, emailStudent)
         .then(([rows]) => rows.map((i) => new Assignment(i)))
         .catch((err) => {
@@ -166,6 +174,7 @@ class Assignment {
     if (assignment == null) {
       throw new Error('No parameters');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, assignment.id)
         .then(([rows]) => rows.length > 0)
         .catch((err) => {
@@ -188,6 +197,7 @@ class Assignment {
   static search(filter) {
     let query = `SELECT * FROM ${table} WHERE true `;
     const params = [];
+
     if (filter.code) {
       query = `${query} AND code LIKE ?`;
       params[params.length] = filter.code + '%';
@@ -204,6 +214,7 @@ class Assignment {
       query = `${query} AND student=?`;
       params[params.length] = filter.student;
     }
+
     return pool.query(query, params)
         .then(([rows]) => rows.map((a) => new Assignment(a)))
         .catch((err) => {

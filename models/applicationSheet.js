@@ -70,6 +70,7 @@ class ApplicationSheet {
     if (!applicationSheet) {
       throw new Error('No Parameters');
     }
+
     return pool.query(`DELETE FROM ${table} WHERE notice_protocol = ${applicationSheet.notice_protocol}`)
         .then((([resultSetHeader]) => {
           return resultSetHeader.affectedRows > 0;
@@ -107,11 +108,13 @@ class ApplicationSheet {
     if (!noticeProtocol) {
       throw new Error('No Parameters');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
         .then(([rows]) => {
           if (rows.length < 1) {
             throw new Error(`No result found: ${noticeProtocol}`);
           }
+
           return new ApplicationSheet(rows[0]);
         })
         .catch((err) => {

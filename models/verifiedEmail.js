@@ -31,6 +31,7 @@ class VerifiedEmail {
       throw new Error('Parameter can not be null or undefined');
     }
     verifiedEmail.signed_up = 0;
+
     return pool.query(`INSERT INTO ${table} SET ?`, verifiedEmail)
         .then(([resultSetHeader]) => {
           return new VerifiedEmail(verifiedEmail);
@@ -69,6 +70,7 @@ class VerifiedEmail {
     if (verifiedEmail == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return pool.query(`DELETE FROM ${table} WHERE email = ?`, verifiedEmail.email)
         .then(([resultSetHeader]) => {
           return resultSetHeader.affectedRows > 0;
@@ -87,6 +89,7 @@ class VerifiedEmail {
     if (verifiedEmail == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE email = ?`, verifiedEmail.email)
         .then(([rows]) => rows.length > 0)
         .catch((err) => {
@@ -103,11 +106,13 @@ class VerifiedEmail {
     if (email == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE email = ?`, email)
         .then(([rows]) => {
           if (rows.length < 1) {
             throw new Error(`No result found: ${email}`);
           }
+
           return new VerifiedEmail(rows[0]);
         })
         .catch((err) => {
@@ -138,6 +143,7 @@ class VerifiedEmail {
     if (email == null) {
       throw new Error('Parameter can not be null or undefined');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE email = ? AND signed_up = 0`, email)
         .then(([rows]) => rows.length > 0)
         .catch((err) => {

@@ -41,15 +41,16 @@ class User {
    * @return {Promise<User>} The promise reresenting the fulfillment of the creation request
    */
   static create(user) {
-    if (user===null || user===undefined) {
+    if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }
     user.password = bcrypt.hashSync(user.password, SALT);
-    return pool.query(`INSERT INTO ${table} SET ?`, user )
-        .then((data)=>{
+
+    return pool.query(`INSERT INTO ${table} SET ?`, user)
+        .then((data) => {
           return new User(user);
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -58,7 +59,7 @@ class User {
    * @return {Promise<User>} The promise reresenting the fulfillment of the update request
    */
   static async update(user) {
-    if (user===null || user===undefined) {
+    if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }
     if (!await this.exists(user)) {
@@ -66,17 +67,19 @@ class User {
     }
 
     let promise;
+
     if (user.password == null) {
       promise = pool.query(`UPDATE ${table} SET name = ?, surname = ?, role = ?, verified = ? WHERE email = ?`, [user.name, user.surname, user.role, user.verified, user.email]);
     } else {
       user.password = bcrypt.hashSync(user.password, SALT);
       promise = pool.query(`UPDATE ${table} SET ? WHERE email=?`, [user, user.email]);
     }
+
     return promise
-        .then((data)=>{
+        .then((data) => {
           return new User(user);
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -86,13 +89,13 @@ class User {
    * @return {Promise<boolean>} The promise reresenting the fulfillment of the deletion request
    */
   static delete(user) {
-    if (user===null || user===undefined) {
+    if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }
 
     return pool.query(`DELETE FROM ${table} WHERE email = ?`, user.email)
-        .then(([resultSetHeader])=> resultSetHeader.affectedRows>0)
-        .catch((err)=> {
+        .then(([resultSetHeader]) => resultSetHeader.affectedRows > 0)
+        .catch((err) => {
           throw err;
         });
   }
@@ -101,13 +104,13 @@ class User {
    * @return {Promise<boolean>} The promise reresenting the fulfillment of the verification request
    */
   static exists(user) {
-    if (user===null || user===undefined) {
+    if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }
 
     return pool.query(`SELECT * FROM ${table} WHERE email=?`, user.email)
-        .then(([rows])=> rows.length > 0)
-        .catch((err)=>{
+        .then(([rows]) => rows.length > 0)
+        .catch((err) => {
           throw err;
         });
   }
@@ -116,18 +119,19 @@ class User {
    * @return {Promise<User>} The promise reresenting the fulfillment of the search request
    */
   static findByEmail(email) {
-    if (email===null || email===undefined) {
+    if (email === null || email === undefined) {
       throw new Error('email must not be null');
     }
 
     return pool.query(`SELECT * FROM ${table} WHERE email=?`, email)
-        .then(([rows])=>{
+        .then(([rows]) => {
           if (rows.length < 1) {
             return null;
           }
+
           return new User(rows[0]);
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -136,15 +140,15 @@ class User {
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static findByRole(role) {
-    if (role===null || role===undefined) {
+    if (role === null || role === undefined) {
       throw new Error('role must not be null');
     }
 
     return pool.query(`SELECT * FROM ${table} WHERE role=?`, role)
-        .then(([rows])=>{
+        .then(([rows]) => {
           return rows.map((u) => new User(u));
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -153,15 +157,15 @@ class User {
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static findByVerified(verified) {
-    if (verified===null || verified===undefined) {
+    if (verified === null || verified === undefined) {
       throw new Error('verified status must not be null');
     }
 
     return pool.query(`SELECT * FROM ${table} WHERE verified=?`, role)
-        .then(([rows])=>{
-          return rows.map((user)=>new User(user));
+        .then(([rows]) => {
+          return rows.map((user) => new User(user));
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -172,10 +176,10 @@ class User {
   */
   static findAll() {
     return pool.query(`SELECT * FROM ${table}`)
-        .then(([rows])=>{
-          return rows.map((user)=>new User(user));
+        .then(([rows]) => {
+          return rows.map((user) => new User(user));
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -185,37 +189,37 @@ class User {
    * @return {Promise<User[]>} The promise representing the fulfillment of the search request
    */
   static search(filter) {
-    let query=`SELECT * FROM ${table} WHERE true`;
-    const params=[];
+    let query = `SELECT * FROM ${table} WHERE true`;
+    const params = [];
 
     if (filter.email) {
-      query =`${query} AND email LIKE ?`;
+      query = `${query} AND email LIKE ?`;
       params.push(filter.email + '%');
     }
 
     if (filter.name) {
-      query =`${query} AND name LIKE ?`;
+      query = `${query} AND name LIKE ?`;
       params.push(filter.name + '%');
     }
 
     if (filter.surname) {
-      query =`${query} AND surname LIKE ?`;
+      query = `${query} AND surname LIKE ?`;
       params.push(filter.surname + '%');
     }
     if (filter.role) {
-      query =`${query} AND role = ?`;
+      query = `${query} AND role = ?`;
       params.push(filter.role);
     }
     if (filter.verified) {
-      query =`${query} AND verified = ?`;
+      query = `${query} AND verified = ?`;
       params.push(filter.verified);
     }
 
     return pool.query(query, params)
-        .then(([rows])=>{
-          return rows.map((user)=>new User(user));
+        .then(([rows]) => {
+          return rows.map((user) => new User(user));
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -229,11 +233,13 @@ class User {
     if (email == null || password == null) {
       throw new Error('Email or Password can not be null or undefined');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE email = ? AND verified = 1`, email)
         .then(([rows]) => {
           if (rows.length < 1 || !bcrypt.compareSync(password, rows[0].password)) {
             return null;
           }
+
           return new User(rows[0]);
         })
         .catch((err) => {
@@ -244,5 +250,5 @@ class User {
 
 User.Role = Role;
 
-module.exports=User;
+module.exports = User;
 

@@ -1,6 +1,7 @@
 const pool = require('../db');
 
 const table = 'comment';
+
 /**
  * Comment
  *
@@ -30,6 +31,7 @@ class Comment {
     if (comment == null) {
       throw new Error('No parameters');
     }
+
     return pool.query(`INSERT INTO ${table} SET ?`, comment)
         .then(([resultSetHeader]) => {
           return comment;
@@ -68,6 +70,7 @@ class Comment {
     if (comment == null) {
       throw new Error('No parameters');
     }
+
     return pool.query(`DELETE FROM ${table} WHERE notice = ?`, comment.notice)
         .then(([resultSetHeader]) => resultSetHeader.affectedRows > 0)
         .catch((err) => {
@@ -84,6 +87,7 @@ class Comment {
     if (comment == null) {
       throw new Error('No parameters');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE notice = ?`, comment.notice)
         .then(([rows]) => rows.length > 0)
         .catch((err) => {
@@ -99,6 +103,7 @@ class Comment {
     if (noticeProtocol == null) {
       throw new Error('No parameters');
     }
+
     return pool.query(`SELECT * FROM ${table} WHERE notice = ?`, noticeProtocol)
         .then(([rows]) => {
           return rows.length > 0 ? new Comment(rows[0]) : null;
