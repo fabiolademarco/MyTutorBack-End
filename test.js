@@ -10,7 +10,7 @@ describe('NoticeModel', function() { // Nome della classe
     it('should have length 3', async function() {
       const notices = await notice.findAll();
 
-      notices.should.have.length(3);
+      notices.should.have.length(4);
     });
   });
 

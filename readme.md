@@ -1,5 +1,7 @@
 # MyTutor-BackEnd
 
+[![Build Status](https://travis-ci.com/fabiolademarco/MyTutorBack-End.svg?branch=master)](https://travis-ci.com/fabiolademarco/MyTutorBack-End)
+
 ## Requirements
 - Node.js, complete installation (latest should be fine)
 - MySQL Server

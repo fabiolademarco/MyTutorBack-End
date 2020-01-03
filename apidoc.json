@@ -4,5 +4,8 @@
   "description": "MyTutor Web API documentation",
   "apidoc": {
     "title": "MyTutor API"
+  },
+  "template": {
+    "forceLanguage": "en"
   }
 }

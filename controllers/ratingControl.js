@@ -22,12 +22,20 @@ const ERR_SERVER_STATUS = 500;
  * @param {Request} req
  * @param {Response} res
  */
-module.exports.createTable=function(req, res) {
+module.exports.createTable=async function(req, res) {
   const ratingList=req.body.ratingList;
   if (ratingList==null ||check.checkRatingList()) {
     res.status(ERR_CLIENT_STATUS).send({error: 'La rating list non può essere nulla'});
     return;
   }
+  
+  for (const rating of ratingList){
+    if(! await Rating.exists(rating)){
+      res.status(ERR_CLIENT_STATUS).send({error:"Uno o più rating non sono presenti nel database."})
+      return;
+    }
+  }
+
   allPromises=[];
   for (const rating of ratingList) {
     allPromises.push(Rating.create(rating));
