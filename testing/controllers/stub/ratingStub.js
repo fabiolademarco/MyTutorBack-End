@@ -1,5 +1,5 @@
 
-const ratingStubList=[
+const ratingStubList = [
   {
     student: 'l.carpentieri7@studenti.unisa.it',
     assignment_id: 1,
@@ -31,6 +31,7 @@ const ratingStubList=[
     interview_score: 126,
   },
 ];
+
 /**
 +findByIncarico(idIncarico : int): List<Valutazione>
 */
@@ -63,11 +64,12 @@ class Rating {
       throw new Error('The rating must not be null');
     }
     ratingStubList.push(rating);
+
     return new Promise()
-        .then(()=>{
+        .then(() => {
           return true;
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -77,18 +79,20 @@ class Rating {
    * @return {Promise<Rating>} Promise representing the fulfillment of Rating update
    */
   static async update(rating) {
-    if (rating==null) {
+    if (rating == null) {
       throw new Error('The rating must not be null');
     }
 
-    const index=ratingStubList.findIndex((el)=>el.student===rating.student && el.assignment_id===rating.assignment_id);
-    if (index=-1) {
+    const index = ratingStubList.findIndex((el) => el.student === rating.student && el.assignment_id === rating.assignment_id);
+
+    if (index = - 1) {
       throw new Error('The rating doesn\'t exists');
     }
-    ratingStubList[index]=rating;
+    ratingStubList[index] = rating;
+
     return new Promise()
-        .then(()=>new Rating(rating))
-        .catch((err)=>{
+        .then(() => new Rating(rating))
+        .catch((err) => {
           throw err;
         });
   }
@@ -98,15 +102,15 @@ class Rating {
    * @return {Promise<Rating>} Promise representing the fulfillment of Rating removal
    */
   static remove(rating) {
-    if (rating==null) {
+    if (rating == null) {
       throw new Error('The rating must not be null');
     }
 
     return new Promise()
-        .then(()=>{
+        .then(() => {
           return true;
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -115,16 +119,17 @@ class Rating {
    * @return {Promise<boolean>} Promise representing the fulfillment of Rating existence check
    */
   static exists(rating) {
-    if (rating==null) {
+    if (rating == null) {
       throw new Error('The rating must not be null');
     }
 
     return new Promise()
-        .then(()=>{
-          const filtered=ratingStubList.filter((el)=>el.student===rating.student && el.assignment_id===rating.assignment_id);
-          return filtered[0]!=undefined;
+        .then(() => {
+          const filtered = ratingStubList.filter((el) => el.student === rating.student && el.assignment_id === rating.assignment_id);
+
+          return filtered[0] != undefined;
         })
-        .catch((err)=>{
+        .catch((err) => {
           throw err;
         });
   }
@@ -134,14 +139,15 @@ class Rating {
    * @return {Promise<Rating>} Promise representing the fulfillment of Rating search
    */
   static findById(emailStudent, assignmentId) {
-    if (emailStudent ==null || assignmentId==null) {
+    if (emailStudent == null || assignmentId == null) {
       throw new Error('Student email and assignment id must be both valid');
     }
 
     return new Promise()
-        .then(()=>{
-          const filtered=ratingStubList.filter((el)=>el.student===emailStudent && el.assignment_id===assignmentId);
-          return (filtered.length==1)?new Rating(filtered[0]):null;
+        .then(() => {
+          const filtered = ratingStubList.filter((el) => el.student === emailStudent && el.assignment_id === assignmentId);
+
+          return (filtered.length == 1) ? new Rating(filtered[0]) : null;
         });
   }
   /**
@@ -149,14 +155,15 @@ class Rating {
    * @return {Promise<Rating[]>} Promise representing the fulfillment of Rating search
    */
   static findByStudent(emailStudent) {
-    if (emailStudent==null) {
+    if (emailStudent == null) {
       throw new Error('The student email must not be null');
     }
 
     return new Promise()
-        .then(()=>{
-          const resultSet=ratingStubList.filter((el)=>el.student===emailStudent)
-              .map((el)=>new Rating(el));
+        .then(() => {
+          const resultSet = ratingStubList.filter((el) => el.student === emailStudent)
+              .map((el) => new Rating(el));
+
           return resultSet;
         });
   }
@@ -165,18 +172,19 @@ class Rating {
    * @return {Promise<Rating[]>} Promise representing the fulfillment of Rating search
    */
   static findByAssignment(assignmentId) {
-    if (assignmentId==null) {
+    if (assignmentId == null) {
       throw new Error('The assignment id must not be null');
     }
 
     return new Promise()
-        .then(()=>{
-          const resultSet=ratingStubList.filter((el)=>el.student===assignmentId)
-              .map((el)=>new Rating(el));
+        .then(() => {
+          const resultSet = ratingStubList.filter((el) => el.student === assignmentId)
+              .map((el) => new Rating(el));
+
           return resultSet;
         });
   }
 }
 
-module.exports=Rating;
+module.exports = Rating;
 

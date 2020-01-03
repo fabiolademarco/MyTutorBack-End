@@ -1,10 +1,12 @@
 // Import dotenv
 const dotenv = require('dotenv');
+
 // Configure dotenv
 dotenv.config();
 
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+
 chai.use(sinonChai);
 const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
@@ -25,6 +27,7 @@ let res;
 
 describe('Controller Autenticazione', function() {
   let student;
+
   describe('Test_RegistraStudente', function() {
     beforeEach(function() {
       student = {
@@ -227,6 +230,7 @@ describe('Controller Autenticazione', function() {
 
   describe('Test_RegistraProfessore', function() {
     let professor;
+
     beforeEach(function() {
       professor = {
         email: 'fferrucci@unisa.it',
@@ -422,6 +426,7 @@ describe('Controller Autenticazione', function() {
   });
 
   let user;
+
   describe('Test_EffettuaLogin', function() {
     beforeEach(function() {
       user = {

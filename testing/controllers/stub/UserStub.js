@@ -99,19 +99,22 @@ class User {
    * @return {Promise<User>} The promise reresenting the fulfillment of the creation request
    */
   static create(user) {
-    if (user===null || user===undefined) {
+    if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }
+
     return new Promise((resolve) => resolve())
         .then(async () => {
           if (await this.exists(user)) {
             throw new Error('The user already exists');
           }
           list.push(user);
+
           return user;
         })
         .catch((err) => {
           console.log(err);
+
           return err.message;
         });
   }
@@ -120,9 +123,10 @@ class User {
    * @return {Promise<User>} The promise reresenting the fulfillment of the update request
    */
   static async update(user) {
-    if (user===null || user===undefined) {
+    if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => {
           if (!this.exists(user)) {
@@ -140,9 +144,10 @@ class User {
    * @return {Promise<boolean>} The promise reresenting the fulfillment of the deletion request
    */
   static remove(user) {
-    if (user===null || user===undefined) {
+    if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => {
           return list.pop(user) != null;
@@ -156,12 +161,13 @@ class User {
    * @return {Promise<boolean>} The promise reresenting the fulfillment of the verification request
    */
   static exists(user) {
-    if (user===null || user===undefined) {
+    if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => {
-          return list.filter((el) =>user.email === el.email).length > 0;
+          return list.filter((el) => user.email === el.email).length > 0;
         })
         .catch((err) => {
           console.log(err);
@@ -173,12 +179,14 @@ class User {
    * @return {Promise<User>} The promise reresenting the fulfillment of the search request
    */
   static findByEmail(email) {
-    if (email===null || email===undefined) {
+    if (email === null || email === undefined) {
       throw new Error('email must not be null');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => {
           const sublist = list.filter((u) => u.email === email);
+
           return (sublist.length > 0) ? newUser(sublist[0]) : null;
         })
         .catch((err) => {
@@ -190,7 +198,7 @@ class User {
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static findByRole(role) {
-    if (role===null || role===undefined) {
+    if (role === null || role === undefined) {
       throw new Error('role must not be null');
     }
 
@@ -205,7 +213,7 @@ class User {
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
   static findByVerified(verified) {
-    if (verified===null || verified===undefined) {
+    if (verified === null || verified === undefined) {
       throw new Error('verified status must not be null');
     }
 
@@ -236,6 +244,7 @@ class User {
    */
   static search(filter) {
     let sublist = [];
+
     try {
       if (filter.email) {
         sublist.concat(list.filter((el) => el.email === filter.email));
@@ -258,6 +267,7 @@ class User {
     } catch (err) {
       console.log(err);
     }
+
     return new Promise((resolve) => resolve())
         .then(() => Array.from(sublist))
         .catch((err) => {
@@ -275,9 +285,11 @@ class User {
     if (email == null || password == null) {
       throw new Error('Email or Password can not be null or undefined');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => {
           const sublist = list.filter((u) => u.email === email && u.password === password);
+
           return (sublist.length > 0) ? new User(sublist[0]) : null;
         })
         .catch((err) => {
@@ -288,5 +300,5 @@ class User {
 
 User.Role = Role;
 
-module.exports=User;
+module.exports = User;
 

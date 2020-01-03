@@ -1,10 +1,10 @@
-// Import dotenv
 const dotenv = require('dotenv');
-// Configure dotenv
+
 dotenv.config();
 
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+
 chai.use(sinonChai);
 const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
@@ -23,6 +23,7 @@ let res;
 
 describe('Controller Utenti', function() {
   let filter;
+
   describe('Test_RicercaProfessore', function() {
     beforeEach(function() {
       filter = {
@@ -50,6 +51,7 @@ describe('Controller Utenti', function() {
 
   let user;
   let loggedUser;
+
   describe('Test_ModificaDatiPersonali', function() {
     beforeEach(function() {
       user = {
