@@ -1,14 +1,14 @@
 # MyTutor-BackEnd
 
 ## Requirements
-- Node.js (latest should be fine)
+- Node.js, complete installation (latest should be fine)
 - MySQL Server
 
 ## Running MyTutor Backend
 
 ### Creating and populating the DB
 First of all, you have to create an populate the database. Scripts are located into `db_scripts` folder.
-Run `MyTutorDatabase_Script.sql` and then `MyTutorDB_script_populator.sql`. In the db creation script is
+Run `MyTutorDB.sql` and then `MyTutorDBPopulator.sql`. In the db creation script is
 also created a user that you can use to log in into the db (**This should not be used in production**).
 
 ### Setting up Node.js dependencies
@@ -17,13 +17,9 @@ After you've imported the project you should run the command `npm install` in th
 ### The .env file
 To get started you should make a **.env** (dotenv) file, it should have the following format: 
 ```
-DB_HOST=your_db_host_address
-DB_PORT=your_db_port
-DB_NAME=your_db_name
-DB_USER=your_db_username
-DB_PASSWORD=your_db_password
 EXPRESS_PORT=your_express_port
 PRIVATE_KEY=your_private_key
+DATABASE_URI=mysql://mt_admin:mt_password@localhost/mytutor
 ```
 
 ### Starting the server

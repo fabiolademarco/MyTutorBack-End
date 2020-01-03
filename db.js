@@ -1,6 +1,6 @@
 const mysql = require('mysql2/promise');
 
-const url = process.env.CLEARDB_DATABASE_URL;
+const url = process.env.DATABASE_URI;
 
 const pool = mysql.createPool(url);
 
