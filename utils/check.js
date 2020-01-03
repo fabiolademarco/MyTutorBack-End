@@ -1,4 +1,4 @@
-const Rating=require('../models/rating');
+
 /**
  * Checks the student params.
  * @param {Student} student The student to check.
@@ -191,11 +191,6 @@ exports.checkRating=(rating)=>{
   if (!interviewScoreExp.test(rating.interview_score)) {
     return false;
   }
-
-  if (!Rating.exists(rating)) {
-    return false;
-  }
-
   return true;
 };
 
