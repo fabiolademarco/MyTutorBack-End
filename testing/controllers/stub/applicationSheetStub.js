@@ -1,5 +1,5 @@
 
-const applicationStub=[
+const applicationStub = [
   {
     notice_protocol: 'Prot. n. 0275137',
     penal_information: 'A tal fine, consapevole delle sanzioni penali per il caso di dichiarazioni mendaci nonché per il caso di formazione e/o uso di atti falsi previste dall\'art.76 del D.P.R. 28 dicembre 2000 n. 445, presa visione del bando di concorso ed accettate tutte le condizioni e prescrizioni in esso previste.',
@@ -58,7 +58,7 @@ class ApplicationSheet {
       throw new Error('No Parameters');
     }
     const index = applicationStub.findIndex((app) => app.notice_protocol === applicationSheet.notice_protocol);
-    if (index != -1) {
+    if (index != - 1) {
       applicationStub[index] = applicationSheet;
     } else {
       throw new Error('the application sheet doesn\'t exist');
@@ -118,7 +118,7 @@ class ApplicationSheet {
     return new Promise((resolve) => resolve())
         .then(() => {
           const filtered = applicationStub.filter((app) => app.notice_protocol == noticeProtocol);
-          return (filtered.length<0) ? null : new ApplicationSheet(filtered[0]);
+          return (filtered.length < 0) ? null : new ApplicationSheet(filtered[0]);
         })
         .catch((err) => {
           throw err;

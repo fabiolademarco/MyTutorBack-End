@@ -170,11 +170,11 @@ exports.checkApplicationSheet = (applicationSheet) => {
  * @param {Rating} rating Comment to check.
  * @return {boolean} True if it respects the format, False otherwise.
  */
-exports.checkRating=(rating)=>{
+exports.checkRating = (rating) => {
   const assignmentIdExp = /[1-9]+/;
   const studentExp = /^[a-z]\.[a-z]+[0-9]*\@(studenti\.)?unisa\.it$/;
-  const titleScoreExp=/^[0-9]+$/;
-  const interviewScoreExp=/^[0-9]+$/;
+  const titleScoreExp = /^[0-9]+$/;
+  const interviewScoreExp = /^[0-9]+$/;
 
   if (!assignmentIdExp.test(rating.assignment_id)) {
     return false;
