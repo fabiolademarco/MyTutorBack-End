@@ -153,7 +153,7 @@ exports.checkNoticeProtocol = (noticeProtocol) => {
  * @return {boolean} True if it respects the format, false otherwise.
  */
 exports.checkComment = (comment) => {
-  return comment.text < 1 || comment.text > 500;
+  return comment.text.length >= 1 && comment.text.length <= 500;
 };
 
 /**
@@ -162,7 +162,7 @@ exports.checkComment = (comment) => {
  * @return {boolean} True if it resepcts the format, false otherwise.
  */
 exports.checkApplicationSheet = (applicationSheet) => {
-  return applicationSheet.documents_to_attach < 1 || applicationSheet.documents_to_attach > 5000;
+  return applicationSheet.documents_to_attach.length >= 1 && applicationSheet.documents_to_attach.length <= 5000;
 };
 
 /**
