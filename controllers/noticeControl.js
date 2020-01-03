@@ -7,6 +7,7 @@ const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
 
 const accessList = new Map();
+
 accessList.set(User.Role.STUDENT, [Notice.States.PUBLISHED, Notice.States.EXPIRED, Notice.States.WAITING_FOR_GRADED_LIST, Notice.States.CLOSED]);
 accessList.set(User.Role.PROFESSOR, accessList.get(User.Role.STUDENT).concat([Notice.States.IN_ACCEPTANCE, Notice.States.ACCEPTED]));
 accessList.set(User.Role.DDI, accessList.get(User.Role.STUDENT).concat([Notice.States.IN_APPROVAL, Notice.States.APPROVED]));
@@ -96,12 +97,14 @@ exports.setState = (req, res) => {
   const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
 
   const statusAccessList = new Map();
-  statusAccessList.put(User.Role.PROFESSOR, [Notice.States.DRAFT, Notice.States.ACCEPTED]);
-  statusAccessList.put(User.Role.DDI, [Notice.States.DRAFT, Notice.States.APPROVED, Notice.States.CLOSED]);
-  statusAccessList.put(User.Role.TEACHING_OFFICE, [Notice.States.IN_ACCEPTANCE, Notice.States.IN_APPROVAL, Notice.States.PUBLISHED, Notice.States.WAITING_FOR_GRADED_LIST]);
+
+  statusAccessList.set(User.Role.PROFESSOR, [Notice.States.DRAFT, Notice.States.ACCEPTED]);
+  statusAccessList.set(User.Role.DDI, [Notice.States.DRAFT, Notice.States.APPROVED, Notice.States.CLOSED]);
+  statusAccessList.set(User.Role.TEACHING_OFFICE, [Notice.States.IN_ACCEPTANCE, Notice.States.IN_APPROVAL, Notice.States.PUBLISHED, Notice.States.WAITING_FOR_GRADED_LIST]);
 
   if (!statusAccessList.get(userRole).includes(notice.state)) {
     res.status(403).send();
+
     return;
   }
 
@@ -119,6 +122,7 @@ exports.setState = (req, res) => {
 
   if (updatedNotice.state === Notice.States.IN_APPROVAL) {
     const path = pdf.generateNotice(notice);
+
     notice.notice_file = path;
   }
 
@@ -188,17 +192,20 @@ exports.search = async (req, res) => {
 
   if (protocol && !state && !professor && !type) {
     req.params.id = protocol;
+
     return this.find(req, res);
   }
 
   if (professor && (userRole !== User.Role.PROFESSOR || userRole !== User.Role.TEACHING_OFFICE)) {
     res.status(403).send();
+
     return;
   }
 
   const userAccessList = accessList.get(userRole);
 
   let notices = [];
+
   if (protocol) {
     notices = await Notice.findByProtocol(protocol);
     notices = notices.filter((notice) => userAccessList.includes(notice.state));
@@ -207,6 +214,7 @@ exports.search = async (req, res) => {
   if (state) {
     if (!userAccessList.includes(state)) {
       res.status(403).send();
+
       return;
     }
 
