@@ -4,31 +4,31 @@ const ratingStubList = [
     student: 'l.carpentieri7@studenti.unisa.it',
     assignment_id: 1,
     titles_score: 145,
-    interview_score: 123,
+    interview_score: 50,
   },
   {
     student: 'l.carpentieri7@studenti.unisa.it',
     assignment_id: 2,
     titles_score: 107,
-    interview_score: 113,
+    interview_score: 50,
   },
   {
     student: 'r.bruno20@studenti.unisa.it',
     assignment_id: 2,
     titles_score: 105,
-    interview_score: 113,
+    interview_score: 50,
   },
   {
     student: 'f.migliaro69@studenti.unisa.it',
     assignment_id: 3,
     titles_score: 135,
-    interview_score: 116,
+    interview_score: 50,
   },
   {
     student: 'm.dantonio69@studenti.unisa.it',
     assignment_id: 3,
     titles_score: 105,
-    interview_score: 126,
+    interview_score: 50,
   },
 ];
 
