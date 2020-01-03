@@ -135,7 +135,7 @@ class User {
    * @param {string} role The role used to find the user
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
-  static async findByRole(role) {
+  static findByRole(role) {
     if (role===null || role===undefined) {
       throw new Error('role must not be null');
     }
