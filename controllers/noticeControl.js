@@ -117,7 +117,7 @@ exports.setState = (req, res) => {
   // }
 
 
-  notice = new Notice();
+  notice = new Notice(notice);
 
   if (updatedNotice.state === Notice.States.IN_APPROVAL) {
     const path = pdf.generateNotice(notice);
