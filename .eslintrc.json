@@ -15,6 +15,18 @@
         "ecmaVersion": 2018
     },
     "rules": {
-        "max-len":"off"
+        "max-len": "off",
+        "arrow-spacing": "error",
+        "key-spacing": "error",
+        "space-in-parens": "error",
+        "space-infix-ops": "error",
+        "no-multi-spaces": "error",
+        "space-unary-ops": ["error", {
+            "words": true,
+            "nonwords": true,
+            "overrides": {
+                "!": false
+            }
+        }]
     }
 }
