@@ -28,13 +28,6 @@ module.exports.createTable=async function(req, res) {
     res.status(ERR_CLIENT_STATUS).send({error: 'La rating list non può essere nulla'});
     return;
   }
-  
-  for (const rating of ratingList){
-    if(! await Rating.exists(rating)){
-      res.status(ERR_CLIENT_STATUS).send({error:"Uno o più rating non sono presenti nel database."})
-      return;
-    }
-  }
 
   allPromises=[];
   for (const rating of ratingList) {
