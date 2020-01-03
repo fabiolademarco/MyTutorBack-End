@@ -95,6 +95,7 @@ exports.update = (req, res) => {
  */
 exports.setState = (req, res) => {
   const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
+  const notice = req.body.notice;
 
   const statusAccessList = new Map();
 
@@ -107,8 +108,6 @@ exports.setState = (req, res) => {
 
     return;
   }
-
-  const notice = req.body.notice;
 
   if (notice == null || !Check.checkNotice(notice)) {
     res.status(ERR_CLIENT_STATUS)
