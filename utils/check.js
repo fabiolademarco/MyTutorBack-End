@@ -199,13 +199,8 @@ exports.checkRating=(rating)=>{
  * @param {Rating[]} ratingList Comment to check.
  * @return {boolean} True if it respects the format, False otherwise.
  */
-exports.checkRatingList=(ratingList)=>{
-  for (const rating of ratingList) {
-    if (!this.checkRating(rating)) {
-      return false;
-    }
-  }
-  return true;
+exports.checkRatingList = (ratingList) => {
+  return ratingList.every(this.checkRating);
 };
 
 /**
