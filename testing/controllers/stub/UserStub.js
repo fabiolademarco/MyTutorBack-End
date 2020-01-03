@@ -15,6 +15,14 @@ const list = [
     verified: '1',
   },
   {
+    email: 'a.lodato1@studenti.unisa.it',
+    password: 'Password123',
+    name: 'Antonio',
+    surname: 'Lodato',
+    role: 'Student',
+    verified: '1',
+  },
+  {
     email: 'v.ventura@student.unisa.it',
     password: 'Password123',
     name: 'Vittorio',
@@ -228,24 +236,32 @@ class User {
    */
   static search(filter) {
     let sublist = [];
-    if (filter.name) {
-      sublist.concat(list.filter((el) => el.name === filter.name));
-    }
-    if (filter.surname) {
-      sublist.concat(list.filter((el) => el.surname === filter.surname));
-    }
-    if (filter.role) {
-      sublist.concat(list.filter((el) => el.role === filter.role));
-    }
-    if (filter.verified) {
-      sublist.concat(list.filter((el) => el.verified === filter.verified));
-    }
+    try {
+      if (filter.email) {
+        sublist.concat(list.filter((el) => el.email === filter.email));
+      }
+      if (filter.name) {
+        sublist.concat(list.filter((el) => el.name === filter.name));
+      }
+      if (filter.surname) {
+        sublist.concat(list.filter((el) => el.surname === filter.surname));
+      }
+      if (filter.role) {
+        sublist.concat(list.filter((el) => el.role === filter.role));
+      }
+      if (filter.verified) {
+        sublist.concat(list.filter((el) => el.verified === filter.verified));
+      }
 
-    sublist = new Set(sublist);
 
+      sublist = new Set(sublist);
+    } catch (err) {
+      console.log(err);
+    }
     return new Promise((resolve) => resolve())
-        .then(() => sublist)
+        .then(() => Array.from(sublist))
         .catch((err) => {
+          console.log(err);
           throw err.message;
         });
   }

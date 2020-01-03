@@ -23,7 +23,7 @@ const {mockRequest, mockResponse} = require('mock-req-res');
 let req;
 let res;
 
-describe('Gestione Autenticazione', function() {
+describe('Controller Autenticazione', function() {
   let student;
   describe('Test_RegistraStudente', function() {
     beforeEach(function() {
