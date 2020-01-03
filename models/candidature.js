@@ -83,7 +83,7 @@ class Candidature {
           return Promise.all(
               toUpdate.map((doc) => Document.update(doc, candidature)),
               toCreate.map((doc) => Document.create(doc, candidature)),
-              map.map((doc) => Document.remove(doc, candidature)),
+              map.values().map((doc) => Document.remove(doc, candidature)),
           );
         })
         .then(() => new Candidature(candidature))
