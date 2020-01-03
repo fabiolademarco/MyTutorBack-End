@@ -109,12 +109,12 @@ exports.setState = (req, res) => {
     return;
   }
 
-  if (notice == null || !Check.checkNotice(notice)) {
-    res.status(ERR_CLIENT_STATUS)
-        .send({error: 'Deve essere inserito un bando valido.'});
+  // if (notice == null || !Check.checkNotice(notice)) {
+  //   res.status(ERR_CLIENT_STATUS)
+  //       .send({error: 'Deve essere inserito un bando valido.'});
 
-    return;
-  }
+  //   return;
+  // }
 
 
   notice = new Notice();
