@@ -1,9 +1,12 @@
 const dotenv = require('dotenv');
+
 dotenv.config();
 
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
+
 chai.use(sinonChai);
+
 const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 

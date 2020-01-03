@@ -41,6 +41,7 @@ class ApplicationSheet {
       throw new Error('No Parameters');
     }
     applicationStub.push(applicationSheet);
+
     return new Promise((resolve) => resolve())
         .then(() => applicationSheet)
         .catch((err) => {
@@ -58,11 +59,13 @@ class ApplicationSheet {
       throw new Error('No Parameters');
     }
     const index = applicationStub.findIndex((app) => app.notice_protocol === applicationSheet.notice_protocol);
+
     if (index != - 1) {
       applicationStub[index] = applicationSheet;
     } else {
       throw new Error('the application sheet doesn\'t exist');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => new ApplicationSheet(applicationSheet))
         .catch((err) => {
@@ -79,6 +82,7 @@ class ApplicationSheet {
     if (!applicationSheet) {
       throw new Error('No Parameters');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => true)
         .catch((err) => {
@@ -99,6 +103,8 @@ class ApplicationSheet {
     return new Promise((resolve) => resolve())
         .then(() => {
           const protocols = applicationStub.map((app) => app.notice_protocol);
+
+
           return protocols.includes(applicationSheet.notice_protocol);
         })
         .catch((err) => {
@@ -115,9 +121,12 @@ class ApplicationSheet {
     if (!noticeProtocol) {
       throw new Error('No Parameters');
     }
+
     return new Promise((resolve) => resolve())
         .then(() => {
           const filtered = applicationStub.filter((app) => app.notice_protocol == noticeProtocol);
+
+
           return (filtered.length < 0) ? null : new ApplicationSheet(filtered[0]);
         })
         .catch((err) => {

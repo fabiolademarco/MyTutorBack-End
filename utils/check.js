@@ -11,6 +11,7 @@ exports.checkStudent = (student) => {
   const registrationNumberExp = /^[0-9A-Za-z ‘]*$/;
   const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
   const birthDateExp = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/; // Non so se deve essere cosi
+
   if (!emailExp.test(student.email) || student.email.length > 50) {
     return false;
   }
@@ -29,6 +30,7 @@ exports.checkStudent = (student) => {
   if (!birthDateExp.test(student.birth_date)) {
     return false;
   }
+
   return true;
 };
 
@@ -55,6 +57,7 @@ exports.checkProfessor = (professor) => {
   if (!passwordExp.test(professor.password) || professor.password.length > 20 || professor.password.length < 8) {
     return false;
   }
+
   return true;
 };
 
@@ -65,6 +68,7 @@ exports.checkProfessor = (professor) => {
  */
 exports.checkVerifiedEmail = (email) => {
   const emailExp = /^[a-z]*(\.[a-z]*)?\@unisa\.it$/;
+
   return emailExp.test(email) && email.length <= 50 && email.length >= 1;
 };
 
@@ -76,6 +80,7 @@ exports.checkVerifiedEmail = (email) => {
 exports.checkEmail = (email) => {
   const emailExpStudent = /^[a-z]\.[a-z]+[0-9]*\@(studenti\.)?unisa\.it$/;
   const emailExpProfessor = /^[a-z]*(\.[a-z]*)?\@unisa\.it$/;
+
   return ((emailExpProfessor.test(email) || emailExpStudent.test(email))) && (email.length <= 50 && email.length >= 1);
 };
 
@@ -86,6 +91,7 @@ exports.checkEmail = (email) => {
  */
 exports.checkPassword = (password) => {
   const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
+
   return passwordExp.test(password) && password.length <= 20 && password.length >= 8;
 };
 
@@ -103,6 +109,7 @@ exports.checkAssignment = (assignment) => {
   const title = /PhD|Master/;
   const hourlyCostExp = /[0-9]+(.[0-9]{2})?/;
   const stateExp = /Unassigned|Waiting|Booked|Assigned|Over/;
+
   if (!noticeProtocolExp.test(assignment.notice_protocol)) {
     return false;
   }
@@ -144,6 +151,7 @@ exports.checkAssignment = (assignment) => {
  */
 exports.checkNoticeProtocol = (noticeProtocol) => {
   const noticeProtocolExp = /Prot. n. [0-9]+/;
+
   return noticeProtocolExp.test(noticeProtocol) && noticeProtocol.length <= 125;
 };
 
