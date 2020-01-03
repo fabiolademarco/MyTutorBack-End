@@ -1,8 +1,10 @@
 const dotenv = require('dotenv');
+
 dotenv.config();
 
 const notice = require('./models/notice');
 const chai = require('chai');
+
 chai.should();
 
 describe('NoticeModel', function() { // Nome della classe
