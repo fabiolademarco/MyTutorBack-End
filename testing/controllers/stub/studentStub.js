@@ -41,9 +41,9 @@ const list = [{
 }];
 
 /**
- * Student
+ * StudentStub
  *
- * This class represents a Student
+ * This class represents a StudentStub
  *
  * @author Roberto Bruno
  *
