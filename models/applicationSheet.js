@@ -56,7 +56,7 @@ class ApplicationSheet {
         .then(([resultSetHeader]) => {
           return applicationSheet;
         })
-        .then((err) => {
+        .catch((err) => {
           throw err;
         });
   }
