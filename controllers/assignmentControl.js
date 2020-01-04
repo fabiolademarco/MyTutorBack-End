@@ -253,6 +253,7 @@ exports.find = (req, res) => {
  * Allows to close an assignment
  * @param {Request} req
  * @param {Response} res
+ * @return {Promise}
  */
 exports.close = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
@@ -264,7 +265,8 @@ exports.close = (req, res) => {
     return;
   }
   assignment.state = Assignment.states.OVER;
-  Assignment.update(assignment)
+
+  return Assignment.update(assignment)
       .then((data) => {
         res.status(OK_STATUS)
             .send({status: true});
