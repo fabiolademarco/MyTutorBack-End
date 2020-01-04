@@ -169,6 +169,9 @@ class Notice {
           if (evaluationCriteria) {
             return EvaluationCriterion.findByNotice(notice.protocol)
                 .then((dbEvaluationCriteria) => {
+                  if (dbEvaluationCriteria == null || dbEvaluationCriteria.length < 1) {
+                    return;
+                  }
                   const actions = getActionsToPerform(dbEvaluationCriteria, evaluationCriteria);
 
                   return Promise.all(performActions(EvaluationCriterion, actions));
@@ -179,6 +182,9 @@ class Notice {
           if (articles) {
             return Article.findByNotice(notice.protocol)
                 .then((dbArticles) => {
+                  if (dbArticles == null || dbArticles.length < 1) {
+                    return;
+                  }
                   const actions = getActionsToPerform(dbArticles, articles);
 
                   return Promise.all(performActions(Article, actions));
@@ -189,6 +195,9 @@ class Notice {
           if (assignments) {
             return Assignment.findByNotice(notice.protocol)
                 .then((dbAssignments) => {
+                  if (dbAssignments == null || dbAssignments.length < 1) {
+                    return;
+                  }
                   const actions = getActionsToPerform(dbAssignments, assignments);
 
                   return Promise.all(performActions(Assignment, actions));
