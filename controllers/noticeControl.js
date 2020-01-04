@@ -95,7 +95,7 @@ exports.update = (req, res) => {
  */
 exports.setState = (req, res) => {
   const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
-  const notice = req.body.notice;
+  let notice = req.body.notice;
 
   const statusAccessList = new Map();
 
