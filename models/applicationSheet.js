@@ -35,7 +35,7 @@ class ApplicationSheet {
           return applicationSheet;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -57,7 +57,7 @@ class ApplicationSheet {
           return applicationSheet;
         })
         .then((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -76,7 +76,7 @@ class ApplicationSheet {
           return resultSetHeader.affectedRows > 0;
         }))
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -95,7 +95,7 @@ class ApplicationSheet {
           return rows.length > 0;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -118,7 +118,7 @@ class ApplicationSheet {
           return new ApplicationSheet(rows[0]);
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -132,7 +132,7 @@ class ApplicationSheet {
           return rows.map((as) => new ApplicationSheet(as));
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 }

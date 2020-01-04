@@ -126,7 +126,8 @@ exports.registerStudent = async (req, res) => {
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
         res.send({
-          error: err,
+          error: 'Creazione dello studente fallita.',
+          exception: err.message,
         });
       });
 };
@@ -159,7 +160,8 @@ exports.registerProfessor = async (req, res) => {
       res.status(401);
       res.send({
         status: false,
-        error: err,
+        error: 'Creazione del professore fallita.',
+        exception: err.message,
       });
     }
 
@@ -207,7 +209,8 @@ exports.registerProfessor = async (req, res) => {
         res.status(ERR_SERVER_STATUS);
         res.send({
           status: false,
-          error: err,
+          error: 'Creazione del professore fallita.',
+          exception: err.message,
         });
       });
 };
@@ -262,6 +265,7 @@ exports.insertVerifiedEmail = async (req, res) => {
         res.send({
           status: false,
           error: 'Email non inserita',
+          exception: err.message,
         });
       });
 };

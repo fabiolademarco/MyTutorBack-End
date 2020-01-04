@@ -41,7 +41,7 @@ class Document {
           return new Document(aDocument);
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -67,7 +67,7 @@ class Document {
           return new Document(aDocument);
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -90,7 +90,7 @@ class Document {
           return resultSetHeader.affectedRow > 0;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -113,7 +113,7 @@ class Document {
           return rows.lenght > 0;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -137,7 +137,7 @@ class Document {
           return new Document(rosw[0]);
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -156,7 +156,7 @@ class Document {
           return rows.map((el) => new Document(el));
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -177,7 +177,7 @@ class Document {
           return rows.map((el) => new Document(el));
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -196,7 +196,7 @@ class Document {
           return rows.map((el) => new Document(el));
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -210,7 +210,7 @@ class Document {
           return rows.map((el) => new Document(el));
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 }

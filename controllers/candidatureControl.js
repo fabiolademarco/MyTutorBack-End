@@ -54,7 +54,8 @@ exports.create = (req, res) => {
         res.status(ERR_SERVER_STATUS);
         res.send({
           status: false,
-          error: err,
+          error: 'Creazione della candidatura fallita.',
+          exception: err.message,
         });
       });
 };
@@ -97,7 +98,8 @@ exports.update = (req, res) => {
 
         return res.send({
           status: false,
-          error: err,
+          error: 'Modifica della candidatura fallita',
+          exception: err.message,
         });
       });
 };
@@ -133,7 +135,8 @@ exports.delete = (req, res) => {
         res.status(ERR_SERVER_STATUS);
         res.send({
           status: false,
-          error: err,
+          error: 'Cancellazione della candidatura fallita',
+          exception: err.message,
         });
       });
 };
@@ -178,8 +181,9 @@ exports.search = (req, res) => {
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
         res.send({
-          error: err,
+          error: 'Ricerca fallita',
           candidatures: [],
+          exception: err.message,
         });
       });
 };
@@ -203,7 +207,8 @@ exports.dowloadDocumentFile = (req, res) => {
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
         res.send({
-          error: err,
+          error: 'Download fallito',
+          exception: err.message,
         });
       });
 };

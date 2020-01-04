@@ -52,7 +52,7 @@ exports.set = (req, res) => {
                 res.status(ERR_SERVER_STATUS)
                     .send({
                       error: 'Aggiornamento del commento fallito.',
-                      exception: err,
+                      exception: err.message,
                     });
               });
         } else {
@@ -65,7 +65,7 @@ exports.set = (req, res) => {
                 res.status(ERR_SERVER_STATUS)
                     .send({
                       error: 'Creazione del commento fallita.',
-                      exception: err,
+                      exception: err.message,
                     });
               });
         }
@@ -74,7 +74,7 @@ exports.set = (req, res) => {
         res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Controllo sull\'esistenza del commento fallito.',
-              exception: err,
+              exception: err.message,
             });
       });
 };
@@ -104,7 +104,7 @@ exports.delete = (req, res) => {
         res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Rimozione del commento fallita.',
-              exception: err,
+              exception: err.message,
             });
       });
 };
@@ -133,7 +133,7 @@ exports.get = (req, res) => {
         res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Fetch del commento fallito.',
-              exception: err,
+              exception: err.message,
             });
       });
 };

@@ -243,7 +243,7 @@ class User {
           return new User(rows[0]);
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 }

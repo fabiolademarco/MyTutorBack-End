@@ -39,7 +39,7 @@ class Article {
           return article;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -58,7 +58,7 @@ class Article {
           return article;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -77,7 +77,7 @@ class Article {
           return resultSetHeader.affectedRows > 0;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -120,7 +120,7 @@ class Article {
           return rows.map((el) => new Article(el));
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -134,7 +134,7 @@ class Article {
           return rows.map((er) => new Article(el));
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -153,7 +153,7 @@ class Article {
           return rows.length > 0;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 }

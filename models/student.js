@@ -42,7 +42,7 @@ class Student extends User {
           return new Student(student);
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -67,11 +67,11 @@ class Student extends User {
                 return new Student(student);
               })
               .catch((err) => {
-                throw err.message;
+                throw err;
               });
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 

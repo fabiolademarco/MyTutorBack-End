@@ -127,7 +127,7 @@ class Notice {
           return new Notice(notice);
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -223,7 +223,7 @@ class Notice {
           return resultSetHeader.affectedRows > 0;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -242,7 +242,7 @@ class Notice {
           return rows.length > 0;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -279,7 +279,7 @@ class Notice {
           ),
           )
               .catch((err) => {
-                throw err.message;
+                throw err;
               });
         });
   }
@@ -317,7 +317,7 @@ class Notice {
           ),
           )
               .catch((err) => {
-                throw err.message;
+                throw err;
               });
         });
   }
@@ -351,7 +351,7 @@ class Notice {
           ),
           )
               .catch((err) => {
-                throw err.message;
+                throw err;
               });
         });
   }
@@ -380,7 +380,7 @@ class Notice {
           ),
           )
               .catch((err) => {
-                throw err.message;
+                throw err;
               });
         });
   }
@@ -425,7 +425,7 @@ function getOtherFields(noticeProtocol) {
   ])
       .then(() => otherFields)
       .catch((err) => {
-        throw err.message;
+        throw err;
       });
 }
 

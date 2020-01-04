@@ -135,7 +135,7 @@ class User {
           list[list.indexOf(user)] = user;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -153,7 +153,7 @@ class User {
           return list.pop(user) != null;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /** Checks if a given user exists
@@ -171,7 +171,7 @@ class User {
         })
         .catch((err) => {
           console.log(err);
-          throw err.message;
+          throw err;
         });
   }
   /** Finds user by email
@@ -190,7 +190,7 @@ class User {
           return (sublist.length > 0) ? newUser(sublist[0]) : null;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /** Finds users by role
@@ -205,7 +205,7 @@ class User {
     return new Promise((resolve) => resolve())
         .then(() => list.filter((el) => el.role === role))
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /** Finds user by verified
@@ -220,7 +220,7 @@ class User {
     return new Promise((resolve) => resolve())
         .then(() => list.filter((el) => el.verified === 1))
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -234,7 +234,7 @@ class User {
           return list;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -272,7 +272,7 @@ class User {
         .then(() => Array.from(sublist))
         .catch((err) => {
           console.log(err);
-          throw err.message;
+          throw err;
         });
   }
   /**
@@ -293,7 +293,7 @@ class User {
           return (sublist.length > 0) ? new User(sublist[0]) : null;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 }

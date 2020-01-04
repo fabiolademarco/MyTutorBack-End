@@ -50,7 +50,7 @@ class Candidature {
         .then(() => candidature.documents.forEach((d) => Document.create(d, candidature)))
         .then(() => new Candidature(candidature))
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -96,7 +96,7 @@ class Candidature {
         })
         .then(() => new Candidature(candidature))
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -113,7 +113,7 @@ class Candidature {
     return pool.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol])
         .then(([resultSetHeader]) => resultSetHeader.affectedRows > 0)
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -130,7 +130,7 @@ class Candidature {
     return pool.query(`SELECT * FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol])
         .then(([rows]) => rows.length > 0)
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -157,7 +157,7 @@ class Candidature {
           return candidature;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -182,7 +182,7 @@ class Candidature {
           return candidatures;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -207,7 +207,7 @@ class Candidature {
           return candidatures;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -227,7 +227,7 @@ class Candidature {
           return candidatures;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 }

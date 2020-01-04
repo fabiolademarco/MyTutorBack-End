@@ -65,7 +65,8 @@ module.exports.createTable = async function(req, res) {
       .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({
           status: false,
-          error: err,
+          error: 'Creazione della tabella delle valutazioni fallita',
+          exception: err.message,
         });
       });
 };
@@ -97,7 +98,7 @@ module.exports.getTable = async function(req, res) {
         res.status(OK_STATUS).send({result: assignments});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: undefined});
+        res.status(ERR_SERVER_STATUS).send({error: 'Recupero della tabella fallito.', exception: err.message});
       });
 };
 

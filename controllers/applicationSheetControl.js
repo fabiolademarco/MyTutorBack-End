@@ -40,7 +40,7 @@ exports.create = (req, res) => {
         res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Creazione della domanda fallita.',
-              exception: err,
+              exception: err.message,
             });
       });
 };
@@ -71,7 +71,7 @@ exports.update = (req, res) => {
         res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Aggiornamento della domanda fallito.',
-              exception: err,
+              exception: err.message,
             });
       });
 };
@@ -106,7 +106,7 @@ exports.delete = (req, res) => {
         res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Rimozione della domanda fallita.',
-              exception: err,
+              exception: err.message,
             });
       });
 };

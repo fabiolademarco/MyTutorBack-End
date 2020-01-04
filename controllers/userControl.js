@@ -39,7 +39,8 @@ module.exports.delete = function(req, res) {
       .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({
           status: false,
-          error: err,
+          error: 'Cancellazione dell\'utente fallita.',
+          exception: err.message,
         });
 
         return;
@@ -82,7 +83,7 @@ module.exports.search = function(req, res) {
         res.status(OK_STATUS).send({list: users});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: err});
+        res.status(ERR_SERVER_STATUS).send({error: 'Ricerca degli utenti fallita.', exception: err.message});
       });
 };
 
@@ -114,7 +115,7 @@ module.exports.update = function(req, res) {
         res.status(OK_STATUS).send({user: newUser});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: err});
+        res.status(ERR_SERVER_STATUS).send({error: 'Aggiornamento dell\'utente fallito', exception: err.message});
       });
 };
 
@@ -144,7 +145,7 @@ module.exports.find = function(req, res) {
         res.status(OK_STATUS).send({user: user});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: err});
+        res.status(ERR_SERVER_STATUS).send({error: 'Ricerca dell\'utente fallita.', exception: err.message});
       });
 };
 
@@ -158,6 +159,6 @@ module.exports.findAll = function(req, res) {
         res.status(OK_STATUS).send({list: userList});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: err});
+        res.status(ERR_SERVER_STATUS).send({error: 'Recupero degli utenti fallito.', exception: err.message});
       });
 };

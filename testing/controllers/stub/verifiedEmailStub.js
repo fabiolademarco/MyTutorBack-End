@@ -57,7 +57,7 @@ class VerifiedEmail {
           return verifiedEmail;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -100,7 +100,7 @@ class VerifiedEmail {
           return emailsVerified.pop(verifiedEmail) != null;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -119,7 +119,7 @@ class VerifiedEmail {
           return emailsVerified.filter((el) => el.email === verifiedEmail.email).length > 0;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -140,7 +140,7 @@ class VerifiedEmail {
           return (list.length > 0) ? list[0] : null;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -152,7 +152,7 @@ class VerifiedEmail {
     return new Promise((resolve) => resolve())
         .then(() => emailsVerified)
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -171,7 +171,7 @@ class VerifiedEmail {
           return emailsVerified.filter((el) => el.email === email && el.signed_up === 0).length > 0;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 }

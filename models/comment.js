@@ -37,7 +37,7 @@ class Comment {
           return comment;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -57,7 +57,7 @@ class Comment {
     return pool.query(`UPDATE ${table} SET ? WHERE notice = ?`, [comment, comment.notice])
         .then(([resultSetHeader]) => comment)
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -74,7 +74,7 @@ class Comment {
     return pool.query(`DELETE FROM ${table} WHERE notice = ?`, comment.notice)
         .then(([resultSetHeader]) => resultSetHeader.affectedRows > 0)
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -91,7 +91,7 @@ class Comment {
     return pool.query(`SELECT * FROM ${table} WHERE notice = ?`, comment.notice)
         .then(([rows]) => rows.length > 0)
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /**
@@ -109,7 +109,7 @@ class Comment {
           return rows.length > 0 ? new Comment(rows[0]) : null;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -121,7 +121,7 @@ class Comment {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => rows.map((c) => new Comment(c)))
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 }
