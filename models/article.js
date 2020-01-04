@@ -92,12 +92,16 @@ class Article {
       throw new Error('The protocol/id must not be null');
     }
 
-    return pool.query(`SELECT * FROM ${table} WHERE id = ? AND notice_protocol = ?`, [id, noticeProtocol])
+    return pool.query(`SELECT * FROM ${table} WHERE id = ?`, id)
         .then(([rows]) => {
+          if (rows.length < 1) {
+            throw new Error(`No result found ${id}`);
+          }
+
           return new Article(rows[0]);
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
 
@@ -140,6 +144,10 @@ class Article {
    * @return {Promise<boolean>} Promise that is true if the Article is in the db, else it's false
    */
   static exists(article) {
+    if (article == null) {
+      throw new Error('The article cannot be null');
+    }
+
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, article.id)
         .then(([rows]) => {
           return rows.length > 0;
