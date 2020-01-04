@@ -45,7 +45,10 @@ exports.sendRequest = (req, res) => {
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS)
-            .send({error: 'Aggiornamento fallito'});
+            .send({
+              error: 'Aggiornamento fallito',
+              exception: err.message,
+            });
       });
 };
 
@@ -77,7 +80,11 @@ exports.book = (req, res) => {
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS)
-            .send({error: false});
+            .send({
+              status: false,
+              error: 'Prenotazione firma contratto fallita',
+              exception: err.message,
+            });
       });
 };
 
@@ -105,7 +112,11 @@ exports.assign = (req, res) => {
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS)
-            .send({error: false});
+            .send({
+              status: false,
+              error: 'Assegnamento fallito',
+              exception: err.message,
+            });
       });
 };
 
@@ -140,7 +151,10 @@ exports.search = (req, res) => {
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS)
-            .send({error: err});
+            .send({
+              error: 'Ricerca fallita',
+              exception: err.message,
+            });
       });
 };
 
@@ -171,7 +185,11 @@ exports.decline = (req, res) => {
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS)
-            .send({error: false});
+            .send({
+              status: false,
+              error: 'Operazione fallita',
+              exception: err.message,
+            });
       });
 };
 
@@ -185,13 +203,13 @@ exports.find = (req, res) => {
   const id = req.params.id;
   const user = req.user;
 
-  if (id == null || Number.parseInt(id) === NaN) {
-    res.status(ERR_CLIENT_STATUS)
-        .send({error: 'Id non passato'});
-
-    return null;
-  }
   if (user.role === User.Role.TEACHING_OFFICE) {
+    if (id == null || Number.parseInt(id) === NaN) {
+      res.status(ERR_CLIENT_STATUS)
+          .send({error: 'Id non passato'});
+
+      return null;
+    }
     Assignment.findById(id)
         .then((data) => {
           data = data === undefined ? null : data;
@@ -200,7 +218,10 @@ exports.find = (req, res) => {
         })
         .catch((err) => {
           res.status(ERR_SERVER_STATUS)
-              .send({error: err});
+              .send({
+                error: 'Ricerca fallita',
+                exception: err.message,
+              });
         });
   } else if (user.role === User.Role.STUDENT) {
     Assignment.findByStudent(user.id)
@@ -217,7 +238,10 @@ exports.find = (req, res) => {
         })
         .catch((err) => {
           res.status(ERR_SERVER_STATUS)
-              .send({error: err});
+              .send({
+                error: 'Ricerca fallita',
+                exception: err.message,
+              });
         });
   } else {
     res.status(401)
@@ -247,6 +271,10 @@ exports.close = (req, res) => {
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS)
-            .send({error: false});
+            .send({
+              status: false,
+              error: 'Chiusura dell\'incario è fallita',
+              exception: err.message,
+            });
       });
 };
