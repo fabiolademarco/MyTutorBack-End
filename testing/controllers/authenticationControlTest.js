@@ -14,10 +14,13 @@ const proxy = require('proxyquire').noCallThru();
 const userStub = require('./stub/userStub');
 const studentStub = require('./stub/studentStub');
 const verifiedEmailStub = require('./stub/verifiedEmailStub');
+const mailStub = require('./stub/mailStub');
+
 const path = {
   '../models/user': userStub,
   '../models/student': studentStub,
   '../models/verifiedEmail': verifiedEmailStub,
+  '../utils/mail': mailStub,
 };
 
 const authenticationControl = proxy('../../controllers/authenticationControl', path);
