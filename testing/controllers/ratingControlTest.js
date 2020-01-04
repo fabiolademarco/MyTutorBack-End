@@ -11,9 +11,16 @@ chai.use(sinonChai);
 const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 
+
 const ratingStub = require('./stub/ratingStub');
+const candidatureStub = require('./stub/candidatureStub');
+const assignmentStub = require('./stub/assignmentStub');
+const evalutationCriterionStub = require('./stub/criterionStub');
 const path = {
   '../models/rating': ratingStub,
+  '../models/assignment': assignmentStub,
+  '../models/candidature': candidatureStub,
+  '../models/evaluationCriterion': evalutationCriterionStub,
 };
 
 const ratingControl = proxy('../../controllers/ratingControl', path);
@@ -42,48 +49,48 @@ describe('Rating Control', function() {
   });
 
   describe('Test Compila Tabella Valutazioni', function() {
-    it('TCS_GA.2.3', function() {
+    it('TCS_GA.2.3', async function() {
       ratingList[0].titles_score = 'ajaja';
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(req, res);
+      await ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_GA.2.4', function() {
+    it('TCS_GA.2.4', async function() {
       ratingList[0].titles_score = 30;
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(req, res);
+      await ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_GA.2.5', function() {
+    it('TCS_GA.2.5', async function() {
       ratingList[0].interview_score = 'aasdf';
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(req, res);
+      await ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
-    it('TCS_GA.2.6', function() {
+    it('TCS_GA.2.6', async function() {
       ratingList[0].interview_score = 30;
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(req, res);
+      await ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
-    it('TCS_GA.2.7', function() {
+    it('TCS_GA.2.7', async function() {
       ratingList[0].student = 'a.aaaa11@studenti.unisa.it';
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(req, res);
+      await ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
-    it('TCS_GA.2.8', function() {
+    it('TCS_GA.2.8', async function() {
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
-      ratingControl.createTable(req, res);
-      expect(res.status).to.have.been.calledWith(412);
+      await ratingControl.createTable(req, res);
+      expect(res.status).to.have.been.calledWith(200);
     });
   });
 });

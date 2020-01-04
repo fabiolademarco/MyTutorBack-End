@@ -58,7 +58,8 @@ module.exports.createTable = async function(req, res) {
   for (const rating of ratingList) {
     allPromises.push(Rating.create(rating));
   }
-  Promise.all(allPromises)
+
+  return Promise.all(allPromises)
       .then((values) => {
         res.status(OK_STATUS).send({status: true});
       })
@@ -91,7 +92,8 @@ module.exports.getTable = async function(req, res) {
   for (const assignment of assignments) {
     ratings.push(Rating.findByAssignment(assignment));
   }
-  Promise.all(ratings)
+
+  return Promise.all(ratings)
       .then((lists) => {
         const assignments = lists.flatMap((ass) => ass);
 
