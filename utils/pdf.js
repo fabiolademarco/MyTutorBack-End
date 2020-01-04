@@ -336,7 +336,7 @@ const generateApplicationSheet = async (notice) => {
         doc.cell(paddingLeft(0.5)).text()
             .add('o  ')
             .add('Cod. ')
-            .add(assignments.code, _(bold));
+            .add(assignment.code, _(bold));
       });
 
       doc.cell(_(paddingTop(0.5)))
