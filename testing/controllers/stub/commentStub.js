@@ -126,7 +126,9 @@ class Comment {
 
     return new Promise((resolve) => resolve())
         .then(() => {
-          return list.filter((el) => el.notice === noticeProtocol);
+          const comment = list.filter((el) => el.notice === noticeProtocol);
+
+          return comment.length > 0 ? comment[0] : null;
         })
         .catch((err) => {
           throw err;
