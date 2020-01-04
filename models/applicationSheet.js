@@ -2,7 +2,7 @@ const pool = require('../db');
 const table = 'application_sheet';
 
 /**
- * Application Sheet
+ * ApplicationSheet
  *
  * This class represents an Application Sheet
  *
