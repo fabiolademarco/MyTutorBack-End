@@ -112,7 +112,7 @@ class ApplicationSheet {
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
         .then(([rows]) => {
           if (rows.length < 1) {
-            throw new Error(`No result found: ${noticeProtocol}`);
+            return null;
           }
 
           return new ApplicationSheet(rows[0]);
