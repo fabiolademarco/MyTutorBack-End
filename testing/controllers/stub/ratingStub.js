@@ -65,7 +65,7 @@ class Rating {
     }
     ratingStubList.push(rating);
 
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
           return true;
         })
@@ -90,7 +90,7 @@ class Rating {
     }
     ratingStubList[index] = rating;
 
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => new Rating(rating))
         .catch((err) => {
           throw err;
@@ -106,7 +106,7 @@ class Rating {
       throw new Error('The rating must not be null');
     }
 
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
           return true;
         })
@@ -123,7 +123,7 @@ class Rating {
       throw new Error('The rating must not be null');
     }
 
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
           const filtered = ratingStubList.filter((el) => el.student === rating.student && el.assignment_id === rating.assignment_id);
 
@@ -143,7 +143,7 @@ class Rating {
       throw new Error('Student email and assignment id must be both valid');
     }
 
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
           const filtered = ratingStubList.filter((el) => el.student === emailStudent && el.assignment_id === assignmentId);
 
@@ -159,7 +159,7 @@ class Rating {
       throw new Error('The student email must not be null');
     }
 
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
           const resultSet = ratingStubList.filter((el) => el.student === emailStudent)
               .map((el) => new Rating(el));
@@ -176,7 +176,7 @@ class Rating {
       throw new Error('The assignment id must not be null');
     }
 
-    return new Promise()
+    return new Promise((resolve) => resolve())
         .then(() => {
           const resultSet = ratingStubList.filter((el) => el.student === assignmentId)
               .map((el) => new Rating(el));

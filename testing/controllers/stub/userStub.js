@@ -73,10 +73,10 @@ const list = [
 ];
 
 /**
- * User
+ * UserStub
  *
  * This class represents an User Stub
- * @author Giannandrea Vicidomini
+ * @author Roberto Bruno
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */

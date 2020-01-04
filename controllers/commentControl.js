@@ -28,6 +28,7 @@ exports.set = (req, res) => {
   if (!comment || !Check.checkComment(comment)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un commento valido.'});
+
     return;
   }
   if (user.role !== User.Role.DDI && user.role !== User.Role.PROFESSOR) {
@@ -35,6 +36,7 @@ exports.set = (req, res) => {
     res.send({
       error: 'Non sei autorizzato.',
     });
+
     return;
   }
   comment.author = user.id;
@@ -92,6 +94,7 @@ exports.delete = (req, res) => {
     return;
   }
   const comment = new Comment({notice: notice});
+
   Comment.remove(comment)
       .then((comment) => {
         res.status(OK_STATUS)

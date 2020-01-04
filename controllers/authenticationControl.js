@@ -34,8 +34,10 @@ exports.login = (req, res) => {
       status: false,
       error: 'Non è stato specificato correttamente l\'User',
     });
+
     return;
   }
+
   return User.matchUser(user.email, user.password)
       .then((user) => {
         if (user == null) {
@@ -83,13 +85,14 @@ exports.logout = (req, res) => {
  * @todo Controlliamo anche che non esista ?
  */
 exports.registerStudent = async (req, res) => {
-  student = (req.body.student != null ) ? new Student(req.body.student) : null;
+  student = (req.body.student != null) ? new Student(req.body.student) : null;
   if (student == null || !Check.checkStudent(student)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
       error: 'Non è stato specificato correttamente lo Studente',
     });
+
     return;
   }
   if (await Student.exists(student)) {
@@ -98,17 +101,20 @@ exports.registerStudent = async (req, res) => {
       status: false,
       error: 'L\'email è già utilizzata',
     });
+
     return;
   }
 
   student.role = Student.Role.STUDENT;
   student.verified = 1;
+
   return Student.create(student) // Return added for testing
       .then((student) => {
         const payload = {
           id: student.email,
           role: student.role,
         };
+
         token = createToken(payload);
         res.set('Authorization', token);
         res.status(OK_STATUS);
@@ -132,11 +138,14 @@ exports.registerStudent = async (req, res) => {
  */
 exports.registerProfessor = async (req, res) => {
   const confirmationToken = req.query.token;
+
   if (confirmationToken) {
     try {
       const payload = jwt.verify(token.substring(4), process.env.PRIVATE_KEY);
+
       await VerifiedEmail.update({email: payload.id, signed_up: 1});
       const professor = await User.findByEmail(payload.id);
+
       professor.verified = 1;
       await User.update(professor);
       res.set('Authorization', confirmationToken);
@@ -153,6 +162,7 @@ exports.registerProfessor = async (req, res) => {
         error: err,
       });
     }
+
     return;
   }
   professor = (req.body.professor != null) ? new User(req.body.professor) : null;
@@ -162,6 +172,7 @@ exports.registerProfessor = async (req, res) => {
       status: false,
       error: 'Non è stato specificato correttamente il Professore',
     });
+
     return;
   }
   if (await User.exists(professor)) {
@@ -170,10 +181,12 @@ exports.registerProfessor = async (req, res) => {
       status: false,
       error: 'L\'email risulta già in uso',
     });
+
     return;
   }
   professor.role = User.Role.PROFESSOR;
   professor.verified = 0;
+
   return User.create(professor)
       .then(async (professor) => {
         const payload = {
@@ -181,6 +194,8 @@ exports.registerProfessor = async (req, res) => {
           role: professor.role,
         };
         const token = createToken(payload);
+
+        console.log('token: ' + token);
         await Mail.sendEmailToProfessor(professor.email, token);
         res.status(200);
         res.send({
@@ -220,6 +235,7 @@ exports.insertVerifiedEmail = async (req, res) => {
       status: false,
       error: 'Non è stata specificata l\'email oppure non rispetta il formato corretto.',
     });
+
     return;
   }
   if (await VerifiedEmail.exists({email: email})) {
@@ -228,10 +244,12 @@ exports.insertVerifiedEmail = async (req, res) => {
       status: false,
       error: 'L\'email già esiste',
     });
+
     return;
   }
 
   const verifiedEmail = new VerifiedEmail({email: email, signed_up: 0});
+
   return VerifiedEmail.create(verifiedEmail)
       .then((result) => {
         res.status(OK_STATUS).send({
@@ -255,5 +273,6 @@ exports.insertVerifiedEmail = async (req, res) => {
  */
 createToken = (payload) => {
   token = jwt.sign(payload, process.env.PRIVATE_KEY, {expiresIn: '1h'});
+
   return 'JWT ' + token;
 };

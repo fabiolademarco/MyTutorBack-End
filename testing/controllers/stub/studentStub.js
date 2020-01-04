@@ -41,9 +41,9 @@ const list = [{
 }];
 
 /**
- * Student
+ * StudentStub
  *
- * This class represents a Student
+ * This class represents a StudentStub
  *
  * @author Roberto Bruno
  *
@@ -171,7 +171,6 @@ class Student extends User {
 
     try {
       users = await super.search(filter);
-      console.log(users);
     } catch (err) {
       console.log(err);
     }

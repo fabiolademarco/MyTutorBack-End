@@ -1,4 +1,4 @@
-const User=require('../models/user');
+const User = require('../models/user');
 const Student = require('../models/student');
 const Check = require('../utils/check');
 const OK_STATUS = 200;
@@ -21,23 +21,27 @@ const ERR_SERVER_STATUS = 500;
  * @param {Request} req
  * @param {Response} res
  */
-module.exports.delete=function(req, res) {
-  const email=req.params.id;
-  if (email==null || !Check.checkEmail(email)) {
+module.exports.delete = function(req, res) {
+  const email = req.params.id;
+
+  if (email == null || !Check.checkEmail(email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente non puo essere nullo'});
+
     return;
   }
   const user = new User({email: email});
+
   User.delete(user)
-      .then((data)=>{
+      .then((data) => {
         res.status(OK_STATUS).send({status: data});
       })
-      .catch((err)=>{
+      .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({
           status: false,
           error: err,
         });
+
         return;
       });
 };
@@ -47,8 +51,8 @@ module.exports.delete=function(req, res) {
  * @param {Response} res
  * @return {Promise}
  */
-module.exports.search=function(req, res) {
-  const param=req.body.param;
+module.exports.search = function(req, res) {
+  const param = req.body.param;
 
   const filter = {
     email: param.email,
@@ -61,20 +65,23 @@ module.exports.search=function(req, res) {
   if (param == null || !Check.checkUserFilter(filter)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'Non sono stati specificati parametri o non risultano validi'});
+
     return;
   }
 
   let promise;
+
   if (filter.role != null && filter.role === User.Role.STUDENT) {
     promise = Student.search(filter);
   } else {
     promise = User.search(filter);
   }
+
   return promise
-      .then((users)=>{
+      .then((users) => {
         res.status(OK_STATUS).send({list: users});
       })
-      .catch((err)=>{
+      .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({error: err});
       });
 };
@@ -84,15 +91,18 @@ module.exports.search=function(req, res) {
  * @param {Response} res
  * @return {Promise}
  */
-module.exports.update=function(req, res) {
-  const user=req.body.user;
+module.exports.update = function(req, res) {
+  const user = req.body.user;
   const loggedUser = req.user;
+
   if (user == null || user.email !== loggedUser.id || ((user.role === User.Role.STUDENT && !Check.checkStudent(user)) || (user.role !== User.Role.STUDENT && !Check.checkProfessor(user)))) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente è nullo o non valido'});
+
     return;
   }
   let promise;
+
   if (loggedUser.role === User.Role.STUDENT) {
     promise = Student.update(user);
   } else {
@@ -100,10 +110,10 @@ module.exports.update=function(req, res) {
   }
 
   return promise
-      .then((newUser)=>{
+      .then((newUser) => {
         res.status(OK_STATUS).send({user: newUser});
       })
-      .catch((err)=>{
+      .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({error: err});
       });
 };
@@ -112,25 +122,28 @@ module.exports.update=function(req, res) {
  * @param {Request} req
  * @param {Response} res
  */
-module.exports.find=function(req, res) {
+module.exports.find = function(req, res) {
   const email = req.params.id;
   const user = req.user;
+
   if (email == null || !Check.checkEmail(email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'email non può essere nulla'});
+
     return;
   }
   // Il professore e il DDI possono farla?
   if (User.Role.STUDENT === user.role && user.id !== email) {
     res.status(403);
     res.send({error: 'Non sei autorizzato'});
+
     return;
   }
   User.findByEmail(email)
-      .then((user)=>{
+      .then((user) => {
         res.status(OK_STATUS).send({user: user});
       })
-      .catch((err)=>{
+      .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({error: err});
       });
 };
@@ -139,12 +152,12 @@ module.exports.find=function(req, res) {
  * @param {Request} req
  * @param {Response} res
  */
-module.exports.findAll=function(req, res) {
+module.exports.findAll = function(req, res) {
   User.findAll()
-      .then((userList)=>{
+      .then((userList) => {
         res.status(OK_STATUS).send({list: userList});
       })
-      .catch((err)=>{
+      .catch((err) => {
         res.status(ERR_SERVER_STATUS).send({error: err});
       });
 };

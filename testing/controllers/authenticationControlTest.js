@@ -383,8 +383,11 @@ describe('Controller Autenticazione', function() {
     it('TCS_UT.2.21', async function() {
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      await authenticationControl.registerProfessor(req, res);
-      expect(res.status).to.have.been.calledWith(200);
+      authenticationControl.registerProfessor(req, res)
+          .then(() => {
+            expect(res.status).to.have.been.calledWith(200);
+          })
+          .catch((err) => console.log(err));
     });
   });
 
