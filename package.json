@@ -8,6 +8,21 @@
     "test": "mocha --reporter mochawesome \"./testing/controllers\"",
     "coverage": "nyc --reporter=html npm test"
   },
+  "nyc": {
+    "all": true,
+    "watermarks": {
+      "branches": [60, 75]
+    },
+    "exclude": [
+      "doc/*",
+      "mochawesome-report/*",
+      "static/*",
+      "coverage/*",
+      "testing/*",
+      "test.js",
+      "individualTest.js"
+    ]
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {

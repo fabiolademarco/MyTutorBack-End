@@ -1,14 +1,11 @@
-
 const applicationStub = [
   {
     notice_protocol: 'Prot. n. 0275137',
-    penal_information: 'A tal fine, consapevole delle sanzioni penali per il caso di dichiarazioni mendaci nonché per il caso di formazione e/o uso di atti falsi previste dall\'art.76 del D.P.R. 28 dicembre 2000 n. 445, presa visione del bando di concorso ed accettate tutte le condizioni e prescrizioni in esso previste.',
-    privacy_policy: '| sottoscritt_ dichiara di essere stato informato ai sensi dell\'art. 13 del d.lgs n. 196/03 sul trattamento dei dati personali forniti e allega alla presente domanda:  • dichiarazione sostitutiva di certificazione relativa all\'avvenuto conseguimento del diploma di laurea  magistrale, alla votazione riportata ed alla data del suo conseguimento; dichiarazione sostitutiva di certificazione all\'iscrizione al corso di dottorato di ricerca con sede presso l\'Università degli Studi di Salerno; dichiarazione sostitutiva di certificazione, resa ai sensi del D.P.R. 445/2000, relativa a precedenti  attività di tutorato, didattico-integrative, propedeutiche e di recupero in ambito universitario.',
+    documents_to_attach: 'dichiarazione sostitutiva di certificazione relativa all\'avvenuto conseguimento del diploma di laurea magistrale, alla votazione riportata ed alla data del suo conseguimento;   - dichiarazione sostitutiva di certificazione all\'iscrizione al corso di dottorato di ricerca con sede presso l\'Università degli Studi di Salerno;   - dichiarazione sostitutiva di certificazione, resa ai sensi del D.P.R. 445/2000, relativa a precedenti attività di tutorato, didattico-integrative, propedeutiche e di recupero in ambito universitario',
   },
   {
     notice_protocol: 'Prot. n. 0279008',
-    penal_information: 'A tal fine, consapevole delle sanzioni penali per il caso di dichiarazioni mendaci nonché per il caso di formazione e/o uso di atti falsi previste dall\'art.76 del D.P.R. 28 dicembre 2000 n. 445, presa visione del bando di concorso ed accettate tutte le condizioni e prescrizioni in esso previste.',
-    privacy_policy: '| sottoscritt_ dichiara di essere stato informato ai sensi dell\'art. 13 del d.lgs n. 196/03 sul trattamento dei dati personali forniti e allega alla presente domanda:  • dichiarazione sostitutiva di certificazione relativa all\'avvenuto conseguimento del diploma di laurea  magistrale, alla votazione riportata ed alla data del suo conseguimento; dichiarazione sostitutiva di certificazione all\'iscrizione al corso di dottorato di ricerca con sede presso l\'Università degli Studi di Salerno; dichiarazione sostitutiva di certificazione, resa ai sensi del D.P.R. 445/2000, relativa a precedenti  attività di tutorato, didattico-integrative, propedeutiche e di recupero in ambito universitario.',
+    documents_to_attach: 'dichiarazione sostitutiva di certificazione relativa all\'avvenuto conseguimento del diploma di laurea magistrale, alla votazione riportata ed alla data del suo conseguimento;   - dichiarazione sostitutiva di certificazione all\'iscrizione al corso di dottorato di ricerca con sede presso l\'Università degli Studi di Salerno;   - dichiarazione sostitutiva di certificazione, resa ai sensi del D.P.R. 445/2000, relativa a precedenti attività di tutorato, didattico-integrative, propedeutiche e di recupero in ambito universitario',
   },
 ];
 

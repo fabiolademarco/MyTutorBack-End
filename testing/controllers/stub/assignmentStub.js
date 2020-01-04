@@ -1,3 +1,14 @@
+const states = {
+  UNASSIGNED: 'Unassigned',
+  WAITING: 'Waiting',
+  BOOKED: 'Booked',
+  ASSIGNED: 'Assigned',
+  OVER: 'Over',
+};
+const titles = {
+  PHD: 'PhD',
+  MASTER: 'Master',
+};
 const assignmentStub = [
   {
     id: 1,
@@ -39,17 +50,6 @@ const assignmentStub = [
     note: null,
   },
 ];
-const states = {
-  UNASSIGNED: 'Unassigned',
-  WAITING: 'Waiting',
-  BOOKED: 'Booked',
-  ASSIGNED: 'Assigned',
-  OVER: 'Over',
-};
-const titles = {
-  PHD: 'PhD',
-  MASTER: 'Master',
-};
 
 /**
  * Assignment
