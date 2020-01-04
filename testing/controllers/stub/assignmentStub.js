@@ -112,11 +112,11 @@ class Assignment {
     }
     const exist = await this.exists(assignment);
 
-    if (exist != - 1) {
+    if (!exist) {
       throw new Error('The assignment doesn\'t exists');
     }
 
-    assignmentStub[exist] = assignment;
+    assignmentStub[assignmentStub.indexOf(assignmentStub.filter((el) => el.id === assignment.id)[0])] = assignment;
 
     return new Promise((resolve) => resolve())
         .then(() => assignment)

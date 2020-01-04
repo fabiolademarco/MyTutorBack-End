@@ -57,9 +57,9 @@ describe('Controller Assignment', function() {
       expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
     });
 
-    it('TCS_IN.1.2', function() {
+    it('TCS_IN.1.2', async function() {
       assignment.note = 'L\'assegno sarà chiuso correttamente';
-      assignmentControl.close(req, res);
+      await assignmentControl.close(req, res);
       expect(res.status).to.have.been.calledWith(OK_STATUS);
     });
   });

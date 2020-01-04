@@ -140,6 +140,9 @@ exports.checkAssignment = (assignment) => {
   if (assignment.activity_description == null || assignment.activity_description.length > 200 || assignment.activity_description.length < 1) {
     return false;
   }
+  if (assignment.note != null && (assignment.note.length > 500 || assignment.note.length < 1)) {
+    return false;
+  }
 
   return true;
 };
