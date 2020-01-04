@@ -31,6 +31,7 @@ exports.create = (req, res) => {
       status: false,
       error: 'Non è stato specificata correttamente la candidatura',
     });
+
     return;
   }
   candidature.student = user.id;
@@ -38,6 +39,7 @@ exports.create = (req, res) => {
       .then((candidature) => {
         if (candidature == null) {
           res.status(ERR_SERVER_STATUS);
+
           return res.send({
             status: false,
             error: 'La transazione non è andata a buon fine.',
@@ -71,6 +73,7 @@ exports.update = (req, res) => {
       status: false,
       error: 'Non è stato specificata correttamente la candidatura',
     });
+
     return;
   }
   candidature.student = user.id;
@@ -78,6 +81,7 @@ exports.update = (req, res) => {
       .then((data) => {
         if (data == null) {
           res.status(ERR_SERVER_STATUS);
+
           return res.send({
             status: false,
             error: 'La transazione non è andata a buon fine.',
@@ -90,6 +94,7 @@ exports.update = (req, res) => {
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
+
         return res.send({
           status: false,
           error: err,
@@ -105,15 +110,18 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   user = req.user;
   const notice = req.params.notice;
+
   if (notice == null || user == null || !Check.checkNoticeProtocol(notice)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
       error: 'Non è stato specificata correttamente la candidatura',
     });
+
     return;
   }
   const candidature = new Candidature({student: user.id, notice_protocol: notice});
+
   Candidature.remove(candidature)
       .then((result) => {
         res.status(OK_STATUS);
@@ -133,9 +141,11 @@ exports.delete = (req, res) => {
 exports.search = (req, res) => {
   user = req.user;
   let promise;
+
   if (user.role === User.Role.TEACHING_OFFICE) {
     const student = req.query.student;
     const noticeProtocol = req.query.protocol;
+
     if (student && noticeProtocol) {
       promise = Candidature.findById(student, noticeProtocol);
     } else if (student) {
@@ -153,6 +163,7 @@ exports.search = (req, res) => {
     res.send({
       error: 'Non autorizzato',
     });
+
     return;
   }
   promise
@@ -176,11 +187,13 @@ exports.search = (req, res) => {
 exports.dowloadDocumentFile = (req, res) => {
   const candidature = req.body.candidature;
   const fileName = req.body.fileName;
+
   if (!Check.checkNoticeProtocol(candidature.notice_protocol) || !Check.checkEmail(candidature.student)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       error: 'I parametri non rispettano il formato',
     });
+
     return;
   }
   Document.findById(fileName, candidature.student, candidature.notice_protocol)
