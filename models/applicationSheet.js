@@ -30,7 +30,7 @@ class ApplicationSheet {
       throw new Error('No Parameters');
     }
 
-    return pool.query(`INSERT INTO ${table} SET`, applicationSheet)
+    return pool.query(`INSERT INTO ${table} SET ?`, applicationSheet)
         .then(([resultSetHeader]) => {
           return applicationSheet;
         })
@@ -52,7 +52,7 @@ class ApplicationSheet {
       throw new Error('The application sheet doesn\'t exists');
     }
 
-    return pool.query(`UPDATE ${table} SET ? WHERE notice_protocol = ?`, applicationSheet.notice_protocol)
+    return pool.query(`UPDATE ${table} SET ? WHERE notice_protocol = ?`, [applicationSheet, applicationSheet.notice_protocol])
         .then(([resultSetHeader]) => {
           return applicationSheet;
         })

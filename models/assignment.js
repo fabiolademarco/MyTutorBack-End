@@ -61,7 +61,7 @@ class Assignment {
           return assignment;
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /**
@@ -81,7 +81,7 @@ class Assignment {
     return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [assignment, assignment.id])
         .then(([resultSetHeader]) => assignment)
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /**
@@ -97,7 +97,7 @@ class Assignment {
     return pool.query(`DELETE FROM ${table} WHERE id = ?`, assignment.id)
         .then(([resultSetHeader]) => resultSetHeader.affectedRows > 0)
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /**
@@ -119,7 +119,7 @@ class Assignment {
           return new Assignment(rows[0]);
         })
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /**
@@ -135,7 +135,7 @@ class Assignment {
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
         .then(([rows]) => rows.map((el) => new Assignment(el)))
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /**
@@ -151,7 +151,7 @@ class Assignment {
     return pool.query(`SELECT * FROM ${table} WHERE student = ?`, emailStudent)
         .then(([rows]) => rows.map((i) => new Assignment(i)))
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /**
@@ -162,7 +162,7 @@ class Assignment {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => rows.map((a) => new Assignment(a)))
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /**
@@ -178,7 +178,7 @@ class Assignment {
     return pool.query(`SELECT * FROM ${table} WHERE id = ?`, assignment.id)
         .then(([rows]) => rows.length > 0)
         .catch((err) => {
-          throw err.message;
+          throw err;
         });
   }
   /**

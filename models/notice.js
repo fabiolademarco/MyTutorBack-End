@@ -204,7 +204,6 @@ class Notice {
           return new Notice(notice);
         })
         .catch((err) => {
-          console.log(err);
           throw err;
         });
   }
