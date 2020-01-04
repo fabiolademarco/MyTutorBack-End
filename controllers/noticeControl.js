@@ -50,7 +50,7 @@ exports.create = (req, res) => {
         res.status(ERR_SERVER_STATUS).
             send({
               error: 'Creazione del bando fallita.',
-              exception: err,
+              exception: err.message,
             });
       });
 };
@@ -81,7 +81,7 @@ exports.update = (req, res) => {
         res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Aggiornamento del bando fallito.',
-              exception: err,
+              exception: err.message,
             });
       });
 };
@@ -165,7 +165,7 @@ exports.delete = (req, res) => {
         res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Rimozione del bando fallita.',
-              exception: err,
+              exception: err.message,
             });
       });
 };
@@ -196,7 +196,9 @@ exports.search = async (req, res) => {
   }
 
   if (professor && (userRole !== User.Role.PROFESSOR || userRole !== User.Role.TEACHING_OFFICE)) {
-    res.status(403).send();
+    res.status(403).send({
+      error: 'Non hai i permessi per eseguire l\'operazione',
+    });
 
     return;
   }
@@ -212,7 +214,9 @@ exports.search = async (req, res) => {
 
   if (state) {
     if (!userAccessList.includes(state)) {
-      res.status(403).send();
+      res.status(403).send({
+        error: 'Non hai i permessi per eseguire l\'operazione',
+      });
 
       return;
     }
@@ -270,7 +274,7 @@ exports.find = (req, res) => {
         res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Fetch del bando fallito.',
-              exception: err,
+              exception: err.message,
             });
       });
 };
@@ -296,7 +300,7 @@ exports.findAll = (req, res) => {
         res.status(ERR_SERVER_STATUS)
             .send({
               error: 'Fetch del bando fallito.',
-              exception: err,
+              exception: err.message,
             });
       });
 };
