@@ -13,11 +13,11 @@ const applicationStub = [
 ];
 
 /**
- * Application Sheet
+ * ApplicationSheetStub
  *
- * This class represents an Application Sheet
+ * This class represents an Application Sheet stub
  *
- * @author Giannandrea Vicidomini, Francesco Migliaro
+ * @author Francesco Migliaro
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
