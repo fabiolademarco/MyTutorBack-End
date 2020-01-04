@@ -93,7 +93,7 @@ exports.update = (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-exports.setState = (req, res) => {
+exports.setState = async (req, res) => {
   const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
   let notice = req.body.notice;
 
@@ -118,25 +118,32 @@ exports.setState = (req, res) => {
 
 
   notice = new Notice(notice);
-
   if (notice.state === Notice.States.IN_APPROVAL) {
-    const path = pdf.generateNotice(notice);
+    try {
+      const [dbNotice] = await Notice.findByProtocol(notice.protocol);
+      const path = await pdf.makeNotice(dbNotice);
 
-    notice.notice_file = path;
+      notice.notice_file = path;
+      console.log(path);
+    } catch (err) {
+      res.status(500)
+          .send({
+            error: 'Aggiornamento del bando fallito.',
+            exception: err.message,
+          });
+    }
   }
+  try {
+    const updatedNotice = await Notice.update(notice);
 
-  Notice.update(notice)
-      .then((notice) => {
-        res.status(OK_STATUS)
-            .send({notice: notice});
-      })
-      .catch((err) => {
-        res.status(500)
-            .send({
-              error: 'Aggiornamento del bando fallito.',
-              exception: err.message,
-            });
-      });
+    res.status(OK_STATUS).send({notice: updatedNotice});
+  } catch (err) {
+    res.status(500)
+        .send({
+          error: 'Aggiornamento del bando fallito.',
+          exception: err.message,
+        });
+  }
 };
 
 /**

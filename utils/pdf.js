@@ -2,9 +2,9 @@ const Notice = require('../models/notice');
 const Assignment = require('../models/assignment');
 const noticeLayout = require('../static/notice.json');
 const personalData = require('../static/personal_data_treatment');
+const applicationSheetLayout = require('../static/application_sheet');
 
 const fs = require('fs');
-const path = require('path');
 const merge = require('easy-pdf-merge');
 const pdf = require('pdfjs');
 
@@ -35,10 +35,10 @@ const padding = (centimeters) => {
 
 
 const generateNotice = async (notice) => {
-  const filePath = `../notices/temp_${notice.protocol}.pdf`;
+  const filePath = `./notices/temp_${notice.protocol}.pdf`;
 
-  if (!fs.existsSync('../notices')) {
-    fs.mkdirSync('../notices');
+  if (!fs.existsSync('./notices')) {
+    fs.mkdirSync('./notices');
   }
 
   const documentOptions = {
@@ -59,7 +59,7 @@ const generateNotice = async (notice) => {
 
   // Header
 
-  const logo = new pdf.Image(fs.readFileSync('../static/logo.jpg'));
+  const logo = new pdf.Image(fs.readFileSync('./static/logo.jpg'));
   const header = doc.header();
 
   header.cell(_(paddingBottom(1))).image(logo, {height: 2 * cm});
@@ -230,7 +230,7 @@ const generateNotice = async (notice) => {
 
 
 const generatePersonalDataTreatment = async () => {
-  const filePath = '../static/personal_data_treatment.pdf';
+  const filePath = './static/personal_data_treatment.pdf';
 
   if (fs.existsSync(filePath)) {
     return filePath;
@@ -277,9 +277,7 @@ const generatePersonalDataTreatment = async () => {
 };
 
 const generateApplicationSheet = async (notice) => {
-  const applicationSheetLayout = require('../static/application_sheet');
-
-  const filePath = `../notices/temp_${notice.protocol}_application_sheet.pdf`;
+  const filePath = `./notices/temp_${notice.protocol}_application_sheet.pdf`;
 
   const documentOptions = {
     font: times,
@@ -298,6 +296,7 @@ const generateApplicationSheet = async (notice) => {
   doc.pipe(fs.createWriteStream(filePath));
 
   const assignments = notice.assignments;
+
   const masterAssignments = [];
   const phdAssignments = [];
 
@@ -374,7 +373,7 @@ exports.makeNotice = async (notice) => {
   const pdtPath = await generatePersonalDataTreatment();
   const applicationSheetPath = await generateApplicationSheet(notice);
 
-  const filePath = `../notices/${notice.protocol}.pdf`;
+  const filePath = `./notices/${notice.protocol}.pdf`;
 
   merge([noticePath, pdtPath, applicationSheetPath], filePath, (err) => {
     if (err) {
@@ -388,5 +387,5 @@ exports.makeNotice = async (notice) => {
     });
   });
 
-  return path.resolve(filePath);
+  return filePath;
 };
