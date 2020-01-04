@@ -200,10 +200,12 @@ class Notice {
           notice.evaluation_criteria = evaluationCriteria;
           notice.assignments = assignments;
           notice.application_sheet = applicationSheet;
+          console.log('notice' + notice);
 
           return new Notice(notice);
         })
         .catch((err) => {
+          console.log(err);
           throw err;
         });
   }
@@ -439,6 +441,8 @@ function getActionsToPerform(dbElements, receivedElements) {
   const map = new Map();
 
   let field = '';
+
+  console.log('dbElements' + dbElements);
 
   if (dbElements[0].name) {
     field = 'name';
