@@ -113,7 +113,7 @@ const validateRatings = async function(ratingList) {
   const candidatures = await Candidature.findByNotice(protocollo);
 
   for (const el of ratingList) {
-    if (!candidatures.some((candidature) => candidature.student === el.student)) {
+    if (!candidatures.some((candidature) => candidature.student === el.student.email)) {
       return false;
     }
 

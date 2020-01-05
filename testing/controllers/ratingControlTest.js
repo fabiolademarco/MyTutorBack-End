@@ -36,17 +36,21 @@ describe('Rating Control', function() {
       email: 'f.migliaro69@studenti.unisa.it',
       name: 'Francesco',
       surname: 'Migliaro',
+      role: 'Student',
+      verified: '1',
       registration_number: 'aaaaBBBB11112222',
       password: 'Sesso123',
-      birth_date: new Date(),
+      birth_date: '1998-03-03 ',
     };
     s2 = {
-      email: 'f.migliaro69@studenti.unisa.it',
-      name: 'Francesco',
-      surname: 'Migliaro',
+      email: 'm.dantonio69@studenti.unisa.it',
+      name: 'Marco',
+      surname: 'D\'antonio',
       registration_number: 'aaaaBBBB11112222',
       password: 'Sesso123',
-      birth_date: new Date(),
+      birth_date: '1998-03-03 ',
+      role: 'Student',
+      verified: '1',
     };
     ratingList = [
       {
@@ -65,6 +69,30 @@ describe('Rating Control', function() {
   });
 
   describe('Test Compila Tabella Valutazioni', function() {
+    it('TCS_GA.2.0', async function() {
+      ratingList[0].student.name = '';
+      req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
+      res = mockResponse();
+      await ratingControl.createTable(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_GA.2.1', async function() {
+      ratingList[0].student.name = 'abababababababababababababababababababababababababababababababababababababababababababababababababaaababa';
+      req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
+      res = mockResponse();
+      await ratingControl.createTable(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_GA.2.2', async function() {
+      ratingList[0].student.name = '888';
+      req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
+      res = mockResponse();
+      await ratingControl.createTable(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
     it('TCS_GA.2.3', async function() {
       ratingList[0].titles_score = 'ajaja';
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
