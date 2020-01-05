@@ -1,6 +1,6 @@
 const list = [
   {
-    notice: '/*Scrivere un notice*/',
+    notice: 'Prot. n. 0279008',
     author: 'alberto@unisa.it',
     text: 'Non è scritto correttamente',
   },

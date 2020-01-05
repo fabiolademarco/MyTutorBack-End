@@ -6,7 +6,7 @@ const Comment = require('./commentStub');
 
 const notices = [
   {
-    protocol: 'Prot. n. 0274751',
+    protocol: 'Prot. n. 0279008',
     referent_professor: null,
     admission_requirements: 'Sono ammessi alla selezione gli studenti regolarmente iscritti al corso di Laurea Magistrale in Informatica (LM18) dell\'Università degli Studi di Salerno.',
     description: 'AVVISO DI SELEZIONE PER TITOLI PER L\'ATTRIBUZIONE DI No. 8 ASSEGNI PER LO SVOLGIMENTO DI ATTIVITÀ DI SUPPORTO ALLA DIDATTICA PER STUDENTI DIVERSAMENTE ABILI.',

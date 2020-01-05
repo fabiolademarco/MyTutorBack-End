@@ -1,13 +1,13 @@
 const list = [
   {
     id: 1,
-    notice_protocol: 'Inserire notice protocol',
+    notice_protocol: 'Prot. n. 0279008',
     text: 'Articolo 1',
     initial: 'VISTO',
   },
   {
     id: 2,
-    notice_protocol: 'Inserire notice protocol',
+    notice_protocol: 'Prot. n. 0279008',
     text: 'Articolo 2',
     initial: 'VISTO',
   },

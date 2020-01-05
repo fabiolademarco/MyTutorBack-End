@@ -12,7 +12,7 @@ const titles = {
 const assignmentStub = [
   {
     id: 1,
-    notice_protocol: 'Prot. n. 0275137',
+    notice_protocol: 'Prot. n. 0279008',
     student: null,
     code: 'PD/01',
     activity_description: 'Programmazione distribuita',
@@ -25,7 +25,7 @@ const assignmentStub = [
   },
   {
     id: 2,
-    notice_protocol: 'Prot. n. 0275137',
+    notice_protocol: 'Prot. n. 0279008',
     student: null,
     code: 'PD/02',
     activity_description: 'Programmazione distribuita',
