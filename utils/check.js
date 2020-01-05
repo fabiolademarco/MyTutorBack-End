@@ -183,14 +183,13 @@ exports.checkApplicationSheet = (applicationSheet) => {
  */
 exports.checkRating = (rating) => {
   const assignmentIdExp = /[1-9]+/;
-  const studentExp = /^[a-z]\.[a-z]+[0-9]*\@(studenti\.)?unisa\.it$/;
   const titleScoreExp = /^[0-9]+$/;
   const interviewScoreExp = /^[0-9]+$/;
 
   if (!assignmentIdExp.test(rating.assignment_id)) {
     return false;
   }
-  if (!studentExp.test(rating.student)) {
+  if (!this.checkStudent(rating.student)) {
     return false;
   }
 

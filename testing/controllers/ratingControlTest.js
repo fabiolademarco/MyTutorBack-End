@@ -32,15 +32,31 @@ describe('Rating Control', function() {
   let ratingList;
 
   beforeEach(function() {
+    s1 = {
+      email: 'f.migliaro69@studenti.unisa.it',
+      name: 'Francesco',
+      surname: 'Migliaro',
+      registration_number: 'aaaaBBBB11112222',
+      password: 'Sesso123',
+      birth_date: new Date(),
+    };
+    s2 = {
+      email: 'f.migliaro69@studenti.unisa.it',
+      name: 'Francesco',
+      surname: 'Migliaro',
+      registration_number: 'aaaaBBBB11112222',
+      password: 'Sesso123',
+      birth_date: new Date(),
+    };
     ratingList = [
       {
-        student: 'f.migliaro69@studenti.unisa.it',
+        student: s1,
         assignment_id: 1,
         titles_score: 5,
         interview_score: 50,
       },
       {
-        student: 'm.dantonio69@studenti.unisa.it',
+        student: s2,
         assignment_id: 2,
         titles_score: 5,
         interview_score: 51,
@@ -82,7 +98,7 @@ describe('Rating Control', function() {
     });
 
     it('TCS_GA.2.7', async function() {
-      ratingList[0].student = 'a.aaaa11@studenti.unisa.it';
+      ratingList[0].student.email = 'a.aaaa11@studenti.unisa.it';
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
       await ratingControl.createTable(req, res);
