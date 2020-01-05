@@ -83,11 +83,11 @@ class Candidature {
               toCreate.push(doc);
             }
           });
-          console.log('ToUpdate :' + toUpdate);
+          console.log(`${toUpdate}`);
 
-          console.log('ToCreate :' + toCreate);
+          console.log(`${toCreate}`);
 
-          console.log('ToRemove :' + map);
+          console.log(`${map}`);
 
           return Promise.all([
             Promise.all(toUpdate.map((doc) => Document.update(doc, candidature))),
