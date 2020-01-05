@@ -2,6 +2,7 @@ const Notice = require('../models/notice');
 const User = require('../models/user');
 const Check = require('../utils/check');
 const pdf = require('../utils/pdf');
+const fs = require('fs');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -66,9 +67,25 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   const notice = req.body.notice;
 
-  if (notice == null || !Check.checkNotice(notice) || !await Notice.exists(notice)) {
+  if (notice == null || !Check.checkNotice(notice)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un bando valido'});
+
+    return;
+  }
+
+  const dbNotices = await Notice.findByProtocol(notice);
+
+  if (dbNotices.length != 1) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: (dbNotices.length < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
+
+    return;
+  }
+
+  if (dbNotices[0].state !== notice.state) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Impossibile cambiare lo stato del bando, usare un\'altra interfaccia'});
 
     return;
   }
@@ -96,54 +113,56 @@ exports.update = async (req, res) => {
  */
 exports.setState = async (req, res) => {
   const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
-  let notice = req.body.notice;
+  const notice = new Notice(req.body.notice);
 
-  const statusAccessList = new Map();
+  if (notice == null || !Check.checkNoticeProtocol(notice.protocol) == null || notice.state == null) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un bando valido.'});
 
-  statusAccessList.set(User.Role.PROFESSOR, [Notice.States.DRAFT, Notice.States.ACCEPTED]);
-  statusAccessList.set(User.Role.DDI, [Notice.States.DRAFT, Notice.States.APPROVED, Notice.States.CLOSED]);
-  statusAccessList.set(User.Role.TEACHING_OFFICE, [Notice.States.IN_ACCEPTANCE, Notice.States.IN_APPROVAL, Notice.States.PUBLISHED, Notice.States.WAITING_FOR_GRADED_LIST]);
+    return;
+  }
 
-  if (!statusAccessList.get(userRole).includes(notice.state)) {
+  const stateAccessList = new Map();
+
+  stateAccessList.set(User.Role.PROFESSOR, [Notice.States.DRAFT, Notice.States.ACCEPTED]);
+  stateAccessList.set(User.Role.DDI, [Notice.States.DRAFT, Notice.States.APPROVED, Notice.States.CLOSED]);
+  stateAccessList.set(User.Role.TEACHING_OFFICE, [Notice.States.IN_ACCEPTANCE, Notice.States.IN_APPROVAL, Notice.States.PUBLISHED, Notice.States.WAITING_FOR_GRADED_LIST]);
+
+  if (!stateAccessList.get(userRole).includes(notice.state)) {
     res.status(403).send();
 
     return;
   }
 
-  // if (notice == null || !Check.checkNotice(notice)) {
-  //   res.status(ERR_CLIENT_STATUS)
-  //       .send({error: 'Deve essere inserito un bando valido.'});
-
-  //   return;
-  // }
-
-
-  notice = new Notice(notice);
   if (notice.state === Notice.States.IN_APPROVAL) {
     try {
       const [dbNotice] = await Notice.findByProtocol(notice.protocol);
       const path = await pdf.makeNotice(dbNotice);
 
       notice.notice_file = path;
-      console.log(path);
     } catch (err) {
+      console.log(err);
       res.status(500)
           .send({
             error: 'Aggiornamento del bando fallito.',
             exception: err.message,
           });
+
+      return;
     }
   }
   try {
     const updatedNotice = await Notice.update(notice);
 
-    res.status(OK_STATUS).send({notice: updatedNotice});
+    return res.status(OK_STATUS).send({notice: updatedNotice});
   } catch (err) {
     res.status(500)
         .send({
           error: 'Aggiornamento del bando fallito.',
           exception: err.message,
         });
+
+    return;
   }
 };
 
@@ -198,7 +217,7 @@ exports.search = async (req, res) => {
   }
 
   if (protocol && !state && !professor && !type) {
-    req.params.id = protocol;
+    req.params.protocol = protocol;
 
     return this.find(req, res);
   }
@@ -260,16 +279,16 @@ exports.search = async (req, res) => {
  * @param {Response} res
  */
 exports.find = (req, res) => {
-  const id = req.params.id;
+  const protocol = req.params.protocol;
 
-  if (id == null || !Check.checkNoticeProtocol(id)) {
+  if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un protocollo valido.'});
 
     return;
   }
 
-  Notice.findByProtocol(id)
+  Notice.findByProtocol(protocol)
       .then((notices) => {
         const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
 
@@ -313,18 +332,186 @@ exports.findAll = (req, res) => {
       });
 };
 
-exports.downloadNotice = (req, res) => {
+exports.downloadNotice = async (req, res) => {
+  let userRole = req.user;
 
+  if (userRole !== User.Role.TEACHING_OFFICE && userRole !== User.Role.DDI) {
+    userRole = User.Role.STUDENT;
+  }
+
+  const protocol = req.params.protocol;
+
+  if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un protocollo valido'});
+
+    return;
+  }
+
+  const notices = await Notice.findByProtocol(protocol);
+
+  if (notices.length != 1) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: (notices < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
+
+    return;
+  }
+
+  const notice = notices[0];
+  const downloadAccessList = new Map();
+
+  downloadAccessList.set(User.Role.STUDENT, [Notice.States.PUBLISHED, Notice.States.EXPIRED, Notice.States.WAITING_FOR_GRADED_LIST, Notice.States.CLOSED]);
+  downloadAccessList.set(User.Role.DDI, [Notice.States.IN_APPROVAL].concat(downloadAccessList.get(User.Role.STUDENT)));
+  downloadAccessList.set(User.Role.TEACHING_OFFICE, [Notice.States.IN_APPROVAL, Notice.States.APPROVED].concat(downloadAccessList.get(User.Role.STUDENT)));
+
+  if (!downloadAccessList.get(userRole).includes(notice.state)) {
+    res.status(403).send();
+
+    return;
+  }
+
+  return res.status(OK_STATUS)
+      .sendFile(notice.notice_file);
 };
 
-exports.uploadNotice = (req, res) => {
+exports.uploadNotice = async (req, res) => {
+  const protocol = req.params.protocol;
 
+  if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un protocollo valido'});
+
+    return;
+  }
+
+  if (!req.files || Object.keys(req.files).length === 0) {
+    res.status(ERR_CLIENT_STATUS).send({error: 'Non è stato caricato alcun file.'});
+
+    return;
+  }
+
+  const noticeFile = req.files.notice;
+
+  const notices = await Notice.findByProtocol(protocol);
+
+  if (notices.length != 1) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: (notices < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
+
+    return;
+  }
+
+  const notice = notices[0];
+
+  if (notice.state !== Notice.States.IN_APPROVAL) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: `Impossibile caricare il bando firmato mentre è ${notice.state}`});
+  }
+
+  if (noticeFile.mimetype !== 'application/pdf') {
+    res.status(ERR_CLIENT_STATUS).send({error: 'Il file deve essere in formato pdf'});
+
+    return;
+  }
+
+  try {
+    fs.writeFile(notice.notice_file, noticeFile.data);
+  } catch (err) {
+    console.log(err);
+    res.send({error: 'Si è verificato un errore'});
+
+    return;
+  }
+
+  res.status(OK_STATUS).send({status: true});
 };
 
-exports.downloadGradedList = (req, res) => {
+exports.downloadGradedList = async (req, res) => {
+  let userRole = req.user;
 
+  if (userRole !== User.Role.TEACHING_OFFICE && userRole !== User.Role.DDI) {
+    userRole = User.Role.STUDENT;
+  }
+
+  const protocol = req.params.protocol;
+
+  if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un protocollo valido'});
+  }
+
+  const notices = await Notice.findByProtocol(protocol);
+
+  if (notices.length != 1) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: (notices < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
+  }
+
+  const notice = notices[0];
+  const downloadAccessList = new Map();
+
+  downloadAccessList.set(User.Role.STUDENT, [Notice.States.CLOSED]);
+  downloadAccessList.set(User.Role.DDI, [Notice.States.WAITING_FOR_GRADED_LIST].concat(downloadAccessList.get(User.Role.STUDENT)));
+  downloadAccessList.set(User.Role.TEACHING_OFFICE, [Notice.States.WAITING_FOR_GRADED_LIST].concat(downloadAccessList.get(User.Role.STUDENT)));
+
+  if (!downloadAccessList.get(userRole).includes(notice.state)) {
+    res.status(403).send();
+
+    return;
+  }
+
+  return res.status(OK_STATUS)
+      .sendFile(notice.graded_list_file);
 };
 
-exports.uploadGradedList = (req, res) => {
-  // ricordare di fare la update dello stato del bando
+exports.uploadGradedList = async (req, res) => {
+  const protocol = req.params.protocol;
+
+  if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un protocollo valido'});
+
+    return;
+  }
+
+  if (!req.files || Object.keys(req.files).length === 0) {
+    res.status(ERR_CLIENT_STATUS).send({error: 'Non è stato caricato alcun file.'});
+
+    return;
+  }
+
+  const gradedListFile = req.files.gradedList;
+
+  const notices = await Notice.findByProtocol(protocol);
+
+  if (notices.length != 1) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: (notices < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
+
+    return;
+  }
+
+  const notice = notices[0];
+
+  if (notice.state !== Notice.States.WAITING_FOR_GRADED_LIST) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: `Impossibile caricare la graduatoria firmata mentre è ${notice.state}`});
+  }
+
+  if (gradedListFile.mimetype !== 'application/pdf') {
+    res.status(ERR_CLIENT_STATUS).send({error: 'Il file deve essere in formato pdf'});
+
+    return;
+  }
+
+  try {
+    fs.writeFile(notice.graded_list_file, gradedListFile.data);
+  } catch (err) {
+    console.log(err);
+    res.send({error: 'Si è verificato un errore'});
+
+    return;
+  }
+
+  res.status(OK_STATUS).send({status: true});
 };
