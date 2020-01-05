@@ -2,6 +2,7 @@ const Notice = require('../models/notice');
 const User = require('../models/user');
 const Check = require('../utils/check');
 const pdf = require('../utils/pdf');
+const fs = require('fs');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -139,7 +140,6 @@ exports.setState = async (req, res) => {
       const path = await pdf.makeNotice(dbNotice);
 
       notice.notice_file = path;
-      console.log(path);
     } catch (err) {
       console.log(err);
       res.status(500)
@@ -408,7 +408,22 @@ exports.uploadNotice = async (req, res) => {
         .send({error: `Impossibile caricare il bando firmato mentre è ${notice.state}`});
   }
 
-  // Completing ...
+  if (noticeFile.mimetype !== 'application/pdf') {
+    res.status(ERR_CLIENT_STATUS).send({error: 'Il file deve essere in formato pdf'});
+
+    return;
+  }
+
+  try {
+    fs.writeFile(notice.notice_file, noticeFile.data);
+  } catch (err) {
+    console.log(err);
+    res.send({error: 'Si è verificato un errore'});
+
+    return;
+  }
+
+  res.status(OK_STATUS).send({status: true});
 };
 
 exports.downloadGradedList = async (req, res) => {
@@ -449,6 +464,54 @@ exports.downloadGradedList = async (req, res) => {
       .sendFile(notice.graded_list_file);
 };
 
-exports.uploadGradedList = (req, res) => {
-  // ricordare di fare la update dello stato del bando
+exports.uploadGradedList = async (req, res) => {
+  const protocol = req.params.protocol;
+
+  if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Deve essere inserito un protocollo valido'});
+
+    return;
+  }
+
+  if (!req.files || Object.keys(req.files).length === 0) {
+    res.status(ERR_CLIENT_STATUS).send({error: 'Non è stato caricato alcun file.'});
+
+    return;
+  }
+
+  const gradedListFile = req.files.gradedList;
+
+  const notices = await Notice.findByProtocol(protocol);
+
+  if (notices.length != 1) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: (notices < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
+
+    return;
+  }
+
+  const notice = notices[0];
+
+  if (notice.state !== Notice.States.WAITING_FOR_GRADED_LIST) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: `Impossibile caricare la graduatoria firmata mentre è ${notice.state}`});
+  }
+
+  if (gradedListFile.mimetype !== 'application/pdf') {
+    res.status(ERR_CLIENT_STATUS).send({error: 'Il file deve essere in formato pdf'});
+
+    return;
+  }
+
+  try {
+    fs.writeFile(notice.graded_list_file, gradedListFile.data);
+  } catch (err) {
+    console.log(err);
+    res.send({error: 'Si è verificato un errore'});
+
+    return;
+  }
+
+  res.status(OK_STATUS).send({status: true});
 };
