@@ -55,13 +55,13 @@ describe('Rating Control', function() {
     ratingList = [
       {
         student: s1,
-        assignment_id: 1,
+        assignment_id: 3,
         titles_score: 5,
         interview_score: 50,
       },
       {
         student: s2,
-        assignment_id: 2,
+        assignment_id: 3,
         titles_score: 5,
         interview_score: 51,
       },
@@ -118,7 +118,7 @@ describe('Rating Control', function() {
     });
 
     it('TCS_GA.2.6', async function() {
-      ratingList[0].interview_score = 30;
+      ratingList[0].interview_score = 70;
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
       await ratingControl.createTable(req, res);
