@@ -243,7 +243,7 @@ exports.checkArticle = (article) => {
     return false;
   }
 
-  if (article.text.length < 1 || article.text.length > 20) {
+  if (article.text.length < 1 || article.text.length > 5000) {
     return false;
   }
 
