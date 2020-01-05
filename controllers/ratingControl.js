@@ -37,28 +37,23 @@ module.exports.createTable = async function(req, res) {
 
     return;
   }
-  console.log('check superato');
   if (!await validateRatings(ratingList)) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o piu valutazioni della lista non sono valide '});
 
     return;
   }
-  console.log('validateRatings superato');
 
   if (!validateRatingsInterviewScore(ratingList)) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o piu valutazioni della lista hanno punteggi non validi'});
 
     return;
   }
-  console.log('validateRatingsInterview superato');
 
   if (!await validateRatingsScore(ratingList)) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o piu valutazioni della lista hanno punteggi non validi'});
 
     return;
   }
-  console.log('validateRatingsScore superato');
-
 
   allPromises = [];
   for (const rating of ratingList) {
