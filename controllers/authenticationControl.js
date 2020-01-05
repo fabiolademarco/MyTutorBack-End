@@ -270,6 +270,32 @@ exports.insertVerifiedEmail = async (req, res) => {
       });
 };
 
+exports.checkUserSession = (req, res) => {
+  const token = req.get('Authorization');
+
+  if (token == null) {
+    res.status(401);
+    res.send({
+      status: false,
+      error: 'Token non valido',
+    });
+
+    return;
+  }
+  try {
+    jwt.verify(token.substring(4), process.env.PRIVATE_KEY);
+    res.status(OK_STATUS).send({
+      status: true,
+    });
+  } catch (err) {
+    res.status(401).send({
+      status: false,
+      error: 'Token non valido',
+      exception: err.message,
+    });
+  }
+};
+
 /**
  * Creates a new jwt token
  * @param {Object} payload The payload of the token

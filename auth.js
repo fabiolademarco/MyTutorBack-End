@@ -46,6 +46,7 @@ module.exports = function() {
           if (result === null) {
             return done(new Error('User not found'), null);
           }
+
           // L'oggetto viene passato alla funzione successiva
           return done(null, {
             id: result.email,
@@ -58,11 +59,11 @@ module.exports = function() {
   });
 
   // Aggiunti per rimuovere alcuni problemi di serializzazione (Vedere se mantenere)
-  passport.serializeUser((user, done)=>{
+  passport.serializeUser((user, done) => {
     done(null, user);
   });
 
-  passport.deserializeUser((user, done)=>{
+  passport.deserializeUser((user, done) => {
     done(null, user);
   });
 
@@ -79,8 +80,10 @@ module.exports = function() {
     },
     isNotLogged: (req, res, next) => {
       const token = req.get('Authorization');
+
       try {
         const payload = token != null ? jwt.verify(token.substring(4), process.env.PRIVATE_KEY) : null;
+
         if (payload) {
           res.send({
             error: 'User is already logged.',
@@ -94,8 +97,10 @@ module.exports = function() {
     },
     setUser: (req, res, next) => {
       const token = req.get('Authorization');
+
       try {
         const payload = token != null ? jwt.verify(token.substring(4), process.env.PRIVATE_KEY) : null;
+
         if (payload) {
           req.user = payload;
         }
@@ -107,6 +112,7 @@ module.exports = function() {
     },
     isProfessor: (req, res, next) => {
       const role = req.user.role;
+
       if (check(role, User.Role.PROFESSOR)) {
         next();
       } else {
@@ -115,6 +121,7 @@ module.exports = function() {
     },
     isStudent: (req, res, next) => {
       const role = req.user.role;
+
       if (check(role, User.Role.STUDENT)) {
         next();
       } else {
@@ -123,6 +130,7 @@ module.exports = function() {
     },
     isDDI: (req, res, next) => {
       const role = req.user.role;
+
       if (check(role, User.Role.DDI)) {
         next();
       } else {
@@ -131,6 +139,7 @@ module.exports = function() {
     },
     isTeachingOffice: (req, res, next) => {
       const role = req.user.role;
+
       if (check(role, User.Role.TEACHING_OFFICE)) {
         next();
       } else {

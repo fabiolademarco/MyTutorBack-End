@@ -65,4 +65,13 @@ module.exports = (app, auth) => {
    * @apiSuccess {string} message A message describing what happened.
    */
   app.post('/api/auth/verified', auth.authenticate(), auth.isTeachingOffice, AuthenticationControl.insertVerifiedEmail);
+
+  /**
+   * @api {GET} /api/auth/check Check Session
+   * @apiName CheckUserSession
+   * @apiGroup Authentication
+   * @apiPermission Guest
+   * @apiSuccess {boolean} status A boolean that it's true if the user token is still valid, or else it's false
+   */
+  app.get('/api/auth/check', AuthenticationControl.checkUserSession);
 };
