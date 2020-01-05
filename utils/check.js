@@ -116,7 +116,7 @@ exports.checkAssignment = (assignment) => {
   if (assignment.student != null && !studentExp.test(assignment.student)) {
     return false;
   }
-  if (!codeExp.test(assignment.code)) {
+  if (!codeExp.test(assignment.code) || assignment.code.length > 30 || assignment.code.length < 1) {
     return false;
   }
   if (assignment.id != null && !idExp.test(assignment.id)) {
@@ -220,11 +220,13 @@ exports.checkRatingList = (ratingList) => {
  * @return {boolean} True if it respects the format, false otherwise.
  */
 exports.checkEvaluationCriterion = (evaluationCriterion) => {
+  const maxScoreExp = /^[0-9]+$/;
+
   if (evaluationCriterion.name.length < 1 || evaluationCriterion.name.length > 125) {
     return false;
   }
   // TODO controllare se c'è già nel bando
-  if (evaluationCriterion.maxScore < 1 || evaluationCriterion.maxScore > 27) {
+  if (!maxScoreExp.test(evaluationCriterion.max_score) || evaluationCriterion.max_score < 1 || evaluationCriterion.max_score > 27) {
     return false;
   }
 
@@ -237,7 +239,7 @@ exports.checkEvaluationCriterion = (evaluationCriterion) => {
  * @return {boolean} True if it respects the format, false otherwise.
  */
 exports.checkArticle = (article) => {
-  const articleInitialExp = /[A-Z a-z]+/;
+  const articleInitialExp = /^[A-Z a-z]+$/;
 
   if (article.initial.length < 1 || article.initial.length > 20 || !articleInitialExp.test(article.initial)) {
     return false;
@@ -256,7 +258,7 @@ exports.checkArticle = (article) => {
  * @return {boolean} True if it respects the format, false otherwise.
  */
 exports.checkNotice = (notice) => {
-  const noticeFundsExp = /[0-9]+(.[0-9]{2})?/;
+  const noticeFundsExp = /^[0-9]+(.[0-9]{2})?$/;
   const noticeDeadlineExp = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/;
 
   if (!this.checkNoticeProtocol(notice.protocol)) {
@@ -283,7 +285,7 @@ exports.checkNotice = (notice) => {
     return false;
   }
 
-  if (notice.evaluation_criteria.length < 1 || notice.evaluation_criteria > 6) {
+  if (notice.evaluation_criteria.length < 1 || notice.evaluation_criteria.length > 6) {
     return false;
   }
 
@@ -291,7 +293,7 @@ exports.checkNotice = (notice) => {
     return false;
   }
 
-  if (notice.assessable_titles.length < 1 || notice.assessable_titles.length > 5000) {
+  if (notice.assessable_titles != null && (notice.assessable_titles.length < 1 || notice.assessable_titles.length > 5000)) {
     return false;
   }
 
@@ -307,11 +309,11 @@ exports.checkNotice = (notice) => {
     return false;
   }
 
-  if (notice.incompatibility.length < 1 || notice.incompatibility > 5000) {
+  if (notice.incompatibility.length < 1 || notice.incompatibility.length > 5000) {
     return false;
   }
 
-  if (notice.termination_of_the_assignment.length < 1 || notice.termination_of_the_assignment > 5000) {
+  if (notice.termination_of_the_assignment.length < 1 || notice.termination_of_the_assignment.length > 5000) {
     return false;
   }
 

@@ -172,7 +172,7 @@ class Assignment {
       throw new Error('No Parameters');
     }
 
-    const assignment = assignmentStub.filter((ass) => ass.notice_protocol == noticeProtocol)[0];
+    const assignment = assignmentStub.filter((ass) => ass.notice_protocol == noticeProtocol);
 
     return new Promise((resolve) => resolve())
         .then(() => assignment)

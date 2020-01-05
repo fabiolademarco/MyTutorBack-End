@@ -15,7 +15,7 @@ const proxy = require('proxyquire').noCallThru();
 const ratingStub = require('./stub/ratingStub');
 const candidatureStub = require('./stub/candidatureStub');
 const assignmentStub = require('./stub/assignmentStub');
-const evalutationCriterionStub = require('./stub/evaluationCriterionStub');
+const evalutationCriterionStub = require('./stub/evalutationCriterionStub');
 const path = {
   '../models/rating': ratingStub,
   '../models/assignment': assignmentStub,

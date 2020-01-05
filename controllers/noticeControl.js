@@ -31,17 +31,17 @@ accessList.set(User.Role.TEACHING_OFFICE, Object.values(Notice.States));
  * @param {Request} req
  * @param {Response} res
  */
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   const notice = req.body.notice;
 
-  if (notice == null || !Check.checkNotice(notice)) {
+  if (notice == null || !Check.checkNotice(notice) || await Notice.exists(notice)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un bando valido.'});
 
     return;
   }
 
-  Notice.create(notice)
+  return Notice.create(notice)
       .then((notice) => {
         res.status(OK_STATUS).
             send({notice: notice});
@@ -61,18 +61,19 @@ exports.create = (req, res) => {
  *
  * @param {Request} req
  * @param {Response} res
+ * @return {Promise}
  */
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const notice = req.body.notice;
 
-  if (notice == null || !Check.checkNotice(notice)) {
+  if (notice == null || !Check.checkNotice(notice) || !await Notice.exists(notice)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un bando valido'});
 
     return;
   }
 
-  Notice.update(notice)
+  return Notice.update(notice)
       .then((notice) => {
         res.status(OK_STATUS)
             .send({notice: notice});
