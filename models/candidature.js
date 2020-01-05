@@ -83,7 +83,6 @@ class Candidature {
               toCreate.push(doc);
             }
           });
-          toUpdate.forEach((el) => console.log(el));
 
           return Promise.all([
             Promise.all(toUpdate.map((doc) => Document.update(doc, candidature))),
