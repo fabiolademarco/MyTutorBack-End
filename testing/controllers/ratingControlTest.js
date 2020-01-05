@@ -72,6 +72,7 @@ describe('Rating Control', function() {
       await ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
+
     it('TCS_GA.2.6', async function() {
       ratingList[0].interview_score = 30;
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
@@ -79,6 +80,7 @@ describe('Rating Control', function() {
       await ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
+
     it('TCS_GA.2.7', async function() {
       ratingList[0].student = 'a.aaaa11@studenti.unisa.it';
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
@@ -86,6 +88,7 @@ describe('Rating Control', function() {
       await ratingControl.createTable(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
+
     it('TCS_GA.2.8', async function() {
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
