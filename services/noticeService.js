@@ -1,8 +1,9 @@
 const NoticeControl = require('../controllers/noticeControl');
+const fileUpload = require('express-fileupload');
 
 module.exports = (app, auth) => {
   /**
-   * @api {GET} /api/notices/:id Request Specified Notices
+   * @api {GET} /api/notices/:protocol Request Specified Notices
    * @apiName GetNotice
    * @apiGroup Notice
    * @apiPermission everyone
@@ -11,10 +12,10 @@ module.exports = (app, auth) => {
    *
    * @apiSuccess {Object[]} notice Notices having the specified protocol as a substring
    */
-  app.get('/api/notices/:id', auth.setUser, NoticeControl.find);
+  app.get('/api/notices/:protocol', auth.setUser, NoticeControl.find);
 
   /**
-   * @api {DELETE} /api/notices/:id Deletes Notice
+   * @api {DELETE} /api/notices/:protocol Deletes Notice
    * @apiName DeleteNotice
    * @apiGroup Notice
    * @apiPermission Teaching Office
@@ -86,13 +87,45 @@ module.exports = (app, auth) => {
    */
   app.post('/api/notices/search', auth.setUser, NoticeControl.search);
 
+  /**
+   * @api {GET} /api/notices/pdf/:protocol Downloads Notice pdf
+   * @apiName GetNoticePdf
+   * @apiGroup Notice
+   * @apiPermission everyone
+   *
+   * @apiParam {String} protocol A notice protocol
+   */
+  app.get('/api/notices/pdf/:protocol', auth.setUser, NoticeControl.downloadNotice);
 
-  app.get('/api/notices/:id/pdf', NoticeControl.downloadNotice); // Probabilmente anche questo è in conflitto
+  /**
+   * @api {PUT} /api/notices/pdf/:protocol Upload Signed Notice pdf
+   * @apiName PutNoticePdf
+   * @apiGroup Notice
+   * @apiPermission everyone
+   *
+   * @apiParam {String} protocol A notice protocol
+   * @apiParam {ArrayBuffer} buffer A buffer of data representing the signed notice pdf
+   */
+  app.put('/api/notices/pdf/:protocol', auth.isDDI, fileUpload(), NoticeControl.uploadNotice);
 
-  app.put('/api/notices/:id/pdf', auth.isDDI, NoticeControl.uploadNotice);
+  /**
+   * @api {GET} /api/notices/grades/pdf/:protocol Downloads Graded List pdf
+   * @apiName GetGradedListPdf
+   * @apiGroup Notice
+   * @apiPermission everyone
+   *
+   * @apiParam {String} protocol A notice protocol
+   */
+  app.get('/api/notices/grades/pdf/:protocol', NoticeControl.downloadGradedList);
 
-
-  app.get('/api/notices/:id/grades', NoticeControl.downloadGradedList); // Probabilmente anche questo è in conflitto
-
-  app.put('/api/notices/:id/grades', auth.isDDI, NoticeControl.uploadGradedList);
+  /**
+   * @api {PUT} /api/notices/grades/pdf/:protocol Upload Signed Graded List pdf
+   * @apiName PutGradedListPdf
+   * @apiGroup Notice
+   * @apiPermission everyone
+   *
+   * @apiParam {String} protocol A notice protocol
+   * @apiParam {ArrayBuffer} buffer A buffer of data representing the signed graded list pdf
+   */
+  app.put('/api/notices/grades/pdf/:protocol', auth.isDDI, fileUpload(), NoticeControl.uploadGradedList);
 };
