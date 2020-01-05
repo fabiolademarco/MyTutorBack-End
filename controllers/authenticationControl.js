@@ -270,6 +270,11 @@ exports.insertVerifiedEmail = async (req, res) => {
       });
 };
 
+/**
+ * Allows to check if the user token is still valid
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.checkUserSession = (req, res) => {
   const token = req.get('Authorization');
 
