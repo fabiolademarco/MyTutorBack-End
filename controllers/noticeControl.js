@@ -146,18 +146,22 @@ exports.setState = async (req, res) => {
             error: 'Aggiornamento del bando fallito.',
             exception: err.message,
           });
+
+      return;
     }
   }
   try {
     const updatedNotice = await Notice.update(notice);
 
-    res.status(OK_STATUS).send({notice: updatedNotice});
+    return res.status(OK_STATUS).send({notice: updatedNotice});
   } catch (err) {
     res.status(500)
         .send({
           error: 'Aggiornamento del bando fallito.',
           exception: err.message,
         });
+
+    return;
   }
 };
 
