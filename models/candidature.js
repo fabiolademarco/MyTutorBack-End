@@ -83,7 +83,7 @@ class Candidature {
               toCreate.push(doc);
             }
           });
-          console.log(`${toUpdate}`);
+          toUpdate.forEach((el) => console.log(el));
 
           console.log(`${toCreate}`);
 
