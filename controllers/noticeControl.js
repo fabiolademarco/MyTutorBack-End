@@ -141,6 +141,7 @@ exports.setState = async (req, res) => {
       notice.notice_file = path;
       console.log(path);
     } catch (err) {
+      console.log(err);
       res.status(500)
           .send({
             error: 'Aggiornamento del bando fallito.',
