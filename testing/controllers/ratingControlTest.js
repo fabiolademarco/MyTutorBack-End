@@ -35,13 +35,13 @@ describe('Rating Control', function() {
     ratingList = [
       {
         student: 'f.migliaro69@studenti.unisa.it',
-        assignment_id: 3,
+        assignment_id: 1,
         titles_score: 5,
         interview_score: 50,
       },
       {
         student: 'm.dantonio69@studenti.unisa.it',
-        assignment_id: 3,
+        assignment_id: 2,
         titles_score: 5,
         interview_score: 51,
       },

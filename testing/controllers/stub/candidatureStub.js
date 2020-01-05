@@ -126,7 +126,7 @@ class Candidature {
             c.notice_protocol === candidature.notice_protocol;
           };
 
-          return candcandidatureStubList.filter(predicate).length > 0;
+          return candidatureStubList.filter(predicate).length > 0;
         })
         .catch((err) => {
           throw err;
@@ -151,7 +151,7 @@ class Candidature {
             c.notice_protocol === protocol;
           };
 
-          const filtered = candcandidatureStubList.filter(predicate);
+          const filtered = candidatureStubList.filter(predicate);
 
           if (filtered.length < 1) {
             throw new Error('No element was found ');
@@ -184,9 +184,9 @@ class Candidature {
             c.student === email;
           };
 
-          const filtered = candcandidatureStubList.filter(predicate);
+          const filtered = candidatureStubList.filter(predicate);
 
-          candidatures = await Promise.all(filtered.map(async (c) => {
+          const candidatures = await Promise.all(filtered.map(async (c) => {
             c.documents = await DocumentStub.findByCandidature(c);
 
             return new Candidature(c);
@@ -215,9 +215,9 @@ class Candidature {
             c.notice_protocol === protocol;
           };
 
-          const filtered = candcandidatureStubList.filter(predicate);
+          const filtered = candidatureStubList.filter(predicate);
 
-          candidatures = await Promise.all(filtered.map(async (c) => {
+          const candidatures = await Promise.all(filtered.map(async (c) => {
             c.documents = await DocumentStub.findByCandidature(c);
 
             return new Candidature(c);
@@ -237,7 +237,7 @@ class Candidature {
   static findAll() {
     return new Promise((resolve) => resolve())
         .then(async () => {
-          candidatures = await Promise.all(candidatureStubList.map(async (c) => {
+          const candidatures = await Promise.all(candidatureStubList.map(async (c) => {
             c.documents = await DocumentStub.findByCandidature(c);
 
             return new Candidature(c);

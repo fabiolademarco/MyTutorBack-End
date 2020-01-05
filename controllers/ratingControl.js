@@ -37,22 +37,28 @@ module.exports.createTable = async function(req, res) {
 
     return;
   }
-  if (!validateRatings()) {
+  console.log('check superato');
+  if (!await validateRatings(ratingList)) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o piu valutazioni della lista non sono valide '});
 
     return;
   }
+  console.log('validateRatings superato');
 
   if (!validateRatingsInterviewScore(ratingList)) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o piu valutazioni della lista hanno punteggi non validi'});
 
     return;
   }
-  if (!validateRatingsScore(ratingList)) {
+  console.log('validateRatingsInterview superato');
+
+  if (!await validateRatingsScore(ratingList)) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o piu valutazioni della lista hanno punteggi non validi'});
 
     return;
   }
+  console.log('validateRatingsScore superato');
+
 
   allPromises = [];
   for (const rating of ratingList) {
@@ -129,7 +135,7 @@ const validateRatingsScore = async function(ratingList) {
   const assignment = await Assignment.findById(assignmentId);
   const protocollo = assignment.notice_protocol;
   const criterions = EvaluationCriterion.findByNotice(protocollo);
-  const maxValue = criterions[0].maxScore;
+  const maxValue = criterions[0].max_score;
 
   return ratingList.every(((rating) => rating.titles_score >= 0 && rating.titles_score <= maxValue));
 };
