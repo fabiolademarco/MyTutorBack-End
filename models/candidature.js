@@ -85,10 +85,6 @@ class Candidature {
           });
           toUpdate.forEach((el) => console.log(el));
 
-          console.log(`${toCreate}`);
-
-          console.log(`${map}`);
-
           return Promise.all([
             Promise.all(toUpdate.map((doc) => Document.update(doc, candidature))),
             Promise.all(toCreate.map((doc) => Document.create(doc, candidature))),
