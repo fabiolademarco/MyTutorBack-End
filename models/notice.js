@@ -338,7 +338,7 @@ class Notice {
    * @return {Promise<Notice[]>} Promise that represents the Notice array having the passed referent.
    */
   static async findByReferent(referent) {
-    if (!refernt) {
+    if (!referent) {
       throw new Error('No Parameters');
     }
 

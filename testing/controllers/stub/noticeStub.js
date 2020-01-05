@@ -122,6 +122,9 @@ class Notice {
 
     return new Promise((resolve) => resolve())
         .then(() => {
+          notices.push(notice);
+        })
+        .then(() => {
           if (articles) {
             articles.forEach((art) => Article.create(art));
           }
@@ -178,7 +181,12 @@ class Notice {
     delete notice.application_sheet;
     delete notice.comment;
 
-    return pool.query(`UPDATE ${table} SET ? WHERE protocol = ?`, [notice, notice.protocol])
+    return new Promise((resolve) => resolve())
+        .then(() => {
+          const el = notices.filter((el) => el.protocol === notice.protocol);
+
+          notices[notices.indexOf(el)] = notice;
+        })
         .then(() => {
           if (applicationSheet) {
             if (Object.entries(applicationSheet).length != 0) {
@@ -251,10 +259,8 @@ class Notice {
       throw new Error('No Parameters');
     }
 
-    return pool.query(`DELETE FROM ${table} WHERE protocol = ?`, notice.protocol)
-        .then(([resultSetHeader]) => {
-          return resultSetHeader.affectedRows > 0;
-        })
+    return new Promise((resolve) => resolve())
+        .then(() => notices.pop(notice) != null)
         .catch((err) => {
           throw err;
         });
@@ -270,9 +276,9 @@ class Notice {
       throw new Error('No Parameters');
     }
 
-    return pool.query(`SELECT * FROM ${table} WHERE protocol = ?`, notice.protocol)
-        .then(([rows]) => {
-          return rows.length > 0;
+    return new Promise((resolve) => resolve())
+        .then(() => {
+          return notices.filter((el) => el.protocol === notice.protocol).length > 0;
         })
         .catch((err) => {
           throw err;
@@ -289,8 +295,10 @@ class Notice {
       throw new Error('No Parameters');
     }
 
-    return pool.query(`SELECT * FROM ${table} WHERE protocol LIKE ?`, '%' + noticeProtocol + '%')
-        .then(([rows]) => {
+    return new Promise((resolve) => resolve())
+        .then(() => {
+          const rows = notices.filter((el) => el.protocol === noticeProtocol);
+
           if (rows[0] == undefined) {
             throw new Error('0 results found for protocol: ' + noticeProtocol);
           }
@@ -331,8 +339,10 @@ class Notice {
 
     states.forEach((state) => query += ' OR state = ?');
 
-    return pool.query(query, states)
-        .then(([rows]) => {
+    return new Promise((resolve) => resolve())
+        .then(() => {
+          const rows = notices.filter((el) => states.includes(el.state));
+
           return Promise.all(rows.map((notice) =>
             getOtherFields(notice.protocol)
                 .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {
@@ -365,8 +375,10 @@ class Notice {
       throw new Error('No Parameters');
     }
 
-    return pool.query(`SELECT * FROM ${table} WHERE referent_professor = ?`, referent)
-        .then(([rows]) => {
+    return new Promise((resolve) => resolve())
+        .then(() => {
+          const rows = notices.filter((el) => el.referent_professor === referent);
+
           return Promise.all(rows.map((notice) =>
             getOtherFields(notice.protocol)
                 .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {
@@ -395,7 +407,9 @@ class Notice {
    */
   static async findAll() {
     return pool.query(`SELECT * FROM ${table}`)
-        .then(([rows]) => {
+        .then(() => {
+          const rows = notices;
+
           return Promise.all(rows.map((notice) =>
             getOtherFields(notice.protocol)
                 .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {
