@@ -47,7 +47,9 @@ exports.login = (req, res) => {
             error: 'Le credenziali di accesso risultano errate',
           });
         } else {
-          user = await Student.findByEmail(user.email);
+          if (user.role === User.Role.STUDENT) {
+            user = await Student.findByEmail(user.email);
+          }
           payload = {
             id: user.email,
             role: user.role,
