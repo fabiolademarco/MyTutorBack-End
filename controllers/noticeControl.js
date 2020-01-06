@@ -430,12 +430,6 @@ exports.uploadNotice = async (req, res) => {
         .send({error: `Impossibile caricare il bando firmato mentre è ${notice.state}`});
   }
 
-  if (noticeFile.mimetype !== 'application/pdf') {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Il file deve essere in formato pdf'});
-
-    return;
-  }
-
   try {
     fs.writeFile(notice.notice_file, Buffer.from(noticeFile, 'base64'));
   } catch (err) {
