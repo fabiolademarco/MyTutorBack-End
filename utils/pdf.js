@@ -1,5 +1,6 @@
 const Notice = require('../models/notice');
 const Assignment = require('../models/assignment');
+const User = require('../models/user');
 const noticeLayout = require('../static/notice.json');
 const personalData = require('../static/personal_data_treatment');
 const applicationSheetLayout = require('../static/application_sheet');
