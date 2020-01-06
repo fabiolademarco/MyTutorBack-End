@@ -245,75 +245,75 @@ describe('Controller Autenticazione', function() {
       };
     });
 
-    it('TCS_UT.2.0', function() {
+    it('TCS_UT.2.0', async function() {
       professor.name = '';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.2.1', function() {
+    it('TCS_UT.2.1', async function() {
       professor.name = 'FilomenaFilomenaFilomena';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.2.2', function() {
+    it('TCS_UT.2.2', async function() {
       professor.name = 'Filomena123';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.2.3', function() {
+    it('TCS_UT.2.3', async function() {
       professor.surname = '';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.2.4', function() {
+    it('TCS_UT.2.4', async function() {
       professor.surname = 'FerrucciFerrucciFerrucci';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.2.5', function() {
+    it('TCS_UT.2.5', async function() {
       professor.surname = 'Ferrucci123';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.2.6', function() {
+    it('TCS_UT.2.6', async function() {
       professor.email = '';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.2.7', function() {
+    it('TCS_UT.2.7', async function() {
       professor.email = 'f.ferrucciferrucciferrucciferrucciferrucciferrucci@unisa.it';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.2.8', function() {
+    it('TCS_UT.2.8', async function() {
       professor.email = 'f.ferrucci***@unisa.it';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
@@ -342,27 +342,27 @@ describe('Controller Autenticazione', function() {
       expect(true);
     });
 
-    it('TCS_UT.2.14', function() {
+    it('TCS_UT.2.14', async function() {
       professor.password = '12345AB';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.2.15', function() {
+    it('TCS_UT.2.15', async function() {
       professor.password = '123456789123456789123AB';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.2.16', function() {
+    it('TCS_UT.2.16', async function() {
       professor.password = '12345678++++';
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res);
+      await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
@@ -386,33 +386,30 @@ describe('Controller Autenticazione', function() {
     it('TCS_UT.2.21', async function() {
       req = mockRequest({method: 'POST', body: {professor: professor}});
       res = mockResponse();
-      authenticationControl.registerProfessor(req, res)
-          .then(() => {
-            expect(res.status).to.have.been.calledWith(200);
-          })
-          .catch((err) => console.log(err));
+      await authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.have.been.calledWith(200);
     });
   });
 
   describe('Test_InserisciEmailProfessore', function() {
-    it('TCS_UT.3.0', function() {
+    it('TCS_UT.3.0', async function() {
       req = mockRequest({method: 'POST', body: {email: ''}});
       res = mockResponse();
-      authenticationControl.insertVerifiedEmail(req, res);
+      await authenticationControl.insertVerifiedEmail(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.3.1', function() {
+    it('TCS_UT.3.1', async function() {
       req = mockRequest({method: 'POST', body: {email: 'f.allegrettiaaaaaaaaaaabbbbbbbbbbccccccddddddderdsa@unisa.it'}});
       res = mockResponse();
-      authenticationControl.insertVerifiedEmail(req, res);
+      await authenticationControl.insertVerifiedEmail(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.3.2', function() {
+    it('TCS_UT.3.2', async function() {
       req = mockRequest({method: 'POST', body: {email: 'c.feggri@studenti.unisa.it'}});
       res = mockResponse();
-      authenticationControl.insertVerifiedEmail(req, res);
+      await authenticationControl.insertVerifiedEmail(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
@@ -441,27 +438,27 @@ describe('Controller Autenticazione', function() {
       };
     });
 
-    it('TCS_UT.4.0', function() {
+    it('TCS_UT.4.0', async function() {
       user.email = '';
       req = mockRequest({method: 'POST', body: {user: user}});
       res = mockResponse();
-      authenticationControl.login(req, res);
+      await authenticationControl.login(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.4.1', function() {
+    it('TCS_UT.4.1', async function() {
       user.email = 'f.allegrettiaaaaaaaaaaabbbbbbbbbbccccccddddddderdsa@unisa.it';
       req = mockRequest({method: 'POST', body: {user: user}});
       res = mockResponse();
-      authenticationControl.login(req, res);
+      await authenticationControl.login(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.4.2', function() {
+    it('TCS_UT.4.2', async function() {
       user.email = 'f.allegretti@studenti@unisa.it';
       req = mockRequest({method: 'POST', body: {user: user}});
       res = mockResponse();
-      authenticationControl.login(req, res);
+      await authenticationControl.login(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 

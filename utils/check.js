@@ -147,7 +147,25 @@ exports.checkProfessorEmail = (email) => {
  * @return {boolean} True if the email respects the format.
  */
 exports.checkEmail = (email) => {
-  return this.checkProfessorEmail(email) || this.checkStudentEmail(email);
+  let error;
+
+  try {
+    this.checkProfessorEmail(email);
+
+    return true;
+  } catch (err) {
+    error = err;
+  }
+
+  try {
+    this.checkStudentEmail(email);
+
+    return true;
+  } catch (err) {
+    error = err;
+  }
+
+  throw error;
 };
 
 /**
