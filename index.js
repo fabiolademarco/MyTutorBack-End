@@ -56,9 +56,10 @@ app.use(function(req, res, next) {
 app.use(
     bodyParser.urlencoded({
       extended: true,
+      limit: '5MB',
     }),
 );
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '5MB'}));
 app.use(auth.initialize());
 
 // Setup server port
