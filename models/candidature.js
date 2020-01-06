@@ -84,11 +84,11 @@ class Candidature {
             }
           });
 
-          return Promise.all(
-              toUpdate.map((doc) => Document.update(doc, candidature)),
-              toCreate.map((doc) => Document.create(doc, candidature)),
-              Array.from(map.values()).map((doc) => Document.remove(doc, candidature)),
-          )
+          return Promise.all([
+            Promise.all(toUpdate.map((doc) => Document.update(doc, candidature))),
+            Promise.all(toCreate.map((doc) => Document.create(doc, candidature))),
+            Promise.all(Array.from(map.values()).map((doc) => Document.remove(doc, candidature))),
+          ])
               .catch((err) => {
                 console.log(err);
                 throw err;

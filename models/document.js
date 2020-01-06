@@ -110,7 +110,7 @@ class Document {
                                               AND file_name = ?`,
     [candidature.student, candidature.notice_protocol, aDocument.file_name])
         .then(([rows]) => {
-          return rows.lenght > 0;
+          return rows.length > 0;
         })
         .catch((err) => {
           throw err;
@@ -134,7 +134,7 @@ class Document {
                                                 AND file_name = ?`,
     [studentEmail, noticeProtocol, name])
         .then(([rows]) => {
-          return new Document(rosw[0]);
+          return new Document(rows[0]);
         })
         .catch((err) => {
           throw err;
