@@ -26,9 +26,9 @@ class VerifiedEmail {
    * @param {VerifiedEmail} verifiedEmail The Verified email to insert.
    * @return {Promise<VerifiedEmail>} Promise Object representing the created VerifiedEmail.
    */
-  static create(verifiedEmail) {
+  static async create(verifiedEmail) {
     if (verifiedEmail == null) {
-      throw new Error('Parameter can not be null or undefined');
+      throw new Error('VerifiedEmail can not be null or undefined');
     }
     verifiedEmail.signed_up = 0;
 
@@ -48,7 +48,7 @@ class VerifiedEmail {
    */
   static async update(verifiedEmail) {
     if (verifiedEmail == null) {
-      throw new Error('Parameter can not be null or undefined');
+      throw new Error('VerifiedEmail can not be null or undefined');
     }
     if (!await this.exists(verifiedEmail)) {
       throw new Error('The verified email doesn\'t exists');
@@ -66,9 +66,9 @@ class VerifiedEmail {
    * @param {VerifiedEmail} verifiedEmail The verifiedEmail to remove.
    * @return {Promise<boolean>} Promise object that it's true if the verifiedEmail it's been removed or else it's false.
    */
-  static remove(verifiedEmail) {
+  static async remove(verifiedEmail) {
     if (verifiedEmail == null) {
-      throw new Error('Parameter can not be null or undefined');
+      throw new Error('VerifiedEmail can not be null or undefined');
     }
 
     return pool.query(`DELETE FROM ${table} WHERE email = ?`, verifiedEmail.email)
@@ -85,9 +85,9 @@ class VerifiedEmail {
    * @param {VerifiedEmail} verifiedEmail The verifiedEmail to check if exists.
    * @return {Promise<boolean>} Promise object that it's true if the verifiedEmail exists in the db, or else it's false.
    */
-  static exists(verifiedEmail) {
+  static async exists(verifiedEmail) {
     if (verifiedEmail == null) {
-      throw new Error('Parameter can not be null or undefined');
+      throw new Error('VerifiedEmail can not be null or undefined');
     }
 
     return pool.query(`SELECT * FROM ${table} WHERE email = ?`, verifiedEmail.email)
@@ -102,9 +102,9 @@ class VerifiedEmail {
    * @param {string} email String representing an email.
    * @return {Promise<VerifiedEmail>} Promise object representing the VerifiedEmail with the passed email.
    */
-  static findByEmail(email) {
+  static async findByEmail(email) {
     if (email == null) {
-      throw new Error('Parameter can not be null or undefined');
+      throw new Error('email can not be null or undefined');
     }
 
     return pool.query(`SELECT * FROM ${table} WHERE email = ?`, email)
@@ -124,7 +124,7 @@ class VerifiedEmail {
    * Finds all VerifiedEmails.
    * @return {Promise<VerifiedEmail[]>} Promise object representing the list of all VerifiedEmails.
    */
-  static findAll() {
+  static async findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => {
           return rows.map((v) => new VerifiedEmail(v));
@@ -139,9 +139,9 @@ class VerifiedEmail {
    * @param {string} email Email to check.
    * @return {Promise<boolean>} Promise object that it's true if the passed email it's verified, or else it's false.
    */
-  static isVerified(email) {
+  static async isVerified(email) {
     if (email == null) {
-      throw new Error('Parameter can not be null or undefined');
+      throw new Error('Email can not be null or undefined');
     }
 
     return pool.query(`SELECT * FROM ${table} WHERE email = ? AND signed_up = 0`, email)
