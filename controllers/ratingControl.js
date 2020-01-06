@@ -32,11 +32,13 @@ module.exports.createTable = async function(req, res) {
 
     return;
   }
+
   if (!check.checkRatingList(ratingList)) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o più degli elementi della lista non rispettano il formato'});
 
     return;
   }
+
   if (!await validateRatings(ratingList)) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Uno o piu valutazioni della lista non sono valide '});
 
@@ -129,7 +131,7 @@ const validateRatingsScore = async function(ratingList) {
   const assignmentId = ratingList[0].assignment_id;
   const assignment = await Assignment.findById(assignmentId);
   const protocollo = assignment.notice_protocol;
-  const criterions = EvaluationCriterion.findByNotice(protocollo);
+  const criterions = await EvaluationCriterion.findByNotice(protocollo);
   const maxValue = criterions[0].max_score;
 
   return ratingList.every(((rating) => rating.titles_score >= 0 && rating.titles_score <= maxValue));

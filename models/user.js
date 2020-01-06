@@ -40,7 +40,7 @@ class User {
    * @param {User} user The user to create
    * @return {Promise<User>} The promise reresenting the fulfillment of the creation request
    */
-  static create(user) {
+  static async create(user) {
     if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }
@@ -88,7 +88,7 @@ class User {
    * @param {User} user The user to remove
    * @return {Promise<boolean>} The promise reresenting the fulfillment of the deletion request
    */
-  static delete(user) {
+  static async delete(user) {
     if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }
@@ -103,7 +103,7 @@ class User {
    * @param {User} user The user whose existence is checked
    * @return {Promise<boolean>} The promise reresenting the fulfillment of the verification request
    */
-  static exists(user) {
+  static async exists(user) {
     if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }

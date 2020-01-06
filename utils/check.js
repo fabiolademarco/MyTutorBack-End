@@ -8,7 +8,7 @@ exports.checkStudent = (student) => {
   const nameExp = /^[A-Za-z ‘]+$/;
   const surnameExp = /^[A-Za-z ‘]+$/;
   const emailExp = /^[a-z]\.[a-z]+[0-9]*\@(studenti\.)?unisa\.it$/;
-  const registrationNumberExp = /^[0-9A-Za-z ‘]*$/;
+  const registrationNumberExp = /^[0-9A-Za-z ‘]+$/;
   const passwordExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[A-Za-z0-9!@#$%]{8,20}$/;
   const birthDateExp = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/; // Non so se deve essere cosi
 

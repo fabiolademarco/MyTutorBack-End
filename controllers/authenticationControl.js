@@ -39,7 +39,7 @@ exports.login = (req, res) => {
   }
 
   return User.matchUser(user.email, user.password)
-      .then((user) => {
+      .then(async (user) => {
         if (user == null) {
           res.status(ERR_NOT_AUTHORIZED);
           res.send({
@@ -47,6 +47,9 @@ exports.login = (req, res) => {
             error: 'Le credenziali di accesso risultano errate',
           });
         } else {
+          if (user.role === User.Role.STUDENT) {
+            user = await Student.findByEmail(user.email);
+          }
           payload = {
             id: user.email,
             role: user.role,
@@ -61,6 +64,14 @@ exports.login = (req, res) => {
             user: user,
           });
         }
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS);
+        res.send({
+          status: false,
+          error: 'Login fallito',
+          exception: err.message,
+        });
       });
 };
 
