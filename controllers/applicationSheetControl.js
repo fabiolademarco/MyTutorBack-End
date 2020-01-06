@@ -131,7 +131,7 @@ exports.delete = (req, res) => {
 
   const applicationObject = new ApplicationSheet();
 
-  applicationObject.noticeProtocol = noticeProtocol;
+  applicationObject.notice_protocol = noticeProtocol;
 
   return ApplicationSheet.remove(applicationObject)
       .then((data) => {
