@@ -212,7 +212,7 @@ class Candidature {
     return new Promise((resolve) => resolve())
         .then(async () => {
           const predicate = (c) => {
-            c.notice_protocol === protocol;
+            return c.notice_protocol === protocol;
           };
 
           const filtered = candidatureStubList.filter(predicate);
