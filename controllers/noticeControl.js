@@ -1,8 +1,10 @@
 const Notice = require('../models/notice');
 const User = require('../models/user');
+const Rating = require('../models/rating');
 const Check = require('../utils/check');
 const pdf = require('../utils/pdf');
 const fs = require('fs');
+const path = require('path');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -151,6 +153,26 @@ exports.setState = async (req, res) => {
       return;
     }
   }
+
+  if (notice.state === Notice.States.WAITING_FOR_GRADED_LIST) {
+    try {
+      const [dbNotice] = await Notice.findByProtocol(notice.protocol);
+      const ratings = await Rating.findByProtocol(notice.protocol);
+      const path = await pdf.makeGradedList(ratings, dbNotice);
+
+      notice.graded_list_file = path;
+    } catch (err) {
+      console.log(err);
+      res.status(500)
+          .send({
+            error: 'Aggiornamento della graduatoria fallita.',
+            exception: err.message,
+          });
+
+      return;
+    }
+  }
+
   try {
     const updatedNotice = await Notice.update(notice);
 
@@ -333,7 +355,7 @@ exports.findAll = (req, res) => {
 };
 
 exports.downloadNotice = async (req, res) => {
-  let userRole = req.user;
+  let userRole = req.user.role;
 
   if (userRole !== User.Role.TEACHING_OFFICE && userRole !== User.Role.DDI) {
     userRole = User.Role.STUDENT;
@@ -371,7 +393,8 @@ exports.downloadNotice = async (req, res) => {
   }
 
   return res.status(OK_STATUS)
-      .sendFile(notice.notice_file);
+      .type('application/pdf')
+      .sendFile(path.resolve(notice.notice_file));
 };
 
 exports.uploadNotice = async (req, res) => {
@@ -427,7 +450,7 @@ exports.uploadNotice = async (req, res) => {
 };
 
 exports.downloadGradedList = async (req, res) => {
-  let userRole = req.user;
+  let userRole = req.user.role;
 
   if (userRole !== User.Role.TEACHING_OFFICE && userRole !== User.Role.DDI) {
     userRole = User.Role.STUDENT;
@@ -461,7 +484,8 @@ exports.downloadGradedList = async (req, res) => {
   }
 
   return res.status(OK_STATUS)
-      .sendFile(notice.graded_list_file);
+      .type('application/pdf')
+      .sendFile(path.resolve(notice.graded_list_file));
 };
 
 exports.uploadGradedList = async (req, res) => {

@@ -3,6 +3,7 @@ const Assignment = require('../models/assignment');
 const noticeLayout = require('../static/notice.json');
 const personalData = require('../static/personal_data_treatment');
 const applicationSheetLayout = require('../static/application_sheet');
+const gradedListLayout = require('../static/graded_list');
 
 const fs = require('fs');
 const merge = require('easy-pdf-merge');
@@ -213,17 +214,18 @@ const generateNotice = async (notice) => {
   doc.cell(_(paddingBottom(1)))
       .text(noticeLayout.ratification);
 
-  // const director = await User.findByRole(User.Role.DDI)[0];
+  User.findByRole(User.Role.DDI)
+      .then(async ([director]) => {
+        const signTable = doc.table({widths: [null, null]}).row();
 
-  const signTable = doc.table({widths: [null, null]}).row();
+        signTable.cell().text('');
+        signTable.cell().text(_(center))
+            .add(gradedListLayout.sign)
+            .br()
+            .add(director.name + ' ' + director.surname);
 
-  signTable.cell().text('');
-  signTable.cell().text(_(center))
-      .add(noticeLayout.sign);
-  // .add(director.name + ' ' + director.surname);
-
-
-  await doc.end();
+        await doc.end();
+      });
 
   return filePath;
 };
@@ -367,6 +369,120 @@ const generateApplicationSheet = async (notice) => {
   return filePath;
 };
 
+const generateGradedList = async (ratings, notice) => {
+  const ratingsGroupedByAssignmentId = groupBy(ratings, 'assignment_id');
+  const allAssignments = notice.assignments;
+
+  const evaluatedAssignmentsId = Object.keys(ratingsGroupedByAssignmentId);
+  const evaluatedAssignments = allAssignments.reduce((accumulator, assign) => {
+    if (evaluatedAssignmentsId.includes(assign.id.toString())) {
+      accumulator.push(assign);
+    }
+
+    return accumulator;
+  }, []);
+
+  const filePath = `./notices/Graduatoria ${notice.protocol}.pdf`;
+
+  if (!fs.existsSync('./notices')) {
+    fs.mkdirSync('./notices');
+  }
+
+  const documentOptions = {
+    font: times,
+    fontSize: 11,
+    paddingLeft: 1.7 * cm,
+    paddingRight: 1.7 * cm,
+    paddingTop: 0.5 * cm,
+    paddingBottom: 1 * cm,
+    properties: {
+      author: 'Unisa',
+    },
+  };
+
+  const doc = new pdf.Document(documentOptions);
+
+  doc.pipe(fs.createWriteStream(filePath));
+
+  // Header
+
+  const logo = new pdf.Image(fs.readFileSync('./static/logo.jpg'));
+  const header = doc.header();
+
+  header.cell(_(paddingBottom(1))).image(logo, {height: 2 * cm});
+
+  // Footer
+
+  const footer = doc.footer().table({widths: [null, null, null]}).row();
+
+  noticeLayout.footer.forEach((element, index) => {
+    footer.cell({fontSize: 6}).text(element);
+  });
+
+  doc.cell(_(paddingBottom(1)))
+      .text(gradedListLayout.directorDecrees, _(center, bold));
+
+  // Approvazione
+
+  doc.cell(_(paddingBottom(1))).text(_(justify))
+      .add(gradedListLayout.approval1)
+      .add(notice.protocol, _(bold))
+      .add(gradedListLayout.approval2)
+      .add(evaluatedAssignmentsId.length)
+      .add(gradedListLayout.approval3)
+      .add(allAssignments.length)
+      .add(gradedListLayout.approval4);
+
+  evaluatedAssignments.forEach((assignment) => {
+    const assignmentTable = doc.cell(_(paddingLeft(2.5), paddingRight(2.5))).table({widths: [null, null, null], borderWidth: 1});
+
+    const th1 = assignmentTable.header(_(bold));
+
+    gradedListLayout.header1.forEach((text) => th1.cell().text(text, _(center)));
+
+    const tr = assignmentTable.row();
+
+    tr.cell().text(assignment.code, _(center));
+    tr.cell().text(assignment.total_number_hours.toString(), _(center));
+    tr.cell().text(assignment.title === Assignment.titles.PHD ? 'Dottorando' : 'Studente laurea Magistrale', _(center));
+
+
+    const ratingsTable = doc.cell(_(paddingLeft(2.5), paddingRight(2.5), paddingBottom(0.5))).table({widths: [3.5 * cm, 3.5 * cm, null, null, null], borderWidth: 1});
+    const th2 = ratingsTable.header(_(bold));
+
+    gradedListLayout.header2.forEach((text) => th2.cell().text(text, _(center)));
+
+    ratingsGroupedByAssignmentId[assignment.id].forEach((rating) => {
+      const tr = ratingsTable.row();
+
+      tr.cell().text(rating.student.name, _(center));
+      tr.cell().text(rating.student.surname, _(center));
+      tr.cell().text(rating.titles_score.toString(), _(center));
+      tr.cell().text(rating.interview_score.toString(), _(center));
+      tr.cell().text((rating.titles_score + rating.interview_score).toString(), _(center));
+    });
+  });
+
+  // Ratifica
+  doc.cell(_(paddingBottom(1)))
+      .text(gradedListLayout.ratification);
+
+  User.findByRole(User.Role.DDI)
+      .then(async ([director]) => {
+        const signTable = doc.table({widths: [null, null]}).row();
+
+        signTable.cell().text('');
+        signTable.cell().text(_(center))
+            .add(gradedListLayout.sign)
+            .br()
+            .add(director.name + ' ' + director.surname);
+
+        await doc.end();
+      });
+
+  return filePath;
+};
+
 
 exports.makeNotice = async (notice) => {
   const noticePath = await generateNotice(notice);
@@ -386,6 +502,12 @@ exports.makeNotice = async (notice) => {
       console.log(`Temporary file '${applicationSheetPath}' deleted`);
     });
   });
+
+  return filePath;
+};
+
+exports.makeGradedList = async (ratings, notice) => {
+  const filePath = await generateGradedList(ratings, notice);
 
   return filePath;
 };
