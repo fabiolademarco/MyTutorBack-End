@@ -514,15 +514,17 @@ exports.uploadNotice = async (req, res) => {
   }
 
   try {
-    fs.writeFile(notice.notice_file, Buffer.from(noticeFile, 'base64'));
+    fs.writeFile(notice.notice_file, Buffer.from(noticeFile, 'base64'), () => {
+      res.status(OK_STATUS).send({status: true});
+
+      return;
+    });
   } catch (err) {
     console.log(err);
     res.send({error: 'Si è verificato un errore'});
 
     return;
   }
-
-  res.status(OK_STATUS).send({status: true});
 };
 
 exports.downloadGradedList = async (req, res) => {
@@ -622,13 +624,15 @@ exports.uploadGradedList = async (req, res) => {
   }
 
   try {
-    fs.writeFile(notice.graded_list_file, Buffer.from(gradedListFile, 'base64'));
+    fs.writeFile(notice.graded_list_file, Buffer.from(gradedListFile, 'base64'), () => {
+      res.status(OK_STATUS).send({status: true});
+
+      return;
+    });
   } catch (err) {
     console.log(err);
     res.send({error: 'Si è verificato un errore'});
 
     return;
   }
-
-  res.status(OK_STATUS).send({status: true});
 };
