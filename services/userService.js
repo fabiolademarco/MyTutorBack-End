@@ -1,6 +1,6 @@
-const UserControl=require('../controllers/userControl');
+const UserControl = require('../controllers/userControl');
 
-module.exports=function(app, auth) {
+module.exports = function(app, auth) {
 /**
  * @todo Controllare bene chi è autorizzato a fare cosa
 */
