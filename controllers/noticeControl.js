@@ -399,6 +399,7 @@ exports.downloadNotice = async (req, res) => {
 
 exports.uploadNotice = async (req, res) => {
   const protocol = req.params.protocol;
+  const noticeFile = req.notice;
 
   if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
     res.status(ERR_CLIENT_STATUS)
@@ -407,13 +408,11 @@ exports.uploadNotice = async (req, res) => {
     return;
   }
 
-  if (!req.files || Object.keys(req.files).length === 0) {
+  if (noticeFile == null || noticeFile.length == 0) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Non è stato caricato alcun file.'});
 
     return;
   }
-
-  const noticeFile = req.files.notice;
 
   const notices = await Notice.findByProtocol(protocol);
 
@@ -438,7 +437,7 @@ exports.uploadNotice = async (req, res) => {
   }
 
   try {
-    fs.writeFile(notice.notice_file, noticeFile.data);
+    fs.writeFile(notice.notice_file, Buffer.from(noticeFile, 'base64'));
   } catch (err) {
     console.log(err);
     res.send({error: 'Si è verificato un errore'});
@@ -490,6 +489,7 @@ exports.downloadGradedList = async (req, res) => {
 
 exports.uploadGradedList = async (req, res) => {
   const protocol = req.params.protocol;
+  const gradedListFile = req.gradedList;
 
   if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
     res.status(ERR_CLIENT_STATUS)
@@ -498,13 +498,11 @@ exports.uploadGradedList = async (req, res) => {
     return;
   }
 
-  if (!req.files || Object.keys(req.files).length === 0) {
+  if (noticeFile == null || noticeFile.length == 0) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Non è stato caricato alcun file.'});
 
     return;
   }
-
-  const gradedListFile = req.files.gradedList;
 
   const notices = await Notice.findByProtocol(protocol);
 
@@ -522,14 +520,8 @@ exports.uploadGradedList = async (req, res) => {
         .send({error: `Impossibile caricare la graduatoria firmata mentre è ${notice.state}`});
   }
 
-  if (gradedListFile.mimetype !== 'application/pdf') {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Il file deve essere in formato pdf'});
-
-    return;
-  }
-
   try {
-    fs.writeFile(notice.graded_list_file, gradedListFile.data);
+    fs.writeFile(notice.graded_list_file, Buffer.from(gradedListFile, 'base64'));
   } catch (err) {
     console.log(err);
     res.send({error: 'Si è verificato un errore'});

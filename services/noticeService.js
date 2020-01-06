@@ -104,7 +104,7 @@ module.exports = (app, auth) => {
    * @apiPermission everyone
    *
    * @apiParam {String} protocol A notice protocol
-   * @apiParam {ArrayBuffer} buffer A buffer of data representing the signed notice pdf
+   * @apiParam {String} notice A base64 encoded string representing the signed notice pdf
    */
   app.put('/api/notices/pdf/:protocol', auth.isDDI, fileUpload(), NoticeControl.uploadNotice);
 
@@ -125,7 +125,7 @@ module.exports = (app, auth) => {
    * @apiPermission everyone
    *
    * @apiParam {String} protocol A notice protocol
-   * @apiParam {ArrayBuffer} buffer A buffer of data representing the signed graded list pdf
+   * @apiParam {String} gradedList A base64 encoded string representing the signed graded list pdf
    */
   app.put('/api/notices/grades/pdf/:protocol', auth.isDDI, fileUpload(), NoticeControl.uploadGradedList);
 };
