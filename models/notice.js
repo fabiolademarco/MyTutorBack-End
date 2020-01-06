@@ -4,6 +4,7 @@ const EvaluationCriterion = require('./evalutationCriterion');
 const Article = require('./article');
 const Assignment = require('./assignment');
 const Comment = require('./comment');
+const toDbTimestamp = require('../utils/date');
 
 const table = 'notice';
 
@@ -66,7 +67,7 @@ class Notice {
     this.notice_funds = notice.notice_funds;
     this.state = Object.values(States).includes(notice.state) ? notice.state : null;
     this.type = Object.values(Types).includes(notice.type) ? notice.type : null;
-    this.deadline = notice.deadline;
+    this.deadline = toDbTimestamp(notice.deadline);
     this.notice_file = notice.notice_file;
     this.graded_list_file = notice.graded_list_file;
     this.articles = notice.articles ? notice.articles.map((art) => new Article(art)) : null;
