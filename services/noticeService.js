@@ -105,7 +105,7 @@ module.exports = (app, auth) => {
    * @apiParam {String} protocol A notice protocol
    * @apiParam {String} notice A base64 encoded string representing the signed notice pdf
    */
-  app.put('/api/notices/pdf/:protocol', auth.isDDI, fileUpload(), NoticeControl.uploadNotice);
+  app.put('/api/notices/pdf/:protocol', auth.isDDI, NoticeControl.uploadNotice);
 
   /**
    * @api {GET} /api/notices/grades/pdf/:protocol Downloads Graded List pdf
@@ -126,5 +126,5 @@ module.exports = (app, auth) => {
    * @apiParam {String} protocol A notice protocol
    * @apiParam {String} gradedList A base64 encoded string representing the signed graded list pdf
    */
-  app.put('/api/notices/grades/pdf/:protocol', auth.isDDI, fileUpload(), NoticeControl.uploadGradedList);
+  app.put('/api/notices/grades/pdf/:protocol', auth.isDDI, NoticeControl.uploadGradedList);
 };
