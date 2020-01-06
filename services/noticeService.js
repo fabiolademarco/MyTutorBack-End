@@ -1,5 +1,4 @@
 const NoticeControl = require('../controllers/noticeControl');
-const fileUpload = require('express-fileupload');
 
 module.exports = (app, auth) => {
   /**
