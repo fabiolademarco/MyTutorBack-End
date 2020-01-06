@@ -399,7 +399,7 @@ exports.downloadNotice = async (req, res) => {
 
 exports.uploadNotice = async (req, res) => {
   const protocol = req.params.protocol;
-  const noticeFile = req.notice;
+  const noticeFile = req.body.notice;
 
   if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
     res.status(ERR_CLIENT_STATUS)
@@ -489,7 +489,7 @@ exports.downloadGradedList = async (req, res) => {
 
 exports.uploadGradedList = async (req, res) => {
   const protocol = req.params.protocol;
-  const gradedListFile = req.gradedList;
+  const gradedListFile = req.body.gradedList;
 
   if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
     res.status(ERR_CLIENT_STATUS)
