@@ -36,7 +36,7 @@ class Article {
         .then(([resultSetHeader]) => {
           article.id = resultSetHeader.insertId;
 
-          return article;
+          return new Article(article);
         })
         .catch((err) => {
           throw err;

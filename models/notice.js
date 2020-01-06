@@ -100,29 +100,30 @@ class Notice {
 
     return pool.query(`INSERT INTO ${table} SET ?`, notice)
         .then(() => {
+          let promises = [];
+
           if (articles) {
-            articles.forEach((art) => Article.create(art));
+            promises = promises.concat(articles.map((art) => Article.create(art)));
           }
-        })
-        .then(() => {
+
           if (evaluationCriteria) {
-            evaluationCriteria.forEach((ec) => EvaluationCriterion.create(ec));
+            promises = promises.concat(evaluationCriteria.map((ec) => EvaluationCriterion.create(ec)));
           }
-        })
-        .then(() => {
+
           if (assignments) {
-            assignments.forEach((assign) => Assignment.create(assign));
+            promises = promises.concat(assignments.map((assign) => Assignment.create(assign)));
           }
-        })
-        .then(() => {
+
           if (applicationSheet) {
-            ApplicationSheet.create(applicationSheet);
+            promises.push(ApplicationSheet.create(applicationSheet));
           }
+
+          return Promise.all(promises);
         })
-        .then(() => {
-          notice.articles = articles;
+        .then((list) => {
+          notice.articles = list.filter((el) => el.constructor.name === 'Article');
           notice.evaluation_criteria = evaluationCriteria;
-          notice.assignments = assignments;
+          notice.assignments = list.filter((el) => el.constructor.name === 'Assignment');
           notice.application_sheet = applicationSheet;
 
           return new Notice(notice);

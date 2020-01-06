@@ -20,7 +20,7 @@ describe('Notice test', function() {
 
   describe('Create method', function() {
     beforeEach(function() {
-      notice = example.notice;
+      notice = JSON.parse(JSON.stringify(example.notice)); // Added because the test Create_2 modified in some way the object
     });
 
     afterEach(async function() {

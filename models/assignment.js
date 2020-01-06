@@ -58,7 +58,7 @@ class Assignment {
         .then(([resultSetHeader]) => {
           assignment.id = resultSetHeader.insertId;
 
-          return assignment;
+          return new Assignment(assignment);
         })
         .catch((err) => {
           console.log(err);
@@ -80,7 +80,7 @@ class Assignment {
     }
 
     return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [assignment, assignment.id])
-        .then(([resultSetHeader]) => assignment)
+        .then(([resultSetHeader]) => new Assignment(assignment))
         .catch((err) => {
           throw err;
         });
