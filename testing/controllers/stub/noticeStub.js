@@ -299,10 +299,6 @@ class Notice {
         .then(() => {
           const rows = notices.filter((el) => el.protocol === noticeProtocol);
 
-          if (rows[0] == undefined) {
-            throw new Error('0 results found for protocol: ' + noticeProtocol);
-          }
-
           return Promise.all(rows.map((notice) =>
             getOtherFields(notice.protocol)
                 .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {

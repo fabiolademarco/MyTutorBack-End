@@ -76,7 +76,7 @@ exports.update = async (req, res) => {
     return;
   }
 
-  const dbNotices = await Notice.findByProtocol(notice);
+  const dbNotices = await Notice.findByProtocol(notice.protocol);
 
   if (dbNotices.length != 1) {
     res.status(ERR_CLIENT_STATUS)

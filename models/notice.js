@@ -268,10 +268,6 @@ class Notice {
 
     return pool.query(`SELECT * FROM ${table} WHERE protocol LIKE ?`, '%' + noticeProtocol + '%')
         .then(([rows]) => {
-          if (rows[0] == undefined) {
-            throw new Error('0 results found for protocol: ' + noticeProtocol);
-          }
-
           return Promise.all(rows.map((notice) =>
             getOtherFields(notice.protocol)
                 .then(({assignments, applicationSheet, evaluationCriteria, articles, comment}) => {
