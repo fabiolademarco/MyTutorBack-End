@@ -59,7 +59,7 @@ app.use(
       limit: '5MB',
     }),
 );
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '5MB'}));
 app.use(auth.initialize());
 
 // Setup server port
