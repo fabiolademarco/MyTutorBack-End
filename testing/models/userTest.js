@@ -15,9 +15,9 @@ const {expect} = chai;
 const User = require('../../models/user');
 
 describe('User model', function() {
-  let user;
-
   describe('Create method', function() {
+    let user;
+
     beforeEach(function() {
       user = {
         email: 'provaEmail',
@@ -40,7 +40,7 @@ describe('User model', function() {
     it('Create_2', async function() {
       const insertedUser = await User.create(user);
 
-      expect(user.email).to.been.equal(insertedUser.email);
+      expect(user.email).to.be.equal(insertedUser.email);
     });
 
     it('Create_3', async function() {
@@ -51,6 +51,8 @@ describe('User model', function() {
   });
 
   describe('Update method', function() {
+    let user;
+
     beforeEach(async function() {
       user = {
         email: 'provaEmail',
@@ -75,13 +77,14 @@ describe('User model', function() {
       await User.delete(user);
     });
 
-    it('Update_1', function() {
-      expect(User.update(null)).to.be.rejectedWith(Error, 'User must not be null');
+    it('Update_1', async function() {
+      await expect(User.update(null)).to.be.rejectedWith(Error, 'User must not be null');
     });
 
-    it('Update_2', function() {
+    it('Update_2', async function() {
       user.email = 'nonEsiste';
-      expect(User.update(user)).to.be.rejectedWith(Error, 'The user doesn\'t exists');
+
+      await expect(User.update(user)).to.be.rejectedWith(Error, 'The user doesn\'t exists');
     });
 
     it('Update_3', async function() {
@@ -98,6 +101,8 @@ describe('User model', function() {
   });
 
   describe('Delete method', function() {
+    let user;
+
     beforeEach(async function() {
       user = {
         email: 'provaEmail',
@@ -132,6 +137,8 @@ describe('User model', function() {
   });
 
   describe('Exists method', function() {
+    let user;
+
     beforeEach(async function() {
       user = {
         email: 'provaEmail',
@@ -166,6 +173,8 @@ describe('User model', function() {
   });
 
   describe('FindByEmail method', function() {
+    let user;
+
     beforeEach(async function() {
       user = {
         email: 'provaEmail',
@@ -208,6 +217,8 @@ describe('User model', function() {
   });
 
   describe('findByRole method', function() {
+    let user;
+
     beforeEach(async function() {
       user = {
         email: 'provaEmail',
@@ -246,6 +257,8 @@ describe('User model', function() {
   });
 
   describe('findByVerified method', function() {
+    let user;
+
     beforeEach(async function() {
       user = {
         email: 'provaEmail',
@@ -309,9 +322,16 @@ describe('User model', function() {
     it('seatch_2', function() {
       expect(User.search(filter)).to.be.fulfilled;
     });
+
+    it('seatch_3', function() {
+      filter = {};
+      expect(User.search(filter)).to.be.fulfilled;
+    });
   });
 
   describe('MatchUser method', function() {
+    let user;
+
     beforeEach(async function() {
       user = {
         email: 'provaEmail',
@@ -349,7 +369,7 @@ describe('User model', function() {
     });
 
     it('matchUser_4', function() {
-      expect(User.matchUser(user.email, user.password)).to.be.fulfilled;
+      expect(User.matchUser(user.email, 'Password123')).to.be.fulfilled;
     });
   });
 });
