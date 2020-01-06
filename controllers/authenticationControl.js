@@ -223,8 +223,6 @@ exports.registerProfessor = async (req, res) => {
           error: error.message,
           exception: error,
         });
-    console.log(error);
-
 
     return;
   }
