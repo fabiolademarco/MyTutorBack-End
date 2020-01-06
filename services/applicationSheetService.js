@@ -4,7 +4,7 @@ module.exports = (app, auth) => {
   app.use('/api/applicationsheet', auth.authenticate(), auth.isTeachingOffice);
 
   /**
-   * @api {PUT} /api/applicationsheet Creates a applicationsheet
+   * @api {PUT} /api/applicationsheet Creates an applicationsheet
    * @apiName Create
    * @apiGroup ApplicationSheet
    * @apiPermission Teaching Office
@@ -14,7 +14,7 @@ module.exports = (app, auth) => {
   app.put('/api/applicationsheet', ApplicationSheetControl.create);
 
   /**
-   * @api {PATCH} /api/applicationsheet Updates a applicationsheet
+   * @api {PATCH} /api/applicationsheet Updates an applicationsheet
    * @apiName Update
    * @apiGroup ApplicationSheet
    * @apiPermission Teaching Office
@@ -24,7 +24,7 @@ module.exports = (app, auth) => {
   app.patch('/api/applicationsheet', ApplicationSheetControl.update);
 
   /**
-   * @api {DELETE} /api/applicationsheet/:id Removes a applicationsheet
+   * @api {DELETE} /api/applicationsheet/:id Removes an applicationsheet
    * @apiName Delete
    * @apiGroup ApplicationSheet
    * @apiPermission Teaching Office
