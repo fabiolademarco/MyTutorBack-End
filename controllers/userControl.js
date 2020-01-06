@@ -121,7 +121,7 @@ module.exports.update = function(req, res) {
   const user = req.body.user;
   const loggedUser = req.user;
 
-  if (user == null || user.email !== loggedUser.id || (user.role === User.Role.STUDENT) || (user.role !== User.Role.STUDENT)) {
+  if (user == null || user.email !== loggedUser.id) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente è nullo o non valido'});
 
@@ -129,8 +129,11 @@ module.exports.update = function(req, res) {
   }
 
   try {
-    Check.checkStudent(user);
-    Check.checkProfessor(user);
+    if (user.role === User.Role.STUDENT) {
+      Check.checkStudent(user);
+    } else {
+      Check.checkProfessor(user);
+    }
   } catch (error) {
     res.status(ERR_CLIENT_STATUS)
         .send({

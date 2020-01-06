@@ -32,11 +32,11 @@ describe('Controller Utenti', function() {
       };
     });
 
-    it('TCS_UT.5.0', function() {
+    it('TCS_UT.5.0', async function() {
       filter.email = 'marchionno20@unisa.it';
       req = mockRequest({method: 'POST', body: {param: filter}});
       res = mockResponse();
-      userControl.search(req, res);
+      await userControl.search(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
@@ -70,75 +70,75 @@ describe('Controller Utenti', function() {
       };
     });
 
-    it('TCS_UT.6.0', function() {
+    it('TCS_UT.6.0', async function() {
       user.name = '';
       req = mockRequest({method: 'POST', body: {user: user}, user: loggedUser});
       res = mockResponse();
-      userControl.update(req, res);
+      await userControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.6.1', function() {
+    it('TCS_UT.6.1', async function() {
       user.name = 'Antoniooooooooooooooooooooooooooooooooooooooo';
       req = mockRequest({method: 'POST', body: {user: user}, user: loggedUser});
       res = mockResponse();
-      userControl.update(req, res);
+      await userControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.6.2', function() {
+    it('TCS_UT.6.2', async function() {
       user.name = 'An#ni@';
       req = mockRequest({method: 'POST', body: {user: user}, user: loggedUser});
       res = mockResponse();
-      userControl.update(req, res);
+      await userControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.6.3', function() {
+    it('TCS_UT.6.3', async function() {
       user.surname = '';
       req = mockRequest({method: 'POST', body: {user: user}, user: loggedUser});
       res = mockResponse();
-      userControl.update(req, res);
+      await userControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.6.4', function() {
+    it('TCS_UT.6.4', async function() {
       user.surname = 'Lodooooooooooooooooooooooooooooooooooooooooooooooooooooo';
       req = mockRequest({method: 'POST', body: {user: user}, user: loggedUser});
       res = mockResponse();
-      userControl.update(req, res);
+      await userControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.6.5', function() {
+    it('TCS_UT.6.5', async function() {
       user.surname = 'Lod@to';
       req = mockRequest({method: 'POST', body: {user: user}, user: loggedUser});
       res = mockResponse();
-      userControl.update(req, res);
+      await userControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.6.6', function() {
+    it('TCS_UT.6.6', async function() {
       user.birth_date = '199-13-04';
       req = mockRequest({method: 'POST', body: {user: user}, user: loggedUser});
       res = mockResponse();
-      userControl.update(req, res);
+      await userControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.6.7', function() {
+    it('TCS_UT.6.7', async function() {
       user.registration_number = '056660512?1';
       req = mockRequest({method: 'POST', body: {user: user}, user: loggedUser});
       res = mockResponse();
-      userControl.update(req, res);
+      await userControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_UT.6.8', function() {
+    it('TCS_UT.6.8', async function() {
       user.password = 'PregiatoMIPS|.,s';
       req = mockRequest({method: 'POST', body: {user: user}, user: loggedUser});
       res = mockResponse();
-      userControl.update(req, res);
+      await userControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
@@ -163,11 +163,11 @@ describe('Controller Utenti', function() {
       };
     });
 
-    it('TCS_UT.7.0', function() {
+    it('TCS_UT.7.0', async function() {
       filter.email = 'm.rossi@gmail.com';
       req = mockRequest({method: 'POST', body: {param: filter}});
       res = mockResponse();
-      userControl.search(req, res);
+      await userControl.search(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
