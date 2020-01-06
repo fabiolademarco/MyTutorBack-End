@@ -14,19 +14,21 @@ const {expect} = chai;
 
 const User = require('../../models/user');
 
+const constUser = {
+  email: 'provaEmail',
+  password: 'Password123',
+  name: 'Cristian',
+  surname: 'Barletta',
+  role: 'DDI',
+  verified: '1',
+};
+
 describe('User model', function() {
   describe('Create method', function() {
     let user;
 
     beforeEach(function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
     });
 
     afterEach(async function() {
@@ -38,9 +40,7 @@ describe('User model', function() {
     });
 
     it('Create_2', async function() {
-      const insertedUser = await User.create(user);
-
-      expect(user.email).to.be.equal(insertedUser.email);
+      expect(User.create(user)).to.be.fulfilled;
     });
 
     it('Create_3', async function() {
@@ -54,49 +54,32 @@ describe('User model', function() {
     let user;
 
     beforeEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.create(user);
     });
 
     afterEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.delete(user);
     });
 
-    it('Update_1', async function() {
-      await expect(User.update(null)).to.be.rejectedWith(Error, 'User must not be null');
+    it('Update_1', function() {
+      expect(User.update(null)).to.be.rejectedWith(Error, 'User must not be null');
     });
 
-    it('Update_2', async function() {
+    it('Update_2', function() {
       user.email = 'nonEsiste';
 
-      await expect(User.update(user)).to.be.rejectedWith(Error, 'The user doesn\'t exists');
+      expect(User.update(user)).to.be.rejectedWith(Error, 'The user doesn\'t exists');
     });
 
-    it('Update_3', async function() {
-      const updatedUser = await User.update(user);
-
-      expect(user.email).to.be.equal(updatedUser.email);
-    });
-
-    it('Update_4', async function() {
+    it('Update_3', function() {
       user.password = null;
-      user.verified = 'Prova';
-      await expect(User.update(user)).to.be.rejectedWith(Error); // Added await to remove warning on promise handling
+      expect(User.update(user)).to.be.fulfilled;
+    });
+
+    it('Update_4', function() {
+      expect(User.update(user)).to.be.fulfilled;
     });
   });
 
@@ -104,26 +87,12 @@ describe('User model', function() {
     let user;
 
     beforeEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.create(user);
     });
 
     afterEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.delete(user);
     });
 
@@ -132,7 +101,7 @@ describe('User model', function() {
     });
 
     it('Delete_2', async function() {
-      expect(await User.delete(user)).to.be.equal(true);
+      expect(User.delete(user)).to.be.fulfilled;
     });
   });
 
@@ -140,26 +109,12 @@ describe('User model', function() {
     let user;
 
     beforeEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.create(user);
     });
 
     afterEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.delete(user);
     });
 
@@ -167,8 +122,8 @@ describe('User model', function() {
       expect(User.exists(null)).to.be.rejectedWith(Error, 'User must not be null');
     });
 
-    it('Exists_2', async function() {
-      expect(await User.exists(user)).to.be.equal(true);
+    it('Exists_2', function() {
+      expect(User.exists(user)).to.be.fulfilled;
     });
   });
 
@@ -176,26 +131,12 @@ describe('User model', function() {
     let user;
 
     beforeEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.create(user);
     });
 
     afterEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.delete(user);
     });
 
@@ -220,26 +161,12 @@ describe('User model', function() {
     let user;
 
     beforeEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.create(user);
     });
 
     afterEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.delete(user);
     });
 
@@ -247,8 +174,8 @@ describe('User model', function() {
       expect(User.findByRole(null)).to.be.rejectedWith(Error, 'Role must not be null');
     });
 
-    it('findByRole_2', async function() {
-      expect(User.findByRole('Student')).to.be.fulfilled; // Added to remove a warning about promise handling
+    it('findByRole_2', function() {
+      expect(User.findByRole('Student')).to.be.fulfilled;
     });
 
     it('findByRole_3', function() {
@@ -260,26 +187,12 @@ describe('User model', function() {
     let user;
 
     beforeEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.create(user);
     });
 
     afterEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.delete(user);
     });
 
@@ -306,13 +219,7 @@ describe('User model', function() {
     let filter;
 
     beforeEach(function() {
-      filter = {
-        email: 'provaEmail',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'Student',
-        verified: '1',
-      };
+      filter = JSON.parse(JSON.stringify(constUser));
     });
 
     it('search_1', function() {
@@ -333,26 +240,12 @@ describe('User model', function() {
     let user;
 
     beforeEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.create(user);
     });
 
     afterEach(async function() {
-      user = {
-        email: 'provaEmail',
-        password: 'Password123',
-        name: 'Cristian',
-        surname: 'Barletta',
-        role: 'DDI',
-        verified: '1',
-      };
+      user = JSON.parse(JSON.stringify(constUser));
       await User.delete(user);
     });
 
