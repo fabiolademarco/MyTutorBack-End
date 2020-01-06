@@ -514,7 +514,7 @@ exports.uploadNotice = async (req, res) => {
   }
 
   try {
-    fs.writeFile(notice.notice_file, Buffer.from(noticeFile, 'base64'), () => {
+    fs.writeFile(notice.notice_file, noticeFile, {encoding: 'base64'}, () => {
       res.status(OK_STATUS).send({status: true});
 
       return;
@@ -624,7 +624,7 @@ exports.uploadGradedList = async (req, res) => {
   }
 
   try {
-    fs.writeFile(notice.graded_list_file, Buffer.from(gradedListFile, 'base64'), () => {
+    fs.writeFile(notice.graded_list_file, gradedListFile, {encoding: 'base64'}, () => {
       res.status(OK_STATUS).send({status: true});
 
       return;
