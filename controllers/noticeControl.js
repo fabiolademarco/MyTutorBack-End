@@ -399,7 +399,7 @@ exports.downloadNotice = async (req, res) => {
 
 exports.uploadNotice = async (req, res) => {
   const protocol = req.params.protocol;
-  const noticeFile = req.notice;
+  const noticeFile = req.body.notice;
 
   if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
     res.status(ERR_CLIENT_STATUS)
@@ -428,12 +428,6 @@ exports.uploadNotice = async (req, res) => {
   if (notice.state !== Notice.States.IN_APPROVAL) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: `Impossibile caricare il bando firmato mentre è ${notice.state}`});
-  }
-
-  if (noticeFile.mimetype !== 'application/pdf') {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Il file deve essere in formato pdf'});
-
-    return;
   }
 
   try {
@@ -489,7 +483,7 @@ exports.downloadGradedList = async (req, res) => {
 
 exports.uploadGradedList = async (req, res) => {
   const protocol = req.params.protocol;
-  const gradedListFile = req.gradedList;
+  const gradedListFile = req.body.gradedList;
 
   if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
     res.status(ERR_CLIENT_STATUS)
