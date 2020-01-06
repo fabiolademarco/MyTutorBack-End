@@ -56,7 +56,7 @@ app.use(function(req, res, next) {
 app.use(
     bodyParser.urlencoded({
       extended: true,
-      limit: '5MB',
+      limit: '5MB', // Limit size
     }),
 );
 app.use(bodyParser.json({limit: '5MB'}));
