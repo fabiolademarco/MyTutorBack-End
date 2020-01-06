@@ -39,7 +39,7 @@ exports.login = (req, res) => {
   }
 
   return User.matchUser(user.email, user.password)
-      .then((user) => {
+      .then(async (user) => {
         if (user == null) {
           res.status(ERR_NOT_AUTHORIZED);
           res.send({
@@ -47,6 +47,7 @@ exports.login = (req, res) => {
             error: 'Le credenziali di accesso risultano errate',
           });
         } else {
+          user = await Student.findByEmail(user.email);
           payload = {
             id: user.email,
             role: user.role,
