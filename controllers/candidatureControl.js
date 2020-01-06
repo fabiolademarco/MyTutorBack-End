@@ -34,6 +34,12 @@ exports.create = (req, res) => {
 
     return;
   }
+  // Decode Base64
+  candidature.documents = candidature.documents.map((d) => {
+    d.file = Buffer.from(d.file, 'base64');
+
+    return d;
+  });
   candidature.student = user.id;
   Candidature.create(candidature)
       .then((candidature) => {
@@ -77,6 +83,12 @@ exports.update = (req, res) => {
 
     return;
   }
+  // Decode Base64
+  candidature.documents = candidature.documents.map((d) => {
+    d.file = Buffer.from(d.file, 'base64');
+
+    return d;
+  });
   candidature.student = user.id;
   Candidature.update(candidature)
       .then((data) => {
@@ -162,7 +174,7 @@ exports.search = (req, res) => {
     promise = Candidature.findByStudent(user.id);
   } else {
     // Vedere cosa fare...
-    res.status(401);
+    res.status(403);
     res.send({
       error: 'Non autorizzato',
     });
@@ -174,6 +186,13 @@ exports.search = (req, res) => {
         if (!Array.isArray(candidatures)) {
           candidatures = [candidatures];
         }
+        candidatures.forEach((c) => {
+          c.documents = c.documents.map((d) => {
+            d.file = null;
+
+            return d;
+          });
+        });
         res.status(OK_STATUS).send({
           candidatures: candidatures,
         });
