@@ -24,9 +24,21 @@ const ERR_SERVER_STATUS = 500;
 exports.create = (req, res) => {
   const applicationSheet = req.body.applicationSheet;
 
-  if (applicationSheet == null || !Check.checkApplicationSheet(applicationSheet)) {
+  if (applicationSheet == null) {
     res.status(ERR_CLIENT_STATUS)
-        .send({error: 'Deve essere inserita una domanda valida.'});
+        .send({error: 'Deve essere inserita una domanda.'});
+
+    return;
+  }
+
+  try {
+    Check.checkApplicationSheet(applicationSheet);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
@@ -55,9 +67,21 @@ exports.create = (req, res) => {
 exports.update = (req, res) => {
   const applicationSheet = req.body.applicationSheet;
 
-  if (applicationSheet == null || !Check.checkApplicationSheet(applicationSheet)) {
+  if (applicationSheet == null) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserita una domanda valida.'});
+
+    return;
+  }
+
+  try {
+    Check.checkApplicationSheet(applicationSheet);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
@@ -86,9 +110,21 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const noticeProtocol = req.params.id;
 
-  if (applicationSheet == null || !Check.checkNoticeProtocol(noticeProtocol)) {
+  if (applicationSheet == null) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un protocollo valido.'});
+
+    return;
+  }
+
+  try {
+    Check.checkNoticeProtocol(noticeProtocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }

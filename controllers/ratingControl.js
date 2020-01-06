@@ -2,7 +2,7 @@ const Rating = require('../models/rating');
 const Candidature = require('../models/candidature');
 const Assignment = require('../models/assignment');
 const EvaluationCriterion = require('../models/evalutationCriterion');
-const check = require('../utils/check');
+const Check = require('../utils/check');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -33,8 +33,14 @@ module.exports.createTable = async function(req, res) {
     return;
   }
 
-  if (!check.checkRatingList(ratingList)) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Uno o più degli elementi della lista non rispettano il formato'});
+  try {
+    Check.checkRatingList(ratingList);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
@@ -83,8 +89,20 @@ module.exports.createTable = async function(req, res) {
 module.exports.getTable = async function(req, res) {
   const noticeProtocol = req.body.noticeProtocol;
 
-  if (noticeProtocol == null || check.checkNoticeProtocol(noticeProtocol) == false) {
+  if (noticeProtocol == null) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Il protocollo non può essere nullo'});
+
+    return;
+  }
+
+  try {
+    Check.checkNoticeProtocol(noticeProtocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }

@@ -25,12 +25,25 @@ exports.set = (req, res) => {
   const comment = req.body.comment;
   const user = req.user;
 
-  if (!comment || !Check.checkComment(comment)) {
+  if (!comment) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un commento valido.'});
 
     return;
   }
+
+  try {
+    Check.checkComment(comment);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   if (user.role !== User.Role.DDI && user.role !== User.Role.PROFESSOR) {
     res.status(403);
     res.send({
@@ -87,12 +100,25 @@ exports.set = (req, res) => {
 exports.delete = (req, res) => {
   const notice = req.params.id;
 
-  if (!notice || !Check.checkNoticeProtocol(notice)) {
+  if (!notice) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un commento valido'});
 
     return;
   }
+
+  try {
+    Check.checkNoticeProtocol(notice);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   const comment = new Comment({notice: notice});
 
   Comment.remove(comment)
@@ -117,9 +143,21 @@ exports.delete = (req, res) => {
 exports.get = (req, res) => {
   const noticeProtocol = req.body.noticeProtocol;
 
-  if (!noticeProtocol || !Check.checkNoticeProtocol(noticeProtocol)) {
+  if (!noticeProtocol) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un protocollo valido'});
+
+    return;
+  }
+
+  try {
+    Check.checkNoticeProtocol(noticeProtocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }

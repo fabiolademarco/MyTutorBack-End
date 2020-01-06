@@ -29,12 +29,26 @@ exports.sendRequest = (req, res) => {
 
   // Bisogna  controllare che esista anche lo studente
   // e forse che sia in graduatoria
-  if (emailStudent == null || assignment == null || assignment.state !== Assignment.states.UNASSIGNED || !Check.checkAssignment(assignment) || !Check.checkEmail(emailStudent)) {
+  if (emailStudent == null || assignment == null || assignment.state !== Assignment.states.UNASSIGNED) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'Non è stato specificato lo studente o l\'incarico'});
 
     return;
   }
+
+  try {
+    Check.checkAssignment(assignment);
+    Check.checkStudentEmail(emailStudent);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   assignment.student = emailStudent;
   assignment.state = Assignment.states.WAITING;
   Assignment.update(assignment)
@@ -62,16 +76,28 @@ exports.book = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
   const user = req.user;
 
-  if (assignment == null || assignment.state !== Assignment.states.WAITING || !Check.checkAssignment(assignment) || assignment.student != user.id) {
+  if (assignment == null || assignment.state !== Assignment.states.WAITING || assignment.student != user.id) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'incarico non può essere prenotato'});
 
     return;
   }
+
+  try {
+    Check.checkAssignment(assignment);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   assignment.state = Assignment.states.BOOKED;
   Assignment.update(assignment)
       .then(async (data) => {
-        // Inviare email
         const teachingOffice = (await User.findByRole(User.Role.TEACHING_OFFICE))[0];
 
         await Mail.sendEmailToTeachingOfficeBook(teachingOffice.email, assignment);
@@ -93,16 +119,28 @@ exports.book = (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-
 exports.assign = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
 
-  if (assignment == null || assignment.state !== Assignment.states.BOOKED || !Check.checkAssignment(assignment)) {
+  if (assignment == null || assignment.state !== Assignment.states.BOOKED) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere assegnato'});
 
     return;
   }
+
+  try {
+    Check.checkAssignment(assignment);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   assignment.state = Assignment.states.ASSIGNED;
   Assignment.update(assignment)
       .then(async (data) => {
@@ -167,12 +205,25 @@ exports.decline = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
   const user = req.user;
 
-  if (assignment == null || assignment.state !== Assignment.states.WAITING || assignment.student !== user.id || !Check.checkAssignment(assignment)) {
+  if (assignment == null || assignment.state !== Assignment.states.WAITING || assignment.student !== user.id) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere rifiutato'});
 
     return;
   }
+
+  try {
+    Check.checkAssignment(assignment);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   assignment.state = Assignment.states.UNASSIGNED;
   assignment.student = null;
   Assignment.update(assignment)
@@ -198,7 +249,6 @@ exports.decline = (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-
 exports.find = (req, res) => {
   const id = req.params.id;
   const user = req.user;
@@ -206,9 +256,9 @@ exports.find = (req, res) => {
   if (user.role === User.Role.TEACHING_OFFICE) {
     if (id == null || Number.parseInt(id) === NaN) {
       res.status(ERR_CLIENT_STATUS)
-          .send({error: 'Id non passato'});
+          .send({error: 'Id non specificato.'});
 
-      return null;
+      return;
     }
     Assignment.findById(id)
         .then((data) => {
@@ -258,12 +308,25 @@ exports.find = (req, res) => {
 exports.close = (req, res) => {
   const assignment = new Assignment(req.body.assignment);
 
-  if (assignment == null || assignment.state !== Assignment.states.ASSIGNED || !Check.checkAssignment(assignment)) {
+  if (assignment == null || assignment.state !== Assignment.states.ASSIGNED) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'L\'incarico non può essere chiuso'});
 
     return;
   }
+
+  try {
+    Check.checkAssignment(assignment);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   assignment.state = Assignment.states.OVER;
 
   return Assignment.update(assignment)

@@ -25,7 +25,7 @@ const ERR_SERVER_STATUS = 500;
 exports.create = (req, res) => {
   user = req.user;
   candidature = (req.body.candidature != null) ? new Candidature(req.body.candidature) : null;
-  if (candidature == null || user == null || !Check.checkNoticeProtocol(candidature.notice_protocol)) {
+  if (candidature == null || user == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -34,6 +34,19 @@ exports.create = (req, res) => {
 
     return;
   }
+
+  try {
+    Check.checkNoticeProtocol(candidature.notice_protocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   // Decode Base64
   candidature.documents = candidature.documents.map((d) => {
     d.file = Buffer.from(d.file, 'base64');
@@ -75,7 +88,7 @@ exports.create = (req, res) => {
 exports.update = (req, res) => {
   user = req.user;
   candidature = (req.body.candidature != null) ? new Candidature(req.body.candidature) : null;
-  if (candidature == null || !Check.checkNoticeProtocol(candidature.notice_protocol) || candidature.student !== user.id) {
+  if (candidature == null || candidature.student !== user.id) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -84,6 +97,19 @@ exports.update = (req, res) => {
 
     return;
   }
+
+  try {
+    Check.checkNoticeProtocol(candidature.notice_protocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   // Decode Base64
   candidature.documents = candidature.documents.map((d) => {
     d.file = Buffer.from(d.file, 'base64');
@@ -127,7 +153,7 @@ exports.delete = (req, res) => {
   user = req.user;
   const notice = req.params.notice;
 
-  if (notice == null || user == null || !Check.checkNoticeProtocol(notice)) {
+  if (notice == null || user == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -136,6 +162,19 @@ exports.delete = (req, res) => {
 
     return;
   }
+
+  try {
+    Check.checkNoticeProtocol(candidature.notice_protocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   const candidature = new Candidature({student: user.id, notice_protocol: notice});
 
   Candidature.remove(candidature)
@@ -175,7 +214,6 @@ exports.search = (req, res) => {
   } else if (user.role === User.Role.STUDENT) {
     promise = Candidature.findByStudent(user.id);
   } else {
-    // Vedere cosa fare...
     res.status(403);
     res.send({
       error: 'Non autorizzato',
@@ -213,14 +251,28 @@ exports.dowloadDocumentFile = (req, res) => {
   const candidature = req.body.candidature;
   const fileName = req.body.fileName;
 
-  if (!Check.checkNoticeProtocol(candidature.notice_protocol) || !Check.checkEmail(candidature.student)) {
+  if (!candidature || !fileName) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
-      error: 'I parametri non rispettano il formato',
+      error: 'Inviare una candidatura e un filename.',
     });
 
     return;
   }
+
+  try {
+    Check.checkNoticeProtocol(candidature.notice_protocol);
+    Check.checkEmail(candidature.student);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   Document.findById(fileName, candidature.student, candidature.notice_protocol)
       .then((doc) => {
         res.send(doc.file);
@@ -234,4 +286,4 @@ exports.dowloadDocumentFile = (req, res) => {
       });
 };
 
-// Forse sarebbe utile un metodo per tornare tutti i pdf di una candidatura
+// TODO: Forse sarebbe utile un metodo per tornare tutti i pdf di una candidatura

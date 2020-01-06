@@ -28,12 +28,26 @@ const ERR_NOT_AUTHORIZED = 401;
  */
 exports.login = (req, res) => {
   user = (req.body.user != null) ? new User(req.body.user) : null;
-  if (user == null || !Check.checkEmail(user.email) || !Check.checkPassword(user.password)) {
+  if (user == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
       error: 'Non è stato specificato correttamente l\'User',
     });
+
+    return;
+  }
+
+
+  try {
+    Check.checkEmail(user.email);
+    Check.checkPassword(user.password);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
@@ -93,11 +107,10 @@ exports.logout = (req, res) => {
  * Allows to register a new Student
  * @param {Request} req
  * @param {Response} res
- * @todo Controlliamo anche che non esista ?
  */
 exports.registerStudent = async (req, res) => {
   student = (req.body.student != null) ? new Student(req.body.student) : null;
-  if (student == null || !Check.checkStudent(student)) {
+  if (student == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -106,6 +119,19 @@ exports.registerStudent = async (req, res) => {
 
     return;
   }
+
+  try {
+    Check.checkStudent(student);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   if (await Student.exists(student)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
@@ -179,7 +205,7 @@ exports.registerProfessor = async (req, res) => {
     return;
   }
   professor = (req.body.professor != null) ? new User(req.body.professor) : null;
-  if (professor == null || !Check.checkProfessor(professor) || !await VerifiedEmail.isVerified(professor.email)) {
+  if (professor == null || !await VerifiedEmail.isVerified(professor.email)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -188,6 +214,21 @@ exports.registerProfessor = async (req, res) => {
 
     return;
   }
+
+  try {
+    Check.checkProfessor(professor);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+    console.log(error);
+
+
+    return;
+  }
+
   if (await User.exists(professor)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
@@ -225,6 +266,7 @@ exports.registerProfessor = async (req, res) => {
         });
       });
 };
+
 /**
  * Allows the recovery of the password.
  * @param {Request} req
@@ -243,7 +285,7 @@ exports.passwordRecovery = (req, res) => {
  */
 exports.insertVerifiedEmail = async (req, res) => {
   email = req.body.email;
-  if (email == null || !Check.checkVerifiedEmail(email)) {
+  if (email == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -252,6 +294,19 @@ exports.insertVerifiedEmail = async (req, res) => {
 
     return;
   }
+
+  try {
+    Check.checkVerifiedEmail(email);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   if (await VerifiedEmail.exists({email: email})) {
     res.status(ERR_CLIENT_STATUS);
     res.send({

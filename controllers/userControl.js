@@ -24,12 +24,25 @@ const ERR_SERVER_STATUS = 500;
 module.exports.delete = function(req, res) {
   const email = req.params.id;
 
-  if (email == null || !Check.checkEmail(email)) {
+  if (email == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente non puo essere nullo'});
 
     return;
   }
+
+  try {
+    Check.checkEmail(email);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   const user = new User({email: email});
 
   User.delete(user)
@@ -63,9 +76,21 @@ module.exports.search = function(req, res) {
     verified: param.verified,
   };
 
-  if (param == null || !Check.checkUserFilter(filter)) {
+  if (param == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'Non sono stati specificati parametri o non risultano validi'});
+
+    return;
+  }
+
+  try {
+    Check.checkUserFilter(filter);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
@@ -96,12 +121,26 @@ module.exports.update = function(req, res) {
   const user = req.body.user;
   const loggedUser = req.user;
 
-  if (user == null || user.email !== loggedUser.id || ((user.role === User.Role.STUDENT && !Check.checkStudent(user)) || (user.role !== User.Role.STUDENT && !Check.checkProfessor(user)))) {
+  if (user == null || user.email !== loggedUser.id || (user.role === User.Role.STUDENT) || (user.role !== User.Role.STUDENT)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'utente è nullo o non valido'});
 
     return;
   }
+
+  try {
+    Check.checkStudent(user);
+    Check.checkProfessor(user);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   let promise;
 
   if (loggedUser.role === User.Role.STUDENT) {
@@ -127,13 +166,26 @@ module.exports.find = function(req, res) {
   const email = req.params.id;
   const user = req.user;
 
-  if (email == null || !Check.checkEmail(email)) {
+  if (email == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'L\'email non può essere nulla'});
 
     return;
   }
-  // Il professore e il DDI possono farla?
+
+  try {
+    Check.checkEmail(email);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
+  // TODO: Il professore e il DDI possono farla?
   if (User.Role.STUDENT === user.role && user.id !== email) {
     res.status(403);
     res.send({error: 'Non sei autorizzato'});

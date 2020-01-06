@@ -37,9 +37,21 @@ accessList.set(User.Role.TEACHING_OFFICE, Object.values(Notice.States));
 exports.create = async (req, res) => {
   const notice = req.body.notice;
 
-  if (notice == null || !Check.checkNotice(notice) || await Notice.exists(notice)) {
+  if (notice == null || await Notice.exists(notice)) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un bando valido.'});
+
+    return;
+  }
+
+  try {
+    Check.checkNotice(notice);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
@@ -69,9 +81,21 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   const notice = req.body.notice;
 
-  if (notice == null || !Check.checkNotice(notice)) {
+  if (notice == null) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un bando valido'});
+
+    return;
+  }
+
+  try {
+    Check.checkNotice(notice);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
@@ -117,9 +141,21 @@ exports.setState = async (req, res) => {
   const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
   const notice = new Notice(req.body.notice);
 
-  if (notice == null || !Check.checkNoticeProtocol(notice.protocol) == null || notice.state == null) {
+  if (notice == null || notice.state == null) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un bando valido.'});
+
+    return;
+  }
+
+  try {
+    Check.checkNoticeProtocol(notice.protocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
@@ -198,9 +234,21 @@ exports.setState = async (req, res) => {
 exports.delete = (req, res) => {
   const notice = req.body.notice;
 
-  if (notice == null || !Check.checkNotice(notice)) {
+  if (notice == null) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un bando valido.'});
+
+    return;
+  }
+
+  try {
+    Check.checkNotice(notice);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
@@ -279,7 +327,6 @@ exports.search = async (req, res) => {
     notices = await Notice.findByState(userAccessList);
   }
 
-
   if (professor) {
     professor = professor.toLowerCase();
     notices = notices.filter((notice) => notice.referent_professor.toLowerCase().includes(professor));
@@ -303,9 +350,21 @@ exports.search = async (req, res) => {
 exports.find = (req, res) => {
   const protocol = req.params.protocol;
 
-  if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
+  if (protocol == null) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un protocollo valido.'});
+
+    return;
+  }
+
+  try {
+    Check.checkNoticeProtocol(protocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
@@ -370,6 +429,18 @@ exports.downloadNotice = async (req, res) => {
     return;
   }
 
+  try {
+    Check.checkNoticeProtocol(protocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
   const notices = await Notice.findByProtocol(protocol);
 
   if (notices.length != 1) {
@@ -401,9 +472,21 @@ exports.uploadNotice = async (req, res) => {
   const protocol = req.params.protocol;
   const noticeFile = req.body.notice;
 
-  if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
+  if (protocol == null) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un protocollo valido'});
+
+    return;
+  }
+
+  try {
+    Check.checkNoticeProtocol(protocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
@@ -457,9 +540,21 @@ exports.downloadGradedList = async (req, res) => {
 
   const protocol = req.params.protocol;
 
-  if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
+  if (protocol == null) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un protocollo valido'});
+  }
+
+  try {
+    Check.checkNoticeProtocol(protocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
   }
 
   const notices = await Notice.findByProtocol(protocol);
@@ -491,9 +586,21 @@ exports.uploadGradedList = async (req, res) => {
   const protocol = req.params.protocol;
   const gradedListFile = req.body.gradedList;
 
-  if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
+  if (protocol == null) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un protocollo valido'});
+
+    return;
+  }
+
+  try {
+    Check.checkNoticeProtocol(protocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
 
     return;
   }
