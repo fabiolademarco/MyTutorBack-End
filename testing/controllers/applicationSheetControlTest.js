@@ -36,15 +36,15 @@ describe('Controller ApplicationSheet', function() {
   });
 
   describe('Test_CreaBozzaDomanda', function() {
-    it('TCS_AV.3.0', function() {
+    it('TCS_AV.3.0', async function() {
       applicationSheet.documents_to_attach = '';
-      applicationSheetControl.create(req, res);
+      await applicationSheetControl.create(req, res);
       expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
     });
 
-    it('TCS_AV.3.1', function() {
+    it('TCS_AV.3.1', async function() {
       applicationSheet.documents_to_attach = 'a'.repeat(5001);
-      applicationSheetControl.create(req, res);
+      await applicationSheetControl.create(req, res);
       expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
     });
 
@@ -55,15 +55,15 @@ describe('Controller ApplicationSheet', function() {
   });
 
   describe('Test_ModificaBozzaDomanda', function() {
-    it('TCS_AV.4.0', function() {
+    it('TCS_AV.4.0', async function() {
       applicationSheet.documents_to_attach = '';
-      applicationSheetControl.update(req, res);
+      await applicationSheetControl.update(req, res);
       expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
     });
 
-    it('TCS_AV.4.1', function() {
+    it('TCS_AV.4.1', async function() {
       applicationSheet.documents_to_attach = 'a'.repeat(5001);
-      applicationSheetControl.update(req, res);
+      await applicationSheetControl.update(req, res);
       expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
     });
 

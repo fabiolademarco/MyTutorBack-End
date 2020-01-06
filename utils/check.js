@@ -258,11 +258,7 @@ exports.checkAssignment = (assignment) => {
     throw new Error('Il campo activity_description ha meno di 1 carattere di lunghezza ooppure supera i 50 caratteri di lunghezza.');
   }
 
-  if (!assignment.note) {
-    throw new Error('Il campo note è nullo.');
-  }
-
-  if (assignment.note.length < 1 || assignment.note.length > 500) {
+  if (assignment.note && (assignment.note.length < 1 || assignment.note.length > 500)) {
     throw new Error('Il campo note ha meno di 1 carattere di lunghezza ooppure supera i 50 caratteri di lunghezza.');
   }
 
@@ -434,11 +430,7 @@ exports.checkNotice = (notice) => {
 
   notice.evaluation_criteria.every(this.checkEvaluationCriterion);
 
-  if (!notice.assessable_titles) {
-    throw new Error('Il campo assessable_titles è nullo.');
-  }
-
-  if (notice.assessable_titles.length < 1 || notice.assessable_titles.length > 5000) {
+  if (notice.assessable_titles && (notice.assessable_titles.length < 1 || notice.assessable_titles.length > 5000)) {
     throw new Error('Il campo assessable_titles ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
