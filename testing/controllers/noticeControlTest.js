@@ -80,21 +80,21 @@ describe('Controller Bando', function() {
       res = mockResponse();
     });
 
-    it('TCS_AV.1.0', function() {
+    it('TCS_AV.1.0', async function() {
       notice.protocol = '';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.1', function() {
+    it('TCS_AV.1.1', async function() {
       notice.protocol = notice.protocol.repeat(126);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.2', function() {
+    it('TCS_AV.1.2', async function() {
       notice.protocol = 'Prov. n. A';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
@@ -104,33 +104,33 @@ describe('Controller Bando', function() {
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.4', function() {
+    it('TCS_AV.1.4', async function() {
       notice.description = 'a'.repeat(301);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.5', function() {
+    it('TCS_AV.1.5', async function() {
       notice.notice_subject = 'a'.repeat(2001);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.6', function() {
+    it('TCS_AV.1.6', async function() {
       notice.assignments[0].code = '';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.7', function() {
+    it('TCS_AV.1.7', async function() {
       notice.assignments[0].code = notice.assignments[0].code.repeat(31);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.8', function() {
+    it('TCS_AV.1.8', async function() {
       notice.assignments[0].code = 'Prova123';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
@@ -139,96 +139,96 @@ describe('Controller Bando', function() {
       expect(true);
     });
 
-    it('TCS_AV.1.10', function() {
+    it('TCS_AV.1.10', async function() {
       notice.assignments[0].activity_description = '';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
 
-    it('TCS_AV.1.11', function() {
+    it('TCS_AV.1.11', async function() {
       notice.assignments[0].activity_description = 'a'.repeat(201);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.12', function() {
+    it('TCS_AV.1.12', async function() {
       notice.assignments[0].total_number_hours = 0;
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.13', function() {
+    it('TCS_AV.1.13', async function() {
       notice.assignments[0].total_number_hours = 60;
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.14', function() {
+    it('TCS_AV.1.14', async function() {
       notice.assignments[0].total_number_hours = 'Ciao';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.15', function() {
+    it('TCS_AV.1.15', async function() {
       notice.assignments[0].title = '';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.16', function() {
+    it('TCS_AV.1.16', async function() {
       notice.assignments[0].hourly_cost = 0.0;
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.17', function() {
+    it('TCS_AV.1.17', async function() {
       notice.assignments[0].hourly_cost = 250.00;
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.18', function() {
+    it('TCS_AV.1.18', async function() {
       notice.assignments[0].hourly_cost = 'Ciao';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.19', function() {
+    it('TCS_AV.1.19', async function() {
       notice.assignments[0].ht_fund = 'a'.repeat(101);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.20', function() {
+    it('TCS_AV.1.20', async function() {
       notice.assignments = [];
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.21', function() {
+    it('TCS_AV.1.21', async function() {
       for (i = 0; i < 16; i ++) {
         notice.assignments.push(notice.assignments[0]);
       }
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.22', function() {
+    it('TCS_AV.1.22', async function() {
       notice.admission_requirements = 'a'.repeat(5091);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.23', function() {
+    it('TCS_AV.1.23', async function() {
       notice.evaluation_criteria[0].name = '';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.24', function() {
+    it('TCS_AV.1.24', async function() {
       notice.evaluation_criteria[0].name = 'a'.repeat(128);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
@@ -237,166 +237,163 @@ describe('Controller Bando', function() {
       expect(true);
     });
 
-    it('TCS_AV.1.26', function() {
+    it('TCS_AV.1.26', async function() {
       notice.evaluation_criteria[0].max_score = 0;
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.27', function() {
+    it('TCS_AV.1.27', async function() {
       notice.evaluation_criteria[0].max_score = 100;
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.28', function() {
+    it('TCS_AV.1.28', async function() {
       notice.evaluation_criteria[0].max_score = 'Ciao';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.29', function() {
+    it('TCS_AV.1.29', async function() {
       notice.evaluation_criteria = [];
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.30', function() {
+    it('TCS_AV.1.30', async function() {
       for (i = 0; i < 10; i ++) {
         notice.evaluation_criteria.push(notice.evaluation_criteria[0]);
       }
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.31', function() {
+    it('TCS_AV.1.31', async function() {
       notice.assessable_titles = 'a'.repeat(5091);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.32', function() {
+    it('TCS_AV.1.32', async function() {
       notice.how_to_submit_applications = 'a'.repeat(5091);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.33', function() {
+    it('TCS_AV.1.33', async function() {
       notice.selection_board = 'a'.repeat(5091);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.34', function() {
+    it('TCS_AV.1.34', async function() {
       notice.acceptance = 'a'.repeat(5091);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.35', function() {
+    it('TCS_AV.1.35', async function() {
       notice.incompatibility = 'a'.repeat(5091);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.36', function() {
+    it('TCS_AV.1.36', async function() {
       notice.termination_of_the_assignment = 'a'.repeat(5091);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.37', function() {
+    it('TCS_AV.1.37', async function() {
       notice.nature_of_the_assignment = 'a'.repeat(5091);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.38', function() {
+    it('TCS_AV.1.38', async function() {
       notice.unused_funds = 'a'.repeat(5091);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.39', function() {
+    it('TCS_AV.1.39', async function() {
       notice.responsible_for_the_procedure = 'a'.repeat(5091);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.40', function() {
+    it('TCS_AV.1.40', async function() {
       notice.notice_funds = 0.00;
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.41', function() {
+    it('TCS_AV.1.41', async function() {
       notice.notice_funds = '650.00 ab';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.42', function() {
+    it('TCS_AV.1.42', async function() {
       notice.type = 'a'.repeat(51);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.43', function() {
+    it('TCS_AV.1.43', async function() {
       notice.deadline = '';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.44', function() {
+    it('TCS_AV.1.44', async function() {
       notice.articles[0].initial = '';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.45', function() {
+    it('TCS_AV.1.45', async function() {
       notice.articles[0].initial = 'a'.repeat(26);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.46', function() {
+    it('TCS_AV.1.46', async function() {
       notice.articles[0].initial = '1234';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.47', function() {
+    it('TCS_AV.1.47', async function() {
       notice.articles[0].text = '';
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.48', function() {
+    it('TCS_AV.1.48', async function() {
       notice.articles[0].text = 'a'.repeat(5091);
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.49', function() {
+    it('TCS_AV.1.49', async function() {
       notice.articles = [];
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.50', function() {
+    it('TCS_AV.1.50', async function() {
       for (i = 0; i < 30; i ++) {
         notice.articles.push(notice.articles[0]);
       }
-      noticeControl.create(req, res);
+      await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.1.51', function() {
-      noticeControl.create(req, res)
-          .then(() => {
-            expect(res.status).to.have.been.calledWith(200);
-          })
-          .catch((err) => console.log(err));
+    it('TCS_AV.1.51', async function() {
+      await noticeControl.create(req, res);
+      expect(res.status).to.have.been.calledWith(200);
     });
   });
 
@@ -454,21 +451,21 @@ describe('Controller Bando', function() {
       res = mockResponse();
     });
 
-    it('TCS_AV.2.0', function() {
+    it('TCS_AV.2.0', async function() {
       notice.protocol = '';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.1', function() {
+    it('TCS_AV.2.1', async function() {
       notice.protocol = notice.protocol.repeat(126);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.2', function() {
+    it('TCS_AV.2.2', async function() {
       notice.protocol = 'Prov. n. A';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
@@ -478,298 +475,295 @@ describe('Controller Bando', function() {
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.4', function() {
+    it('TCS_AV.2.4', async function() {
       notice.description = 'a'.repeat(301);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.5', function() {
+    it('TCS_AV.2.5', async function() {
       notice.notice_subject = 'a'.repeat(2001);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.6', function() {
+    it('TCS_AV.2.6', async function() {
       notice.assignments[0].code = '';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.7', function() {
+    it('TCS_AV.2.7', async function() {
       notice.assignments[0].code = notice.assignments[0].code.repeat(31);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.8', function() {
+    it('TCS_AV.2.8', async function() {
       notice.assignments[0].code = 'Prova123';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    // Il controllo dei codici degli incarichi è eseguito lato front Vedere se TODO
+    // TODO: Il controllo dei codici degli incarichi è eseguito lato front Vedere se TODO
     it('TCS_AV.2.9', function() {
       expect(true);
     });
 
-    it('TCS_AV.2.10', function() {
+    it('TCS_AV.2.10', async function() {
       notice.assignments[0].activity_description = '';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.11', function() {
+    it('TCS_AV.2.11', async function() {
       notice.assignments[0].activity_description = 'a'.repeat(201);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.12', function() {
+    it('TCS_AV.2.12', async function() {
       notice.assignments[0].total_number_hours = 0;
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.13', function() {
+    it('TCS_AV.2.13', async function() {
       notice.assignments[0].total_number_hours = 60;
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.14', function() {
+    it('TCS_AV.2.14', async function() {
       notice.assignments[0].total_number_hours = 'Ciao';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.15', function() {
+    it('TCS_AV.2.15', async function() {
       notice.assignments[0].title = '';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.16', function() {
+    it('TCS_AV.2.16', async function() {
       notice.assignments[0].hourly_cost = 0.0;
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.17', function() {
+    it('TCS_AV.2.17', async function() {
       notice.assignments[0].hourly_cost = 250.00;
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.18', function() {
+    it('TCS_AV.2.18', async function() {
       notice.assignments[0].hourly_cost = 'Ciao';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.19', function() {
+    it('TCS_AV.2.19', async function() {
       notice.assignments[0].ht_fund = 'a'.repeat(101);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.20', function() {
+    it('TCS_AV.2.20', async function() {
       notice.assignments = [];
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.21', function() {
+    it('TCS_AV.2.21', async function() {
       for (i = 0; i < 16; i ++) {
         notice.assignments.push(notice.assignments[0]);
       }
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.22', function() {
+    it('TCS_AV.2.22', async function() {
       notice.admission_requirements = 'a'.repeat(5091);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.23', function() {
+    it('TCS_AV.2.23', async function() {
       notice.evaluation_criteria[0].name = '';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.24', function() {
+    it('TCS_AV.2.24', async function() {
       notice.evaluation_criteria[0].name = 'a'.repeat(128);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    // Il nome del criterio inserito viene controllato lato front Vedere se TODO
+    // TODO: Il nome del criterio inserito viene controllato lato front Vedere se TODO
     it('TCS_AV.2.25', function() {
       expect(true);
     });
 
-    it('TCS_AV.2.26', function() {
+    it('TCS_AV.2.26', async function() {
       notice.evaluation_criteria[0].max_score = 0;
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.27', function() {
+    it('TCS_AV.2.27', async function() {
       notice.evaluation_criteria[0].max_score = 100;
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.28', function() {
+    it('TCS_AV.2.28', async function() {
       notice.evaluation_criteria[0].max_score = 'Ciao';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.29', function() {
+    it('TCS_AV.2.29', async function() {
       notice.evaluation_criteria = [];
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.30', function() {
+    it('TCS_AV.2.30', async function() {
       for (i = 0; i < 10; i ++) {
         notice.evaluation_criteria.push(notice.evaluation_criteria[0]);
       }
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.31', function() {
+    it('TCS_AV.2.31', async function() {
       notice.assessable_titles = 'a'.repeat(5091);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.32', function() {
+    it('TCS_AV.2.32', async function() {
       notice.how_to_submit_applications = 'a'.repeat(5091);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.33', function() {
+    it('TCS_AV.2.33', async function() {
       notice.selection_board = 'a'.repeat(5091);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.34', function() {
+    it('TCS_AV.2.34', async function() {
       notice.acceptance = 'a'.repeat(5091);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.35', function() {
+    it('TCS_AV.2.35', async function() {
       notice.incompatibility = 'a'.repeat(5091);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.36', function() {
+    it('TCS_AV.2.36', async function() {
       notice.termination_of_the_assignment = 'a'.repeat(5091);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.37', function() {
+    it('TCS_AV.2.37', async function() {
       notice.nature_of_the_assignment = 'a'.repeat(5091);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.38', function() {
+    it('TCS_AV.2.38', async function() {
       notice.unused_funds = 'a'.repeat(5091);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.39', function() {
+    it('TCS_AV.2.39', async function() {
       notice.responsible_for_the_procedure = 'a'.repeat(5091);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.40', function() {
+    it('TCS_AV.2.40', async function() {
       notice.notice_funds = 0.00;
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.41', function() {
+    it('TCS_AV.2.41', async function() {
       notice.notice_funds = '650.00 ab';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.42', function() {
+    it('TCS_AV.2.42', async function() {
       notice.type = 'a'.repeat(51);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.43', function() {
+    it('TCS_AV.2.43', async function() {
       notice.deadline = '';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.44', function() {
+    it('TCS_AV.2.44', async function() {
       notice.articles[0].initial = '';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.45', function() {
+    it('TCS_AV.2.45', async function() {
       notice.articles[0].initial = 'a'.repeat(26);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.46', function() {
+    it('TCS_AV.2.46', async function() {
       notice.articles[0].initial = '1234';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.47', function() {
+    it('TCS_AV.2.47', async function() {
       notice.articles[0].text = '';
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.48', function() {
+    it('TCS_AV.2.48', async function() {
       notice.articles[0].text = 'a'.repeat(5091);
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.49', function() {
+    it('TCS_AV.2.49', async function() {
       notice.articles = [];
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.50', function() {
+    it('TCS_AV.2.50', async function() {
       for (i = 0; i < 30; i ++) {
         notice.articles.push(notice.articles[0]);
       }
-      noticeControl.update(req, res);
+      await noticeControl.update(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    it('TCS_AV.2.51', function() {
-      noticeControl.update(req, res)
-          .then(() => {
-            expect(res.status).to.have.been.calledWith(200);
-          })
-          .catch((err) => console.log(err));
+    it('TCS_AV.2.51', async function() {
+      await noticeControl.update(req, res);
+      expect(res.status).to.have.been.calledWith(200);
     });
   });
 });
