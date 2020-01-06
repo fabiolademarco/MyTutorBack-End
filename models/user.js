@@ -118,9 +118,9 @@ class User {
    * @param {string} email The email used to find the user
    * @return {Promise<User>} The promise reresenting the fulfillment of the search request
    */
-  static findByEmail(email) {
+  static async findByEmail(email) {
     if (email === null || email === undefined) {
-      throw new Error('email must not be null');
+      throw new Error('Email must not be null');
     }
 
     return pool.query(`SELECT * FROM ${table} WHERE email=?`, email)
@@ -139,9 +139,9 @@ class User {
    * @param {string} role The role used to find the user
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
-  static findByRole(role) {
+  static async findByRole(role) {
     if (role === null || role === undefined) {
-      throw new Error('role must not be null');
+      throw new Error('Role must not be null');
     }
 
     return pool.query(`SELECT * FROM ${table} WHERE role=?`, role)
@@ -156,12 +156,12 @@ class User {
    * @param {string} verified The state used to find the user
    * @return {Promise<User[]>} The promise reresenting the fulfillment of the search request
    */
-  static findByVerified(verified) {
+  static async findByVerified(verified) {
     if (verified === null || verified === undefined) {
-      throw new Error('verified status must not be null');
+      throw new Error('Verified status must not be null');
     }
 
-    return pool.query(`SELECT * FROM ${table} WHERE verified=?`, role)
+    return pool.query(`SELECT * FROM ${table} WHERE verified=?`, verified)
         .then(([rows]) => {
           return rows.map((user) => new User(user));
         })
@@ -188,7 +188,7 @@ class User {
    * @param {Object} filter The object containing the logic to use for the search
    * @return {Promise<User[]>} The promise representing the fulfillment of the search request
    */
-  static search(filter) {
+  static async search(filter) {
     let query = `SELECT * FROM ${table} WHERE true`;
     const params = [];
 
@@ -229,7 +229,7 @@ class User {
    * @param {string} password The password encrypted.
    * @return {Promise<User>} Promise Object that represents the User if there is a match or else it's null.
    */
-  static matchUser(email, password) {
+  static async matchUser(email, password) {
     if (email == null || password == null) {
       throw new Error('Email or Password can not be null or undefined');
     }

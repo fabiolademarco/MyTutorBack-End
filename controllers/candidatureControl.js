@@ -37,6 +37,7 @@ exports.create = (req, res) => {
   // Decode Base64
   candidature.documents = candidature.documents.map((d) => {
     d.file = Buffer.from(d.file, 'base64');
+    d.student = user.id;
 
     return d;
   });
@@ -86,6 +87,7 @@ exports.update = (req, res) => {
   // Decode Base64
   candidature.documents = candidature.documents.map((d) => {
     d.file = Buffer.from(d.file, 'base64');
+    d.student = user.id;
 
     return d;
   });
