@@ -103,7 +103,7 @@ class User {
    * @param {User} user The user whose existence is checked
    * @return {Promise<boolean>} The promise reresenting the fulfillment of the verification request
    */
-  static exists(user) {
+  static async exists(user) {
     if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }

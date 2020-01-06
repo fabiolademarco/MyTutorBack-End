@@ -156,12 +156,12 @@ describe('User model', function() {
       await User.delete(user);
     });
 
-    it('Delete_1', function() {
-      expect(User.delete(null)).to.be.rejectedWith(Error, 'User must not be null');
+    it('Exists_1', function() {
+      expect(User.exists(null)).to.be.rejectedWith(Error, 'User must not be null');
     });
 
-    it('Delete_2', async function() {
-      expect(await User.delete(user)).to.be.equal(true);
+    it('Exists_2', async function() {
+      expect(await User.exists(user)).to.be.equal(true);
     });
   });
 });

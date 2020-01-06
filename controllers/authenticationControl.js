@@ -64,6 +64,14 @@ exports.login = (req, res) => {
             user: user,
           });
         }
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS);
+        res.send({
+          status: false,
+          error: 'Login fallito',
+          exception: err.message,
+        });
       });
 };
 

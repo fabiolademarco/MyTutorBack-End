@@ -118,9 +118,7 @@ class Student extends User {
 
     return new Promise((resolve) => resolve())
         .then(async () => {
-          const user = await this.findByEmail(email);
-
-          sublist = list.filter((el) => el.email === user.email);
+          const sublist = list.filter((el) => el.email === email);
 
           return (sublist.length > 0) ? sublist[0] : null;
         })
