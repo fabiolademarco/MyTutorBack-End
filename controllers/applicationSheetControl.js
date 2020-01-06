@@ -110,7 +110,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const noticeProtocol = req.params.id;
 
-  if (applicationSheet == null) {
+  if (noticeProtocol == null) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un protocollo valido.'});
 
