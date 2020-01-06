@@ -507,29 +507,23 @@ exports.checkNotice = (notice) => {
 exports.checkUserFilter = (filter) => {
   const roleExp = /Student|Teaching Office|Professor|DDI/;
 
-  if (!filter.email) {
-    throw new Error('La mail è nulla.');
+  if (filter.email != null) {
+    this.checkEmail(filter.email);
   }
 
-  this.checkEmail(filter.email);
-
-  checkName(filter.name);
-
-  checkSurname(filter.surname);
-
-  if (!filter.role) {
-    throw new Error('Il ruolo è nullo.');
+  if (filter.name != null) {
+    checkName(filter.name);
   }
 
-  if (!roleExp.test(filter.role)) {
+  if (filter.surname != null) {
+    checkSurname(filter.surname);
+  }
+
+  if (filter.role != null && !roleExp.test(filter.role)) {
     throw new Error('Il ruolo non rispetta il formato.');
   }
 
-  if (!filter.verified) {
-    throw new Error('Il campo verified è nullo.');
-  }
-
-  if (filter.verified != 0 || filter.verified != 1) {
+  if (filter.verified != null && (filter.verified != 0 || filter.verified != 1)) {
     throw new Error('Il campo verified non è nè 0 nè 1.');
   }
 
