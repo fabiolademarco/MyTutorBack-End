@@ -2,6 +2,9 @@ const Candidature = require('../models/candidature');
 const User = require('../models/user');
 const Check = require('../utils/check');
 const Document = require('../models/document');
+const JSZip = require('jszip');
+const FileType = require('file-type');
+const fs = require('fs');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -274,8 +277,11 @@ exports.dowloadDocumentFile = (req, res) => {
   }
 
   Document.findById(fileName, candidature.student, candidature.notice_protocol)
-      .then((doc) => {
-        res.send(doc.file);
+      .then(async (doc) => {
+        res
+            .type((await FileType.fromBuffer(doc.file)).mime)
+            .set('Content-Disposition', 'attachment; filename=' + doc.file_name)
+            .send(doc.file);
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
@@ -286,4 +292,62 @@ exports.dowloadDocumentFile = (req, res) => {
       });
 };
 
-// TODO: Forse sarebbe utile un metodo per tornare tutti i pdf di una candidatura
+exports.dowloadDocuments = async (req, res) => {
+  const candidature = req.body.candidature;
+
+  if (!candidature) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({
+      error: 'Inviare una candidatura.',
+    });
+
+    return;
+  }
+
+  try {
+    Check.checkNoticeProtocol(candidature.notice_protocol);
+    Check.checkEmail(candidature.student);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
+  const student = await User.findByEmail(candidature.student);
+
+  Document.findByCandidature(candidature)
+      .then((docs) => {
+        const zip = new JSZip();
+
+        const fileName = `Candidatura ${student.name} ${student.surname} - ${candidature.notice_protocol}.zip`;
+
+        docs.forEach((doc) => zip.file(doc.file_name, doc.file));
+        zip
+            .generateNodeStream({streamFiles: true})
+            .pipe(fs.createWriteStream(fileName))
+            .on('finish', function() {
+              res
+                  .type('application/zip')
+                  .download(fileName, (err) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                    fs.unlink(fileName, () => {
+                      console.log(`Deleted temp file ${fileName}`);
+                    });
+                  });
+            });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(ERR_SERVER_STATUS);
+        res.send({
+          error: 'Download fallito',
+          exception: err.message,
+        });
+      });
+};

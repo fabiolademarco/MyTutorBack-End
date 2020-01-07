@@ -12,6 +12,8 @@ chai.use(chaiAsPromised);
 
 const {expect} = chai;
 
+const db = require('../../db');
+const table = 'user';
 const User = require('../../models/user');
 
 const constUser = {
@@ -32,7 +34,8 @@ describe('User model', function() {
     });
 
     afterEach(async function() {
-      await User.delete(user);
+      user = JSON.parse(JSON.stringify(constUser));
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
     it('Create_1', async function() {
@@ -55,12 +58,12 @@ describe('User model', function() {
 
     beforeEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.create(user);
+      await db.query(`INSERT INTO ${table} SET ?`, user);
     });
 
     afterEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.delete(user);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
     it('Update_1', function() {
@@ -88,12 +91,12 @@ describe('User model', function() {
 
     beforeEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.create(user);
+      await db.query(`INSERT INTO ${table} SET ?`, user);
     });
 
     afterEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.delete(user);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
     it('Delete_1', function() {
@@ -110,12 +113,12 @@ describe('User model', function() {
 
     beforeEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.create(user);
+      await db.query(`INSERT INTO ${table} SET ?`, user);
     });
 
     afterEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.delete(user);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
     it('Exists_1', function() {
@@ -132,12 +135,12 @@ describe('User model', function() {
 
     beforeEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.create(user);
+      await db.query(`INSERT INTO ${table} SET ?`, user);
     });
 
     afterEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.delete(user);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
     it('findByEmail_1', function() {
@@ -162,12 +165,12 @@ describe('User model', function() {
 
     beforeEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.create(user);
+      await db.query(`INSERT INTO ${table} SET ?`, user);
     });
 
     afterEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.delete(user);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
     it('findByRole_1', function() {
@@ -188,12 +191,12 @@ describe('User model', function() {
 
     beforeEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.create(user);
+      await db.query(`INSERT INTO ${table} SET ?`, user);
     });
 
     afterEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.delete(user);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
     it('findByVerified_1', function() {
@@ -241,12 +244,12 @@ describe('User model', function() {
 
     beforeEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.create(user);
+      await db.query(`INSERT INTO ${table} SET ?`, user);
     });
 
     afterEach(async function() {
       user = JSON.parse(JSON.stringify(constUser));
-      await User.delete(user);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
     it('matchUser_1', function() {

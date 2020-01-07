@@ -13,9 +13,12 @@ const proxy = require('proxyquire').noCallThru();
 
 const NoticeStub = require('./stub/noticeStub');
 const UserStub = require('./stub/userStub');
+const RatingStub = require('./stub/ratingStub');
+
 const path = {
   '../models/notice': NoticeStub,
   '../models/user': UserStub,
+  '../models/rating': RatingStub,
 };
 
 const noticeControl = proxy('../../controllers/noticeControl', path);

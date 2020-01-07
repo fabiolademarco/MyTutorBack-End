@@ -1,4 +1,5 @@
 const CandidatureControl = require('../controllers/candidatureControl');
+const cors = require('cors');
 
 module.exports = (app, auth) => {
   app.use('/api/candidatures', auth.authenticate());
@@ -54,5 +55,15 @@ module.exports = (app, auth) => {
    * @apiParam {string} fileName The fileName of a document of the given candidature
    * @apiSuccess {Blob} Stream of byte of the document
    */
-  app.post('/api/candidatures', auth.isTeachingOffice, CandidatureControl.dowloadDocumentFile);
+  app.post('/api/candidatures', cors({exposedHeaders: ['Content-Disposition']}), auth.isTeachingOffice, CandidatureControl.dowloadDocumentFile);
+
+  /**
+   * @api {POST} /api/candidatures/all Gets all documents for a candidature
+   * @apiName DowloadDocuments
+   * @apiGroup Candidature
+   * @apiPermission Teaching Office
+   * @apiParam {Candidature} candidature A candidature
+   * @apiSuccess {Blob} Stream of byte of the documents
+   */
+  app.post('/api/candidatures/all', cors({exposedHeaders: ['Content-Disposition']}), auth.isTeachingOffice, CandidatureControl.dowloadDocuments);
 };

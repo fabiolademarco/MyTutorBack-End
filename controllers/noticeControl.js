@@ -282,7 +282,6 @@ exports.search = async (req, res) => {
   const professor = req.body.professor;
   const type = req.body.type;
 
-  console.log(protocol);
   if (protocol && protocol.length > 127) {
     res.status(ERR_CLIENT_STATUS)
         .send({
@@ -475,12 +474,12 @@ exports.downloadNotice = async (req, res) => {
 
   return res.status(OK_STATUS)
       .type('application/pdf')
-      .sendFile(path.resolve(notice.notice_file));
+      .download(path.resolve(notice.notice_file));
 };
 
 exports.uploadNotice = async (req, res) => {
   const protocol = req.params.protocol;
-  const noticeFile = req.body.notice;
+  let noticeFile = req.body.notice;
 
   if (protocol == null) {
     res.status(ERR_CLIENT_STATUS)
@@ -521,10 +520,24 @@ exports.uploadNotice = async (req, res) => {
   if (notice.state !== Notice.States.IN_APPROVAL) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: `Impossibile caricare il bando firmato mentre è ${notice.state}`});
+
+    return;
+  }
+
+  const substr = noticeFile.substring(0, noticeFile.indexOf(','));
+
+  noticeFile = noticeFile.replace(substr, '');
+  const mime = substr.split(':')[1].split(';')[0];
+
+  if (mime !== 'application/pdf') {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Il file caricato deve essere un pdf'});
+
+    return;
   }
 
   try {
-    fs.writeFile(notice.notice_file, Buffer.from(noticeFile, 'base64'), {encoding: 'binary'}, () => {
+    fs.writeFile(notice.notice_file, noticeFile, {encoding: 'base64'}, () => {
       res.status(OK_STATUS).send({status: true});
 
       return;
@@ -585,12 +598,12 @@ exports.downloadGradedList = async (req, res) => {
 
   return res.status(OK_STATUS)
       .type('application/pdf')
-      .sendFile(path.resolve(notice.graded_list_file));
+      .download(path.resolve(notice.graded_list_file));
 };
 
 exports.uploadGradedList = async (req, res) => {
   const protocol = req.params.protocol;
-  const gradedListFile = req.body.gradedList;
+  let gradedListFile = req.body.gradedList;
 
   if (protocol == null) {
     res.status(ERR_CLIENT_STATUS)
@@ -633,8 +646,20 @@ exports.uploadGradedList = async (req, res) => {
         .send({error: `Impossibile caricare la graduatoria firmata mentre è ${notice.state}`});
   }
 
+  const substr = gradedListFile.substring(0, gradedListFile.indexOf(','));
+
+  gradedListFile = gradedListFile.replace(substr, '');
+  const mime = substr.split(':')[1].split(';')[0];
+
+  if (mime !== 'application/pdf') {
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Il file caricato deve essere un pdf'});
+
+    return;
+  }
+
   try {
-    fs.writeFile(notice.graded_list_file, Buffer.from(gradedListFile, 'base64'), {encoding: 'binary'}, () => {
+    fs.writeFile(notice.graded_list_file, gradedListFile, {encoding: 'base64'}, () => {
       res.status(OK_STATUS).send({status: true});
 
       return;

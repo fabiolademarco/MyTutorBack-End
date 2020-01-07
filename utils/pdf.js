@@ -305,9 +305,9 @@ const generateApplicationSheet = async (notice) => {
 
   for (const assignment of assignments) {
     if (assignment.title === Assignment.titles.MASTER) {
-      masterAssignments.push(assignments);
+      masterAssignments.push(assignment);
     } else {
-      phdAssignments.push(assignments);
+      phdAssignments.push(assignment);
     }
   }
 
@@ -491,6 +491,7 @@ exports.makeNotice = async (notice) => {
   const applicationSheetPath = await generateApplicationSheet(notice);
 
   const filePath = `./notices/${notice.protocol}.pdf`;
+
 
   merge([noticePath, pdtPath, applicationSheetPath], filePath, (err) => {
     if (err) {
