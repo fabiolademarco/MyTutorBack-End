@@ -514,10 +514,12 @@ exports.uploadNotice = async (req, res) => {
   }
 
   try {
-    fs.writeFile(notice.notice_file, Buffer.from(noticeFile, 'base64'), {encoding: 'binary'}, () => {
-      res.status(OK_STATUS).send({status: true});
+    fs.unlink(notice.notice_file, () => {
+      fs.writeFile(notice.notice_file, noticeFile, {encoding: 'base64'}, () => {
+        res.status(OK_STATUS).send({status: true});
 
-      return;
+        return;
+      });
     });
   } catch (err) {
     console.log(err);

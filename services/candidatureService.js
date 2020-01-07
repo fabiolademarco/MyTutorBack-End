@@ -55,4 +55,14 @@ module.exports = (app, auth) => {
    * @apiSuccess {Blob} Stream of byte of the document
    */
   app.post('/api/candidatures', auth.isTeachingOffice, CandidatureControl.dowloadDocumentFile);
+
+  /**
+   * @api {POST} /api/candidatures/all Gets all documents for a candidature
+   * @apiName DowloadDocuments
+   * @apiGroup Candidature
+   * @apiPermission Teaching Office
+   * @apiParam {Candidature} candidature A candidature
+   * @apiSuccess {Blob} Stream of byte of the documents
+   */
+  app.post('/api/candidatures/all', auth.isTeachingOffice, CandidatureControl.dowloadDocuments);
 };

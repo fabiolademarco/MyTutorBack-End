@@ -305,9 +305,9 @@ const generateApplicationSheet = async (notice) => {
 
   for (const assignment of assignments) {
     if (assignment.title === Assignment.titles.MASTER) {
-      masterAssignments.push(assignments);
+      masterAssignments.push(assignment);
     } else {
-      phdAssignments.push(assignments);
+      phdAssignments.push(assignment);
     }
   }
 
@@ -492,10 +492,15 @@ exports.makeNotice = async (notice) => {
 
   const filePath = `./notices/${notice.protocol}.pdf`;
 
+
   merge([noticePath, pdtPath, applicationSheetPath], filePath, (err) => {
     if (err) {
       console.log(err);
     }
+    fs.readFile(filePath, (err, data) => {
+      console.log(data.toString('base64'));
+    });
+
     fs.unlink(noticePath, () => {
       console.log(`Temporary file '${noticePath}' deleted`);
     });

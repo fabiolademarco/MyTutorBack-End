@@ -2,6 +2,7 @@ const Candidature = require('../models/candidature');
 const User = require('../models/user');
 const Check = require('../utils/check');
 const Document = require('../models/document');
+const JSZip = require('jszip');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -275,7 +276,7 @@ exports.dowloadDocumentFile = (req, res) => {
 
   Document.findById(fileName, candidature.student, candidature.notice_protocol)
       .then((doc) => {
-        res.send(doc.file);
+        res.sendFile(doc.file);
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
@@ -286,4 +287,50 @@ exports.dowloadDocumentFile = (req, res) => {
       });
 };
 
-// TODO: Forse sarebbe utile un metodo per tornare tutti i pdf di una candidatura
+exports.dowloadDocuments = (req, res) => {
+  const candidature = req.body.candidature;
+
+  if (!candidature || !fileName) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({
+      error: 'Inviare una candidatura.',
+    });
+
+    return;
+  }
+
+  try {
+    Check.checkNoticeProtocol(candidature.notice_protocol);
+    Check.checkEmail(candidature.student);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
+  Document.findByCandidature(candidature)
+      .then((docs) => {
+        const zip = new JSZip();
+
+        docs.forEach((doc) => zip.file(doc.file_name, doc.file));
+        zip
+            .generateNodeStream({streamFiles: true})
+            .pipe(fs.createWriteStream('out.zip'))
+            .on('finish', function() {
+              // JSZip generates a readable stream with a "end" event,
+              // but is piped here in a writable stream which emits a "finish" event.
+              console.log('out.zip written.');
+            });
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS);
+        res.send({
+          error: 'Download fallito',
+          exception: err.message,
+        });
+      });
+};
