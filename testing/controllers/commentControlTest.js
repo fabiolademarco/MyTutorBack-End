@@ -11,9 +11,13 @@ const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 
 const commentStub = require('./stub/commentStub');
+const userStub = require('./stub/userStub');
+
 const path = {
   '../models/comment': commentStub,
+  '../models/user': userStub,
 };
+
 const commentControl = proxy('../../controllers/commentControl', path);
 const {mockRequest, mockResponse} = require('mock-req-res');
 let req;
