@@ -123,7 +123,7 @@ exports.update = (req, res) => {
     });
     candidature.student = user.id;
   } else {
-    candidatures.documents = null;
+    candidature.documents = null;
   }
   Candidature.update(candidature)
       .then((data) => {
