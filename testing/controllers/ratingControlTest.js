@@ -78,7 +78,7 @@ describe('Rating Control', function() {
     });
 
     it('TCS_GA.2.1', async function() {
-      ratingList[0].student.name = 'abababababababababababababababababababababababababababababababababababababababababababababababababaaababa';
+      ratingList[0].student.name = 'ab'.repeat(100);
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
       await ratingControl.createTable(req, res);

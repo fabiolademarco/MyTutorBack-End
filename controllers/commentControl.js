@@ -20,6 +20,7 @@ const ERR_SERVER_STATUS = 500;
   * Handles the request for create and update a comment.
   * @param {Request} req
   * @param {Response} res
+  * @return {Promise}
   */
 exports.set = (req, res) => {
   const comment = req.body.comment;
@@ -53,7 +54,8 @@ exports.set = (req, res) => {
     return;
   }
   comment.author = user.id;
-  Comment.exists(comment)
+
+  return Comment.exists(comment)
       .then((exist) => {
         if (exist) {
           Comment.update(comment)
@@ -96,6 +98,7 @@ exports.set = (req, res) => {
  * Handles the request for remove a comment.
  * @param {Request} req
  * @param {Reponse} res
+ * @return {Promise}
  */
 exports.delete = (req, res) => {
   const notice = req.params.id;
@@ -121,7 +124,7 @@ exports.delete = (req, res) => {
 
   const comment = new Comment({notice: notice});
 
-  Comment.remove(comment)
+  return Comment.remove(comment)
       .then((comment) => {
         res.status(OK_STATUS)
             .send({comment: comment});
@@ -139,6 +142,7 @@ exports.delete = (req, res) => {
  * Handles the request for search a comment by notice's protocol.
  * @param {Request} req
  * @param {Response} res
+ * @return {Promise}
  */
 exports.get = (req, res) => {
   const noticeProtocol = req.body.noticeProtocol;
@@ -162,7 +166,7 @@ exports.get = (req, res) => {
     return;
   }
 
-  Comment.findByProtocol(noticeProtocol)
+  return Comment.findByProtocol(noticeProtocol)
       .then((comment) => {
         res.status(OK_STATUS)
             .send({comment: comment});
