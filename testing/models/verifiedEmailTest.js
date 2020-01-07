@@ -12,6 +12,8 @@ chai.use(chaiAsPromised);
 const {expect} = chai;
 
 const VerifiedEmail = require('../../models/verifiedEmail');
+const db = require('../../db');
+const table = 'verified_email';
 
 const verifiedEmail = {
   email: 'EmailVerificataModel',
@@ -28,7 +30,7 @@ describe('VerifiedEmail Model', function() {
 
     afterEach(async function() {
       email = JSON.parse(JSON.stringify(verifiedEmail));
-      await VerifiedEmail.remove(email);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, email.email);
     });
 
     it('Create_1', function() {
@@ -47,12 +49,12 @@ describe('VerifiedEmail Model', function() {
   describe('Update method', function() {
     beforeEach(async function() {
       email = JSON.parse(JSON.stringify(verifiedEmail));
-      await VerifiedEmail.create(email);
+      await db.query(`INSERT INTO ${table} SET ?`, email);
     });
 
     afterEach(async function() {
       email = JSON.parse(JSON.stringify(verifiedEmail));
-      await VerifiedEmail.remove(email);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, email.email);
     });
 
     it('Update_1', function() {
@@ -77,12 +79,12 @@ describe('VerifiedEmail Model', function() {
   describe('Remove method', function() {
     beforeEach(async function() {
       email = JSON.parse(JSON.stringify(verifiedEmail));
-      await VerifiedEmail.create(email);
+      await db.query(`INSERT INTO ${table} SET ?`, email);
     });
 
     afterEach(async function() {
       email = JSON.parse(JSON.stringify(verifiedEmail));
-      await VerifiedEmail.remove(email);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, email.email);
     });
 
     it('Remove_1', function() {
@@ -102,12 +104,12 @@ describe('VerifiedEmail Model', function() {
   describe('Exists method', function() {
     beforeEach(async function() {
       email = JSON.parse(JSON.stringify(verifiedEmail));
-      await VerifiedEmail.create(email);
+      await db.query(`INSERT INTO ${table} SET ?`, email);
     });
 
     afterEach(async function() {
       email = JSON.parse(JSON.stringify(verifiedEmail));
-      await VerifiedEmail.remove(email);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, email.email);
     });
 
     it('Exists_1', function() {
@@ -127,12 +129,12 @@ describe('VerifiedEmail Model', function() {
   describe('FindByEmail method', function() {
     beforeEach(async function() {
       email = JSON.parse(JSON.stringify(verifiedEmail));
-      await VerifiedEmail.create(email);
+      await db.query(`INSERT INTO ${table} SET ?`, email);
     });
 
     afterEach(async function() {
       email = JSON.parse(JSON.stringify(verifiedEmail));
-      await VerifiedEmail.remove(email);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, email.email);
     });
 
     it('FindByEmail_1', function() {
@@ -157,12 +159,12 @@ describe('VerifiedEmail Model', function() {
   describe('IsVerified method', function() {
     beforeEach(async function() {
       email = JSON.parse(JSON.stringify(verifiedEmail));
-      await VerifiedEmail.create(email);
+      await db.query(`INSERT INTO ${table} SET ?`, email);
     });
 
     afterEach(async function() {
       email = JSON.parse(JSON.stringify(verifiedEmail));
-      await VerifiedEmail.remove(email);
+      await db.query(`DELETE FROM ${table} WHERE email = ?`, email.email);
     });
 
     it('IsVerified_1', function() {
