@@ -5,7 +5,6 @@ const Document = require('../models/document');
 const JSZip = require('jszip');
 const FileType = require('file-type');
 const fs = require('fs');
-const path = require('path');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -330,9 +329,16 @@ exports.dowloadDocuments = async (req, res) => {
             .generateNodeStream({streamFiles: true})
             .pipe(fs.createWriteStream(fileName))
             .on('finish', function() {
-              return res
+              res
                   .type('application/zip')
-                  .sendFile(path.resolve(fileName));
+                  .download(fileName, (err) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                    fs.unlink(fileName, () => {
+                      console.log(`Deleted temp file ${fileName}`);
+                    });
+                  });
             });
       })
       .catch((err) => {
