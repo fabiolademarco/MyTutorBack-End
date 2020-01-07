@@ -39,7 +39,7 @@ describe('Rating Control', function() {
       role: 'Student',
       verified: '1',
       registration_number: 'aaaaBBBB11112222',
-      password: 'Sesso123',
+      password: 'Abcde123',
       birth_date: '1998-03-03 ',
     };
     s2 = {
@@ -47,7 +47,7 @@ describe('Rating Control', function() {
       name: 'Marco',
       surname: 'Dantonio', // Bisogna vedere che probabilmente c'è un problema con i carattere di escape
       registration_number: 'aaaaBBBB11112222',
-      password: 'Sesso123',
+      password: 'Abcde123',
       birth_date: '1998-03-03 ',
       role: 'Student',
       verified: '1',
