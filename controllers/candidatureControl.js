@@ -91,7 +91,7 @@ exports.create = (req, res) => {
 exports.update = (req, res) => {
   user = req.user;
   candidature = (req.body.candidature != null) ? new Candidature(req.body.candidature) : null;
-  if (candidature == null || candidature.student !== user.id) {
+  if (candidature == null || (candidature.student !== user.id && user.role !== User.Role.TEACHING_OFFICE)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -113,14 +113,18 @@ exports.update = (req, res) => {
     return;
   }
 
+  if (user.role === User.Role.STUDENT) {
   // Decode Base64
-  candidature.documents = candidature.documents.map((d) => {
-    d.file = Buffer.from(d.file, 'base64');
-    d.student = user.id;
+    candidature.documents = candidature.documents.map((d) => {
+      d.file = Buffer.from(d.file, 'base64');
+      d.student = user.id;
 
-    return d;
-  });
-  candidature.student = user.id;
+      return d;
+    });
+    candidature.student = user.id;
+  } else {
+    candidatures.documents = null;
+  }
   Candidature.update(candidature)
       .then((data) => {
         if (data == null) {

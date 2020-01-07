@@ -33,7 +33,7 @@ class Candidature {
     this.notice_protocol = candidature.notice_protocol;
     this.state = Object.values(States).includes(candidature.state) ? candidature.state : null;
     this.last_edit = candidature.last_edit;
-    this.documents = candidature.documents.map((d) => new Document(d));
+    this.documents = candidature.documents != null ? candidature.documents.map((d) => new Document(d)) : null;
   }
 
   /**
@@ -67,7 +67,17 @@ class Candidature {
       throw new Error('The candidature doesn\'t exist');
     }
 
-    return pool.query(`UPDATE ${table} SET state = ?, last_edit = ? WHERE student = ? AND notice_protocol = ?`, [candidature.state, candidature.last_edit, candidature.student, candidature.notice_protocol])
+    const promise = pool.query(`UPDATE ${table} SET state = ?, last_edit = ? WHERE student = ? AND notice_protocol = ?`, [candidature.state, candidature.last_edit, candidature.student, candidature.notice_protocol]);
+
+    if (candidature.documents == null) { // Used to update only the state
+      return promise
+          .then(() => new Candidature(candidature))
+          .catch((err) => {
+            throw err;
+          });
+    }
+
+    return promise
         .then(() => Document.findByCandidature(candidature))
         .then((documents) => {
           const map = new Map();

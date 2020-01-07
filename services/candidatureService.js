@@ -18,12 +18,12 @@ module.exports = (app, auth) => {
    * @api {PATCH} /api/candidatures Updates a candidature
    * @apiName Update
    * @apiGroup Candidature
-   * @apiPermission Student
-   * @apiParam {Candidature} candidature The candidature to update
+   * @apiPermission Student, Teaching Office
+   * @apiParam {Candidature} candidature The candidature to update [The Teaching office can only update the state of a candidature]
    * @apiSuccess {boolean} status Boolean which expresses the result of the operation
    * @apiSuccess {Candidature} candidature The updated candidature
    */
-  app.patch('/api/candidatures', auth.isStudent, CandidatureControl.update);
+  app.patch('/api/candidatures', CandidatureControl.update);
 
   /**
    * @api {DELETE} /api/candidatures/:notice Removes a candidature
