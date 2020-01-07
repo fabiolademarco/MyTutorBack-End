@@ -24,7 +24,7 @@ const student = {
   role: 'Student',
   verified: '1',
   registration_number: 'aaaaBBBB11112222',
-  password: 'Sesso123',
+  password: 'Abcde123',
   birth_date: '1998-03-03 ',
 };
 
@@ -36,7 +36,7 @@ const ratingTemp = {
     role: 'Student',
     verified: '1',
     registration_number: 'aaaaBBBB11112222',
-    password: 'Sesso123',
+    password: 'Abcde123',
     birth_date: '1998-03-03 ',
   },
   assignment_id: 3,
