@@ -3,7 +3,6 @@ const dotenv = require('dotenv');
 
 // Configure dotenv
 dotenv.config();
-const jwt = require('jsonwebtoken');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
@@ -12,9 +11,13 @@ const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 
 const commentStub = require('./stub/commentStub');
+const userStub = require('./stub/userStub');
+
 const path = {
   '../models/comment': commentStub,
+  '../models/user': userStub,
 };
+
 const commentControl = proxy('../../controllers/commentControl', path);
 const {mockRequest, mockResponse} = require('mock-req-res');
 let req;
@@ -27,12 +30,6 @@ describe('Comment control', function() {
     id: 'manselmo@unisa.it',
     role: 'Professor',
   };
-
-  const token = (function createToken(payload) {
-    jwt.sign(payload, process.env.PRIVATE_KEY, {expiresIn: '1h'});
-
-    return 'JWT ' + token;
-  })(payload);
 
   beforeEach(function() {
     comment = {
@@ -48,9 +45,7 @@ describe('Comment control', function() {
       options = {
         method: 'PUT',
         body: {'comment': comment},
-        headers: {
-          Authentication: token,
-        },
+        user: payload,
       };
 
       req = mockRequest(options);
@@ -64,9 +59,7 @@ describe('Comment control', function() {
       options = {
         method: 'PUT',
         body: {'comment': comment},
-        headers: {
-          Authentication: token,
-        },
+        user: payload,
       };
       req = mockRequest(options);
       res = mockResponse();
@@ -78,9 +71,7 @@ describe('Comment control', function() {
       options = {
         method: 'PUT',
         body: {'comment': comment},
-        headers: {
-          Authentication: token,
-        },
+        user: payload,
       };
       req = mockRequest(options);
       res = mockResponse();
