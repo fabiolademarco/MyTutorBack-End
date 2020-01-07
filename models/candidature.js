@@ -67,14 +67,18 @@ class Candidature {
       throw new Error('The candidature doesn\'t exist');
     }
 
-    const promise = pool.query(`UPDATE ${table} SET state = ?, last_edit = ? WHERE student = ? AND notice_protocol = ?`, [candidature.state, candidature.last_edit, candidature.student, candidature.notice_protocol]);
+    let promise;
 
     if (candidature.documents == null) { // Used to update only the state
+      promise = pool.query(`UPDATE ${table} SET state = ? WHERE student = ? AND notice_protocol = ?`, [candidature.state, candidature.student, candidature.notice_protocol]);
+
       return promise
           .then(() => new Candidature(candidature))
           .catch((err) => {
             throw err;
           });
+    } else {
+      promise = pool.query(`UPDATE ${table} SET state = ?, last_edit = ? WHERE student = ? AND notice_protocol = ?`, [candidature.state, candidature.last_edit, candidature.student, candidature.notice_protocol]);
     }
 
     return promise
