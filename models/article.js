@@ -27,7 +27,7 @@ class Article {
    * @param {Article} article The article to save.
    * @return {Promise<Article>} Promise object that represents the created Article
    */
-  static create(article) {
+  static async create(article) {
     if (article == null) {
       throw new Error('The article cannot be null.');
     }
@@ -49,8 +49,11 @@ class Article {
    * @return {Promise<Article>} Promise object that represents the updated Article
    */
   static async update(article) {
-    if (article == null || !await this.exists(article)) {
+    if (article == null) {
       throw new Error('The article must not be null.');
+    }
+    if (!await this.exists(article)) {
+      throw new Error('The article doesn\'t exists.');
     }
 
     return pool.query(`UPDATE ${table} SET ? WHERE id = ?`, [article, article.id])
@@ -67,7 +70,7 @@ class Article {
    * @param {Article} article The article to remove.
    * @return {Promise<boolean>} Promise that is true if the removal went right else it's false
    */
-  static remove(article) {
+  static async remove(article) {
     if (article == null) {
       throw new Error('The article cannot be null');
     }
@@ -87,7 +90,7 @@ class Article {
    * @param {String} noticeProtocol The protocol number
    * @return {Promise<Article>} Promise that represents the Article having the passed id
    */
-  static findById(id, noticeProtocol) {
+  static async findById(id, noticeProtocol) {
     if (id == null || noticeProtocol == null) {
       throw new Error('The protocol/id must not be null');
     }
@@ -110,7 +113,7 @@ class Article {
    * @param {string} noticeProtocol The protocol of the notice.
    * @return {Promise<Article[]>} Promise that represents the Articles related to the passed Notice protocol
    */
-  static findByNotice(noticeProtocol) {
+  static async findByNotice(noticeProtocol) {
     if (noticeProtocol == null) {
       throw new Error('The protocol must not be null');
     }
@@ -128,10 +131,10 @@ class Article {
    * Finds all the articles.
    * @return {Promise<Article[]>} Promise that represents a list of all the Articles
    */
-  static findAll() {
+  static async findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => {
-          return rows.map((er) => new Article(el));
+          return rows.map((el) => new Article(el));
         })
         .catch((err) => {
           throw err;
@@ -143,7 +146,7 @@ class Article {
    * @param {Article} article The article to check.
    * @return {Promise<boolean>} Promise that is true if the Article is in the db, else it's false
    */
-  static exists(article) {
+  static async exists(article) {
     if (article == null) {
       throw new Error('The article cannot be null');
     }
