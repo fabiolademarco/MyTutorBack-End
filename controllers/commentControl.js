@@ -22,7 +22,7 @@ const ERR_SERVER_STATUS = 500;
   * @param {Response} res
   * @return {Promise}
   */
-exports.set = (req, res) => {
+exports.set = async (req, res) => {
   const comment = req.body.comment;
   const user = req.user;
 
@@ -58,7 +58,7 @@ exports.set = (req, res) => {
   return Comment.exists(comment)
       .then((exist) => {
         if (exist) {
-          Comment.update(comment)
+          return Comment.update(comment)
               .then((comment) => {
                 res.status(OK_STATUS)
                     .send({comment: comment});
@@ -71,7 +71,7 @@ exports.set = (req, res) => {
                     });
               });
         } else {
-          Comment.create(comment)
+          return Comment.create(comment)
               .then((comment) => {
                 res.status(OK_STATUS)
                     .send({comment: comment});

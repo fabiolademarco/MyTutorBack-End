@@ -3,7 +3,6 @@ const dotenv = require('dotenv');
 
 // Configure dotenv
 dotenv.config();
-const jwt = require('jsonwebtoken');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 
@@ -28,12 +27,6 @@ describe('Comment control', function() {
     role: 'Professor',
   };
 
-  const token = (function createToken(payload) {
-    jwt.sign(payload, process.env.PRIVATE_KEY, {expiresIn: '1h'});
-
-    return 'JWT ' + token;
-  })(payload);
-
   beforeEach(function() {
     comment = {
       notice: 'Prot. n. 0279008',
@@ -48,9 +41,7 @@ describe('Comment control', function() {
       options = {
         method: 'PUT',
         body: {'comment': comment},
-        headers: {
-          Authentication: token,
-        },
+        user: payload,
       };
 
       req = mockRequest(options);
@@ -64,9 +55,7 @@ describe('Comment control', function() {
       options = {
         method: 'PUT',
         body: {'comment': comment},
-        headers: {
-          Authentication: token,
-        },
+        user: payload,
       };
       req = mockRequest(options);
       res = mockResponse();
@@ -78,9 +67,7 @@ describe('Comment control', function() {
       options = {
         method: 'PUT',
         body: {'comment': comment},
-        headers: {
-          Authentication: token,
-        },
+        user: payload,
       };
       req = mockRequest(options);
       res = mockResponse();
