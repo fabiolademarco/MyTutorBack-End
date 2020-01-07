@@ -322,23 +322,16 @@ exports.dowloadDocuments = async (req, res) => {
       .then((docs) => {
         const zip = new JSZip();
 
-        const fileName = `Candidatura ${student.name} ${student.surnames} - ${candidature.notice_protocol}.zip`;
+        const fileName = `Candidatura ${student.name} ${student.surname} - ${candidature.notice_protocol}.zip`;
 
         docs.forEach((doc) => zip.file(doc.file_name, doc.file));
         zip
             .generateNodeStream({streamFiles: true})
             .pipe(fs.createWriteStream(fileName))
             .on('finish', function() {
-              res
+              return res
                   .type('application/zip')
-                  .download(fileName, (err) => {
-                    if (err) {
-                      console.log(err);
-                    }
-                    fs.unlink(fileName, () => {
-                      console.log(`Deleted temp file ${fileName}`);
-                    });
-                  });
+                  .sendFile(fileName);
             });
       })
       .catch((err) => {
