@@ -11,8 +11,13 @@ const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 
 const assignmentStub = require('./stub/assignmentStub');
+const mailStub = require('./stub/mailStub');
+const userStub = require('./stub/userStub');
+
 const path = {
   '../models/assignment': assignmentStub,
+  '../utils/mail': mailStub,
+  '../models/user': userStub,
 };
 
 const assignmentControl = proxy('../../controllers/assignmentControl', path);
