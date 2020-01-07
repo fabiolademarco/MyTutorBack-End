@@ -282,6 +282,16 @@ exports.search = async (req, res) => {
   const professor = req.body.professor;
   const type = req.body.type;
 
+  console.log(protocol);
+  if (protocol && protocol.length > 127) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: 'Il campo protocollo supera la lunghezza massima',
+        });
+
+    return;
+  }
+
   if (!protocol && !state && !professor && !type) {
     return this.findAll(req, res);
   }
@@ -347,7 +357,7 @@ exports.search = async (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-exports.find = (req, res) => {
+exports.find = async (req, res) => {
   const protocol = req.params.protocol;
 
   if (protocol == null) {
@@ -369,14 +379,14 @@ exports.find = (req, res) => {
     return;
   }
 
-  Notice.findByProtocol(protocol)
+  return Notice.findByProtocol(protocol)
       .then((notices) => {
         const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
 
         const userAccessList = accessList.get(userRole);
         const authorizedNotices = notices.filter((notice) => userAccessList.includes(notice.state));
 
-        res.send({notices: authorizedNotices});
+        res.status(OK_STATUS).send({notices: authorizedNotices});
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS)

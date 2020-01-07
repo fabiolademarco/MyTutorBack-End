@@ -226,11 +226,11 @@ describe('User model', function() {
       expect(User.search(null)).to.be.rejectedWith(Error);
     });
 
-    it('seatch_2', function() {
+    it('search_2', function() {
       expect(User.search(filter)).to.be.fulfilled;
     });
 
-    it('seatch_3', function() {
+    it('search_3', function() {
       filter = {};
       expect(User.search(filter)).to.be.fulfilled;
     });
