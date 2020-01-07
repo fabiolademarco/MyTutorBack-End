@@ -1,4 +1,5 @@
 const NoticeControl = require('../controllers/noticeControl');
+const cors = require('cors');
 
 module.exports = (app, auth) => {
   /**
@@ -94,7 +95,7 @@ module.exports = (app, auth) => {
    *
    * @apiParam {String} protocol A notice protocol
    */
-  app.get('/api/notices/pdf/:protocol', auth.setUser, NoticeControl.downloadNotice);
+  app.get('/api/notices/pdf/:protocol', cors({exposedHeaders: ['Content-Disposition']}), auth.setUser, NoticeControl.downloadNotice);
 
   /**
    * @api {PUT} /api/notices/pdf/:protocol Upload Signed Notice pdf
@@ -115,7 +116,7 @@ module.exports = (app, auth) => {
    *
    * @apiParam {String} protocol A notice protocol
    */
-  app.get('/api/notices/grades/pdf/:protocol', NoticeControl.downloadGradedList);
+  app.get('/api/notices/grades/pdf/:protocol', cors({exposedHeaders: ['Content-Disposition']}), NoticeControl.downloadGradedList);
 
   /**
    * @api {PUT} /api/notices/grades/pdf/:protocol Upload Signed Graded List pdf

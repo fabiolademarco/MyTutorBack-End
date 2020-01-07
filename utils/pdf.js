@@ -497,10 +497,6 @@ exports.makeNotice = async (notice) => {
     if (err) {
       console.log(err);
     }
-    fs.readFile(filePath, (err, data) => {
-      console.log(data.toString('base64'));
-    });
-
     fs.unlink(noticePath, () => {
       console.log(`Temporary file '${noticePath}' deleted`);
     });

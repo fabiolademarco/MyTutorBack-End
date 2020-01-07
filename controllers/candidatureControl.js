@@ -280,6 +280,7 @@ exports.dowloadDocumentFile = (req, res) => {
       .then(async (doc) => {
         res
             .type((await FileType.fromBuffer(doc.file)).mime)
+            .set('Content-Disposition', 'attachment; filename=' + doc.file_name)
             .send(doc.file);
       })
       .catch((err) => {
