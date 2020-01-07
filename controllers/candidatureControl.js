@@ -3,6 +3,8 @@ const User = require('../models/user');
 const Check = require('../utils/check');
 const Document = require('../models/document');
 const JSZip = require('jszip');
+const FileType = require('file-type');
+const fs = require('fs');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
 const ERR_SERVER_STATUS = 500;
@@ -275,8 +277,10 @@ exports.dowloadDocumentFile = (req, res) => {
   }
 
   Document.findById(fileName, candidature.student, candidature.notice_protocol)
-      .then((doc) => {
-        res.sendFile(doc.file);
+      .then(async (doc) => {
+        res
+            .type((await FileType.fromBuffer(doc.file)).mime)
+            .send(doc.file);
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS);
@@ -287,10 +291,10 @@ exports.dowloadDocumentFile = (req, res) => {
       });
 };
 
-exports.dowloadDocuments = (req, res) => {
+exports.dowloadDocuments = async (req, res) => {
   const candidature = req.body.candidature;
 
-  if (!candidature || !fileName) {
+  if (!candidature) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       error: 'Inviare una candidatura.',
@@ -312,21 +316,33 @@ exports.dowloadDocuments = (req, res) => {
     return;
   }
 
+  const student = await User.findByEmail(candidature.student);
+
   Document.findByCandidature(candidature)
       .then((docs) => {
         const zip = new JSZip();
 
+        const fileName = `Candidatura ${student.name} ${student.surnames} - ${candidature.notice_protocol}.zip`;
+
         docs.forEach((doc) => zip.file(doc.file_name, doc.file));
         zip
             .generateNodeStream({streamFiles: true})
-            .pipe(fs.createWriteStream('out.zip'))
+            .pipe(fs.createWriteStream(fileName))
             .on('finish', function() {
-              // JSZip generates a readable stream with a "end" event,
-              // but is piped here in a writable stream which emits a "finish" event.
-              console.log('out.zip written.');
+              res
+                  .type('application/zip')
+                  .download(fileName, (err) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                    fs.unlink(fileName, () => {
+                      console.log(`Deleted temp file ${fileName}`);
+                    });
+                  });
             });
       })
       .catch((err) => {
+        console.log(err);
         res.status(ERR_SERVER_STATUS);
         res.send({
           error: 'Download fallito',

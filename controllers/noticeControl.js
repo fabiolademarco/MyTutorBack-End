@@ -474,7 +474,7 @@ exports.downloadNotice = async (req, res) => {
 
   return res.status(OK_STATUS)
       .type('application/pdf')
-      .sendFile(path.resolve(notice.notice_file));
+      .download(path.resolve(notice.notice_file));
 };
 
 exports.uploadNotice = async (req, res) => {
@@ -586,7 +586,7 @@ exports.downloadGradedList = async (req, res) => {
 
   return res.status(OK_STATUS)
       .type('application/pdf')
-      .sendFile(path.resolve(notice.graded_list_file));
+      .download(path.resolve(notice.graded_list_file));
 };
 
 exports.uploadGradedList = async (req, res) => {
