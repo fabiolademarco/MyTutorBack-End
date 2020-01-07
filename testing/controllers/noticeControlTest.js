@@ -766,4 +766,26 @@ describe('Controller Bando', function() {
       expect(res.status).to.have.been.calledWith(200);
     });
   });
+
+  describe('Test_RicercaBandi', function() {
+    let protocol;
+
+    beforeEach(function() {
+      protocol = 'Prot. n. 0032';
+      res = mockResponse();
+    });
+
+    it('TCS_GA.1.0', async function() {
+      protocol = 'a'.repeat(128);
+      req = mockRequest({method: 'POST', body: {protocol: protocol}});
+      await noticeControl.search(req, res);
+      expect(res.status).to.have.been.calledWith(412);
+    });
+
+    it('TCS_GA.1.1', async function() {
+      req = mockRequest({method: 'POST', body: {protocol: protocol}});
+      await noticeControl.search(req, res);
+      expect(res.status).to.have.been.calledWith(200);
+    });
+  });
 });

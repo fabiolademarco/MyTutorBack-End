@@ -25,7 +25,7 @@ class ApplicationSheet {
    * @param {ApplicationSheet} applicationSheet The application sheet to create.
    * @return {Promise<ApplicationSheet>} Promise representing the fulfillment of an application sheet creation.
    */
-  static create(applicationSheet) {
+  static async create(applicationSheet) {
     if (!applicationSheet) {
       throw new Error('No Parameters');
     }
@@ -66,7 +66,7 @@ class ApplicationSheet {
    * @param {ApplicationSheet} applicationSheet The application sheet to remove.
    * @return {Promise<boolean>} Promise representing the fulfillment of the application sheet removal.
    */
-  static remove(applicationSheet) {
+  static async remove(applicationSheet) {
     if (!applicationSheet) {
       throw new Error('No Parameters');
     }
@@ -85,7 +85,7 @@ class ApplicationSheet {
    * @param {ApplicationSheet} applicationSheet The application sheet to check.
    * @return {Promise<boolean>} Promise that resolves to true if the application sheet exists, false otherwise.
    */
-  static exists(applicationSheet) {
+  static async exists(applicationSheet) {
     if (!applicationSheet) {
       throw new Error('No Parameters');
     }
@@ -104,7 +104,7 @@ class ApplicationSheet {
    * @param {NoticeProtocol} noticeProtocol The notice protocol on which to filter.
    * @return {Promise<ApplicationSheet>} Promise representing the fulfillment of the rapplication sheet search.
    */
-  static findByNotice(noticeProtocol) {
+  static async findByNotice(noticeProtocol) {
     if (!noticeProtocol) {
       throw new Error('No Parameters');
     }
@@ -126,7 +126,7 @@ class ApplicationSheet {
    * Returns application sheet table content.
    * @return {Promise<ApplicationSheet[]>} Promise representing the fulfillment of the application sheet search.
    */
-  static findAll() {
+  static async findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => {
           return rows.map((as) => new ApplicationSheet(as));
