@@ -282,7 +282,6 @@ exports.search = async (req, res) => {
   const professor = req.body.professor;
   const type = req.body.type;
 
-  console.log(protocol);
   if (protocol && protocol.length > 127) {
     res.status(ERR_CLIENT_STATUS)
         .send({

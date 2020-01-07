@@ -28,7 +28,7 @@ class Student extends User {
    * @param {Student} student The Student to save.
    * @return {Promise<Student>} Promise object that represents the created Student.
    */
-  static create(student) {
+  static async create(student) {
     if (student == null) {
       throw new Error('The parameter student can not be null or undefined');
     }
@@ -80,7 +80,7 @@ class Student extends User {
    * @param {string} email The email of a Student.
    * @return {Promise<Student>} Promise object that represents the Student with the given email.
    */
-  static findByEmail(email) {
+  static async findByEmail(email) {
     if (email == null) {
       throw new Error('The parameter email can not be null or undefined');
     }
@@ -109,7 +109,7 @@ class Student extends User {
    * Finds all the Students in the db.
    * @return {Promise<Student[]>} Promise object that returns the list of Student.
    */
-  static findAll() {
+  static async findAll() {
     return User.findByRole(User.Role.STUDENT)
         .then((users) => {
           return Promise.all(users.map((user) => {
@@ -127,7 +127,7 @@ class Student extends User {
    * @param {string} password
    * @return {Promise<Student>} Promise Object that represents the Student if there is a match or else it's null
    */
-  static matchUser(email, password) {
+  static async matchUser(email, password) {
     return super.matchUser(email, password)
         .then((user) => {
           if (user === null) {
