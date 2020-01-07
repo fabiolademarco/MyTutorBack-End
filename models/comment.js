@@ -27,7 +27,7 @@ class Comment {
    * @param {Comment} comment The comment to save.
    * @return {Promise<Comment>} Promise object that represents the created comment.
    */
-  static create(comment) {
+  static async create(comment) {
     if (comment == null) {
       throw new Error('No parameters');
     }
@@ -66,7 +66,7 @@ class Comment {
    * @param {Comment} comment The comment to remove.
    * @return {Promise<boolean>}  Promise that is true if the removal went right else it's false.
    */
-  static remove(comment) {
+  static async remove(comment) {
     if (comment == null) {
       throw new Error('No parameters');
     }
@@ -83,7 +83,7 @@ class Comment {
    * @param {Comment} comment The comment to check.
    * @return {Promise<boolean>} Promise that is true if the comment exists in the db, else it's false
    */
-  static exists(comment) {
+  static async exists(comment) {
     if (comment == null) {
       throw new Error('No parameters');
     }
@@ -99,7 +99,7 @@ class Comment {
    * @param {string} noticeProtocol The protocol of the notice.
    * @return {Promise<Comment>} Promise object that represents the Comment of the passed notice.
    */
-  static findByProtocol(noticeProtocol) {
+  static async findByProtocol(noticeProtocol) {
     if (noticeProtocol == null) {
       throw new Error('No parameters');
     }
@@ -117,7 +117,7 @@ class Comment {
    * Finds all the comments.
    * @return {Promise<Comment[]>} Promise object that represents the list of all Comments.
    */
-  static findAll() {
+  static async findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => rows.map((c) => new Comment(c)))
         .catch((err) => {
