@@ -10,7 +10,7 @@ const States = {
   EDITABLE: 'Editable',
   IN_EVALUATION: 'In Evaluation',
   REJECTED: 'Rejected',
-  IN_GRADED_LIST: 'In Granded List',
+  IN_GRADED_LIST: 'In Graded List',
 };
 
 /**

@@ -116,7 +116,7 @@ module.exports = (app, auth) => {
    *
    * @apiParam {String} protocol A notice protocol
    */
-  app.get('/api/notices/grades/pdf/:protocol', cors({exposedHeaders: ['Content-Disposition']}), NoticeControl.downloadGradedList);
+  app.get('/api/notices/grades/pdf/:protocol', cors({exposedHeaders: ['Content-Disposition']}), auth.setUser, NoticeControl.downloadGradedList);
 
   /**
    * @api {PUT} /api/notices/grades/pdf/:protocol Upload Signed Graded List pdf

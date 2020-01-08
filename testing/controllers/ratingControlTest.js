@@ -15,12 +15,12 @@ const proxy = require('proxyquire').noCallThru();
 const ratingStub = require('./stub/ratingStub');
 const candidatureStub = require('./stub/candidatureStub');
 const assignmentStub = require('./stub/assignmentStub');
-const evalutationCriterionStub = require('./stub/evalutationCriterionStub');
+const evaluationCriterionStub = require('./stub/evaluationCriterionStub');
 const path = {
   '../models/rating': ratingStub,
   '../models/assignment': assignmentStub,
   '../models/candidature': candidatureStub,
-  '../models/evaluationCriterion': evalutationCriterionStub,
+  '../models/evaluationCriterion': evaluationCriterionStub,
 };
 
 const ratingControl = proxy('../../controllers/ratingControl', path);

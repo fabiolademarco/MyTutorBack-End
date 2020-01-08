@@ -1,5 +1,5 @@
 const ApplicationSheet = require('./applicationSheetStub');
-const EvaluationCriterion = require('./evalutationCriterionStub');
+const EvaluationCriterion = require('./evaluationCriterionStub');
 const Article = require('./articleStub');
 const Assignment = require('./assignmentStub');
 const Comment = require('./commentStub');

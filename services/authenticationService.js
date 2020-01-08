@@ -2,12 +2,36 @@ const AuthenticationControl = require('../controllers/authenticationControl');
 
 module.exports = (app, auth) => {
   /**
+   * @api {OBJECT} User User
+   * @apiGroup Authentication
+   * @apiParam {string} email The email of the user
+   * @apiParam {string} password The user password
+   * @apiParam {string} name The user name
+   * @apiParam {string} surname The user surname
+   * @apiParam {string="Student","Professor","DDI","Teaching Office"} role The user role
+   * @apiParam {number="0","1"} verified
+   */
+
+  /**
+   * @api {OBJECT} Student Student
+   * @apiGroup Authentication
+   * @apiParam {string} email The email of the user
+   * @apiParam {string} password The user password
+   * @apiParam {string} name The user name
+   * @apiParam {string} surname The user surname
+   * @apiParam {string="Student"} role The user role
+   * @apiParam {number="0","1"} verified
+   * @apiParam {string} registration_number The registration number of the student
+   * @apiParam {date} birth_date The birth date
+   */
+
+  /**
    * @api {POST} /api/auth/login Login
    * @apiName Login
    * @apiGroup Authentication
    * @apiPermission guest
-   * @apiParam {User} user User, with email and password,who wants to do the login in the system.
-   * @apiSuccess {User} user The user who logged in the system.
+   * @apiParam {[User](#api-Authentication-ObjectUser)} user User, with email and password,who wants to do the login in the system.
+   * @apiSuccess {[User](#api-Authentication-ObjectUser)} user The user who logged in the system.
    * @apiSuccess {boolean} status The status of the operation.
    * @apiSuccess {string} token The jwt token for authorization.
    */
@@ -28,8 +52,8 @@ module.exports = (app, auth) => {
    * @apiName RegisterStudent
    * @apiGroup Authentication
    * @apiPermission guest
-   * @apiParam {Student} student The student to register.
-   * @apiSuccess {Student} student The registered student.
+   * @apiParam {[Student](#api-Authentication-ObjectStudent)} student The student to register.
+   * @apiSuccess {[Student](#api-Authentication-ObjectStudent)} student The registered student.
    * @apiSuccess {string} token The jwt token for authorization.
    */
   app.post('/api/auth/registerStudent', auth.isNotLogged, AuthenticationControl.registerStudent);
@@ -39,10 +63,10 @@ module.exports = (app, auth) => {
    * @apiName RegisterProfessor
    * @apiGroup Authentication
    * @apiPermission guest
-   * @apiParam {User} professor The professor to register
+   * @apiParam {[User](#api-Authentication-ObjectUser)} professor The professor to register
    * @apiParams {string} token Optional token sent to complete professor registration
    * @apiSuccess {boolean} status Boolean representing the result of the operation
-   * @apiSuccess {User} professor This attribute is sent only when the token is passed
+   * @apiSuccess {[User](#api-Authentication-ObjectUser)} professor This attribute is sent only when the token is passed
    */
   app.post('/api/auth/registerProfessor', auth.isNotLogged, AuthenticationControl.registerProfessor);
 
