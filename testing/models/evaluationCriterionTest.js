@@ -17,6 +17,8 @@ const table = 'evaluation_criterion';
 const db = require('../../db');
 const fakeNotice = 'Bando per evaluationCriterion';
 
+const EvaluationCriterion = require('../../models/evaluationCriterion');
+
 const evaluationCriterion = {
   notice_protocol: fakeNotice,
   name: 'criterio.........',
@@ -42,6 +44,18 @@ describe('EvaluationCriterion model', function() {
     afterEach(async function() {
       criterion = JSON.parse(JSON.stringify(evaluationCriterion));
       await db.query(`DELETE FROM ${table} WHERE notice_protocol = ?`, criterion.notice_protocol);
+    });
+
+    it('Create_1', async function() {
+      await expect(EvaluationCriterion.create(null)).to.be.rejectedWith(Error, 'No parameters');
+    });
+
+    it('Create_2', async function() {
+      await expect(EvaluationCriterion.create({hey: 'hey'})).to.be.rejectedWith(Error);
+    });
+
+    it('Create_3', async function() {
+      await expect(EvaluationCriterion.create(criterion)).to.be.fulfilled;
     });
   });
 });

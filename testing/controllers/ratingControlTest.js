@@ -45,7 +45,7 @@ describe('Rating Control', function() {
     s2 = {
       email: 'm.dantonio69@studenti.unisa.it',
       name: 'Marco',
-      surname: 'Dantonio', // Bisogna vedere che probabilmente c'è un problema con i carattere di escape
+      surname: 'Dntonio', // Bisogna vedere che probabilmente c'è un problema con i carattere di escape
       registration_number: 'aaaaBBBB11112222',
       password: 'Abcde123',
       birth_date: '1998-03-03 ',
