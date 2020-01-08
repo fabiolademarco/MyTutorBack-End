@@ -55,13 +55,13 @@ describe('Rating Control', function() {
     ratingList = [
       {
         student: s1,
-        assignment_id: 1,
+        assignment_id: 3,
         titles_score: 5,
         interview_score: 50,
       },
       {
         student: s2,
-        assignment_id: 1,
+        assignment_id: 3,
         titles_score: 5,
         interview_score: 51,
       },
