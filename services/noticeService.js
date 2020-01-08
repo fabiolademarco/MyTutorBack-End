@@ -35,7 +35,18 @@ module.exports = (app, auth) => {
   /**
    * @api {OBJECT} Article Article
    * @apiGroup Notice
-   * @apiParam {number}
+   * @apiParam {number} id The key of the article
+   * @apiParam {string} notice_protocol The protocol of the notice which article belongs
+   * @apiParam {string} text A text describing the article
+   * @apiParam {string} initial A short text containing the initial of the article
+   */
+
+  /**
+   * @api {OBJECT} EvaluationCriterion EvaluationCriterion
+   * @apiGroup Notice
+   * @apiParam {string} notice_protocol The protocol of the notice which the evaluation criterion belongs
+   * @apiParam {string} name The key of the evaluation criterion
+   * @apiParam {number} max_score The max score of the criterion
    */
 
 
@@ -47,7 +58,7 @@ module.exports = (app, auth) => {
    *
    * @apiParam {String} protocol Notice unique protocol, can be part of a protocol
    *
-   * @apiSuccess {Object[]} notice Notices having the specified protocol as a substring
+   * @apiSuccess {[Notice](#api-Notice-ObjectNotice)[]} notice Notices having the specified protocol as a substring
    */
   app.get('/api/notices/:protocol', auth.setUser, NoticeControl.find);
 
@@ -73,7 +84,7 @@ module.exports = (app, auth) => {
    * @apiGroup Notice
    * @apiPermission everyone
    *
-   * @apiSuccess {Object[]} notices All Notices the user is authorized to access
+   * @apiSuccess {[Notice](#api-Notice-ObjectNotice)[]} notices All Notices the user is authorized to access
    */
   app.get('/api/notices', auth.setUser, NoticeControl.findAll);
 
@@ -83,9 +94,9 @@ module.exports = (app, auth) => {
    * @apiGroup Notice
    * @apiPermission Teaching Office
    *
-   * @apiParam {Object} notice Notice to be created
+   * @apiParam {[Notice](#api-Notice-ObjectNotice)} notice Notice to be created
    *
-   * @apiSuccess {Object} notices The created Notice
+   * @apiSuccess {[Notice](#api-Notice-ObjectNotice)} notices The created Notice
    */
   app.put('/api/notices', auth.isTeachingOffice, NoticeControl.create);
 
@@ -95,9 +106,9 @@ module.exports = (app, auth) => {
    * @apiGroup Notice
    * @apiPermission Teaching Office
    *
-   * @apiParam {Object} notice Notice to be updated
+   * @apiParam {[Notice](#api-Notice-ObjectNotice)} notice Notice to be updated
    *
-   * @apiSuccess {Object} notices The updated Notice
+   * @apiSuccess {[Notice](#api-Notice-ObjectNotice)} notices The updated Notice
    */
   app.patch('/api/notices', auth.isTeachingOffice, NoticeControl.update);
 
@@ -107,7 +118,7 @@ module.exports = (app, auth) => {
    * @apiGroup Notice
    * @apiPermission Teaching Office, Professor, DDI
    *
-   * @apiParam {Object} notice Notice which state must be changed
+   * @apiParam {[Notice](#api-Notice-ObjectNotice)} notice Notice which state must be changed
    */
   app.patch('/api/notices/state', auth.setUser, NoticeControl.setState);
 

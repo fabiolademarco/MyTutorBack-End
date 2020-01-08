@@ -64,7 +64,7 @@ module.exports = (app, auth) => {
    * @apiGroup Authentication
    * @apiPermission guest
    * @apiParam {[User](#api-Authentication-ObjectUser)} professor The professor to register
-   * @apiParams {string} token Optional token sent to complete professor registration
+   * @apiParam {string} token Optional token sent to complete professor registration
    * @apiSuccess {boolean} status Boolean representing the result of the operation
    * @apiSuccess {[User](#api-Authentication-ObjectUser)} professor This attribute is sent only when the token is passed
    */
