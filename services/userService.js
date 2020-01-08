@@ -7,6 +7,15 @@ module.exports = function(app, auth) {
   app.use(/\/api\/users.*/, auth.authenticate());
 
   /**
+   * @api {OBJECT} UserFilter
+   * @apiGroup User
+   * @apiParam {string} name The user name
+   * @apiParam {string} surname The user surname
+   * @apiParam {string="Student","Professor","DDI","TeachingOffice"} role User role
+   * @apiParam {int="1","0"} verified
+   */
+
+  /**
    * @api {DELETE} /api/users/:id Removes User
    * @apiName DeleteUser
    * @apiGroup User
@@ -38,7 +47,7 @@ module.exports = function(app, auth) {
    * @apiName SearchUser
    * @apiGroup User
    * @apiPermission Teaching Office
-   * @apiParam {Object} param Object with name, surname, role or verified to do the search
+   * @apiParam {[UserFilter](#api-User-ObjectUserFilter)} param The param of the search
    * @apiSuccess {[User](#api-Authentication-ObjectUser)[]} list List of the searched users
    */
   app.post('/api/users/search', auth.isTeachingOffice, UserControl.search);
