@@ -21,7 +21,7 @@ To get started you should make a **.env** (dotenv) file, it should have the foll
 ```
 EXPRESS_PORT=your_express_port
 PRIVATE_KEY=your_private_key
-DATABASE_URI=mysql://mt_admin:mt_password@localhost/mytutor
+DATABASE_URI=mysql://mt_admin:mt_password@localhost/mytutor?dateStrings=true
 ```
 
 ### Starting the server

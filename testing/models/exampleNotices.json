@@ -152,5 +152,13 @@
       }
     ],
     "comment": null
+  },
+  "professor": {
+    "email": "pippofranco@unisa.it",
+    "name": "Pippo",
+    "surname": "Franco",
+    "password": "$2b$08$zTTwHZFJmZprh49oBBZzOuvFd8cGwXZnonpuSFUCyqYap1gnqrOzS",
+    "role": "Professor",
+    "verified": 1
   }
 }

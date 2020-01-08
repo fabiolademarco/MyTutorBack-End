@@ -25,6 +25,7 @@ describe('ApplicationSheet Model', function() {
   let applicationSheet;
 
   before(async function() {
+    this.timeout(3000);
     applicationSheet = JSON.parse(JSON.stringify(applicationSheetConst));
     exampleNotice.notice.application_sheet = null;
 

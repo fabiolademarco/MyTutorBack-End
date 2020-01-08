@@ -524,16 +524,18 @@ exports.uploadNotice = async (req, res) => {
     return;
   }
 
-  const substr = noticeFile.substring(0, noticeFile.indexOf(','));
+  if (gradedListFile.substr(0, 100).indexOf(',') != - 1) {
+    const substr = noticeFile.substring(0, noticeFile.indexOf(','));
 
-  noticeFile = noticeFile.replace(substr, '');
-  const mime = substr.split(':')[1].split(';')[0];
+    noticeFile = noticeFile.replace(substr, '');
+    const mime = substr.split(':')[1].split(';')[0];
 
-  if (mime !== 'application/pdf') {
-    res.status(ERR_CLIENT_STATUS)
-        .send({error: 'Il file caricato deve essere un pdf'});
+    if (mime !== 'application/pdf') {
+      res.status(ERR_CLIENT_STATUS)
+          .send({error: 'Il file caricato deve essere un pdf'});
 
-    return;
+      return;
+    }
   }
 
   try {
@@ -646,16 +648,18 @@ exports.uploadGradedList = async (req, res) => {
         .send({error: `Impossibile caricare la graduatoria firmata mentre è ${notice.state}`});
   }
 
-  const substr = gradedListFile.substring(0, gradedListFile.indexOf(','));
+  if (gradedListFile.substr(0, 100).indexOf(',') != - 1) {
+    const substr = gradedListFile.substring(0, gradedListFile.indexOf(','));
 
-  gradedListFile = gradedListFile.replace(substr, '');
-  const mime = substr.split(':')[1].split(';')[0];
+    gradedListFile = gradedListFile.replace(substr, '');
+    const mime = substr.split(':')[1].split(';')[0];
 
-  if (mime !== 'application/pdf') {
-    res.status(ERR_CLIENT_STATUS)
-        .send({error: 'Il file caricato deve essere un pdf'});
+    if (mime !== 'application/pdf') {
+      res.status(ERR_CLIENT_STATUS)
+          .send({error: 'Il file caricato deve essere un pdf'});
 
-    return;
+      return;
+    }
   }
 
   try {

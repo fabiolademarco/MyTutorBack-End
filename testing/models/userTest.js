@@ -143,24 +143,24 @@ describe('User model', function() {
       await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
-    it('findByEmail_1', function() {
+    it('FindByEmail_1', function() {
       expect(User.findByEmail(null)).to.be.rejectedWith(Error, 'Email must not be null');
     });
 
-    it('findByEmail_2', async function() {
+    it('FindByEmail_2', async function() {
       expect(await User.findByEmail('nonesiste')).to.be.equal(null);
     });
 
-    it('findByEmail_3', async function() {
+    it('FindByEmail_3', async function() {
       expect((await User.findByEmail(user.email)).email).to.be.equal(user.email);
     });
 
-    it('findByEmail_4', function() {
+    it('FindByEmail_4', function() {
       expect(User.findByEmail({hey: 'hey'})).to.be.rejectedWith(Error);
     });
   });
 
-  describe('findByRole method', function() {
+  describe('FindByRole method', function() {
     let user;
 
     beforeEach(async function() {
@@ -173,20 +173,20 @@ describe('User model', function() {
       await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
-    it('findByRole_1', function() {
+    it('FindByRole_1', function() {
       expect(User.findByRole(null)).to.be.rejectedWith(Error, 'Role must not be null');
     });
 
-    it('findByRole_2', function() {
+    it('FindByRole_2', function() {
       expect(User.findByRole('Student')).to.be.fulfilled;
     });
 
-    it('findByRole_3', function() {
+    it('FindByRole_3', function() {
       expect(User.findByRole({role: 'hey', hey: 'hey'})).to.be.rejectedWith(Error);
     });
   });
 
-  describe('findByVerified method', function() {
+  describe('FindByVerified method', function() {
     let user;
 
     beforeEach(async function() {
@@ -199,21 +199,21 @@ describe('User model', function() {
       await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
-    it('findByVerified_1', function() {
+    it('FindByVerified_1', function() {
       expect(User.findByVerified(null)).to.be.rejectedWith(Error, 'Verified status must not be null');
     });
 
-    it('findByVerified_2', async function() {
+    it('FindByVerified_2', async function() {
       expect(User.findByVerified(1)).to.be.fulfilled; // Added to remove a warning about promise handling
     });
 
-    it('findByVerified_3', function() {
+    it('FindByVerified_3', function() {
       expect(User.findByVerified({role: 'hey', hey: 'hey'})).to.be.rejectedWith(Error);
     });
   });
 
-  describe('findAll method', function() {
-    it('findAll', function() {
+  describe('FindAll method', function() {
+    it('FindAll', function() {
       expect(User.findAll()).to.be.fulfilled;
     });
   });
@@ -225,15 +225,15 @@ describe('User model', function() {
       filter = JSON.parse(JSON.stringify(constUser));
     });
 
-    it('search_1', function() {
+    it('Search_1', function() {
       expect(User.search(null)).to.be.rejectedWith(Error);
     });
 
-    it('search_2', function() {
+    it('Search_2', function() {
       expect(User.search(filter)).to.be.fulfilled;
     });
 
-    it('search_3', function() {
+    it('Search_3', function() {
       filter = {};
       expect(User.search(filter)).to.be.fulfilled;
     });
@@ -252,19 +252,19 @@ describe('User model', function() {
       await db.query(`DELETE FROM ${table} WHERE email = ?`, user.email);
     });
 
-    it('matchUser_1', function() {
+    it('MatchUser_1', function() {
       expect(User.matchUser(user.email, null)).to.be.rejectedWith(Error, 'Email or Password can not be null or undefined');
     });
 
-    it('matchUser_2', async function() {
+    it('MatchUser_2', async function() {
       expect(await User.matchUser(user.email, 'password')).to.be.equal(null);
     });
 
-    it('matchUser_3', function() {
+    it('MatchUser_3', function() {
       expect(User.matchUser({hey: 'hey'}, user.password)).to.be.rejectedWith(Error);
     });
 
-    it('matchUser_4', function() {
+    it('MatchUser_4', function() {
       expect(User.matchUser(user.email, 'Password123')).to.be.fulfilled;
     });
   });

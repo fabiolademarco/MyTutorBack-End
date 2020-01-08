@@ -16,7 +16,7 @@ module.exports = (app, auth) => {
    * @api {PUT} /api/ratings Creates Specified Rating Table
    * @apiName CreateTable
    * @apiGroup Rating
-   * @apiPermission Professore
+   * @apiPermission Professor
    *
    * @apiParam {[Rating](#api-Rating-ObjectRating)[]} ratingList The list of ratigs from which to create the table
    * @apiSuccess {boolean} result boolean representing the result of the operation
@@ -27,7 +27,7 @@ module.exports = (app, auth) => {
    * @api {POST} /api/ratings Retrieves Specified Rating Table
    * @apiName getTable
    * @apiGroup Rating
-   * @apiPermission Ufficio Didattica
+   * @apiPermission Teaching Office
    *
    * @apiParam {string} noticeProtocol The protocol to retrieve the related rating list
    * @apiSuccess {[Rating](#api-Rating-ObjectRating)[]} result The list of rating as per specified according to the protocol
