@@ -16,6 +16,8 @@ const Student = require('../../models/student');
 const Notice = require('../../models/notice');
 const exampleNotice = require('./exampleNotices.json');
 
+const noticeConst = JSON.parse(JSON.stringify(exampleNotice.notice));
+
 const studentConst = {
   email: 'f.migliaro69@studenti.unisa.it',
   name: 'Francesco',
@@ -39,7 +41,7 @@ describe('Rating model', function() {
 
   before(async function() {
     this.timeout(3000);
-    const notice = await Notice.create(exampleNotice.notice);
+    const notice = await Notice.create(noticeConst);
 
     await Student.create(studentConst);
 
