@@ -107,6 +107,10 @@ describe('Article model', function() {
     });
 
     it('FindById_2', function() {
+      expect(Article.findById('lalala', 'lelele')).to.be.rejectedWith(Error, /No result/);
+    });
+
+    it('FindById_3', function() {
       expect(Article.findById(article.id, article.notice_protocol)).to.be.fulfilled;
     });
   });

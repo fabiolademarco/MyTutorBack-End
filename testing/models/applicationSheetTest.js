@@ -108,6 +108,10 @@ describe('ApplicationSheet Model', function() {
     });
 
     it('FindByNotice_2', function() {
+      expect(ApplicationSheet.findByNotice('Manzo')).to.be.rejectedWith(Error, /No result/);
+    });
+
+    it('FindByNotice_3', function() {
       expect(ApplicationSheet.findByNotice(applicationSheet.notice_protocol)).to.be.fulfilled;
     });
   });
