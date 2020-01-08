@@ -320,6 +320,10 @@ exports.checkRating = (rating) => {
   const titleScoreExp = /^[0-9]+$/;
   const interviewScoreExp = /^[0-9]+$/;
 
+  if (ratingList.length == 0) {
+    throw new Error('La lista è vuota');
+  }
+
   if (!assignmentIdExp.test(rating.assignment_id)) {
     throw new Error('L\'id non rispetta il formato');
   }
