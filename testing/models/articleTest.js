@@ -33,8 +33,6 @@ describe('Article model', function() {
   });
 
   after(async function() {
-    article = JSON.parse(JSON.stringify(articleConst));
-
     await Notice.remove(exampleNotice.notice);
   });
 
