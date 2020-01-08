@@ -74,7 +74,8 @@ class Assignment {
     if (assignment == null) {
       throw new Error('No Parameters');
     }
-    exist = await this.exists(assignment);
+    const exist = await this.exists(assignment);
+
     if (!exist) {
       throw new Error('The assignment doesn\'t exists');
     }
