@@ -29,7 +29,7 @@ class Document {
    * @param {Candidature} candidature The candidature correlates to the document.
    * @return {Promise<Document>} Promise that represents the created document.
    */
-  static create(aDocument, candidature) {
+  static async create(aDocument, candidature) {
     if (aDocument == null || candidature == null) {
       throw new Error('The document/candidature must not be null.');
     }
@@ -52,8 +52,11 @@ class Document {
    * @return {Promise<Document>} Promise that represents the updated document.
    */
   static async update(aDocument, candidature) {
-    if (aDocument == null || candidature == null || !await this.exists(aDocument, candidature)) {
+    if (aDocument == null || candidature == null) {
       throw new Error('The document/candidature is either null or the document is not in the database.');
+    }
+    if (!await this.exists(aDocument, candidature)) {
+      throw new Error('The document doesn\'t exists');
     }
 
     aDocument.notice_protocol = candidature.notice_protocol;
@@ -77,7 +80,7 @@ class Document {
  * @param {Candidature} candidature The candidature correlates to the document.
  * @return {Promise<boolean>} Promise that represents the value of the action.
  */
-  static remove(aDocument, candidature) {
+  static async remove(aDocument, candidature) {
     if (aDocument == null || candidature == null) {
       throw new Error('The document/candidature must not be null.');
     }
@@ -100,7 +103,7 @@ class Document {
    * @param {Candidature} candidature The candidature correlates to the document.
    * @return {Promise<boolean>} Promise that represents the value of the action.
    */
-  static exists(aDocument, candidature) {
+  static async exists(aDocument, candidature) {
     if (aDocument == null || candidature == null) {
       throw new Error('The document/candidature must not be null.');
     }
@@ -124,7 +127,7 @@ class Document {
    * @param {string} noticeProtocol The protocol of the notice correlate to the document.
    * @return {Promise<Document>} Promise that represents the document.
    */
-  static findById(name, studentEmail, noticeProtocol) {
+  static async findById(name, studentEmail, noticeProtocol) {
     if (name == null || studentEmail == null || noticeProtocol == null) {
       throw new Error('The name/student email/notice protocol must not be null.');
     }
@@ -134,7 +137,9 @@ class Document {
                                                 AND file_name = ?`,
     [studentEmail, noticeProtocol, name])
         .then(([rows]) => {
-          return new Document(rows[0]);
+          if (rows.length) {
+            return new Document(rows[0]);
+          }
         })
         .catch((err) => {
           throw err;
@@ -146,7 +151,7 @@ class Document {
    * @param {string} noticeProtocol The protocol of the notice.
    * @return {Promise<Document[]>} Promise that respresents the Documents correlated to the specific notice.
    */
-  static findByNotice(noticeProtocol) {
+  static async findByNotice(noticeProtocol) {
     if (noticeProtocol == null) {
       throw new Error('The notice protocol must not be null.');
     }
@@ -165,7 +170,7 @@ class Document {
    * @param {Candidature} candidature The candidature.
    * @return {Promise<Document[]>} Promise that respresents the Documents correlated to the specific candidature.
    */
-  static findByCandidature(candidature) {
+  static async findByCandidature(candidature) {
     if (candidature == null) {
       throw new Error('The candidature must not be null.');
     }
@@ -186,7 +191,7 @@ class Document {
    * @param {string} studentEmail The email of the student.
    * @return {Promise<Document[]>} Promise that respresents the Documents correlated to the specific student.
    */
-  static findByStudent(studentEmail) {
+  static async findByStudent(studentEmail) {
     if (studentEmail == null) {
       throw new Error('The student email must not be null.');
     }
@@ -204,7 +209,7 @@ class Document {
    * Finds all the documents.
    * @return {Promise<Document[]>} Promise that respresents all the Documents.
    */
-  static findAll() {
+  static async findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => {
           return rows.map((el) => new Document(el));
