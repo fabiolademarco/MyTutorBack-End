@@ -33,11 +33,6 @@ describe('VerifiedEmail Model', function() {
       await db.query(`DELETE FROM ${table} WHERE email = ?`, email.email);
     });
 
-    after(async function() {
-      email = JSON.parse(JSON.stringify(verifiedEmail));
-      await db.query(`DELETE FROM ${table} WHERE email = ?`, email.email);
-    });
-
     it('Create_1', function() {
       expect(VerifiedEmail.create(null)).to.be.rejectedWith(Error, 'VerifiedEmail can not be null or undefined');
     });
