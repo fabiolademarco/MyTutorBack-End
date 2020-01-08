@@ -203,7 +203,7 @@ exports.checkAssignment = (assignment) => {
   this.checkNoticeProtocol(assignment.notice_protocol);
 
   if (assignment.student) {
-    this.checkStudentEmail(assignment.student.email);
+    this.checkStudentEmail(assignment.student);
   }
 
   if (assignment.code.length < 1 || assignment.code.length > 30) {
