@@ -27,14 +27,14 @@ const ERR_SERVER_STATUS = 500;
 module.exports.createTable = async function(req, res) {
   const ratingList = req.body.ratingList;
 
-  if (ratingList.length == 0) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'La lista di valutazioni è vuota'});
+  if (ratingList == null) {
+    res.status(ERR_CLIENT_STATUS).send({error: 'La lista di valutazioni non può essere nulla'});
 
     return;
   }
 
-  if (ratingList == null) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'La lista di valutazioni non può essere nulla'});
+  if (ratingList.length == 0) {
+    res.status(ERR_CLIENT_STATUS).send({error: 'La lista di valutazioni è vuota'});
 
     return;
   }
