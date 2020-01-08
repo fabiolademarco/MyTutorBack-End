@@ -68,6 +68,8 @@ module.exports.delete = function(req, res) {
 module.exports.search = function(req, res) {
   const param = req.body.param;
 
+  console.err('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+  console.err(param);
   if (param == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({error: 'Non sono stati specificati parametri o non risultano validi'});
