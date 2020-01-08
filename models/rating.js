@@ -129,7 +129,7 @@ class Rating {
           }
           const rating = rows[0];
 
-          Student.findByEmail(rating.student)
+          return Student.findByEmail(rating.student)
               .then((student) => {
                 rating.student = student;
 

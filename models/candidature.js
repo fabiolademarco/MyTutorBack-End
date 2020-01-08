@@ -41,13 +41,13 @@ class Candidature {
    * @param {Candidature} candidature The candidature to save.
    * @return {Promise<Candidature>} Promise object representing the created Candidature.
    */
-  static create(candidature) {
+  static async create(candidature) {
     if (candidature == null) {
       throw new Error('Parameter can not be null or undefined');
     }
 
-    return pool.query(`INSERT INTO ${table} VALUES(?, ?, ?, ?)`, [candidature.student, candidature.notice_protocol, candidature.state, candidature.last_edit])
-        .then(() => candidature.documents.forEach((d) => Document.create(d, candidature)))
+    return pool.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?, ?, ?, ?)`, [candidature.student, candidature.notice_protocol, candidature.state, candidature.last_edit])
+        .then(() => Promise.all(candidature.documents.map((d) => Document.create(d, candidature))))
         .then(() => new Candidature(candidature))
         .catch((err) => {
           throw err;
@@ -119,7 +119,7 @@ class Candidature {
    * @param {Candidature} candidature The candidature to remove.
    * @return {Promise<Candidature>} Promise object representing the boolean result of operation.
    */
-  static remove(candidature) {
+  static async remove(candidature) {
     if (candidature == null) {
       throw new Error('Parameter can not be null or undefined');
     }
@@ -136,7 +136,7 @@ class Candidature {
    * @param {Candidature} candidature The candidature to check.
    * @return {Promise<boolean>} Promise object that it's true if the candidature exists in the db, or else it's false.
    */
-  static exists(candidature) {
+  static async exists(candidature) {
     if (candidature == null) {
       throw new Error('Parameter can not be null or undefined');
     }
@@ -154,7 +154,7 @@ class Candidature {
    * @param {string} protocol The notice protocol.
    * @return {Promise<Candidature>} Promise object representing the candidature with the given email and protocol.
    */
-  static findById(email, protocol) {
+  static async findById(email, protocol) {
     if (email == null || protocol == null) {
       throw new Error('Parameters can not be null or undefined');
     }
@@ -180,7 +180,7 @@ class Candidature {
    * @param {string} email The email of the student.
    * @return {Promise<Candidature[]>} Promise object representing the list of candidature of the given student.
    */
-  static findByStudent(email) {
+  static async findByStudent(email) {
     if (email == null) {
       throw new Error('Parameter can not be null or undefined');
     }
@@ -205,7 +205,7 @@ class Candidature {
    * @param {string} protocol The notice protocol.
    * @return {Promise<Candidature[]>} Promise object representing the list of candidature of the given notice.
    */
-  static findByNotice(protocol) {
+  static async findByNotice(protocol) {
     if (protocol == null) {
       throw new Error('Parameter can not be null or undefined');
     }
@@ -229,7 +229,7 @@ class Candidature {
    * Finds the list of all the candidatures.
    * @return {Promise<Candidature[]>} Promise object representing all the candidatures.
    */
-  static findAll() {
+  static async findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(async ([rows]) => {
           const candidatures = await Promise.all(rows.map(async (c) => {
