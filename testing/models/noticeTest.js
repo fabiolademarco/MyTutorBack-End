@@ -16,6 +16,7 @@ const Notice = require('../../models/notice');
 const User = require('../../models/user');
 const example = require('./exampleNotices.json');
 
+
 describe('Notice test', function() {
   let notice = JSON.parse(JSON.stringify(example.notice));
   let professor = JSON.parse(JSON.stringify(example.professor));
@@ -220,7 +221,8 @@ describe('Notice test', function() {
     });
 
     it('FindByReferent_2', function() {
-      expect(Notice.findByReferent(notice.referent)).to.be.fulfilled;
+      notice.referent_professor = professor.email;
+      expect(Notice.findByReferent(notice.referent_professor)).to.be.fulfilled;
     });
   });
 
