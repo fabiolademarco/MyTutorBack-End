@@ -9,6 +9,7 @@ module.exports = function(app, auth) {
   /**
    * @api {OBJECT} UserFilter
    * @apiGroup User
+   * @apiParam {string} email The user email
    * @apiParam {string} name The user name
    * @apiParam {string} surname The user surname
    * @apiParam {string="Student","Professor","DDI","TeachingOffice"} role User role
