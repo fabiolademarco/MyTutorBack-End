@@ -318,6 +318,7 @@ exports.close = (req, res) => {
   try {
     Check.checkAssignment(assignment);
   } catch (error) {
+    console.log(error);
     res.status(ERR_CLIENT_STATUS)
         .send({
           error: error.message,
@@ -335,6 +336,7 @@ exports.close = (req, res) => {
             .send({status: true});
       })
       .catch((err) => {
+        console.log(err);
         res.status(ERR_SERVER_STATUS)
             .send({
               status: false,

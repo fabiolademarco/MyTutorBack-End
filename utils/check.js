@@ -250,7 +250,7 @@ exports.checkAssignment = (assignment) => {
     throw new Error('Il campo ht_fund supera i 50 caratteri di lunghezza.');
   }
 
-  if (!assignment.activity_description == null) {
+  if (assignment.activity_description == null) {
     throw new Error('Il campo activity_description è nullo.');
   }
 
