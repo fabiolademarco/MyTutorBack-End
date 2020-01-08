@@ -58,6 +58,10 @@ describe('Article model', function() {
       article = await Article.create(article);
     });
 
+    after(async function() {
+      await Article.remove(article);
+    });
+
     it('Update_1', function() {
       expect(Article.update(null)).to.have.been.rejectedWith(Error, /null/);
     });
@@ -76,6 +80,10 @@ describe('Article model', function() {
   });
 
   describe('Remove method', function() {
+    before(async function() {
+      article = await Article.create(article);
+    });
+
     it('Remove_1', function() {
       expect(Article.remove(null)).to.have.been.rejectedWith(Error, /null/);
     });
