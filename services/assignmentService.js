@@ -58,11 +58,11 @@ module.exports = (app, auth) => {
    * @apiName SearchAssignment
    * @apiGroup Assignment
    * @apiPermission User
-   * @apiParam {string} code The code of the assignment
-   * @apiParam {string} noticeProtocol The notice protocol
-   * @apiParam {string} state The state of the assignment
-   * @apiParam {string} student The student email (only allowed to Teaching Office)
-   * @apiSuccess {[Assignment](#api-Assignment-ObjectAssignment)[]} list The list of the assignments which respect the search criteria
+   * @apiParam {string} code The code of the assignment (optional for Teaching Office)
+   * @apiParam {string} noticeProtocol The notice protocol (optional for Teaching Office)
+   * @apiParam {string} state The state of the assignment (optional for Teaching Office)
+   * @apiParam {string} student The student email (only allowed to Teaching Office) (optional for Teaching Office)
+   * @apiSuccess {[Assignment](#api-Assignment-ObjectAssignment)[]} list The list of the assignments which respect the search criteria (if there are not criteria the list contains all the assignments)
    */
   app.get('/api/assignments/search', AssignmentControl.search);
 

@@ -12,7 +12,7 @@ const table = 'evaluation_criterion';
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
-class EvalutationCriterion {
+class EvaluationCriterion {
   /**
  * EvaluationCriterion object constructor
  * @param {EvaluationCriterion} evaluationCriterion The JS object that contains fields for setting new EvaluationCriterion object
@@ -28,14 +28,14 @@ class EvalutationCriterion {
    * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion to save.
    * @return {Promise} Promise that represents the created evaluation criterion.
    */
-  static create(evaluationCriterion) {
+  static async create(evaluationCriterion) {
     if (!evaluationCriterion) {
       throw new Error('No parameters');
     }
 
     return pool.query(`INSERT INTO ${table} SET ?`, evaluationCriterion)
         .then(([resultSetHeader]) => {
-          return new EvalutationCriterion(evaluationCriterion);
+          return new EvaluationCriterion(evaluationCriterion);
         })
         .catch((err) => {
           throw err;
@@ -58,7 +58,7 @@ class EvalutationCriterion {
     return pool.query(`UPDATE ${table} SET ? WHERE name = ? AND notice_protocol = ?`,
         [evaluationCriterion, evaluationCriterion.name, evaluationCriterion.notice_protocol])
         .then(([resultSetHeader]) => {
-          return new EvalutationCriterion(evaluationCriterion);
+          return new EvaluationCriterion(evaluationCriterion);
         })
         .catch((err) => {
           throw err;
@@ -70,7 +70,7 @@ class EvalutationCriterion {
    * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion to remove.
    * @return {Promise}  Promise that represents the value of the action.
    */
-  static remove(evaluationCriterion) {
+  static async remove(evaluationCriterion) {
     if (!evaluationCriterion) {
       throw new Error('No parameters');
     }
@@ -90,7 +90,7 @@ class EvalutationCriterion {
    * @param {EvaluationCriterion} evaluationCriterion The evaluation criterion to check.
    * @return {Promise} Promise that represents the value of the action.
    */
-  static exists(evaluationCriterion) {
+  static async exists(evaluationCriterion) {
     if (!evaluationCriterion) {
       throw new Error('No parameters');
     }
@@ -111,7 +111,7 @@ class EvalutationCriterion {
    * @param {string} noticeProtocol The protocol of the notice to which the evaluation criterion is related.
    * @return {Promise} Promise that represent the evaluation criterion.
    */
-  static findById(name, noticeProtocol) {
+  static async findById(name, noticeProtocol) {
     if (!name || !noticeProtocol) {
       throw new Error('No parameters');
     }
@@ -119,7 +119,7 @@ class EvalutationCriterion {
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ? AND name = ?`,
         [noticeProtocol, name])
         .then(([rows]) => {
-          return (rows[0] == undefined) ? rows : new EvalutationCriterion(rows[0]);
+          return (rows[0] == undefined) ? rows : new EvaluationCriterion(rows[0]);
         })
         .catch((err) => {
           throw err;
@@ -131,14 +131,14 @@ class EvalutationCriterion {
    * @param {string} noticeProtocol The protocol of the notice.
    * @return {Promise} Promise that represent the evaluation criterion.
    */
-  static findByNotice(noticeProtocol) {
+  static async findByNotice(noticeProtocol) {
     if (!noticeProtocol) {
       throw new Error('No parameters');
     }
 
     return pool.query(`SELECT * FROM ${table} WHERE notice_protocol = ?`, noticeProtocol)
         .then(([rows]) => {
-          return rows.map((criterion) => new EvalutationCriterion(criterion));
+          return rows.map((criterion) => new EvaluationCriterion(criterion));
         })
         .catch((err) => {
           throw err;
@@ -149,10 +149,10 @@ class EvalutationCriterion {
    * Finds allthe evaluation criterions in the database.
    * @return {Promise} Promise that respresents all the Documents.
    */
-  static findAll() {
+  static async findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => {
-          return rows.map((criterion) => new EvalutationCriterion(criterion));
+          return rows.map((criterion) => new EvaluationCriterion(criterion));
         })
         .catch((err) => {
           throw err;
@@ -160,4 +160,4 @@ class EvalutationCriterion {
   }
 }
 
-module.exports = EvalutationCriterion;
+module.exports = EvaluationCriterion;
