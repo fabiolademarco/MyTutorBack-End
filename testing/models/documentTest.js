@@ -17,6 +17,8 @@ const Student = require('../../models/student');
 const Notice = require('../../models/notice');
 const exampleNotice = require('./exampleNotices.json');
 
+const noticeConst = JSON.parse(JSON.stringify(exampleNotice.notice));
+
 const studentConst = {
   email: 'g.vicidomini69@studenti.unisa.it',
   name: 'Giannandrea',
@@ -30,14 +32,14 @@ const studentConst = {
 
 const documentConst = {
   student: studentConst.email,
-  notice_protocol: exampleNotice.notice.protocol,
+  notice_protocol: noticeConst.protocol,
   file_name: 'CerchiaGiovanni.pdf',
   file: 5648789651648,
 };
 
 const candidatureConst = {
   student: studentConst.email,
-  notice_protocol: exampleNotice.notice.protocol,
+  notice_protocol: noticeConst.protocol,
   state: Candidature.States.EDITABLE,
   last_edit: '2019-12-01',
   documents: [],
@@ -49,18 +51,18 @@ describe('Document model', function() {
   before(async function() {
     this.timeout(5000);
 
-    exampleNotice.notice.articles = null;
-    exampleNotice.notice.evaluation_criteria = null;
-    exampleNotice.notice.assignments = null;
-    exampleNotice.notice.application_sheet = null;
+    noticeConst.articles = null;
+    noticeConst.evaluation_criteria = null;
+    noticeConst.assignments = null;
+    noticeConst.application_sheet = null;
 
-    await Notice.create(exampleNotice.notice);
+    await Notice.create(noticeConst);
     await Student.create(studentConst);
     await Candidature.create(candidatureConst);
   });
 
   after(async function() {
-    await Notice.remove(exampleNotice.notice);
+    await Notice.remove(noticeConst);
     await Student.delete(studentConst);
   });
 
@@ -157,11 +159,11 @@ describe('Document model', function() {
     });
 
     it('FindById_2', function() {
-      expect(Document.findById('nome mai vero', studentConst.email, exampleNotice.notice.protocol)).to.be.fulfilled;
+      expect(Document.findById('nome mai vero', studentConst.email, noticeConst.protocol)).to.be.fulfilled;
     });
 
     it('FindById_3', function() {
-      expect(Document.findById(documentConst.file_name, studentConst.email, exampleNotice.notice.protocol)).to.be.fulfilled;
+      expect(Document.findById(documentConst.file_name, studentConst.email, noticeConst.protocol)).to.be.fulfilled;
     });
   });
 
@@ -171,7 +173,7 @@ describe('Document model', function() {
     });
 
     it('FindByNotice_2', function() {
-      expect(Document.findByNotice(exampleNotice.notice.protocol)).to.be.fulfilled;
+      expect(Document.findByNotice(noticeConst.protocol)).to.be.fulfilled;
     });
   });
 

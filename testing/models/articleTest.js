@@ -16,8 +16,10 @@ const Article = require('../../models/article');
 const Notice = require('../../models/notice');
 const exampleNotice = require('./exampleNotices.json');
 
+const noticeConst = JSON.parse(JSON.stringify(exampleNotice.notice));
+
 const articleConst = {
-  notice_protocol: exampleNotice.notice.protocol,
+  notice_protocol: noticeConst.protocol,
   text: 'lo Statuto dell\'Università degli Studi di Salerno; VISTO l\'art. 13 del Regolamento UE 2016/679 - Regolamento Generale sulla Protezione dei Dati;',
   initial: 'VISTO',
 };
@@ -27,13 +29,13 @@ describe('Article model', function() {
 
   before(async function() {
     article = JSON.parse(JSON.stringify(articleConst));
-    exampleNotice.notice.articles = null;
+    noticeConst.articles = null;
 
-    await Notice.create(exampleNotice.notice);
+    await Notice.create(noticeConst);
   });
 
   after(async function() {
-    await Notice.remove(exampleNotice.notice);
+    await Notice.remove(noticeConst);
   });
 
   describe('Create method', function() {
