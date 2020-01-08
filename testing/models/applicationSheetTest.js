@@ -56,6 +56,10 @@ describe('ApplicationSheet Model', function() {
       await ApplicationSheet.create(applicationSheet);
     });
 
+    after(async function() {
+      await ApplicationSheet.remove(applicationSheet);
+    });
+
     it('Update_1', function() {
       expect(ApplicationSheet.update(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
@@ -75,6 +79,10 @@ describe('ApplicationSheet Model', function() {
   });
 
   describe('Remove method', function() {
+    before(async function() {
+      await ApplicationSheet.create(applicationSheet);
+    });
+
     it('Remove_1', function() {
       expect(ApplicationSheet.remove(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
