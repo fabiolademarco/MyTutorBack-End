@@ -55,27 +55,7 @@ function checkEmailLength(email) {
  * @return {boolean} True if the student attributes respect the format.
  */
 exports.checkStudent = (student) => {
-  const registrationNumberExp = /^[0-9A-Za-z ‘]*$/;
-  const birthDateExp = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/;
-
-  checkName(student.name);
-
-  checkSurname(student.surname);
-
-  if (!birthDateExp.test(student.birth_date)) {
-    throw new Error('La data non rispetta il formato.');
-  }
-
-  if (student.registration_number.length < 1 || student.registration_number.length > 20) {
-    throw new Error('La matricola ha meno di 1 carattere di lunghezza oppure supera i 20 caratteri di lunghezza.');
-  }
-
-  if (!registrationNumberExp.test(student.registration_number)) {
-    throw new Error('La matricola non rispetta il formato.');
-  }
-
-  this.checkStudentEmail(student.email);
-
+  this.checkStudentWithoutPassword(student);
   this.checkPassword(student.password);
 
   return true;
@@ -320,10 +300,6 @@ exports.checkRating = (rating) => {
   const titleScoreExp = /^[0-9]+$/;
   const interviewScoreExp = /^[0-9]+$/;
 
-  if (ratingList.length == 0) {
-    throw new Error('La lista è vuota');
-  }
-
   if (!assignmentIdExp.test(rating.assignment_id)) {
     throw new Error('L\'id non rispetta il formato');
   }
@@ -347,6 +323,10 @@ exports.checkRating = (rating) => {
  * @return {boolean} True if it respects the format.
  */
 exports.checkRatingList = (ratingList) => {
+  if (ratingList.length == 0) {
+    throw new Error('La lista è vuota');
+  }
+
   return ratingList.every(this.checkRating);
 };
 
