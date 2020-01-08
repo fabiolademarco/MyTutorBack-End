@@ -203,7 +203,7 @@ exports.checkAssignment = (assignment) => {
   this.checkNoticeProtocol(assignment.notice_protocol);
 
   if (assignment.student) {
-    this.checkStudentEmail(assignment.student.email);
+    this.checkStudentEmail(assignment.student);
   }
 
   if (assignment.code.length < 1 || assignment.code.length > 30) {
@@ -250,7 +250,7 @@ exports.checkAssignment = (assignment) => {
     throw new Error('Il campo ht_fund supera i 50 caratteri di lunghezza.');
   }
 
-  if (!assignment.activity_description == null) {
+  if (assignment.activity_description == null) {
     throw new Error('Il campo activity_description è nullo.');
   }
 
