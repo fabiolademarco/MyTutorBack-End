@@ -4,12 +4,20 @@ module.exports = (app, auth) => {
   app.use('/api/comment', auth.authenticate());
 
   /**
+   * @api {OBJECT} Comment Comment
+   * @apiGroup Comment
+   * @apiParam {string} notice The notice protocol
+   * @apiParam {string} author The email of the author
+   * @apiParam {string} text The body of the comment
+   */
+
+  /**
    * @api {PUT} /api/comment Creates a comment
    * @apiName Create
    * @apiGroup Comment
    * @apiPermission DDI, Professor
-   * @apiParam {Comment} comment The comment to create
-   * @apiSuccess {Comment} comment The created comment
+   * @apiParam {[Comment](#api-Comment-ObjectComment)} comment The comment to create
+   * @apiSuccess {[Comment](#api-Comment-ObjectComment)} comment The created comment
    */
   app.put('/api/comment', CommentControl.set);
 
@@ -19,7 +27,7 @@ module.exports = (app, auth) => {
    * @apiGroup Comment
    * @apiPermission Teaching Office
    * @apiParam {string} id The notice protocol of the comment to remove
-   * @apiSuccess {Comment} comment The removed comment
+   * @apiSuccess {[Comment](#api-Comment-ObjectComment)} comment The removed comment
    */
   app.delete('/api/comment/:id', auth.isTeachingOffice, CommentControl.delete);
 
@@ -29,7 +37,7 @@ module.exports = (app, auth) => {
    * @apiGroup Comment
    * @apiPermission Teaching Office
    * @apiParam {string} noticeProtocol The notice protocol of the comment to find
-   * @apiSuccess {Comment} comment The comment with the given noticeProtocol
+   * @apiSuccess {[Comment](#api-Comment-ObjectComment)} comment The comment with the given noticeProtocol
    */
   app.post('/api/comment', auth.isTeachingOffice, CommentControl.get);
 };

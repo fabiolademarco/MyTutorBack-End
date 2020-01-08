@@ -21,7 +21,7 @@ module.exports = function(app, auth) {
    * @apiGroup User
    * @apiPermission User
    * @apiParam {string} id The email of the user
-   * @apiSuccess {User} user The user with the given id
+   * @apiSuccess {[User](#api-Authentication-ObjectUser)} user The user with the given id
    */
   app.get('/api/users/:id', UserControl.find);
   /**
@@ -29,8 +29,8 @@ module.exports = function(app, auth) {
    * @apiName UpdateUser
    * @apiGroup User
    * @apiPermission User
-   * @apiParam {User} user The user to update
-   * @apiSuccess {User} user The updated User
+   * @apiParam {[User](#api-Authentication-ObjectUser)} user The user to update
+   * @apiSuccess {[User](#api-Authentication-ObjectUser)} user The updated User
    */
   app.patch('/api/users', UserControl.update);
   /**
@@ -39,7 +39,7 @@ module.exports = function(app, auth) {
    * @apiGroup User
    * @apiPermission Teaching Office
    * @apiParam {Object} param Object with name, surname, role or verified to do the search
-   * @apiSuccess {User[]} list List of the searched users
+   * @apiSuccess {[User](#api-Authentication-ObjectUser)[]} list List of the searched users
    */
   app.post('/api/users/search', auth.isTeachingOffice, UserControl.search);
   /**
@@ -47,7 +47,7 @@ module.exports = function(app, auth) {
    * @apiName FindAll
    * @apiGroup User
    * @apiPermission Teaching Office
-   * @apiSuccess {User[]} list List of all users
+   * @apiSuccess {[User](#api-Authentication-ObjectUser)[]} list List of all users
    */
   app.get('/api/users', auth.isTeachingOffice, UserControl.findAll);
 };

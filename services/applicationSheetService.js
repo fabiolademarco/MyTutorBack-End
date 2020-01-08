@@ -4,11 +4,18 @@ module.exports = (app, auth) => {
   app.use('/api/applicationsheet', auth.authenticate(), auth.isTeachingOffice);
 
   /**
+   * @api {OBJECT} ApplicationSheet
+   * @apiGroup ApplicationSheet
+   * @apiParam {string} notice_protocol The protocol of the notice
+   * @apiParam {string} documents_to_attach A text containing the documents to attach
+   */
+
+  /**
    * @api {PUT} /api/applicationsheet Creates an applicationsheet
    * @apiName Create
    * @apiGroup ApplicationSheet
    * @apiPermission Teaching Office
-   * @apiParam {ApplicationSheet} applicationSheet The applicationSheet to create
+   * @apiParam {[ApplicationSheet](#api-ApplicationSheet-ObjectApplicationSheet)} applicationSheet The applicationSheet to create
    * @apiSuccess {boolean} status Boolean representing the result of the operation
    */
   app.put('/api/applicationsheet', ApplicationSheetControl.create);
@@ -18,8 +25,8 @@ module.exports = (app, auth) => {
    * @apiName Update
    * @apiGroup ApplicationSheet
    * @apiPermission Teaching Office
-   * @apiParam {ApplicationSheet} applicationSheet The applicationSheet to update
-   * @apiSuccess {ApplicationSheet} applicationSheet The updated applicationSheet
+   * @apiParam {[ApplicationSheet](#api-ApplicationSheet-ObjectApplicationSheet)} applicationSheet The applicationSheet to update
+   * @apiSuccess {[ApplicationSheet](#api-ApplicationSheet-ObjectApplicationSheet)} applicationSheet The updated applicationSheet
    */
   app.patch('/api/applicationsheet', ApplicationSheetControl.update);
 
