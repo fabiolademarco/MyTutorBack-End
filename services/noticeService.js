@@ -3,6 +3,43 @@ const cors = require('cors');
 
 module.exports = (app, auth) => {
   /**
+   * @api {OBJECT} Notice Notice
+   * @apiGroup Notice
+   * @apiParam {string} protocol The notice key
+   * @apiParam {string} referent_professor The email of the referent professor
+   * @apiParam {string} description A short description of notice
+   * @apiParam {string} notice_subject The subject of the notice
+   * @apiParam {string} admission_requirements A text containing the admission requirements
+   * @apiParam {string} assessable_titles A text containing the assessable titles
+   * @apiParam {string} how_to_submit_applications A text describing how to submit the application
+   * @apiParam {string} selection_board A text containing information about selection board
+   * @apiParam {string} acceptance A text describing how to accept the assignments
+   * @apiParam {string} incompatibility A text describing the incompatibility about the current notice
+   * @apiParam {string} termination_of_the_assignment A text describing the ways of an assignment termination
+   * @apiParam {string} nature_of_the_assignment A text containing the nature of the assignment
+   * @apiParam {string} unused_funds A text describing how the unsed_funds will be use
+   * @apiParam {string} responsible_for_the_procedure A text describing the responsible for the notice procedure
+   * @apiParam {number} notice_funds Represents the notice funds
+   * @apiParam {string="Draft","In Acceptance","Accepted","In Approval","Approved","Published","Expired","Waiting for Graded List","Closed"} state The state of the notice
+   * @apiParam {string="Help Teaching", "Tutoring"} type Represents the type of the notice
+   * @apiParam {date} deadline Represents the deadline to present the applications
+   * @apiParam {string} notice_file The name of the notice pdf
+   * @apiParam {string} graded_list_file The name of the notice graded list
+   * @apiParam {[Article](#api-Notice-ObjectArticle)[]} articles The list of notice articles
+   * @apiParam {[EvaluationCriterion](#api-Notice-ObjectEvaluationCriterion)[]} evaluation_criteria The list of notice evaluation criteria
+   * @apiParam {[ApplicationSheet](#api-ApplicationSheet-ObjectApplicationSheet)} application_sheet The application sheet of the notice
+   * @apiParam {[Assignment](#api-Assignment-ObjectAssignment)[]} The list of assignments
+   * @apiParam {[Comment](#api-Comment-ObjectComment)} comment A comment about the notice
+   */
+
+  /**
+   * @api {OBJECT} Article Article
+   * @apiGroup Notice
+   * @apiParam {number}
+   */
+
+
+  /**
    * @api {GET} /api/notices/:protocol Request Specified Notices
    * @apiName GetNotice
    * @apiGroup Notice

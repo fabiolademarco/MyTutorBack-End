@@ -74,7 +74,7 @@ module.exports = (app, auth) => {
    * @api {POST} /api/auth/recovery Password recovery
    * @apiName PasswordRecovery
    * @apiGroup Authentication
-   * @apiPermission guest
+   * @apiPermission Guest
    * Working in progress...
    */
   app.post('/api/auth/recovery', auth.isNotLogged, AuthenticationControl.passwordRecovery);

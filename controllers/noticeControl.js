@@ -626,7 +626,7 @@ exports.uploadGradedList = async (req, res) => {
     return;
   }
 
-  if (noticeFile == null || noticeFile.length == 0) {
+  if (gradedListFile == null || gradedListFile.length == 0) {
     res.status(ERR_CLIENT_STATUS).send({error: 'Non è stato caricato alcun file.'});
 
     return;
