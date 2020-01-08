@@ -50,7 +50,7 @@ describe('Rating model', function() {
   });
 
   after(async function() {
-    await Notice.remove(exampleNotice.notice);
+    await Notice.remove(noticeConst);
     await Student.delete(studentConst);
   });
 

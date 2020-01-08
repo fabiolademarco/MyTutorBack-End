@@ -16,8 +16,10 @@ const ApplicationSheet = require('../../models/applicationSheet');
 const Notice = require('../../models/notice');
 const exampleNotice = require('./exampleNotices.json');
 
+const noticeConst = JSON.parse(JSON.stringify(exampleNotice.notice));
+
 const applicationSheetConst = {
-  notice_protocol: exampleNotice.notice.protocol,
+  notice_protocol: noticeConst.protocol,
   documents_to_attach: 'dichiarazione sostitutiva di certificazione relativa all\'avvenuto conseguimento del diploma di laurea magistrale, alla votazione riportata ed alla data del suo conseguimento;   - dichiarazione sostitutiva di certificazione all\'iscrizione al corso di dottorato di ricerca con sede presso l\'Università degli Studi di Salerno;   - dichiarazione sostitutiva di certificazione, resa ai sensi del D.P.R. 445/2000, relativa a precedenti attività di tutorato, didattico-integrative, propedeutiche e di recupero in ambito universitario',
 };
 
@@ -27,15 +29,15 @@ describe('ApplicationSheet Model', function() {
   before(async function() {
     this.timeout(3000);
     applicationSheet = JSON.parse(JSON.stringify(applicationSheetConst));
-    exampleNotice.notice.application_sheet = null;
+    noticeConst.application_sheet = null;
 
-    await Notice.create(exampleNotice.notice);
+    await Notice.create(noticeConst);
   });
 
   after(async function() {
     applicationSheet = JSON.parse(JSON.stringify(applicationSheetConst));
 
-    await Notice.remove(exampleNotice.notice);
+    await Notice.remove(noticeConst);
   });
 
   describe('Create method', function() {
