@@ -1,7 +1,7 @@
 const Rating = require('../models/rating');
 const Candidature = require('../models/candidature');
 const Assignment = require('../models/assignment');
-const EvaluationCriterion = require('../models/evalutationCriterion');
+const EvaluationCriterion = require('../models/evaluationCriterion');
 const Check = require('../utils/check');
 const OK_STATUS = 200;
 const ERR_CLIENT_STATUS = 412;
@@ -150,7 +150,7 @@ const validateRatingsScore = async function(ratingList) {
   const assignment = await Assignment.findById(assignmentId);
   const protocollo = assignment.notice_protocol;
   const criterions = await EvaluationCriterion.findByNotice(protocollo);
-  const maxValue = criterions[0].max_score;
+  const maxValue = criterions[0].maxScore;
 
   return ratingList.every(((rating) => rating.titles_score >= 0 && rating.titles_score <= maxValue));
 };

@@ -15,12 +15,12 @@ const proxy = require('proxyquire').noCallThru();
 const ratingStub = require('./stub/ratingStub');
 const candidatureStub = require('./stub/candidatureStub');
 const assignmentStub = require('./stub/assignmentStub');
-const evalutationCriterionStub = require('./stub/evalutationCriterionStub');
+const evaluationCriterionStub = require('./stub/evaluationCriterionStub');
 const path = {
   '../models/rating': ratingStub,
   '../models/assignment': assignmentStub,
   '../models/candidature': candidatureStub,
-  '../models/evaluationCriterion': evalutationCriterionStub,
+  '../models/evaluationCriterion': evaluationCriterionStub,
 };
 
 const ratingControl = proxy('../../controllers/ratingControl', path);
@@ -45,7 +45,7 @@ describe('Rating Control', function() {
     s2 = {
       email: 'm.dantonio69@studenti.unisa.it',
       name: 'Marco',
-      surname: 'Dantonio', // Bisogna vedere che probabilmente c'è un problema con i carattere di escape
+      surname: 'Dntonio', // Bisogna vedere che probabilmente c'è un problema con i carattere di escape
       registration_number: 'aaaaBBBB11112222',
       password: 'Abcde123',
       birth_date: '1998-03-03 ',

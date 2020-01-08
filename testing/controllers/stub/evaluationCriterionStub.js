@@ -32,7 +32,7 @@ const criterionStubList = [
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
-class EvalutationCriterion {
+class EvaluationCriterion {
   /**
  * EvaluationCriterion object constructor
  * @param {EvaluationCriterion} evaluationCriterion The JS object that contains fields for setting new EvaluationCriterion object
@@ -76,7 +76,7 @@ class EvalutationCriterion {
 
     return new Promise((resolve) => resolve())
         .then(() => {
-          return new EvalutationCriterion(evaluationCriterion);
+          return new EvaluationCriterion(evaluationCriterion);
         })
         .catch((err) => {
           throw err;
@@ -136,7 +136,7 @@ class EvalutationCriterion {
         .then(() => {
           const filtered = criterionStubList.filter((el) => el.notice_protocol === evaluationCriterion.noticeProtocol && el.name === evaluationCriterion.name).length > 0;
 
-          return (filtered.length > 0) ? new EvalutationCriterion(filtered[0]) : null;
+          return (filtered.length > 0) ? new EvaluationCriterion(filtered[0]) : null;
         })
         .catch((err) => {
           throw err;
@@ -156,7 +156,7 @@ class EvalutationCriterion {
     return new Promise((resolve) => resolve())
         .then(() => {
           return criterionStubList.filter((el) => el.notice_protocol == noticeProtocol)
-              .map((el) => new EvalutationCriterion(el));
+              .map((el) => new EvaluationCriterion(el));
         })
         .catch((err) => {
           throw err;
@@ -170,7 +170,7 @@ class EvalutationCriterion {
   static findAll() {
     return new Promise((resolve) => resolve())
         .then(() => {
-          return criterionStubList.map((el) => new EvalutationCriterion(el));
+          return criterionStubList.map((el) => new EvaluationCriterion(el));
         })
         .catch((err) => {
           throw err;
@@ -178,4 +178,4 @@ class EvalutationCriterion {
   }
 }
 
-module.exports = EvalutationCriterion;
+module.exports = EvaluationCriterion;

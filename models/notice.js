@@ -1,6 +1,6 @@
 const pool = require('../db');
 const ApplicationSheet = require('./applicationSheet');
-const EvaluationCriterion = require('./evalutationCriterion');
+const EvaluationCriterion = require('./evaluationCriterion');
 const Article = require('./article');
 const Assignment = require('./assignment');
 const Comment = require('./comment');

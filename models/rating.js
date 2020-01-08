@@ -28,7 +28,7 @@ class Rating {
    * @param {Rating} rating The ratind to create
    * @return {Promise<Rating>} Promise representing the fulfillment of Rating creation
    */
-  static create(rating) {
+  static async create(rating) {
     if (rating == null) {
       throw new Error('The rating must not be null');
     }
@@ -80,7 +80,7 @@ class Rating {
    * @param {Rating} rating The rating to remove
    * @return {Promise<Rating>} Promise representing the fulfillment of Rating removal
    */
-  static remove(rating) {
+  static async remove(rating) {
     if (rating == null) {
       throw new Error('The rating must not be null');
     }
@@ -98,7 +98,7 @@ class Rating {
    * @param {Rating} rating The rating whose existence is checked
    * @return {Promise<boolean>} Promise representing the fulfillment of Rating existence check
    */
-  static exists(rating) {
+  static async exists(rating) {
     if (rating == null) {
       throw new Error('The rating must not be null');
     }
@@ -111,12 +111,13 @@ class Rating {
           throw err;
         });
   }
+
   /**
    * @param {String} emailStudent The student email
    * @param {String} assignmentId The assignment id
    * @return {Promise<Rating>} Promise representing the fulfillment of Rating search
    */
-  static findById(emailStudent, assignmentId) {
+  static async findById(emailStudent, assignmentId) {
     if (emailStudent == null || assignmentId == null) {
       throw new Error('Student email and assignment id must be both valid');
     }
@@ -128,7 +129,7 @@ class Rating {
           }
           const rating = rows[0];
 
-          Student.findByEmail(rating.student)
+          return Student.findByEmail(rating.student)
               .then((student) => {
                 rating.student = student;
 
@@ -139,11 +140,12 @@ class Rating {
           throw err;
         });
   }
+
   /**
    * @param {String} emailStudent The student email
    * @return {Promise<Rating[]>} Promise representing the fulfillment of Rating search
    */
-  static findByStudent(emailStudent) {
+  static async findByStudent(emailStudent) {
     if (emailStudent == null) {
       throw new Error('The student email must not be null');
     }
@@ -164,12 +166,11 @@ class Rating {
         });
   }
 
-
   /**
    * @param {String} assignmentId The student email
    * @return {Promise<Rating[]>} Promise representing the fulfillment of Rating search
    */
-  static findByAssignment(assignmentId) {
+  static async findByAssignment(assignmentId) {
     if (assignmentId == null) {
       throw new Error('The assignment id must not be null');
     }
@@ -197,7 +198,7 @@ class Rating {
    * @param {String} noticeProcol The notice protocol
    * @return {Promise<Rating[]>} Promise representing the fulfillment of Rating search
    */
-  static findByProtocol(noticeProcol) {
+  static async findByProtocol(noticeProcol) {
     if (noticeProcol == null) {
       throw new Error('The notice protocol must not be null');
     }
