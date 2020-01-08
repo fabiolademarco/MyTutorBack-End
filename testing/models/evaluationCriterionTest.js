@@ -58,4 +58,149 @@ describe('EvaluationCriterion model', function() {
       await expect(EvaluationCriterion.create(criterion)).to.be.fulfilled;
     });
   });
+
+  describe('Update method', function() {
+    let criterion;
+
+    beforeEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`INSERT INTO ${table} SET ?`, criterion);
+    });
+
+    afterEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`DELETE FROM ${table} WHERE notice_protocol = ?`, criterion.notice_protocol);
+    });
+
+    it('Update_1', async function() {
+      await expect(EvaluationCriterion.update(null)).to.be.rejectedWith(Error, 'No parameters');
+    });
+
+    it('Update_2', async function() {
+      criterion.notice_protocol = '..';
+      await expect(EvaluationCriterion.update(criterion)).to.be.rejectedWith(Error, 'The evaluation criterion doesn\'t exists');
+    });
+
+    it('Update_3', async function() {
+      await expect(EvaluationCriterion.update(criterion)).to.be.fulfilled;
+    });
+  });
+
+  describe('Remove method', function() {
+    let criterion;
+
+    beforeEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`INSERT INTO ${table} SET ?`, criterion);
+    });
+
+    afterEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`DELETE FROM ${table} WHERE notice_protocol = ?`, criterion.notice_protocol);
+    });
+
+    it('Remove_1', async function() {
+      await expect(EvaluationCriterion.remove(null)).to.be.rejectedWith(Error, 'No parameters');
+    });
+
+    it('Remove_2', async function() {
+      await expect(EvaluationCriterion.remove(criterion)).to.be.fulfilled;
+    });
+  });
+
+  describe('Exists method', function() {
+    let criterion;
+
+    beforeEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`INSERT INTO ${table} SET ?`, criterion);
+    });
+
+    afterEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`DELETE FROM ${table} WHERE notice_protocol = ?`, criterion.notice_protocol);
+    });
+
+    it('Exists_1', async function() {
+      await expect(EvaluationCriterion.exists(null)).to.be.rejectedWith(Error, 'No parameters');
+    });
+
+    it('Exists_2', async function() {
+      await expect(EvaluationCriterion.exists(criterion)).to.be.fulfilled;
+    });
+  });
+
+  describe('FindById method', function() {
+    let criterion;
+
+    beforeEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`INSERT INTO ${table} SET ?`, criterion);
+    });
+
+    afterEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`DELETE FROM ${table} WHERE notice_protocol = ?`, criterion.notice_protocol);
+    });
+
+    it('FindById_1', async function() {
+      await expect(EvaluationCriterion.findById(criterion.name, null)).to.be.rejectedWith(Error, 'No parameters');
+    });
+
+    it('FindById_2', async function() {
+      await expect(EvaluationCriterion.findById(criterion.name, {hey: 'hey'})).to.be.rejectedWith(Error);
+    });
+
+    it('FindById_3', async function() {
+      await expect(EvaluationCriterion.findById('---', criterion.notice_protocol)).to.be.fulfilled;
+    });
+
+    it('FindById_4', async function() {
+      await expect(EvaluationCriterion.findById(criterion.name, criterion.notice_protocol)).to.be.fulfilled;
+    });
+  });
+
+  describe('FindByNotice method', function() {
+    let criterion;
+
+    beforeEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`INSERT INTO ${table} SET ?`, criterion);
+    });
+
+    afterEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`DELETE FROM ${table} WHERE notice_protocol = ?`, criterion.notice_protocol);
+    });
+
+    it('FindByNotice_1', async function() {
+      await expect(EvaluationCriterion.findByNotice(null)).to.be.rejectedWith(Error, 'No parameters');
+    });
+
+    it('FindByNotice_2', async function() {
+      await expect(EvaluationCriterion.findByNotice({hey: 'hey'})).to.be.rejectedWith(Error);
+    });
+
+    it('FindByNotice_3', async function() {
+      await expect(EvaluationCriterion.findByNotice(criterion.notice_protocol)).to.be.fulfilled;
+    });
+  });
+
+  describe('FindAll method', async function() {
+    let criterion;
+
+    beforeEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`INSERT INTO ${table} SET ?`, criterion);
+    });
+
+    afterEach(async function() {
+      criterion = JSON.parse(JSON.stringify(evaluationCriterion));
+      await db.query(`DELETE FROM ${table} WHERE notice_protocol = ?`, criterion.notice_protocol);
+    });
+
+    it('FindAll_1', async function() {
+      await expect(EvaluationCriterion.findAll()).to.be.fulfilled;
+    });
+  });
 });
