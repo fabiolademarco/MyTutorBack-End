@@ -248,7 +248,7 @@ exports.registerProfessor = async (req, res) => {
         const token = createToken(payload);
 
         console.log('token: ' + token);
-        await Mail.sendEmailToProfessor(professor.email, token);
+        Mail.sendEmailToProfessor(professor.email, token);
         res.status(200);
         res.send({
           status: true,

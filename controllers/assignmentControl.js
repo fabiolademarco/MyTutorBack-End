@@ -53,7 +53,7 @@ exports.sendRequest = (req, res) => {
   assignment.state = Assignment.states.WAITING;
   Assignment.update(assignment)
       .then(async (data) => {
-        await Mail.sendEmailToStudentRequest(assignment.student);
+        Mail.sendEmailToStudentRequest(assignment.student);
         res.status(OK_STATUS)
             .send({assignment: data});
       })
@@ -101,7 +101,7 @@ exports.book = (req, res) => {
       .then(async (data) => {
         const teachingOffice = (await User.findByRole(User.Role.TEACHING_OFFICE))[0];
 
-        await Mail.sendEmailToTeachingOfficeBook(teachingOffice.email, assignment);
+        Mail.sendEmailToTeachingOfficeBook(teachingOffice.email, assignment);
         res.status(OK_STATUS)
             .send({status: true});
       })
@@ -145,7 +145,7 @@ exports.assign = (req, res) => {
   assignment.state = Assignment.states.ASSIGNED;
   Assignment.update(assignment)
       .then(async (data) => {
-        await Mail.sendEmailToStudentAssign(assignment.student, assignment.code);
+        Mail.sendEmailToStudentAssign(assignment.student, assignment.code);
         res.status(OK_STATUS)
             .send({status: true});
       })
@@ -231,7 +231,7 @@ exports.decline = (req, res) => {
       .then(async (data) => {
         const teachingOffice = (await User.findByRole(User.Role.TEACHING_OFFICE))[0];
 
-        await Mail.sendEmailToTeachingOfficeDecline(teachingOffice.email, req.id, assignment.code);
+        Mail.sendEmailToTeachingOfficeDecline(teachingOffice.email, req.id, assignment.code);
         res.status(OK_STATUS)
             .send({status: true});
       })

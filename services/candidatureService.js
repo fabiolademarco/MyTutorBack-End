@@ -7,7 +7,7 @@ module.exports = (app, auth) => {
   /**
    * @api {OBJECT} Candidature Candidature
    * @apiGroup Candidature
-   * @apiParam {string} student The email of the student
+   * @apiParam {[Student](#-api-Authentication-ObjectStudent)} student The student of the candidature
    * @apiParam {string} notice_protocol The protocol of the notice
    * @apiParam {string="Editable","In Evaluation","Rejected","In Graded List"} state The state of the notice
    * @apiParam {date} last_edit The date of the last edit

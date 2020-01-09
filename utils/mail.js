@@ -142,5 +142,8 @@ createTransport = () => {
       user: user.email,
       pass: user.password,
     },
+    tls: {
+      secureProtocol: 'TLSv1_method',
+    },
   });
 };
