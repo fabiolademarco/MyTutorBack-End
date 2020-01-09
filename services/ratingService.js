@@ -33,4 +33,15 @@ module.exports = (app, auth) => {
    * @apiSuccess {[Rating](#api-Rating-ObjectRating)[]} result The list of rating as per specified according to the protocol
    */
   app.post('/api/ratings', RatingControl.getTable);
+
+  /**
+   * @api {POST} /api/ratings/exists Check if Specified Rating Table exists
+   * @apiName existsTable
+   * @apiGroup Rating
+   * @apiPermission Teaching Office
+   *
+   * @apiParam {string} noticeProtocol The protocol to check if the related rating table exists
+   * @apiSuccess {boolean} exists True if the rating table exists
+   */
+  app.post('/api/ratings/exists', RatingControl.exists);
 };

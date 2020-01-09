@@ -107,21 +107,48 @@ module.exports.getTable = async function(req, res) {
     return;
   }
 
-  const assignments = await Assignment.findById(noticeProtocol);
-  const ratings = [];
-
-  for (const assignment of assignments) {
-    ratings.push(Rating.findByAssignment(assignment));
-  }
-
-  return Promise.all(ratings)
-      .then((lists) => {
-        const assignments = lists.flatMap((ass) => ass);
-
-        res.status(OK_STATUS).send({result: assignments});
+  return Rating.findByProtocol(noticeProtocol)
+      .then((ratings) => {
+        res.status(OK_STATUS)
+            .send({result: ratings});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).send({error: 'Recupero della tabella fallito.', exception: err.message});
+        res.status(ERR_SERVER_STATUS)
+            .send({error: 'Recupero delle valutazioni fallito.', exception: err.message});
+      });
+};
+
+module.exports.exists = async function(req, res) {
+  const noticeProtocol = req.body.noticeProtocol;
+
+  if (noticeProtocol == null) {
+    res.status(ERR_CLIENT_STATUS).send({error: 'Il protocollo non può essere nullo'});
+
+    return;
+  }
+
+  try {
+    Check.checkNoticeProtocol(noticeProtocol);
+  } catch (error) {
+    res.status(ERR_CLIENT_STATUS)
+        .send({
+          error: error.message,
+          exception: error,
+        });
+
+    return;
+  }
+
+  return Rating.findByProtocol(noticeProtocol)
+      .then((ratings) => {
+        const exists = ratings.length > 0;
+
+        res.status(OK_STATUS)
+            .send({exists: exists});
+      })
+      .catch((err) => {
+        res.status(ERR_SERVER_STATUS)
+            .send({error: 'Recupero delle valutazioni fallito.', exception: err.message});
       });
 };
 
