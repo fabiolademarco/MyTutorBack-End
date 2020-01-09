@@ -111,7 +111,7 @@ describe('ApplicationSheet Model', function() {
     });
 
     it('FindByNotice_2', function() {
-      expect(ApplicationSheet.findByNotice('Manzo')).to.be.rejectedWith(Error, /No result/);
+      expect(ApplicationSheet.findByNotice('Manzo')).to.be.fulfilled;
     });
 
     it('FindByNotice_3', function() {
