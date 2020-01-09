@@ -396,11 +396,10 @@ exports.checkNotice = (notice) => {
     throw new Error('Il campo notice_subject ha meno di 1 carattere di lunghezza oppure supera i 2000 caratteri di lunghezza.');
   }
 
-  if (notice.assignments && (notice.assignments.length < 1 || notice.assignments.length > 15)) {
-    throw new Error('Il campo assignments ha lunghezza minore di 1 oppure supera 15.');
-  }
-
   if (notice.assignments) {
+    if (notice.assignments.length < 1 || notice.assignments.length > 15) {
+      throw new Error('Il campo assignments ha lunghezza minore di 1 oppure supera 15.');
+    }
     notice.assignments.every(this.checkAssignment);
   }
 
