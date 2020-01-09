@@ -18,6 +18,8 @@ const example = require('./exampleNotices.json');
 
 
 describe('Notice test', function() {
+  this.timeout(5000);
+
   let notice = JSON.parse(JSON.stringify(example.notice));
   let professor = JSON.parse(JSON.stringify(example.professor));
 

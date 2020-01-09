@@ -48,6 +48,8 @@ const constCandidature = {
 };
 
 describe('Candidature model', function() {
+  this.timeout(5000);
+
   before(async function() {
     await db.query(`INSERT INTO ${noticeTable}(protocol) VALUES(?)`, fakeNotice);
     await db.query(`INSERT INTO ${userTable} SET ?`, fakeUser);

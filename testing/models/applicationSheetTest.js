@@ -24,10 +24,11 @@ const applicationSheetConst = {
 };
 
 describe('ApplicationSheet Model', function() {
+  this.timeout(5000);
+
   let applicationSheet;
 
   before(async function() {
-    this.timeout(3000);
     applicationSheet = JSON.parse(JSON.stringify(applicationSheetConst));
     noticeConst.application_sheet = null;
 
@@ -111,7 +112,7 @@ describe('ApplicationSheet Model', function() {
     });
 
     it('FindByNotice_2', function() {
-      expect(ApplicationSheet.findByNotice('Manzo')).to.be.rejectedWith(Error, /No result/);
+      expect(ApplicationSheet.findByNotice('Manzo')).to.be.fulfilled;
     });
 
     it('FindByNotice_3', function() {

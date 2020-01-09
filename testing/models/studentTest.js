@@ -24,8 +24,9 @@ const constStudent = {
   birth_date: '1998-03-12 ',
 };
 
-describe('Studente model', function() {
-  this.timeout(3000);
+describe('Student model', function() {
+  this.timeout(5000);
+
   describe('Create method', function() {
     let student;
 

@@ -26,6 +26,8 @@ const constUser = {
 };
 
 describe('User model', function() {
+  this.timeout(5000);
+
   describe('Create method', function() {
     let user;
 
