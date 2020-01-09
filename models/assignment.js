@@ -44,12 +44,13 @@ class Assignment {
       assignment.state : null;
     this.note = assignment.note;
   }
+
   /**
    * Creates a new Assignment.
    * @param {Assignment} assignment The assignment to save.
    * @return {Promise<Assignment>} Promise object that represents the created Assignment.
    */
-  static create(assignment) {
+  static async create(assignment) {
     if (assignment == null) {
       throw new Error('No Parameters');
     }
@@ -65,6 +66,7 @@ class Assignment {
           throw err;
         });
   }
+
   /**
    * Updates an Assignment.
    * @param {Assignment} assignment The assignment to update.
@@ -86,12 +88,13 @@ class Assignment {
           throw err;
         });
   }
+
   /**
    * Removes an Assignment.
    * @param {Assignment} assignment The assignment to remove.
    * @return {Promise<boolean>} Promise that is true if the removal went right else it's false.
    */
-  static remove(assignment) {
+  static async remove(assignment) {
     if (assignment == null) {
       throw new Error('No Parameters');
     }
@@ -102,12 +105,13 @@ class Assignment {
           throw err;
         });
   }
+
   /**
    * Finds the assignment with the specified id.
    * @param {Number} id The id of an existing assignment.
    * @return {Promise<Assignment>} Promise object that represents the assignment having the passed id.
    */
-  static findById(id) {
+  static async findById(id) {
     if (id == null) {
       throw new Error('No Parameters');
     }
@@ -124,12 +128,13 @@ class Assignment {
           throw err;
         });
   }
+
   /**
    * Finds the assignments of the specified notice.
    * @param {string} noticeProtocol The protocol of a notice.
    * @return {Promise<Assignment[]>} Promise that represents the Assignments related to the passed Notice protocol.
    */
-  static findByNotice(noticeProtocol) {
+  static async findByNotice(noticeProtocol) {
     if (noticeProtocol == null) {
       throw new Error('No Parameters');
     }
@@ -140,12 +145,13 @@ class Assignment {
           throw err;
         });
   }
+
   /**
    * Finds the assignments of a student.
    * @param {string} emailStudent The email of the student.
    * @return {Promise<Assignment[]>} Promise that represents the Assignments related to the passed email Student.
    */
-  static findByStudent(emailStudent) {
+  static async findByStudent(emailStudent) {
     if (emailStudent == null) {
       throw new Error('No Parameters');
     }
@@ -156,23 +162,25 @@ class Assignment {
           throw err;
         });
   }
+
   /**
    * Finds all the assignments.
    * @return {Promise<Assignment[]>} Promise that represents the list of all Assignments.
    */
-  static findAll() {
+  static async findAll() {
     return pool.query(`SELECT * FROM ${table}`)
         .then(([rows]) => rows.map((a) => new Assignment(a)))
         .catch((err) => {
           throw err;
         });
   }
+
   /**
    * Checks if an assignment exists.
    * @param {Assignment} assignment The assignment to check.
    * @return {Promise<boolean>} Promise that is true if the assignment is in the db, else it's false.
    */
-  static exists(assignment) {
+  static async exists(assignment) {
     if (assignment == null) {
       throw new Error('No parameters');
     }
@@ -183,6 +191,7 @@ class Assignment {
           throw err;
         });
   }
+
   /**
    * Search Filter definition
    * @typedef {Object} filter
@@ -196,7 +205,7 @@ class Assignment {
    * @param {filter} filter An object specifying the search criteria.
    * @return {Promise<Assignment[]>} Promise that represents the list of Assignments which respects the search criteria.
    */
-  static search(filter) {
+  static async search(filter) {
     let query = `SELECT * FROM ${table} WHERE true `;
     const params = [];
 
