@@ -1,7 +1,7 @@
 const RatingControl = require('../controllers/ratingControl');
 
 module.exports = (app, auth) => {
-  app.use('/api/ratings', auth.authenticate());
+  app.use(/\/api\/ratings\.*/, auth.authenticate());
 
   /**
    * @api {OBJECT} Rating Rating
@@ -43,5 +43,5 @@ module.exports = (app, auth) => {
    * @apiParam {string} noticeProtocol The protocol to check if the related rating table exists
    * @apiSuccess {boolean} exists True if the rating table exists
    */
-  app.post('/api/ratings/exists', RatingControl.exists);
+  app.post('/api/ratings/exists', auth.isTeachingOffice, RatingControl.exists);
 };
