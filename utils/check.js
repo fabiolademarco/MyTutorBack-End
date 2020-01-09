@@ -396,11 +396,11 @@ exports.checkNotice = (notice) => {
     throw new Error('Il campo notice_subject ha meno di 1 carattere di lunghezza oppure supera i 2000 caratteri di lunghezza.');
   }
 
-  if (notice.assignment && (notice.assignments.length < 1 || notice.assignments.length > 15)) {
+  if (notice.assignments && (notice.assignments.length < 1 || notice.assignments.length > 15)) {
     throw new Error('Il campo assignments ha lunghezza minore di 1 oppure supera 15.');
   }
 
-  if (notice.assignment) {
+  if (notice.assignments) {
     notice.assignments.every(this.checkAssignment);
   }
 
@@ -452,7 +452,7 @@ exports.checkNotice = (notice) => {
     throw new Error('Il campo responsible_for_the_procedure ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
-  if (notice.notice_funds) {
+  if (notice.notice_funds !== null || notice.notice_funds !== undefined) {
     if ((notice.notice_funds < 1)) {
       throw new Error('Il campo admission_requirements ha valore minore di 1.');
     }
@@ -466,7 +466,7 @@ exports.checkNotice = (notice) => {
     throw new Error('Il campo type ha meno di 1 carattere di lunghezza oppure supera i 50 caratteri di lunghezza.');
   }
 
-  if (notice.deadline && !noticeDeadlineExp.test(notice.deadline)) {
+  if ((notice.deadline !== null || notice.deadline !== undefined) && !noticeDeadlineExp.test(notice.deadline)) {
     throw new Error('Il campo deadline non rispetta il formato.');
   }
 
