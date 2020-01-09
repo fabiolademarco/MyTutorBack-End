@@ -32,6 +32,16 @@ const assignmentConst = {
   note: null,
 };
 
+// Added for cover other branches
+const assignment = JSON.parse(JSON.stringify(assignmentConst));
+
+assignment.student = 'student';
+assignment.total_number_hours = 'x';
+assignment.title = 'hey';
+assignment.hourly_cost = 'x';
+assignment.state = 'hey';
+new Assignment(assignment);
+
 describe('Assignment model', function() {
   this.timeout(5000);
 
@@ -180,6 +190,10 @@ describe('Assignment model', function() {
 
     it('Search_1', function() {
       expect(Assignment.search(filter)).to.be.fulfilled;
+    });
+
+    it('Search_2', function() {
+      expect(Assignment.search({})).to.be.fulfilled;
     });
   });
 });
