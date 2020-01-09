@@ -172,6 +172,20 @@ exports.setState = async (req, res) => {
     return;
   }
 
+  if (notice.state === Notice.States.IN_ACCEPTANCE) {
+    try {
+      Check.checkCompleteNotice(notice);
+    } catch (err) {
+      res.status(ERR_CLIENT_STATUS)
+          .send({
+            error: error.message,
+            exception: error,
+          });
+
+      return;
+    }
+  }
+
   if (notice.state === Notice.States.IN_APPROVAL) {
     try {
       const [dbNotice] = await Notice.findByProtocol(notice.protocol);
