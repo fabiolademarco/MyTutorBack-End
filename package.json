@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "mocha --reporter mochawesome \"./testing/controllers\" \"./testing/models\"",
-    "coverage": "nyc --reporter=html npm test"
+    "test": "mocha --exit --reporter mochawesome \"./testing/controllers\"",
+    "coverage": "nyc --reporter=html mocha --exit \"./testing/controllers\" \"./testing/models\""
   },
   "nyc": {
     "all": true,
