@@ -3,6 +3,54 @@ const cors = require('cors');
 
 module.exports = (app, auth) => {
   /**
+   * @api {OBJECT} Notice Notice
+   * @apiGroup Notice
+   * @apiParam {string} protocol The notice key
+   * @apiParam {string} referent_professor The email of the referent professor
+   * @apiParam {string} description A short description of notice
+   * @apiParam {string} notice_subject The subject of the notice
+   * @apiParam {string} admission_requirements A text containing the admission requirements
+   * @apiParam {string} assessable_titles A text containing the assessable titles
+   * @apiParam {string} how_to_submit_applications A text describing how to submit the application
+   * @apiParam {string} selection_board A text containing information about selection board
+   * @apiParam {string} acceptance A text describing how to accept the assignments
+   * @apiParam {string} incompatibility A text describing the incompatibility about the current notice
+   * @apiParam {string} termination_of_the_assignment A text describing the ways of an assignment termination
+   * @apiParam {string} nature_of_the_assignment A text containing the nature of the assignment
+   * @apiParam {string} unused_funds A text describing how the unsed_funds will be use
+   * @apiParam {string} responsible_for_the_procedure A text describing the responsible for the notice procedure
+   * @apiParam {number} notice_funds Represents the notice funds
+   * @apiParam {string="Draft","In Acceptance","Accepted","In Approval","Approved","Published","Expired","Waiting for Graded List","Closed"} state The state of the notice
+   * @apiParam {string="Help Teaching", "Tutoring"} type Represents the type of the notice
+   * @apiParam {date} deadline Represents the deadline to present the applications
+   * @apiParam {string} notice_file The name of the notice pdf
+   * @apiParam {string} graded_list_file The name of the notice graded list
+   * @apiParam {[Article](#api-Notice-ObjectArticle)[]} articles The list of notice articles
+   * @apiParam {[EvaluationCriterion](#api-Notice-ObjectEvaluationcriterion)[]} evaluation_criteria The list of notice evaluation criteria
+   * @apiParam {[ApplicationSheet](#api-ApplicationSheet-ObjectApplicationsheet)} application_sheet The application sheet of the notice
+   * @apiParam {[Assignment](#api-Assignment-ObjectAssignment)[]} The list of assignments
+   * @apiParam {[Comment](#api-Comment-ObjectComment)} comment A comment about the notice
+   */
+
+  /**
+   * @api {OBJECT} Article Article
+   * @apiGroup Notice
+   * @apiParam {number} id The key of the article
+   * @apiParam {string} notice_protocol The protocol of the notice which article belongs
+   * @apiParam {string} text A text describing the article
+   * @apiParam {string} initial A short text containing the initial of the article
+   */
+
+  /**
+   * @api {OBJECT} EvaluationCriterion EvaluationCriterion
+   * @apiGroup Notice
+   * @apiParam {string} notice_protocol The protocol of the notice which the evaluation criterion belongs
+   * @apiParam {string} name The key of the evaluation criterion
+   * @apiParam {number} max_score The max score of the criterion
+   */
+
+
+  /**
    * @api {GET} /api/notices/:protocol Request Specified Notices
    * @apiName GetNotice
    * @apiGroup Notice
@@ -10,7 +58,7 @@ module.exports = (app, auth) => {
    *
    * @apiParam {String} protocol Notice unique protocol, can be part of a protocol
    *
-   * @apiSuccess {Object[]} notice Notices having the specified protocol as a substring
+   * @apiSuccess {[Notice](#api-Notice-ObjectNotice)[]} notice Notices having the specified protocol as a substring
    */
   app.get('/api/notices/:protocol', auth.setUser, NoticeControl.find);
 
@@ -36,7 +84,7 @@ module.exports = (app, auth) => {
    * @apiGroup Notice
    * @apiPermission everyone
    *
-   * @apiSuccess {Object[]} notices All Notices the user is authorized to access
+   * @apiSuccess {[Notice](#api-Notice-ObjectNotice)[]} notices All Notices the user is authorized to access
    */
   app.get('/api/notices', auth.setUser, NoticeControl.findAll);
 
@@ -46,9 +94,9 @@ module.exports = (app, auth) => {
    * @apiGroup Notice
    * @apiPermission Teaching Office
    *
-   * @apiParam {Object} notice Notice to be created
+   * @apiParam {[Notice](#api-Notice-ObjectNotice)} notice Notice to be created
    *
-   * @apiSuccess {Object} notices The created Notice
+   * @apiSuccess {[Notice](#api-Notice-ObjectNotice)} notices The created Notice
    */
   app.put('/api/notices', auth.isTeachingOffice, NoticeControl.create);
 
@@ -58,9 +106,9 @@ module.exports = (app, auth) => {
    * @apiGroup Notice
    * @apiPermission Teaching Office
    *
-   * @apiParam {Object} notice Notice to be updated
+   * @apiParam {[Notice](#api-Notice-ObjectNotice)} notice Notice to be updated
    *
-   * @apiSuccess {Object} notices The updated Notice
+   * @apiSuccess {[Notice](#api-Notice-ObjectNotice)} notices The updated Notice
    */
   app.patch('/api/notices', auth.isTeachingOffice, NoticeControl.update);
 
@@ -70,7 +118,7 @@ module.exports = (app, auth) => {
    * @apiGroup Notice
    * @apiPermission Teaching Office, Professor, DDI
    *
-   * @apiParam {Object} notice Notice which state must be changed
+   * @apiParam {[Notice](#api-Notice-ObjectNotice)} notice Notice which state must be changed
    */
   app.patch('/api/notices/state', auth.setUser, NoticeControl.setState);
 

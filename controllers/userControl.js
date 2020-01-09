@@ -68,6 +68,13 @@ module.exports.delete = function(req, res) {
 module.exports.search = function(req, res) {
   const param = req.body.param;
 
+  if (param == null) {
+    res.status(ERR_CLIENT_STATUS);
+    res.send({error: 'Non sono stati specificati parametri o non risultano validi'});
+
+    return;
+  }
+
   const filter = {
     email: param.email,
     name: param.name,
@@ -75,13 +82,6 @@ module.exports.search = function(req, res) {
     role: param.role,
     verified: param.verified,
   };
-
-  if (param == null) {
-    res.status(ERR_CLIENT_STATUS);
-    res.send({error: 'Non sono stati specificati parametri o non risultano validi'});
-
-    return;
-  }
 
   try {
     Check.checkUserFilter(filter);

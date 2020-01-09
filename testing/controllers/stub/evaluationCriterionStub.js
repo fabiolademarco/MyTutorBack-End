@@ -40,7 +40,7 @@ class EvaluationCriterion {
   constructor(evaluationCriterion) {
     this.notice_protocol = evaluationCriterion.notice_protocol;
     this.name = evaluationCriterion.name;
-    this.maxScore = evaluationCriterion.max_score;
+    this.max_score = evaluationCriterion.max_score;
   }
 
   /**

@@ -87,7 +87,7 @@ module.exports = (app, auth) => {
   app.get('/api/assignments/:id', AssignmentControl.find); // Non ricordo chi è autorizzato a farla
 
   /**
-   * @api {POST} /api/assognments/close Closes an assignment
+   * @api {POST} /api/assignments/close Closes an assignment
    * @apiName Close
    * @apiGroup Assignment
    * @apiPermission Teaching Office
