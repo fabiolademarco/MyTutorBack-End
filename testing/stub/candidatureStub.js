@@ -14,13 +14,13 @@ const States = {
 
 const candidatureStubList = [
   {
-    student: 'f.migliaro69@studenti.unisa.it',
+    student: {email: 'f.migliaro69@studenti.unisa.it'},
     notice_protocol: 'Prot. n. 0279008',
     state: States.EDITABLE,
     last_edit: new Date(),
   },
   {
-    student: 'm.dantonio69@studenti.unisa.it',
+    student: {email: 'm.dantonio69@studenti.unisa.it'},
     notice_protocol: 'Prot. n. 0279008',
     state: States.EDITABLE,
     last_edit: new Date(),
@@ -122,7 +122,7 @@ class Candidature {
     return new Promise((resolve) => resolve())
         .then(() => {
           const predicate = (c) => {
-            c.student === candidature.student;
+            c.student.email === candidature.student.email;
             c.notice_protocol === candidature.notice_protocol;
           };
 
@@ -147,7 +147,7 @@ class Candidature {
     return new Promise((resolve) => resolve())
         .then(async () => {
           const predicate = (c) => {
-            c.student === email;
+            c.student.email === email;
             c.notice_protocol === protocol;
           };
 
@@ -181,7 +181,7 @@ class Candidature {
     return new Promise((resolve) => resolve())
         .then(async () => {
           const predicate = (c) => {
-            c.student === email;
+            c.student.email === email;
           };
 
           const filtered = candidatureStubList.filter(predicate);
