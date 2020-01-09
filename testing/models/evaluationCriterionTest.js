@@ -26,6 +26,8 @@ const evaluationCriterion = {
 };
 
 describe('EvaluationCriterion model', function() {
+  this.timeout(5000);
+
   before(async function() {
     await db.query(`INSERT INTO ${noticeTable}(protocol) VALUES(?)`, fakeNotice);
   });

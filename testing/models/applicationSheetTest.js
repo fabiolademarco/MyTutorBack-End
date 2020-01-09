@@ -24,10 +24,11 @@ const applicationSheetConst = {
 };
 
 describe('ApplicationSheet Model', function() {
+  this.timeout(5000);
+
   let applicationSheet;
 
   before(async function() {
-    this.timeout(3000);
     applicationSheet = JSON.parse(JSON.stringify(applicationSheetConst));
     noticeConst.application_sheet = null;
 

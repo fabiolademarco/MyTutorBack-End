@@ -25,7 +25,8 @@ const constStudent = {
 };
 
 describe('Student model', function() {
-  this.timeout(3000);
+  this.timeout(5000);
+
   describe('Create method', function() {
     let student;
 

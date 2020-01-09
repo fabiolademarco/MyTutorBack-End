@@ -46,11 +46,11 @@ const candidatureConst = {
 };
 
 describe('Document model', function() {
+  this.timeout(5000);
+
   let aDocument;
 
   before(async function() {
-    this.timeout(5000);
-
     noticeConst.articles = null;
     noticeConst.evaluation_criteria = null;
     noticeConst.assignments = null;

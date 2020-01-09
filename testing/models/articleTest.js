@@ -25,6 +25,8 @@ const articleConst = {
 };
 
 describe('Article model', function() {
+  this.timeout(5000);
+
   let article;
 
   before(async function() {

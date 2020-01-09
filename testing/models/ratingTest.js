@@ -37,10 +37,11 @@ const ratingConst = {
 };
 
 describe('Rating model', function() {
+  this.timeout(5000);
+
   let rating;
 
   before(async function() {
-    this.timeout(3000);
     const notice = await Notice.create(noticeConst);
 
     await Student.create(studentConst);

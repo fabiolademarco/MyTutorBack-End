@@ -21,6 +21,8 @@ const verifiedEmail = {
 };
 
 describe('VerifiedEmail Model', function() {
+  this.timeout(5000);
+
   describe('Create method', function() {
     let email;
 
