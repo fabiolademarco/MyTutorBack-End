@@ -11,9 +11,9 @@ chai.use(sinonChai);
 const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 
-const NoticeStub = require('./stub/noticeStub');
-const UserStub = require('./stub/userStub');
-const RatingStub = require('./stub/ratingStub');
+const NoticeStub = require('../../stub/noticeStub');
+const UserStub = require('../../stub/userStub');
+const RatingStub = require('../../stub/ratingStub');
 
 const path = {
   '../models/notice': NoticeStub,
@@ -21,7 +21,7 @@ const path = {
   '../models/rating': RatingStub,
 };
 
-const noticeControl = proxy('../../controllers/noticeControl', path);
+const noticeControl = proxy('../../../controllers/noticeControl', path);
 const {mockRequest, mockResponse} = require('mock-req-res');
 let req;
 let res;

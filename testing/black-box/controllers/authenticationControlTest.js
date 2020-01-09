@@ -11,10 +11,10 @@ chai.use(sinonChai);
 const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 
-const userStub = require('./stub/userStub');
-const studentStub = require('./stub/studentStub');
-const verifiedEmailStub = require('./stub/verifiedEmailStub');
-const mailStub = require('./stub/mailStub');
+const userStub = require('../../stub/userStub');
+const studentStub = require('../../stub/studentStub');
+const verifiedEmailStub = require('../../stub/verifiedEmailStub');
+const mailStub = require('../../stub/mailStub');
 
 const path = {
   '../models/user': userStub,
@@ -23,7 +23,7 @@ const path = {
   '../utils/mail': mailStub,
 };
 
-const authenticationControl = proxy('../../controllers/authenticationControl', path);
+const authenticationControl = proxy('../../../controllers/authenticationControl', path);
 const {mockRequest, mockResponse} = require('mock-req-res');
 let req;
 let res;

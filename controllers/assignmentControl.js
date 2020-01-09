@@ -316,6 +316,8 @@ exports.close = (req, res) => {
     return;
   }
 
+  assignment.state = Assignment.states.OVER;
+
   try {
     Check.checkAssignment(assignment);
   } catch (error) {
@@ -327,8 +329,6 @@ exports.close = (req, res) => {
 
     return;
   }
-
-  assignment.state = Assignment.states.OVER;
 
   return Assignment.update(assignment)
       .then((data) => {

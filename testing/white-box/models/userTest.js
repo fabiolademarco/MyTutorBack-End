@@ -12,9 +12,9 @@ chai.use(chaiAsPromised);
 
 const {expect} = chai;
 
-const db = require('../../db');
+const db = require('../../../db');
 const table = 'user';
-const User = require('../../models/user');
+const User = require('../../../models/user');
 
 const constUser = {
   email: 'provaEmail',

@@ -12,8 +12,8 @@ chai.use(chaiAsPromised);
 
 const {expect} = chai;
 
-const ApplicationSheet = require('../../models/applicationSheet');
-const Notice = require('../../models/notice');
+const ApplicationSheet = require('../../../models/applicationSheet');
+const Notice = require('../../../models/notice');
 const exampleNotice = require('./exampleNotices.json');
 
 const noticeConst = JSON.parse(JSON.stringify(exampleNotice.notice));

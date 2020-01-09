@@ -12,10 +12,10 @@ const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 
 
-const ratingStub = require('./stub/ratingStub');
-const candidatureStub = require('./stub/candidatureStub');
-const assignmentStub = require('./stub/assignmentStub');
-const evaluationCriterionStub = require('./stub/evaluationCriterionStub');
+const ratingStub = require('../../stub/ratingStub');
+const candidatureStub = require('../../stub/candidatureStub');
+const assignmentStub = require('../../stub/assignmentStub');
+const evaluationCriterionStub = require('../../stub/evaluationCriterionStub');
 const path = {
   '../models/rating': ratingStub,
   '../models/assignment': assignmentStub,
@@ -23,7 +23,7 @@ const path = {
   '../models/evaluationCriterion': evaluationCriterionStub,
 };
 
-const ratingControl = proxy('../../controllers/ratingControl', path);
+const ratingControl = proxy('../../../controllers/ratingControl', path);
 const {mockRequest, mockResponse} = require('mock-req-res');
 let req;
 let res;

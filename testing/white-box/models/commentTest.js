@@ -15,8 +15,8 @@ const {expect} = chai;
 const noticeTable = 'notice';
 const userTable = 'user';
 const table = 'comment';
-const db = require('../../db');
-const Comment = require('../../models/comment');
+const db = require('../../../db');
+const Comment = require('../../../models/comment');
 
 const fakeNotice = 'Bando per il commento';
 const fakeUser = {

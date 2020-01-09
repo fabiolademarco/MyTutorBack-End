@@ -16,8 +16,8 @@ const noticeTable = 'notice';
 const userTable = 'user';
 const studentTable = 'student';
 const table = 'candidature';
-const db = require('../../db');
-const Candidature = require('../../models/candidature');
+const db = require('../../../db');
+const Candidature = require('../../../models/candidature');
 
 const fakeNotice = 'Bando per candidatura';
 const fakeUser = {

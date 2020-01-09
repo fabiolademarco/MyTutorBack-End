@@ -10,12 +10,12 @@ chai.use(sinonChai);
 const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 
-const applicationSheetStub = require('./stub/applicationSheetStub');
+const applicationSheetStub = require('../../stub/applicationSheetStub');
 const path = {
   '../models/applicationSheet': applicationSheetStub,
 };
 
-const applicationSheetControl = proxy('../../controllers/applicationSheetControl', path);
+const applicationSheetControl = proxy('../../../controllers/applicationSheetControl', path);
 const {mockRequest, mockResponse} = require('mock-req-res');
 let req;
 let res;

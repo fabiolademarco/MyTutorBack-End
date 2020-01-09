@@ -11,8 +11,8 @@ chai.use(chaiAsPromised);
 
 const {expect} = chai;
 
-const VerifiedEmail = require('../../models/verifiedEmail');
-const db = require('../../db');
+const VerifiedEmail = require('../../../models/verifiedEmail');
+const db = require('../../../db');
 const table = 'verified_email';
 
 const verifiedEmail = {

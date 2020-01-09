@@ -11,10 +11,10 @@ chai.use(chaiAsPromised);
 
 const {expect} = chai;
 
-const Document = require('../../models/document');
-const Candidature = require('../../models/candidature');
-const Student = require('../../models/student');
-const Notice = require('../../models/notice');
+const Document = require('../../../models/document');
+const Candidature = require('../../../models/candidature');
+const Student = require('../../../models/student');
+const Notice = require('../../../models/notice');
 const exampleNotice = require('./exampleNotices.json');
 
 const noticeConst = JSON.parse(JSON.stringify(exampleNotice.notice));

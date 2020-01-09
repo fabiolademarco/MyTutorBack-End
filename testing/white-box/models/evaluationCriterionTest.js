@@ -14,10 +14,10 @@ const {expect} = chai;
 
 const noticeTable = 'notice';
 const table = 'evaluation_criterion';
-const db = require('../../db');
+const db = require('../../../db');
 const fakeNotice = 'Bando per evaluationCriterion';
 
-const EvaluationCriterion = require('../../models/evaluationCriterion');
+const EvaluationCriterion = require('../../../models/evaluationCriterion');
 
 const evaluationCriterion = {
   notice_protocol: fakeNotice,

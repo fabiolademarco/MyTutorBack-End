@@ -11,7 +11,7 @@ chai.use(chaiAsPromised);
 
 const {expect} = chai;
 
-const Student = require('../../models/student');
+const Student = require('../../../models/student');
 
 const constStudent = {
   email: 'provaStudenteEmail',

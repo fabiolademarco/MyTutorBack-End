@@ -9,14 +9,14 @@ chai.use(sinonChai);
 const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 
-const userStub = require('./stub/userStub');
-const studentStub = require('./stub/studentStub');
+const userStub = require('../../stub/userStub');
+const studentStub = require('../../stub/studentStub');
 const path = {
   '../models/user': userStub,
   '../models/student': studentStub,
 };
 
-const userControl = proxy('../../controllers/userControl', path);
+const userControl = proxy('../../../controllers/userControl', path);
 const {mockRequest, mockResponse} = require('mock-req-res');
 let req;
 let res;
