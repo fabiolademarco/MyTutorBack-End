@@ -83,6 +83,8 @@ exports.book = (req, res) => {
     return;
   }
 
+  assignment.state = Assignment.states.BOOKED;
+
   try {
     Check.checkAssignment(assignment);
   } catch (error) {
@@ -95,7 +97,6 @@ exports.book = (req, res) => {
     return;
   }
 
-  assignment.state = Assignment.states.BOOKED;
   Assignment.update(assignment)
       .then(async (data) => {
         const teachingOffice = (await User.findByRole(User.Role.TEACHING_OFFICE))[0];

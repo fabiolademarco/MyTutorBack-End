@@ -1,3 +1,5 @@
+const Assignment = require('../models/assignment');
+
 /**
  * Checks if a name respects the format.
  * @param {string} name The name to check.
@@ -236,8 +238,10 @@ exports.checkAssignment = (assignment) => {
     throw new Error('Il campo activity_description ha meno di 1 carattere di lunghezza ooppure supera i 50 caratteri di lunghezza.');
   }
 
-  if (assignment.note != null && (assignment.note.length < 1 || assignment.note.length > 500)) {
-    throw new Error('Il campo note ha meno di 1 carattere di lunghezza ooppure supera i 50 caratteri di lunghezza.');
+  if (assignment.state === Assignment.states.OVER) {
+    if (assignment.note != null && (assignment.note.length < 1 || assignment.note.length > 500)) {
+      throw new Error('Il campo note ha meno di 1 carattere di lunghezza ooppure supera i 50 caratteri di lunghezza.');
+    }
   }
 
   return true;
