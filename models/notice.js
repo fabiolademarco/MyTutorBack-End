@@ -162,6 +162,8 @@ class Notice {
             if (Object.entries(applicationSheet).length != 0) {
               return ApplicationSheet.update(applicationSheet);
             } else {
+              applicationSheet.notice_protocol = notice.protocol;
+
               return ApplicationSheet.remove(applicationSheet);
             }
           }

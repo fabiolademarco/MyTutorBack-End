@@ -82,6 +82,14 @@ describe('Notice test', function() {
 
       expect(dbNotice.deadline).to.be.equal(notice.deadline);
     });
+
+    it('Update_5', function() {
+      notice.application_sheet = {};
+      notice.evaluation_criteria = null;
+      notice.articles = null;
+      notice.assignments = null;
+      expect(Notice.update(notice)).to.be.fulfilled;
+    });
   });
 
   describe('Remove method', function() {
@@ -186,7 +194,7 @@ describe('Notice test', function() {
     });
 
     it('FindByState_2', function() {
-      expect(Notice.findByProtocol(notice.state)).to.be.fulfilled;
+      expect(Notice.findByState([notice.state])).to.be.fulfilled;
     });
   });
 
