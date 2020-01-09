@@ -156,7 +156,7 @@ const validateRatingsScore = async function(ratingList) {
   const assignment = await Assignment.findById(assignmentId);
   const protocollo = assignment.notice_protocol;
   const criterions = await EvaluationCriterion.findByNotice(protocollo);
-  const maxValue = criterions[0].maxScore;
+  const maxValue = criterions[0].max_score;
 
   return ratingList.every(((rating) => rating.titles_score >= 0 && rating.titles_score <= maxValue));
 };
