@@ -26,8 +26,8 @@ module.exports = (app, auth) => {
    * @apiParam {string} notice_file The name of the notice pdf
    * @apiParam {string} graded_list_file The name of the notice graded list
    * @apiParam {[Article](#api-Notice-ObjectArticle)[]} articles The list of notice articles
-   * @apiParam {[EvaluationCriterion](#api-Notice-ObjectEvaluationCriterion)[]} evaluation_criteria The list of notice evaluation criteria
-   * @apiParam {[ApplicationSheet](#api-ApplicationSheet-ObjectApplicationSheet)} application_sheet The application sheet of the notice
+   * @apiParam {[EvaluationCriterion](#api-Notice-ObjectEvaluationcriterion)[]} evaluation_criteria The list of notice evaluation criteria
+   * @apiParam {[ApplicationSheet](#api-ApplicationSheet-ObjectApplicationsheet)} application_sheet The application sheet of the notice
    * @apiParam {[Assignment](#api-Assignment-ObjectAssignment)[]} The list of assignments
    * @apiParam {[Comment](#api-Comment-ObjectComment)} comment A comment about the notice
    */
