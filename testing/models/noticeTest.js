@@ -49,20 +49,14 @@ describe('Notice test', function() {
   });
 
   describe('Update method', function() {
-    before(async function() {
-      await Notice.create(notice);
-    });
-
-    beforeEach(function() {
+    beforeEach(async function() {
       notice = JSON.parse(JSON.stringify(example.notice));
+      notice = await Notice.create(notice);
     });
 
-    after(async function() {
+    afterEach(async function() {
+      notice = JSON.parse(JSON.stringify(example.notice));
       await Notice.remove(notice);
-    });
-
-    afterEach(function() {
-      notice = JSON.parse(JSON.stringify(example.notice));
     });
 
     it('Update_1', function() {
