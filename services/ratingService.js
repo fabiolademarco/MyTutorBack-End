@@ -41,7 +41,7 @@ module.exports = (app, auth) => {
    * @apiPermission Teaching Office
    *
    * @apiParam {string} noticeProtocol The protocol to check if the related rating table exists
-   * @apiSuccess {[Rating](#api-Rating-ObjectRating)[]} result The list of rating as per specified according to the protocol
+   * @apiSuccess {boolean} exists True if the rating table exists
    */
   app.post('/api/ratings/exists', RatingControl.exists);
 };
