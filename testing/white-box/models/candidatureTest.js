@@ -29,12 +29,18 @@ const fakeUser = {
   verified: '1',
 };
 const fakeStudent = {
+  email: 'EmailPerCandidatura',
+  password: '...',
+  name: 'Name',
+  surname: 'Surname',
+  role: 'Student',
+  verified: '1',
   registration_number: 'avc',
   birth_date: '1998-03-04 ',
 };
 
 const constCandidature = {
-  student: fakeUser.email,
+  student: JSON.parse(JSON.stringify(fakeStudent)),
   notice_protocol: fakeNotice,
   state: 'Editable',
   last_edit: '1998-09-04 ',
@@ -70,7 +76,7 @@ describe('Candidature model', function() {
 
     afterEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol]);
+      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
     it('Create_1', async function() {
@@ -92,12 +98,12 @@ describe('Candidature model', function() {
 
     beforeEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student, candidature.notice_protocol, candidature.state, candidature.last_edit]);
+      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student.email, candidature.notice_protocol, candidature.state, candidature.last_edit]);
     });
 
     afterEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol]);
+      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
     it('Update_1', async function() {
@@ -117,6 +123,11 @@ describe('Candidature model', function() {
       candidature.documents = null;
       await expect(Candidature.update(candidature)).to.be.fulfilled;
     });
+
+    it('Update_5', async function() {
+      candidature.student = null;
+      await expect(Candidature.update(candidature)).to.be.rejectedWith(Error, 'Student can not be null or undefined');
+    });
   });
 
   describe('Remove method', function() {
@@ -124,12 +135,12 @@ describe('Candidature model', function() {
 
     beforeEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student, candidature.notice_protocol, candidature.state, candidature.last_edit]);
+      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student.email, candidature.notice_protocol, candidature.state, candidature.last_edit]);
     });
 
     afterEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol]);
+      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
     it('Remove_1', async function() {
@@ -137,11 +148,16 @@ describe('Candidature model', function() {
     });
 
     it('Remove_2', async function() {
-      await expect(Candidature.remove({student: {hey: 'hey'}})).to.be.rejectedWith(Error);
+      await expect(Candidature.remove({student: {email: {hey: 'hey'}}})).to.be.rejectedWith(Error);
     });
 
     it('Remove_3', async function() {
       await expect(Candidature.remove(candidature)).to.be.fulfilled;
+    });
+
+    it('Remove_4', async function() {
+      candidature.student = null;
+      await expect(Candidature.remove(candidature)).to.be.rejectedWith(Error, 'Student can not be null or undefined');
     });
   });
 
@@ -150,12 +166,12 @@ describe('Candidature model', function() {
 
     beforeEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student, candidature.notice_protocol, candidature.state, candidature.last_edit]);
+      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student.email, candidature.notice_protocol, candidature.state, candidature.last_edit]);
     });
 
     afterEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol]);
+      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
     it('Exists_1', async function() {
@@ -163,11 +179,16 @@ describe('Candidature model', function() {
     });
 
     it('Exists_2', async function() {
-      await expect(Candidature.exists({student: {hey: 'hey'}})).to.rejectedWith(Error);
+      await expect(Candidature.exists({student: {email: {hey: 'hey'}}})).to.rejectedWith(Error);
     });
 
     it('Exists_3', async function() {
       await expect(Candidature.exists(candidature)).to.be.fulfilled;
+    });
+
+    it('Exists_4', async function() {
+      candidature.student = null;
+      await expect(Candidature.exists(candidature)).to.be.rejectedWith(Error, 'Student can not be null or undefined');
     });
   });
 
@@ -176,12 +197,12 @@ describe('Candidature model', function() {
 
     beforeEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student, candidature.notice_protocol, candidature.state, candidature.last_edit]);
+      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student.email, candidature.notice_protocol, candidature.state, candidature.last_edit]);
     });
 
     afterEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol]);
+      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
     it('FindById_1', async function() {
@@ -193,7 +214,7 @@ describe('Candidature model', function() {
     });
 
     it('FindById_3', async function() {
-      await expect(Candidature.findById(candidature.student, candidature.notice_protocol)).to.be.fulfilled;
+      await expect(Candidature.findById(candidature.student.email, candidature.notice_protocol)).to.be.fulfilled;
     });
   });
 
@@ -202,12 +223,12 @@ describe('Candidature model', function() {
 
     beforeEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student, candidature.notice_protocol, candidature.state, candidature.last_edit]);
+      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student.email, candidature.notice_protocol, candidature.state, candidature.last_edit]);
     });
 
     afterEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol]);
+      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
     it('FindByStudent_1', async function() {
@@ -219,7 +240,7 @@ describe('Candidature model', function() {
     });
 
     it('FindByStudent_3', async function() {
-      await expect(Candidature.findByStudent(candidature.student)).to.be.fulfilled;
+      await expect(Candidature.findByStudent(candidature.student.email)).to.be.fulfilled;
     });
   });
 
@@ -228,12 +249,12 @@ describe('Candidature model', function() {
 
     beforeEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student, candidature.notice_protocol, candidature.state, candidature.last_edit]);
+      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student.email, candidature.notice_protocol, candidature.state, candidature.last_edit]);
     });
 
     afterEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol]);
+      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
     it('FindByNotice_1', async function() {
@@ -254,12 +275,12 @@ describe('Candidature model', function() {
 
     beforeEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student, candidature.notice_protocol, candidature.state, candidature.last_edit]);
+      await db.query(`INSERT INTO ${table}(student,notice_protocol,state,last_edit) VALUES(?,?,?,?)`, [candidature.student.email, candidature.notice_protocol, candidature.state, candidature.last_edit]);
     });
 
     afterEach(async function() {
       candidature = JSON.parse(JSON.stringify(constCandidature));
-      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student, candidature.notice_protocol]);
+      await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
     it('FindAll_1', async function() {

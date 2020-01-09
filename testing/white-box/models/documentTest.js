@@ -38,7 +38,7 @@ const documentConst = {
 };
 
 const candidatureConst = {
-  student: studentConst.email,
+  student: studentConst,
   notice_protocol: noticeConst.protocol,
   state: Candidature.States.EDITABLE,
   last_edit: '2019-12-01',

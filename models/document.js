@@ -34,7 +34,7 @@ class Document {
       throw new Error('The document/candidature must not be null.');
     }
     aDocument.notice_protocol = candidature.notice_protocol;
-    aDocument.student = candidature.student;
+    aDocument.student = candidature.student.email;
 
     return pool.query(`INSERT INTO ${table} SET ?`, aDocument)
         .then(() => {
@@ -60,7 +60,7 @@ class Document {
     }
 
     aDocument.notice_protocol = candidature.notice_protocol;
-    aDocument.student = candidature.student;
+    aDocument.student = candidature.student.email;
 
     return pool.query(`UPDATE ${table} SET ? WHERE student = ? 
                                               AND notice_protocol = ? 
@@ -88,7 +88,7 @@ class Document {
     return pool.query(`DELETE FROM ${table} WHERE student = ?
                                               AND notice_protocol = ?
                                               AND file_name = ?`,
-    [candidature.student, candidature.notice_protocol, aDocument.file_name])
+    [candidature.student.email, candidature.notice_protocol, aDocument.file_name])
         .then(([resultSetHeader]) => {
           return resultSetHeader.affectedRow > 0;
         })
@@ -111,7 +111,7 @@ class Document {
     return pool.query(`SELECT * FROM ${table} WHERE student = ?
                                               AND notice_protocol = ?
                                               AND file_name = ?`,
-    [candidature.student, candidature.notice_protocol, aDocument.file_name])
+    [candidature.student.email, candidature.notice_protocol, aDocument.file_name])
         .then(([rows]) => {
           return rows.length > 0;
         })
@@ -177,7 +177,7 @@ class Document {
 
     return pool.query(`SELECT * FROM ${table} WHERE student = ?
                                               AND notice_protocol = ?`,
-    [candidature.student, candidature.notice_protocol])
+    [candidature.student.email, candidature.notice_protocol])
         .then(([rows]) => {
           return rows.map((el) => new Document(el));
         })
