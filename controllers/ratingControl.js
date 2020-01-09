@@ -33,12 +33,6 @@ module.exports.createTable = async function(req, res) {
     return;
   }
 
-  if (ratingList.length == 0) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'La lista di valutazioni è vuota'});
-
-    return;
-  }
-
   try {
     Check.checkRatingList(ratingList);
   } catch (error) {
@@ -156,7 +150,11 @@ const validateRatingsScore = async function(ratingList) {
   const assignment = await Assignment.findById(assignmentId);
   const protocollo = assignment.notice_protocol;
   const criterions = await EvaluationCriterion.findByNotice(protocollo);
-  const maxValue = criterions[0].max_score;
+  let maxValue = 0;
+
+  criterions.forEach((element) => {
+    maxValue += element.max_score;
+  });
 
   return ratingList.every(((rating) => rating.titles_score >= 0 && rating.titles_score <= maxValue));
 };
