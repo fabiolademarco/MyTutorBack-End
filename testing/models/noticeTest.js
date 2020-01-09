@@ -70,9 +70,8 @@ describe('Notice test', function() {
     });
 
     it('Update_2', async function() {
-      await Notice.remove(notice);
+      notice.protocol = 'Marcolino';
       expect(Notice.update(notice)).to.be.rejectedWith(Error, 'The notice doesn\'t exists');
-      await Notice.create(notice);
     });
 
     it('Update_3', function() {
