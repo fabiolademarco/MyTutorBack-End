@@ -1,5 +1,6 @@
 const Candidature = require('../models/candidature');
 const User = require('../models/user');
+const Student = require('../models/student');
 const Check = require('../utils/check');
 const Document = require('../models/document');
 const JSZip = require('jszip');
@@ -25,10 +26,11 @@ const ERR_SERVER_STATUS = 500;
  * @param {Request} req
  * @param {Response} res
  */
-exports.create = (req, res) => {
-  user = req.user;
-  candidature = (req.body.candidature != null) ? new Candidature(req.body.candidature) : null;
-  if (candidature == null || user == null) {
+exports.create = async (req, res) => {
+  const user = req.user;
+  let candidature = (req.body.candidature != null) ? req.body.candidature : null;
+
+  if (candidature == null || user == null || candidature.student == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -57,8 +59,12 @@ exports.create = (req, res) => {
 
     return d;
   });
-  candidature.student = user.id;
-  Candidature.create(candidature)
+  const student = await Student.findByEmail(user.id);
+
+  candidature.student = student;
+  candidature = new Candidature(candidature);
+
+  return Candidature.create(candidature)
       .then((candidature) => {
         if (candidature == null) {
           res.status(ERR_SERVER_STATUS);
@@ -88,10 +94,11 @@ exports.create = (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-exports.update = (req, res) => {
-  user = req.user;
-  candidature = (req.body.candidature != null) ? new Candidature(req.body.candidature) : null;
-  if (candidature == null || (candidature.student !== user.id && user.role !== User.Role.TEACHING_OFFICE)) {
+exports.update = async (req, res) => {
+  const user = req.user;
+  let candidature = (req.body.candidature != null) ? req.body.candidature : null;
+
+  if (candidature == null || candidature.student == null || (candidature.student.email !== user.id && user.role !== User.Role.TEACHING_OFFICE)) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -121,11 +128,15 @@ exports.update = (req, res) => {
 
       return d;
     });
-    candidature.student = user.id;
+    const student = await Student.findByEmail(user.id);
+
+    candidature.student = student;
+    candidature = new Candidature(candidature);
   } else {
     candidature.documents = null;
   }
-  Candidature.update(candidature)
+
+  return Candidature.update(candidature)
       .then((data) => {
         if (data == null) {
           res.status(ERR_SERVER_STATUS);
@@ -155,9 +166,10 @@ exports.update = (req, res) => {
  * Allows to delete a Candidature
  * @param {Request} req
  * @param {Response} res
+ * @return {Promise}
  */
 exports.delete = (req, res) => {
-  user = req.user;
+  const user = req.user;
   const notice = req.params.notice;
 
   if (notice == null || user == null) {
@@ -182,9 +194,9 @@ exports.delete = (req, res) => {
     return;
   }
 
-  const candidature = new Candidature({student: user.id, notice_protocol: notice});
+  const candidature = {student: {email: user.id}, notice_protocol: notice};
 
-  Candidature.remove(candidature)
+  return Candidature.remove(candidature)
       .then((result) => {
         res.status(OK_STATUS);
         res.send({
@@ -201,8 +213,9 @@ exports.delete = (req, res) => {
       });
 };
 
+// TODO doc
 exports.search = (req, res) => {
-  user = req.user;
+  const user = req.user;
   let promise;
 
   if (user.role === User.Role.TEACHING_OFFICE) {
@@ -220,6 +233,18 @@ exports.search = (req, res) => {
     }
   } else if (user.role === User.Role.STUDENT) {
     promise = Candidature.findByStudent(user.id);
+  } else if (user.role === User.Role.PROFESSOR) {
+    const noticeProtocol = req.query.protocol;
+
+    if (noticeProtocol == null) {
+      res.status(ERR_CLIENT_STATUS)
+          .send({
+            error: 'Parametro nullo',
+          });
+
+      return;
+    }
+    promise = Candidature.findByNotice(noticeProtocol);
   } else {
     res.status(403);
     res.send({
@@ -254,14 +279,15 @@ exports.search = (req, res) => {
       });
 };
 
+// TODO doc
 exports.dowloadDocumentFile = (req, res) => {
   const candidature = req.body.candidature;
   const fileName = req.body.fileName;
 
-  if (!candidature || !fileName) {
+  if (!candidature || !fileName || !candidature.student) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
-      error: 'Inviare una candidatura e un filename.',
+      error: 'Inviare una candidatura valida e un filename.',
     });
 
     return;
@@ -269,7 +295,7 @@ exports.dowloadDocumentFile = (req, res) => {
 
   try {
     Check.checkNoticeProtocol(candidature.notice_protocol);
-    Check.checkEmail(candidature.student);
+    Check.checkEmail(candidature.student.email);
   } catch (error) {
     res.status(ERR_CLIENT_STATUS)
         .send({
@@ -280,7 +306,7 @@ exports.dowloadDocumentFile = (req, res) => {
     return;
   }
 
-  Document.findById(fileName, candidature.student, candidature.notice_protocol)
+  return Document.findById(fileName, candidature.student.email, candidature.notice_protocol)
       .then(async (doc) => {
         res
             .type((await FileType.fromBuffer(doc.file)).mime)
@@ -296,13 +322,14 @@ exports.dowloadDocumentFile = (req, res) => {
       });
 };
 
+// TODO doc
 exports.dowloadDocuments = async (req, res) => {
   const candidature = req.body.candidature;
 
-  if (!candidature) {
+  if (!candidature || !candidature.student) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
-      error: 'Inviare una candidatura.',
+      error: 'Inviare una candidatura valida.',
     });
 
     return;
@@ -310,7 +337,7 @@ exports.dowloadDocuments = async (req, res) => {
 
   try {
     Check.checkNoticeProtocol(candidature.notice_protocol);
-    Check.checkEmail(candidature.student);
+    Check.checkEmail(candidature.student.email);
   } catch (error) {
     res.status(ERR_CLIENT_STATUS)
         .send({
@@ -321,13 +348,11 @@ exports.dowloadDocuments = async (req, res) => {
     return;
   }
 
-  const student = await User.findByEmail(candidature.student);
-
   Document.findByCandidature(candidature)
       .then((docs) => {
         const zip = new JSZip();
 
-        const fileName = `Candidatura ${student.name} ${student.surname} - ${candidature.notice_protocol}.zip`;
+        const fileName = `Candidatura ${candidature.student.name} ${candidature.student.surname} - ${candidature.notice_protocol}.zip`;
 
         docs.forEach((doc) => zip.file(doc.file_name, doc.file));
         zip

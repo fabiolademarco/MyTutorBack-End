@@ -58,7 +58,7 @@ module.exports = (app, auth) => {
    * @api {GET} /api/candidatures Searches candidatures
    * @apiName Search
    * @apiGroup Candidature
-   * @apiPermission Teaching Office, Student
+   * @apiPermission Teaching Office, Student, Professor
    * @apiParam {string} student The email of the student
    * @apiParam {string} protocol The notice protocol
    * @apiSuccess {[Candidature](#api-Candidature-ObjectCandidature)[]} candidatures The list of the candidatures, which respect the search criteria
@@ -67,7 +67,7 @@ module.exports = (app, auth) => {
 
   /**
    * @api {POST} /api/candidatures Gets a document
-   * @apiName DowloadDocument
+   * @apiName DownloadDocument
    * @apiGroup Candidature
    * @apiPermission Teaching Office
    * @apiParam {[Candidature](#api-Candidature-ObjectCandidature)} candidature A candidature
@@ -78,7 +78,7 @@ module.exports = (app, auth) => {
 
   /**
    * @api {POST} /api/candidatures/all Gets all documents for a candidature
-   * @apiName DowloadDocuments
+   * @apiName DownloadDocuments
    * @apiGroup Candidature
    * @apiPermission Teaching Office
    * @apiParam {[Candidature](#api-Candidature-ObjectCandidature)} candidature A candidature
