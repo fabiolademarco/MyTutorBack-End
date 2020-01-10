@@ -228,7 +228,9 @@ exports.registerProfessor = async (req, res) => {
     return;
   }
 
-  if (await User.exists(professor)) {
+  const user = await User.findByEmail(professor.email);
+
+  if (user != null && user.verified === 1) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,
@@ -236,7 +238,23 @@ exports.registerProfessor = async (req, res) => {
     });
 
     return;
+  } else if (user != null) {
+    const payload = {
+      id: professor.email,
+      role: professor.role,
+    };
+    const token = createToken(payload);
+
+    console.log('token: ' + token);
+    Mail.sendEmailToProfessor(professor.email, token);
+    res.status(200);
+    res.send({
+      status: true,
+    });
+
+    return;
   }
+
   professor.role = User.Role.PROFESSOR;
   professor.verified = 0;
 
