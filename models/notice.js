@@ -456,6 +456,7 @@ function getActionsToPerform(dbElements, receivedElements, Class) {
   receivedElements.forEach((el) => {
     if (el[field] == undefined) {
       el[field] = i ++;
+      el.generated = true;
     };
     if (map.has(el[field])) {
       if (JSON.stringify(map.get(el[field]).element) != JSON.stringify(new Class(el))) {
@@ -468,7 +469,13 @@ function getActionsToPerform(dbElements, receivedElements, Class) {
     }
   });
 
-  map.forEach((entry) => delete entry.element.id);
+
+  map.forEach((entry) => {
+    if (entry.element.generated) {
+      delete entry.element.id;
+    }
+  });
+
 
   return map;
 }
