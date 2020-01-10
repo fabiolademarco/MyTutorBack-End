@@ -411,23 +411,23 @@ function getOtherFields(noticeProtocol) {
   return Promise.all([
 
     Assignment.findByNotice(noticeProtocol)
-        .then((assignments) => otherFields.assignments = assignments)
+        .then((assignments) => otherFields.assignments = assignments.length ? assignments : null)
         .catch((err) => console.log(err)),
 
     ApplicationSheet.findByNotice(noticeProtocol)
-        .then((applicationSheet) => otherFields.applicationSheet = applicationSheet)
+        .then((applicationSheet) => otherFields.applicationSheet = applicationSheet.length ? applicationSheet : null)
         .catch((err) => console.log(err)),
 
     EvaluationCriterion.findByNotice(noticeProtocol)
-        .then((criteria) => otherFields.evaluationCriteria = criteria)
+        .then((criteria) => otherFields.evaluationCriteria = criteria.length ? criteria : null)
         .catch((err) => console.log(err)),
 
     Article.findByNotice(noticeProtocol)
-        .then((articles) => otherFields.articles = articles)
+        .then((articles) => otherFields.articles = articles.length ? articles : null)
         .catch((err) => console.log(err)),
 
     Comment.findByProtocol(noticeProtocol)
-        .then((comment) => otherFields.comment = comment)
+        .then((comment) => otherFields.comment = comment.length ? comment : null)
         .catch((err) => console.log(err)),
 
   ])
