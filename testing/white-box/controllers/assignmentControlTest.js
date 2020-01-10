@@ -35,7 +35,7 @@ describe('Assignment Control', function() {
 
     beforeEach(function() {
       assignment = {
-        id: 3,
+        id: 1,
         notice_protocol: 'Prot. n. 0279008',
         student: null,
         code: 'BD/01',
@@ -73,7 +73,7 @@ describe('Assignment Control', function() {
 
     beforeEach(function() {
       assignment = {
-        id: 3,
+        id: 1,
         notice_protocol: 'Prot. n. 0279008',
         student: 'p.franco69@studenti.unisa.it',
         code: 'BD/01',
@@ -113,7 +113,7 @@ describe('Assignment Control', function() {
 
     beforeEach(function() {
       assignment = {
-        id: 3,
+        id: 1,
         notice_protocol: 'Prot. n. 0279008',
         student: null,
         code: 'BD/01',
@@ -186,7 +186,7 @@ describe('Assignment Control', function() {
 
     beforeEach(function() {
       assignment = {
-        id: 3,
+        id: 1,
         notice_protocol: 'Prot. n. 0279008',
         student: 'p.franco69@studenti.unisa.it',
         code: 'BD/01',
@@ -269,7 +269,7 @@ describe('Assignment Control', function() {
 
     beforeEach(function() {
       assignment = {
-        id: 3,
+        id: 1,
         notice_protocol: 'Prot. n. 0279008',
         student: null,
         code: 'BD/01',
