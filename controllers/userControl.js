@@ -21,7 +21,7 @@ const ERR_SERVER_STATUS = 500;
  * @param {Request} req
  * @param {Response} res
  */
-module.exports.delete = function(req, res) {
+module.exports.delete = async function(req, res) {
   const email = req.params.id;
 
   if (email == null) {
@@ -45,7 +45,7 @@ module.exports.delete = function(req, res) {
 
   const user = new User({email: email});
 
-  User.delete(user)
+  return User.delete(user)
       .then((data) => {
         res.status(OK_STATUS).send({status: data});
       })
@@ -117,7 +117,7 @@ module.exports.search = function(req, res) {
  * @param {Response} res
  * @return {Promise}
  */
-module.exports.update = function(req, res) {
+module.exports.update = async function(req, res) {
   const user = req.body.user;
   const loggedUser = req.user;
 
@@ -165,7 +165,7 @@ module.exports.update = function(req, res) {
  * @param {Request} req
  * @param {Response} res
  */
-module.exports.find = function(req, res) {
+module.exports.find = async function(req, res) {
   const email = req.params.id;
   const user = req.user;
 
@@ -195,7 +195,8 @@ module.exports.find = function(req, res) {
 
     return;
   }
-  User.findByEmail(email)
+
+  return User.findByEmail(email)
       .then((user) => {
         res.status(OK_STATUS).send({user: user});
       })
