@@ -28,7 +28,8 @@ module.exports.createTable = async function(req, res) {
   const ratingList = req.body.ratingList;
 
   if (ratingList == null) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'La lista di valutazioni non può essere nulla'});
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'La lista di valutazioni non può essere nulla'});
 
     return;
   }
@@ -90,7 +91,8 @@ module.exports.getTable = async function(req, res) {
   const noticeProtocol = req.body.noticeProtocol;
 
   if (noticeProtocol == null) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Il protocollo non può essere nullo'});
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Il protocollo non può essere nullo'});
 
     return;
   }
@@ -122,7 +124,8 @@ module.exports.exists = async function(req, res) {
   const noticeProtocol = req.body.noticeProtocol;
 
   if (noticeProtocol == null) {
-    res.status(ERR_CLIENT_STATUS).send({error: 'Il protocollo non può essere nullo'});
+    res.status(ERR_CLIENT_STATUS)
+        .send({error: 'Il protocollo non può essere nullo'});
 
     return;
   }
