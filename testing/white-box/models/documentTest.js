@@ -76,11 +76,11 @@ describe('Document model', function() {
     });
 
     it('Create_1', function() {
-      expect(Document.create(null, null)).to.be.rejectedWith(Error, /null/);
+      return expect(Document.create(null, null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('Create_2', function() {
-      expect(Document.create(aDocument, candidatureConst)).to.be.fulfilled;
+      return expect(Document.create(aDocument, candidatureConst)).to.be.fulfilled;
     });
   });
 
@@ -98,20 +98,20 @@ describe('Document model', function() {
     });
 
     it('Update_1', function() {
-      expect(Document.update(null, null)).to.be.rejectedWith(Error, /null/);
+      return expect(Document.update(null, null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('Update_2', function() {
       aDocument.file_name = 'VespoliMario.pdf';
 
-      expect(Document.update(aDocument, candidatureConst)).to.be.rejectedWith(Error, /doesn't exists/);
+      return expect(Document.update(aDocument, candidatureConst)).to.be.rejectedWith(Error, /doesn't exists/);
     });
 
     it('Update_3', function() {
       aDocument = JSON.parse(JSON.stringify(documentConst));
       aDocument.file = 292929292929;
 
-      expect(Document.update(aDocument, candidatureConst)).to.be.fulfilled;
+      return expect(Document.update(aDocument, candidatureConst)).to.be.fulfilled;
     });
   });
 
@@ -123,21 +123,21 @@ describe('Document model', function() {
     });
 
     it('Remove_1', function() {
-      expect(Document.remove(null, null)).to.be.rejectedWith(Error, /null/);
+      return expect(Document.remove(null, null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('Remove_2', function() {
-      expect(Document.remove(aDocument, candidatureConst)).to.be.fulfilled;
+      return expect(Document.remove(aDocument, candidatureConst)).to.be.fulfilled;
     });
   });
 
   describe('Exists method', function() {
     it('Exists_1', function() {
-      expect(Document.exists(null, null)).to.be.rejectedWith(Error, /null/);
+      return expect(Document.exists(null, null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('Exists_2', function() {
-      expect(Document.exists(aDocument, candidatureConst)).to.be.fulfilled;
+      return expect(Document.exists(aDocument, candidatureConst)).to.be.fulfilled;
     });
   });
 
@@ -155,51 +155,51 @@ describe('Document model', function() {
     });
 
     it('FindById_1', function() {
-      expect(Document.findById(null, null, null)).to.be.rejectedWith(Error, /null/);
+      return expect(Document.findById(null, null, null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('FindById_2', function() {
-      expect(Document.findById('nome mai vero', studentConst.email, noticeConst.protocol)).to.be.fulfilled;
+      return expect(Document.findById('nome mai vero', studentConst.email, noticeConst.protocol)).to.be.fulfilled;
     });
 
     it('FindById_3', function() {
-      expect(Document.findById(documentConst.file_name, studentConst.email, noticeConst.protocol)).to.be.fulfilled;
+      return expect(Document.findById(documentConst.file_name, studentConst.email, noticeConst.protocol)).to.be.fulfilled;
     });
   });
 
   describe('FindByNotice method', function() {
     it('FindByNotice_1', function() {
-      expect(Document.findByNotice(null)).to.be.rejectedWith(Error, /null/);
+      return expect(Document.findByNotice(null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('FindByNotice_2', function() {
-      expect(Document.findByNotice(noticeConst.protocol)).to.be.fulfilled;
+      return expect(Document.findByNotice(noticeConst.protocol)).to.be.fulfilled;
     });
   });
 
   describe('FindByCandidature method', function() {
     it('FindByCandidature_1', function() {
-      expect(Document.findByCandidature(null)).to.be.rejectedWith(Error, /null/);
+      return expect(Document.findByCandidature(null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('FindByCandidature_2', function() {
-      expect(Document.findByCandidature(candidatureConst)).to.be.fulfilled;
+      return expect(Document.findByCandidature(candidatureConst)).to.be.fulfilled;
     });
   });
 
   describe('FindByStudent method', function() {
     it('FindByStudent_1', function() {
-      expect(Document.findByStudent(null)).to.be.rejectedWith(Error, /null/);
+      return expect(Document.findByStudent(null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('FindByStudent_2', function() {
-      expect(Document.findByStudent(studentConst.email)).to.be.fulfilled;
+      return expect(Document.findByStudent(studentConst.email)).to.be.fulfilled;
     });
   });
 
   describe('FindAll method', function() {
     it('FindAll_1', function() {
-      expect(Document.findAll()).to.be.fulfilled;
+      return expect(Document.findAll()).to.be.fulfilled;
     });
   });
 });

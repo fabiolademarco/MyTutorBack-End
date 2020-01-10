@@ -67,19 +67,19 @@ describe('Rating model', function() {
     });
 
     it('Create_1', function() {
-      expect(Rating.create(null)).to.be.rejectedWith(Error, /The rating must not be null/);
+      return expect(Rating.create(null)).to.be.rejectedWith(Error, /The rating must not be null/);
     });
 
     it('Create_2', function() {
       rating.student.email = 'tralalalalaliday';
 
-      expect(Rating.create(rating)).to.be.rejectedWith(Error);
+      return expect(Rating.create(rating)).to.be.rejectedWith(Error);
     });
 
     it('Create_3', function() {
       rating.student.email = studentConst.email;
 
-      expect(Rating.create(rating)).to.be.fulfilled;
+      return expect(Rating.create(rating)).to.be.fulfilled;
     });
   });
 
@@ -97,19 +97,19 @@ describe('Rating model', function() {
     });
 
     it('Update_1', function() {
-      expect(Rating.update(null)).to.be.rejectedWith(Error, /The rating must not be null/);
+      return expect(Rating.update(null)).to.be.rejectedWith(Error, /The rating must not be null/);
     });
 
     it('Update_2', function() {
       rating.assignment_id = 0;
 
-      expect(Rating.update(rating)).to.be.rejectedWith(Error, /The rating doesn't exists/);
+      return expect(Rating.update(rating)).to.be.rejectedWith(Error, /The rating doesn't exists/);
     });
 
     it('Update_3', async function() {
       rating.assignment_id = ratingConst.assignment_id;
 
-      expect(Rating.update(rating)).to.be.fulfilled;
+      return expect(Rating.update(rating)).to.be.fulfilled;
     });
   });
 
@@ -127,21 +127,21 @@ describe('Rating model', function() {
     });
 
     it('Remove_1', function() {
-      expect(Rating.remove(null)).to.be.rejectedWith(Error, /The rating must not be null/);
+      return expect(Rating.remove(null)).to.be.rejectedWith(Error, /The rating must not be null/);
     });
 
     it('Remove_2', function() {
-      expect(Rating.remove(rating)).to.be.fulfilled;
+      return expect(Rating.remove(rating)).to.be.fulfilled;
     });
   });
 
   describe('Exists method', function() {
-    it('Exists_1', async function() {
-      await expect(Rating.exists(null)).to.be.rejectedWith(Error, /The rating must not be null/);
+    it('Exists_1', function() {
+      return expect(Rating.exists(null)).to.be.rejectedWith(Error, /The rating must not be null/);
     });
 
-    it('Exists_2', async function() {
-      expect(Rating.exists(rating)).to.be.fulfilled;
+    it('Exists_2', function() {
+      return expect(Rating.exists(rating)).to.be.fulfilled;
     });
   });
 
@@ -159,19 +159,19 @@ describe('Rating model', function() {
     });
 
     it('FindById_1', function() {
-      expect(Rating.findById(null)).to.be.rejectedWith(Error, /valid/);
+      return expect(Rating.findById(null)).to.be.rejectedWith(Error, /valid/);
     });
 
     it('FindById_2', function() {
       rating.assignment_id = 0;
 
-      expect(Rating.findById(rating.student.email, rating.assignment_id)).to.be.rejectedWith(Error, 'No result was found');
+      return expect(Rating.findById(rating.student.email, rating.assignment_id)).to.be.rejectedWith(Error, 'No result was found');
     });
 
     it('FindById_3', function() {
       rating.assignment_id = ratingConst.assignment_id;
 
-      expect(Rating.findById(rating.student.email, rating.assignment_id)).to.be.fulfilled;
+      return expect(Rating.findById(rating.student.email, rating.assignment_id)).to.be.fulfilled;
     });
   });
 
@@ -189,11 +189,11 @@ describe('Rating model', function() {
     });
 
     it('FindByStudent_1', function() {
-      expect(Rating.findByStudent(null)).to.be.rejectedWith(Error, /null/);
+      return expect(Rating.findByStudent(null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('FindByStudent_2', function() {
-      expect(Rating.findByStudent(rating.student.email)).to.be.fulfilled;
+      return expect(Rating.findByStudent(rating.student.email)).to.be.fulfilled;
     });
   });
 
@@ -211,21 +211,21 @@ describe('Rating model', function() {
     });
 
     it('FindByAssignment_1', function() {
-      expect(Rating.findByAssignment(null)).to.be.rejectedWith(Error, /null/);
+      return expect(Rating.findByAssignment(null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('FindByAssignment_2', function() {
-      expect(Rating.findByAssignment(rating.assignment_id)).to.be.fulfilled;
+      return expect(Rating.findByAssignment(rating.assignment_id)).to.be.fulfilled;
     });
   });
 
   describe('FindByProtocol method', function() {
-    it('FindByProtocol_1', async function() {
-      await expect(Rating.findByProtocol(null)).to.be.rejectedWith(Error, /null/);
+    it('FindByProtocol_1', function() {
+      return expect(Rating.findByProtocol(null)).to.be.rejectedWith(Error, /null/);
     });
 
-    it('FindByProtocol_2', async function() {
-      await expect(Rating.findByProtocol('Prot. n. 0279008')).to.be.fulfilled;
+    it('FindByProtocol_2', function() {
+      return expect(Rating.findByProtocol('Prot. n. 0279008')).to.be.fulfilled;
     });
   });
 });
