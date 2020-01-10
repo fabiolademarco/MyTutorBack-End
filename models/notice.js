@@ -411,23 +411,23 @@ function getOtherFields(noticeProtocol) {
   return Promise.all([
 
     Assignment.findByNotice(noticeProtocol)
-        .then((assignments) => otherFields.assignments = assignments.length ? assignments : null)
+        .then((assignments) => otherFields.assignments = assignments == null ? null : assignments.length ? assignments : null)
         .catch((err) => console.log(err)),
 
     ApplicationSheet.findByNotice(noticeProtocol)
-        .then((applicationSheet) => otherFields.applicationSheet = applicationSheet.length ? applicationSheet : null)
+        .then((applicationSheet) => otherFields.applicationSheet = applicationSheet == null ? null : applicationSheet.length ? applicationSheet : null)
         .catch((err) => console.log(err)),
 
     EvaluationCriterion.findByNotice(noticeProtocol)
-        .then((criteria) => otherFields.evaluationCriteria = criteria.length ? criteria : null)
+        .then((criteria) => otherFields.evaluationCriteria = criteria == null ? null : criteria.length ? criteria : null)
         .catch((err) => console.log(err)),
 
     Article.findByNotice(noticeProtocol)
-        .then((articles) => otherFields.articles = articles.length ? articles : null)
+        .then((articles) => otherFields.articles = articles == null ? null : articles.length ? articles : null)
         .catch((err) => console.log(err)),
 
     Comment.findByProtocol(noticeProtocol)
-        .then((comment) => otherFields.comment = comment.length ? comment : null)
+        .then((comment) => otherFields.comment = comment == null ? null : comment.length ? comment : null)
         .catch((err) => console.log(err)),
 
   ])
