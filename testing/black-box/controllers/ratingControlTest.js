@@ -32,7 +32,7 @@ describe('Rating Control', function() {
   let ratingList;
 
   beforeEach(function() {
-    s1 = {
+    const s1 = {
       email: 'f.migliaro69@studenti.unisa.it',
       name: 'Francesco',
       surname: 'Migliaro',
@@ -42,7 +42,7 @@ describe('Rating Control', function() {
       password: 'Abcde123',
       birth_date: '1998-03-03 ',
     };
-    s2 = {
+    const s2 = {
       email: 'm.dantonio69@studenti.unisa.it',
       name: 'Marco',
       surname: 'Dntonio', // Bisogna vedere che probabilmente c'è un problema con i carattere di escape
@@ -52,6 +52,7 @@ describe('Rating Control', function() {
       role: 'Student',
       verified: '1',
     };
+
     ratingList = [
       {
         student: s1,
