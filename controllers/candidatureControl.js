@@ -352,7 +352,7 @@ exports.downloadDocuments = async (req, res) => {
     return;
   }
 
-  Document.findByCandidature(candidature)
+  return Document.findByCandidature(candidature)
       .then((docs) => {
         const zip = new JSZip();
 
@@ -376,7 +376,6 @@ exports.downloadDocuments = async (req, res) => {
             });
       })
       .catch((err) => {
-        console.log(err);
         res.status(ERR_SERVER_STATUS);
         res.send({
           error: 'Download fallito',

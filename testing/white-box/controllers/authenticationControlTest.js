@@ -66,6 +66,34 @@ describe('Authentication control', function() {
     });
   });
 
+  describe('RegisterProfessor method', function() {
+    let user;
+
+    beforeEach(function() {
+      user = {
+        email: 'u.vaccaro@unisa.it',
+        password: 'Password123',
+        name: 'Ugo',
+        surname: 'Vaccaro',
+        role: 'Professor',
+        verified: '1',
+      };
+      req = mockRequest({method: 'POST', body: {professor: user}});
+      res = mockResponse();
+    });
+
+    it('RegisterProfessor_1', async function() {
+      req = mockRequest({method: 'POST'});
+      await authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.been.calledWith(412);
+    });
+
+    it('RegisterProfessor_2', async function() {
+      await authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.been.calledWith(412);
+    });
+  });
+
   describe('InsertVerifiedEmail method', function() {
     it('InserVerifiedEmail_1', async function() {
       req = mockRequest({method: 'POST'});
@@ -81,6 +109,15 @@ describe('Authentication control', function() {
       res = mockResponse();
       await authenticationControl.checkUserSession(req, res);
       expect(res.status).to.been.calledWith(401);
+    });
+  });
+
+  describe('Logout method', function() {
+    it('Logout_1', async function() {
+      req = mockRequest({method: 'GET'});
+      res = mockResponse();
+      await authenticationControl.logout(req, res);
+      expect(res.status).to.been.calledWith(200);
     });
   });
 });

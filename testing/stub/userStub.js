@@ -170,7 +170,6 @@ class User {
           return list.filter((el) => user.email === el.email).length > 0;
         })
         .catch((err) => {
-          console.log(err);
           throw err;
         });
   }

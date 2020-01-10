@@ -218,6 +218,15 @@ describe('Candidature control', function() {
       await candidatureControl.downloadDocumentFile(req, res);
       expect(res.status).to.been.calledWith(412);
     });
+
+    it('DownloadDocumentFile_2', async function() {
+      const candidature = JSON.parse(JSON.stringify(constCandidature));
+
+      req = mockRequest({method: 'POST', body: {candidature: candidature, fileName: 'hey'}});
+      res = mockResponse();
+      await candidatureControl.downloadDocumentFile(req, res);
+      expect(res.status).to.been.calledWith(500);
+    });
   });
 
   describe('DownloadDocuments method', function() {
