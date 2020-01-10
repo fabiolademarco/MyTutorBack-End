@@ -36,15 +36,15 @@ describe('VerifiedEmail Model', function() {
     });
 
     it('Create_1', function() {
-      expect(VerifiedEmail.create(null)).to.be.rejectedWith(Error, 'VerifiedEmail can not be null or undefined');
+      return expect(VerifiedEmail.create(null)).to.be.rejectedWith(Error, 'VerifiedEmail can not be null or undefined');
     });
 
     it('Create_2', function() {
-      expect(VerifiedEmail.create({hey: 'hey'})).to.be.rejectedWith(Error);
+      return expect(VerifiedEmail.create({hey: 'hey'})).to.be.rejectedWith(Error);
     });
 
     it('Create_3', function() {
-      expect(VerifiedEmail.create(email)).to.be.fulfilled;
+      return expect(VerifiedEmail.create(email)).to.be.fulfilled;
     });
   });
 
@@ -60,21 +60,23 @@ describe('VerifiedEmail Model', function() {
     });
 
     it('Update_1', function() {
-      expect(VerifiedEmail.update(null)).to.be.rejectedWith(Error, 'VerifiedEmail can not be null or undefined');
+      return expect(VerifiedEmail.update(null)).to.be.rejectedWith(Error, 'VerifiedEmail can not be null or undefined');
     });
 
     it('Update_2', function() {
       email.email = '...';
-      expect(VerifiedEmail.update(email)).to.be.rejectedWith(Error, 'The verified email doesn\'t exists');
+
+      return expect(VerifiedEmail.update(email)).to.be.rejectedWith(Error, 'The verified email doesn\'t exists');
     });
 
     it('Update_3', function() {
-      expect(VerifiedEmail.update(email)).to.be.fulfilled;
+      return expect(VerifiedEmail.update(email)).to.be.fulfilled;
     });
 
     it('Update_4', function() {
       email.hey = 'hey';
-      expect(VerifiedEmail.update(email)).to.be.rejectedWith(Error);
+
+      return expect(VerifiedEmail.update(email)).to.be.rejectedWith(Error);
     });
   });
 
@@ -90,16 +92,17 @@ describe('VerifiedEmail Model', function() {
     });
 
     it('Remove_1', function() {
-      expect(VerifiedEmail.remove(null)).to.be.rejectedWith(Error, 'VerifiedEmail can not be null or undefined');
+      return expect(VerifiedEmail.remove(null)).to.be.rejectedWith(Error, 'VerifiedEmail can not be null or undefined');
     });
 
     it('Remove_2', function() {
       delete email.email;
-      expect(VerifiedEmail.remove(email)).to.be.rejectedWith(Error);
+
+      return expect(VerifiedEmail.remove(email)).to.be.rejectedWith(Error);
     });
 
     it('Remove_3', function() {
-      expect(VerifiedEmail.remove(email)).to.be.fulfilled;
+      return expect(VerifiedEmail.remove(email)).to.be.fulfilled;
     });
   });
 
@@ -115,16 +118,17 @@ describe('VerifiedEmail Model', function() {
     });
 
     it('Exists_1', function() {
-      expect(VerifiedEmail.exists(null)).to.be.rejectedWith(Error, 'VerifiedEmail can not be null or undefined');
+      return expect(VerifiedEmail.exists(null)).to.be.rejectedWith(Error, 'VerifiedEmail can not be null or undefined');
     });
 
     it('Exists_2', function() {
       delete email.email;
-      expect(VerifiedEmail.exists(email)).to.be.rejectedWith(Error);
+
+      return expect(VerifiedEmail.exists(email)).to.be.rejectedWith(Error);
     });
 
     it('Exists_3', function() {
-      expect(VerifiedEmail.exists(email)).to.be.fulfilled;
+      return expect(VerifiedEmail.exists(email)).to.be.fulfilled;
     });
   });
 
@@ -140,21 +144,21 @@ describe('VerifiedEmail Model', function() {
     });
 
     it('FindByEmail_1', function() {
-      expect(VerifiedEmail.findByEmail(null)).to.be.rejectedWith(Error, 'email can not be null or undefined');
+      return expect(VerifiedEmail.findByEmail(null)).to.be.rejectedWith(Error, 'email can not be null or undefined');
     });
 
     it('FindByEmail_2', function() {
-      expect(VerifiedEmail.findByEmail('...')).to.be.rejectedWith(Error, 'No result found: ...');
+      return expect(VerifiedEmail.findByEmail('...')).to.be.rejectedWith(Error, 'No result found: ...');
     });
 
     it('FindByEmail_3', function() {
-      expect(VerifiedEmail.findByEmail(email.email)).to.be.fulfilled;
+      return expect(VerifiedEmail.findByEmail(email.email)).to.be.fulfilled;
     });
   });
 
   describe('FindAll method', function() {
     it('FindAll', function() {
-      expect(VerifiedEmail.findAll()).to.be.fulfilled;
+      return expect(VerifiedEmail.findAll()).to.be.fulfilled;
     });
   });
 
@@ -170,18 +174,19 @@ describe('VerifiedEmail Model', function() {
     });
 
     it('IsVerified_1', function() {
-      expect(VerifiedEmail.isVerified(null)).to.be.rejectedWith(Error, 'Email can not be null or undefined');
+      return expect(VerifiedEmail.isVerified(null)).to.be.rejectedWith(Error, 'Email can not be null or undefined');
     });
 
     it('IsVerified_2', function() {
       email = {
         hey: 'hey',
       };
-      expect(VerifiedEmail.isVerified(email)).to.be.rejectedWith(Error);
+
+      return expect(VerifiedEmail.isVerified(email)).to.be.rejectedWith(Error);
     });
 
     it('IsVerified_3', function() {
-      expect(VerifiedEmail.isVerified(email.email)).to.be.fulfilled;
+      return expect(VerifiedEmail.isVerified(email.email)).to.be.fulfilled;
     });
   });
 });

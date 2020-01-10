@@ -34,19 +34,19 @@ describe('Notice test', function() {
     });
 
     it('Create_1', function() {
-      expect(Notice.create(null)).to.be.rejectedWith(Error, 'No Parameters');
+      return expect(Notice.create(null)).to.be.rejectedWith(Error, 'No Parameters');
     });
 
     it('Create_2', async function() {
       await Notice.create(notice);
 
-      expect(Notice.create(notice)).to.be.rejectedWith(Error);
+      return expect(Notice.create(notice)).to.be.rejectedWith(Error);
     });
 
     it('Create_3', async function() {
       const inserted = await Notice.create(notice);
 
-      expect(inserted.protocol).to.be.equal(notice.protocol);
+      return expect(inserted.protocol).to.be.equal(notice.protocol);
     });
   });
 
@@ -62,17 +62,19 @@ describe('Notice test', function() {
     });
 
     it('Update_1', function() {
-      expect(Notice.update(null)).to.be.rejectedWith(Error, 'No Parameters');
+      return expect(Notice.update(null)).to.be.rejectedWith(Error, 'No Parameters');
     });
 
     it('Update_2', async function() {
       notice.protocol = 'Marcolino';
-      expect(Notice.update(notice)).to.be.rejectedWith(Error, 'The notice doesn\'t exists');
+
+      return expect(Notice.update(notice)).to.be.rejectedWith(Error, 'The notice doesn\'t exists');
     });
 
     it('Update_3', function() {
       notice.pippo = 'franco';
-      expect(Notice.update(notice)).to.be.rejectedWith(Error);
+
+      return expect(Notice.update(notice)).to.be.rejectedWith(Error);
     });
 
     it('Update_4', async function() {
@@ -88,7 +90,8 @@ describe('Notice test', function() {
       notice.evaluation_criteria = null;
       notice.articles = null;
       notice.assignments = null;
-      expect(Notice.update(notice)).to.be.fulfilled;
+
+      return expect(Notice.update(notice)).to.be.fulfilled;
     });
   });
 
@@ -110,16 +113,17 @@ describe('Notice test', function() {
     });
 
     it('Remove_1', function() {
-      expect(Notice.remove(null)).to.be.rejectedWith(Error, 'No Parameters');
+      return expect(Notice.remove(null)).to.be.rejectedWith(Error, 'No Parameters');
     });
 
     it('Remove_2', function() {
       delete notice.protocol;
-      expect(Notice.remove(notice)).to.be.rejectedWith(Error);
+
+      return expect(Notice.remove(notice)).to.be.rejectedWith(Error);
     });
 
     it('Remove_3', function() {
-      expect(Notice.remove(notice)).to.be.fulfilled;
+      return expect(Notice.remove(notice)).to.be.fulfilled;
     });
   });
 
@@ -133,16 +137,17 @@ describe('Notice test', function() {
     });
 
     it('Exists_1', function() {
-      expect(Notice.exists(null)).to.be.rejectedWith(Error, 'No Parameters');
+      return expect(Notice.exists(null)).to.be.rejectedWith(Error, 'No Parameters');
     });
 
     it('Exists_2', function() {
       delete notice.protocol;
-      expect(Notice.exists(notice)).to.be.rejectedWith(Error);
+
+      return expect(Notice.exists(notice)).to.be.rejectedWith(Error);
     });
 
     it('Exists_3', function() {
-      expect(Notice.exists(notice)).to.be.fulfilled;
+      return expect(Notice.exists(notice)).to.be.fulfilled;
     });
   });
 
@@ -164,11 +169,11 @@ describe('Notice test', function() {
     });
 
     it('FindByProtocol_1', function() {
-      expect(Notice.findByProtocol(null)).to.be.rejectedWith(Error, 'No Parameters');
+      return expect(Notice.findByProtocol(null)).to.be.rejectedWith(Error, 'No Parameters');
     });
 
     it('FindByProtocol_2', function() {
-      expect(Notice.findByProtocol(notice.protocol)).to.be.fulfilled;
+      return expect(Notice.findByProtocol(notice.protocol)).to.be.fulfilled;
     });
   });
 
@@ -190,11 +195,11 @@ describe('Notice test', function() {
     });
 
     it('FindByState_1', function() {
-      expect(Notice.findByState(null)).to.be.rejectedWith(Error, 'No Parameters');
+      return expect(Notice.findByState(null)).to.be.rejectedWith(Error, 'No Parameters');
     });
 
     it('FindByState_2', function() {
-      expect(Notice.findByState([notice.state])).to.be.fulfilled;
+      return expect(Notice.findByState([notice.state])).to.be.fulfilled;
     });
   });
 
@@ -220,12 +225,13 @@ describe('Notice test', function() {
     });
 
     it('FindByReferent_1', function() {
-      expect(Notice.findByReferent(null)).to.be.rejectedWith(Error, 'No Parameters');
+      return expect(Notice.findByReferent(null)).to.be.rejectedWith(Error, 'No Parameters');
     });
 
     it('FindByReferent_2', function() {
       notice.referent_professor = professor.email;
-      expect(Notice.findByReferent(notice.referent_professor)).to.be.fulfilled;
+
+      return expect(Notice.findByReferent(notice.referent_professor)).to.be.fulfilled;
     });
   });
 
@@ -251,7 +257,7 @@ describe('Notice test', function() {
     });
 
     it('FindAll_1', function() {
-      expect(Notice.findAll()).to.be.fulfilled;
+      return expect(Notice.findAll()).to.be.fulfilled;
     });
   });
 });
