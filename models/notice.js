@@ -190,8 +190,6 @@ class Notice {
                   }
                   const actions = getActionsToPerform(dbArticles, articles, Article);
 
-                  actions.forEach((entry) => delete entry.element.id);
-
                   return Promise.all(performActions(Article, actions));
                 });
           }
@@ -204,8 +202,6 @@ class Notice {
                     dbAssignments = [];
                   }
                   const actions = getActionsToPerform(dbAssignments, assignments, Assignment);
-
-                  actions.forEach((entry) => delete entry.element.id);
 
                   return Promise.all(performActions(Assignment, actions));
                 });
@@ -471,6 +467,8 @@ function getActionsToPerform(dbElements, receivedElements, Class) {
       map.set(el[field], {action: 'CREATE', element: el});
     }
   });
+
+  map.forEach((entry) => delete entry.element.id);
 
   return map;
 }
