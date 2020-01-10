@@ -173,7 +173,7 @@ class Notice {
             return EvaluationCriterion.findByNotice(notice.protocol)
                 .then((dbEvaluationCriteria) => {
                   if (dbEvaluationCriteria == null || dbEvaluationCriteria.length < 1) {
-                    return;
+                    dbEvaluationCriteria = [];
                   }
                   const actions = getActionsToPerform(dbEvaluationCriteria, evaluationCriteria, EvaluationCriterion);
 
@@ -186,9 +186,11 @@ class Notice {
             return Article.findByNotice(notice.protocol)
                 .then((dbArticles) => {
                   if (dbArticles == null || dbArticles.length < 1) {
-                    return;
+                    dbArticles = [];
                   }
                   const actions = getActionsToPerform(dbArticles, articles, Article);
+
+                  actions.forEach((entry) => delete entry.element.id);
 
                   return Promise.all(performActions(Article, actions));
                 });
@@ -199,9 +201,11 @@ class Notice {
             return Assignment.findByNotice(notice.protocol)
                 .then((dbAssignments) => {
                   if (dbAssignments == null || dbAssignments.length < 1) {
-                    return;
+                    dbAssignments = [];
                   }
                   const actions = getActionsToPerform(dbAssignments, assignments, Assignment);
+
+                  actions.forEach((entry) => delete entry.element.id);
 
                   return Promise.all(performActions(Assignment, actions));
                 });
@@ -446,20 +450,17 @@ function getOtherFields(noticeProtocol) {
  */
 function getActionsToPerform(dbElements, receivedElements, Class) {
   const map = new Map();
-
-  let field = '';
-
-  if (dbElements[0].name) {
-    field = 'name';
-  } else {
-    field = 'id';
-  }
+  const field = Class == EvaluationCriterion ? 'name' : 'id';
+  let i = 0;
 
   if (dbElements.length > 0) {
     dbElements.forEach((el) => map.set(el[field], {action: 'REMOVE', element: el}));
   }
 
   receivedElements.forEach((el) => {
+    if (el[field] == undefined) {
+      el[field] = i ++;
+    };
     if (map.has(el[field])) {
       if (JSON.stringify(map.get(el[field]).element) != JSON.stringify(new Class(el))) {
         map.set(el[field], {action: 'UPDATE', element: el});
