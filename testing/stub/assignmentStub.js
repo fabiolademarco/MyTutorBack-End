@@ -149,8 +149,6 @@ class Assignment {
       throw new Error('No Parameters');
     }
 
-    assignmentStub.pop(assignment);
-
     return new Promise((resolve) => resolve())
         .then(() => true)
         .catch((err) => {
@@ -237,7 +235,7 @@ class Assignment {
     }
 
     const assignmentResult = assignmentStub.reduce((exists, currentAssign) => {
-      return exists || currentAssign.id === assignment.id;
+      return exists || (currentAssign.id === assignment.id);
     }, false);
 
     return new Promise((resolve) => resolve())
