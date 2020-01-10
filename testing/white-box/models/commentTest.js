@@ -58,17 +58,18 @@ describe('Comment model', function() {
       await db.query(`DELETE FROM ${table} WHERE notice = ?`, comment.notice);
     });
 
-    it('Create_1', async function() {
-      await expect(Comment.create(null)).to.be.rejectedWith(Error, 'No parameters');
+    it('Create_1', function() {
+      return expect(Comment.create(null)).to.be.rejectedWith(Error, 'No parameters');
     });
 
-    it('Create_2', async function() {
+    it('Create_2', function() {
       comment = {hey: 'hey'};
-      await expect(Comment.create(comment)).to.be.rejectedWith(Error);
+
+      return expect(Comment.create(comment)).to.be.rejectedWith(Error);
     });
 
-    it('Create_3', async function() {
-      await expect(Comment.create(comment)).to.be.fulfilled;
+    it('Create_3', function() {
+      return expect(Comment.create(comment)).to.be.fulfilled;
     });
   });
 
@@ -85,17 +86,18 @@ describe('Comment model', function() {
       await db.query(`DELETE FROM ${table} WHERE notice = ?`, comment.notice);
     });
 
-    it('Update_1', async function() {
-      await expect(Comment.update(null)).to.be.rejectedWith(Error, 'No parameters');
+    it('Update_1', function() {
+      return expect(Comment.update(null)).to.be.rejectedWith(Error, 'No parameters');
     });
 
-    it('Update_2', async function() {
+    it('Update_2', function() {
       comment.notice = ',.,';
-      await expect(Comment.update(comment)).to.be.rejectedWith(Error, 'The comment doesn\'t exists');
+
+      return expect(Comment.update(comment)).to.be.rejectedWith(Error, 'The comment doesn\'t exists');
     });
 
-    it('Update_3', async function() {
-      await expect(Comment.update(comment)).to.be.fulfilled;
+    it('Update_3', function() {
+      return expect(Comment.update(comment)).to.be.fulfilled;
     });
   });
 
@@ -112,17 +114,18 @@ describe('Comment model', function() {
       await db.query(`DELETE FROM ${table} WHERE notice = ?`, comment.notice);
     });
 
-    it('Remove_1', async function() {
-      await expect(Comment.remove(null)).to.be.rejectedWith(Error, 'No parameters');
+    it('Remove_1', function() {
+      return expect(Comment.remove(null)).to.be.rejectedWith(Error, 'No parameters');
     });
 
-    it('Remove_2', async function() {
+    it('Remove_2', function() {
       delete comment.notice;
-      await expect(Comment.remove(comment)).to.be.rejectedWith(Error);
+
+      return expect(Comment.remove(comment)).to.be.rejectedWith(Error);
     });
 
-    it('Remove_3', async function() {
-      await expect(Comment.remove(comment)).to.be.fulfilled;
+    it('Remove_3', function() {
+      return expect(Comment.remove(comment)).to.be.fulfilled;
     });
   });
 
@@ -139,17 +142,18 @@ describe('Comment model', function() {
       await db.query(`DELETE FROM ${table} WHERE notice = ?`, comment.notice);
     });
 
-    it('Exists_1', async function() {
-      await expect(Comment.exists(null)).to.be.rejectedWith(Error, 'No parameters');
+    it('Exists_1', function() {
+      return expect(Comment.exists(null)).to.be.rejectedWith(Error, 'No parameters');
     });
 
-    it('Exists_2', async function() {
+    it('Exists_2', function() {
       delete comment.notice;
-      await expect(Comment.exists(comment)).to.be.rejectedWith(Error);
+
+      return expect(Comment.exists(comment)).to.be.rejectedWith(Error);
     });
 
-    it('Exists_3', async function() {
-      await expect(Comment.exists(comment)).to.be.fulfilled;
+    it('Exists_3', function() {
+      return expect(Comment.exists(comment)).to.be.fulfilled;
     });
   });
 
@@ -166,20 +170,20 @@ describe('Comment model', function() {
       await db.query(`DELETE FROM ${table} WHERE notice = ?`, comment.notice);
     });
 
-    it('FindByProtocol_1', async function() {
-      await expect(Comment.findByProtocol(null)).to.be.rejectedWith(Error, 'No parameters');
+    it('FindByProtocol_1', function() {
+      return expect(Comment.findByProtocol(null)).to.be.rejectedWith(Error, 'No parameters');
     });
 
-    it('FindByProtocol_2', async function() {
-      await expect(Comment.findByProtocol(',.,')).to.be.fulfilled;
+    it('FindByProtocol_2', function() {
+      return expect(Comment.findByProtocol(',.,')).to.be.fulfilled;
     });
 
-    it('FindByProtocol_3', async function() {
-      await expect(Comment.findByProtocol(comment.notice)).to.be.fulfilled;
+    it('FindByProtocol_3', function() {
+      return expect(Comment.findByProtocol(comment.notice)).to.be.fulfilled;
     });
 
-    it('FindByProtocol_4', async function() {
-      await expect(Comment.findByProtocol({hey: 'hey'})).to.be.rejectedWith(Error);
+    it('FindByProtocol_4', function() {
+      return expect(Comment.findByProtocol({hey: 'hey'})).to.be.rejectedWith(Error);
     });
   });
 
@@ -194,8 +198,8 @@ describe('Comment model', function() {
       await db.query(`DELETE FROM ${table} WHERE notice = ?`, comment.notice);
     });
 
-    it('FindAll_1', async function() {
-      await expect(Comment.findAll()).to.be.fulfilled;
+    it('FindAll_1', function() {
+      return expect(Comment.findAll()).to.be.fulfilled;
     });
   });
 });

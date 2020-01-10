@@ -26,8 +26,9 @@ const ERR_NOT_AUTHORIZED = 401;
  * @param {Response} res
  * @return {Promise}
  */
-exports.login = (req, res) => {
-  user = (req.body.user != null) ? new User(req.body.user) : null;
+exports.login = async (req, res) => {
+  const user = (req.body.user != null) ? new User(req.body.user) : null;
+
   if (user == null) {
     res.status(ERR_CLIENT_STATUS);
     res.send({

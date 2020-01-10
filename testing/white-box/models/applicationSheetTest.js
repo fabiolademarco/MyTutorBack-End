@@ -47,11 +47,11 @@ describe('ApplicationSheet Model', function() {
     });
 
     it('Create_1', function() {
-      expect(ApplicationSheet.create(null)).to.be.rejectedWith(Error, /No Parameters/);
+      return expect(ApplicationSheet.create(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
 
     it('Create_2', async function() {
-      expect(ApplicationSheet.create(applicationSheet)).to.be.fulfilled;
+      return expect(ApplicationSheet.create(applicationSheet)).to.be.fulfilled;
     });
   });
 
@@ -65,20 +65,20 @@ describe('ApplicationSheet Model', function() {
     });
 
     it('Update_1', function() {
-      expect(ApplicationSheet.update(null)).to.be.rejectedWith(Error, /No Parameters/);
+      return expect(ApplicationSheet.update(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
 
     it('Update_2', function() {
       applicationSheet.notice_protocol = 'Prot. n. 9999999';
 
-      expect(ApplicationSheet.update(applicationSheet)).to.be.rejectedWith(Error, /doesn't exists/);
+      return expect(ApplicationSheet.update(applicationSheet)).to.be.rejectedWith(Error, /doesn't exists/);
     });
 
     it('Update_3', async function() {
       applicationSheet.notice_protocol = applicationSheetConst.notice_protocol;
       applicationSheet.documents_to_attach = 'a';
 
-      expect(ApplicationSheet.update(applicationSheet)).to.be.fulfilled;
+      return expect(ApplicationSheet.update(applicationSheet)).to.be.fulfilled;
     });
   });
 
@@ -88,41 +88,41 @@ describe('ApplicationSheet Model', function() {
     });
 
     it('Remove_1', function() {
-      expect(ApplicationSheet.remove(null)).to.be.rejectedWith(Error, /No Parameters/);
+      return expect(ApplicationSheet.remove(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
 
     it('Remove_2', function() {
-      expect(ApplicationSheet.remove(applicationSheet)).to.be.fulfilled;
+      return expect(ApplicationSheet.remove(applicationSheet)).to.be.fulfilled;
     });
   });
 
   describe('Exists method', function() {
     it('Exists_1', function() {
-      expect(ApplicationSheet.exists(null)).to.be.rejectedWith(Error, /No Parameters/);
+      return expect(ApplicationSheet.exists(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
 
     it('Exists_2', function() {
-      expect(ApplicationSheet.exists(applicationSheet)).to.be.fulfilled;
+      return expect(ApplicationSheet.exists(applicationSheet)).to.be.fulfilled;
     });
   });
 
   describe('FindByNotice method', function() {
     it('FindByNotice_1', function() {
-      expect(ApplicationSheet.findByNotice(null)).to.be.rejectedWith(Error, /No Parameters/);
+      return expect(ApplicationSheet.findByNotice(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
 
     it('FindByNotice_2', function() {
-      expect(ApplicationSheet.findByNotice('Manzo')).to.be.fulfilled;
+      return expect(ApplicationSheet.findByNotice('Manzo')).to.be.fulfilled;
     });
 
     it('FindByNotice_3', function() {
-      expect(ApplicationSheet.findByNotice(applicationSheet.notice_protocol)).to.be.fulfilled;
+      return expect(ApplicationSheet.findByNotice(applicationSheet.notice_protocol)).to.be.fulfilled;
     });
   });
 
   describe('FindAll', function() {
     it('FindAll_1', function() {
-      expect(ApplicationSheet.findAll()).to.be.fulfilled;
+      return expect(ApplicationSheet.findAll()).to.be.fulfilled;
     });
   });
 });

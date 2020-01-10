@@ -79,17 +79,18 @@ describe('Candidature model', function() {
       await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
-    it('Create_1', async function() {
-      await expect(Candidature.create(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
+    it('Create_1', function() {
+      return expect(Candidature.create(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
     });
 
-    it('Create_2', async function() {
+    it('Create_2', function() {
       delete candidature.student;
-      await expect(Candidature.create(candidature)).to.be.rejectedWith(Error);
+
+      return expect(Candidature.create(candidature)).to.be.rejectedWith(Error);
     });
 
-    it('Create_3', async function() {
-      await expect(Candidature.create(candidature)).to.be.fulfilled;
+    it('Create_3', function() {
+      return expect(Candidature.create(candidature)).to.be.fulfilled;
     });
   });
 
@@ -106,27 +107,30 @@ describe('Candidature model', function() {
       await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
-    it('Update_1', async function() {
-      await expect(Candidature.update(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
+    it('Update_1', function() {
+      return expect(Candidature.update(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
     });
 
-    it('Update_2', async function() {
+    it('Update_2', function() {
       candidature.student = ',.,';
-      await expect(Candidature.update(candidature)).to.be.rejectedWith(Error, 'The candidature doesn\'t exist');
+
+      return expect(Candidature.update(candidature)).to.be.rejectedWith(Error, 'The candidature doesn\'t exist');
     });
 
-    it('Update_3', async function() {
-      await expect(Candidature.update(candidature)).to.be.fulfilled;
+    it('Update_3', function() {
+      return expect(Candidature.update(candidature)).to.be.fulfilled;
     });
 
-    it('Update_4', async function() {
+    it('Update_4', function() {
       candidature.documents = null;
-      await expect(Candidature.update(candidature)).to.be.fulfilled;
+
+      return expect(Candidature.update(candidature)).to.be.fulfilled;
     });
 
-    it('Update_5', async function() {
+    it('Update_5', function() {
       candidature.student = null;
-      await expect(Candidature.update(candidature)).to.be.rejectedWith(Error, 'Student can not be null or undefined');
+
+      return expect(Candidature.update(candidature)).to.be.rejectedWith(Error, 'Student can not be null or undefined');
     });
   });
 
@@ -143,21 +147,22 @@ describe('Candidature model', function() {
       await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
-    it('Remove_1', async function() {
-      await expect(Candidature.remove(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
+    it('Remove_1', function() {
+      return expect(Candidature.remove(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
     });
 
-    it('Remove_2', async function() {
-      await expect(Candidature.remove({student: {email: {hey: 'hey'}}})).to.be.rejectedWith(Error);
+    it('Remove_2', function() {
+      return expect(Candidature.remove({student: {email: {hey: 'hey'}}})).to.be.rejectedWith(Error);
     });
 
-    it('Remove_3', async function() {
-      await expect(Candidature.remove(candidature)).to.be.fulfilled;
+    it('Remove_3', function() {
+      return expect(Candidature.remove(candidature)).to.be.fulfilled;
     });
 
-    it('Remove_4', async function() {
+    it('Remove_4', function() {
       candidature.student = null;
-      await expect(Candidature.remove(candidature)).to.be.rejectedWith(Error, 'Student can not be null or undefined');
+
+      return expect(Candidature.remove(candidature)).to.be.rejectedWith(Error, 'Student can not be null or undefined');
     });
   });
 
@@ -174,21 +179,22 @@ describe('Candidature model', function() {
       await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
-    it('Exists_1', async function() {
-      await expect(Candidature.exists(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
+    it('Exists_1', function() {
+      return expect(Candidature.exists(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
     });
 
-    it('Exists_2', async function() {
-      await expect(Candidature.exists({student: {email: {hey: 'hey'}}})).to.rejectedWith(Error);
+    it('Exists_2', function() {
+      return expect(Candidature.exists({student: {email: {hey: 'hey'}}})).to.rejectedWith(Error);
     });
 
-    it('Exists_3', async function() {
-      await expect(Candidature.exists(candidature)).to.be.fulfilled;
+    it('Exists_3', function() {
+      return expect(Candidature.exists(candidature)).to.be.fulfilled;
     });
 
-    it('Exists_4', async function() {
+    it('Exists_4', function() {
       candidature.student = null;
-      await expect(Candidature.exists(candidature)).to.be.rejectedWith(Error, 'Student can not be null or undefined');
+
+      return expect(Candidature.exists(candidature)).to.be.rejectedWith(Error, 'Student can not be null or undefined');
     });
   });
 
@@ -205,16 +211,16 @@ describe('Candidature model', function() {
       await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
-    it('FindById_1', async function() {
-      await expect(Candidature.findById('hey', null)).to.be.rejectedWith(Error, 'Parameters can not be null or undefined');
+    it('FindById_1', function() {
+      return expect(Candidature.findById('hey', null)).to.be.rejectedWith(Error, 'Parameters can not be null or undefined');
     });
 
-    it('FindById_2', async function() {
-      await expect(Candidature.findById('..', '..')).to.be.rejectedWith(Error, 'No result found: .. and ..');
+    it('FindById_2', function() {
+      return expect(Candidature.findById('..', '..')).to.be.rejectedWith(Error, 'No result found: .. and ..');
     });
 
-    it('FindById_3', async function() {
-      await expect(Candidature.findById(candidature.student.email, candidature.notice_protocol)).to.be.fulfilled;
+    it('FindById_3', function() {
+      return expect(Candidature.findById(candidature.student.email, candidature.notice_protocol)).to.be.fulfilled;
     });
   });
 
@@ -231,16 +237,16 @@ describe('Candidature model', function() {
       await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
-    it('FindByStudent_1', async function() {
-      await expect(Candidature.findByStudent(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
+    it('FindByStudent_1', function() {
+      return expect(Candidature.findByStudent(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
     });
 
-    it('FindByStudent_2', async function() {
-      await expect(Candidature.findByStudent({hey: 'hey'})).to.be.rejectedWith(Error);
+    it('FindByStudent_2', function() {
+      return expect(Candidature.findByStudent({hey: 'hey'})).to.be.rejectedWith(Error);
     });
 
-    it('FindByStudent_3', async function() {
-      await expect(Candidature.findByStudent(candidature.student.email)).to.be.fulfilled;
+    it('FindByStudent_3', function() {
+      return expect(Candidature.findByStudent(candidature.student.email)).to.be.fulfilled;
     });
   });
 
@@ -257,16 +263,16 @@ describe('Candidature model', function() {
       await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
-    it('FindByNotice_1', async function() {
-      await expect(Candidature.findByNotice(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
+    it('FindByNotice_1', function() {
+      return expect(Candidature.findByNotice(null)).to.be.rejectedWith(Error, 'Parameter can not be null or undefined');
     });
 
-    it('FindByNotice_2', async function() {
-      await expect(Candidature.findByNotice({hey: 'hey'})).to.be.rejectedWith(Error);
+    it('FindByNotice_2', function() {
+      return expect(Candidature.findByNotice({hey: 'hey'})).to.be.rejectedWith(Error);
     });
 
-    it('FindByNotice_3', async function() {
-      await expect(Candidature.findByNotice(candidature.notice_protocol)).to.be.fulfilled;
+    it('FindByNotice_3', function() {
+      return expect(Candidature.findByNotice(candidature.notice_protocol)).to.be.fulfilled;
     });
   });
 
@@ -283,8 +289,8 @@ describe('Candidature model', function() {
       await db.query(`DELETE FROM ${table} WHERE student = ? AND notice_protocol = ?`, [candidature.student.email, candidature.notice_protocol]);
     });
 
-    it('FindAll_1', async function() {
-      await expect(Candidature.findAll()).to.be.fulfilled;
+    it('FindAll_1', function() {
+      return expect(Candidature.findAll()).to.be.fulfilled;
     });
   });
 });

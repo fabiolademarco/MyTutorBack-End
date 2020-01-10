@@ -143,7 +143,7 @@ class User {
    * @param {User} user The user to remove
    * @return {Promise<boolean>} The promise reresenting the fulfillment of the deletion request
    */
-  static remove(user) {
+  static delete(user) {
     if (user === null || user === undefined) {
       throw new Error('User must not be null');
     }

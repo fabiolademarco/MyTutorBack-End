@@ -46,12 +46,11 @@ describe('Article model', function() {
     });
 
     it('Create_1', function() {
-      expect(Article.create(null)).to.be.rejectedWith(Error, /null/);
+      return expect(Article.create(null)).to.be.rejectedWith(Error, /null/);
     });
 
-    it('Create_2', async function() {
-      article = await Article.create(article);
-      expect(true);
+    it('Create_2', function() {
+      return expect(Article.create(article)).to.be.fulfilled;
     });
   });
 
@@ -65,7 +64,7 @@ describe('Article model', function() {
     });
 
     it('Update_1', function() {
-      expect(Article.update(null)).to.be.rejectedWith(Error, /null/);
+      return expect(Article.update(null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('Update_2', function() {
@@ -73,11 +72,11 @@ describe('Article model', function() {
 
       tempArticle.id = 9999999;
 
-      expect(Article.update(tempArticle)).to.be.rejectedWith(Error, /doesn't exists/);
+      return expect(Article.update(tempArticle)).to.be.rejectedWith(Error, /doesn't exists/);
     });
 
     it('Update_3', function() {
-      expect(Article.update(article)).to.be.fulfilled;
+      return expect(Article.update(article)).to.be.fulfilled;
     });
   });
 
@@ -87,51 +86,55 @@ describe('Article model', function() {
     });
 
     it('Remove_1', function() {
-      expect(Article.remove(null)).to.be.rejectedWith(Error, /null/);
+      return expect(Article.remove(null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('Remove_2', function() {
-      expect(Article.remove(article)).to.be.fulfilled;
+      return expect(Article.remove(article)).to.be.fulfilled;
     });
   });
 
   describe('Exists method', function() {
     it('Exists_1', function() {
-      expect(Article.exists(null)).to.be.rejectedWith(Error, /null/);
+      return expect(Article.exists(null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('Exists_2', function() {
-      expect(Article.exists(article)).to.be.fulfilled;
+      return expect(Article.exists(article)).to.be.fulfilled;
     });
   });
 
   describe('FindById method', function() {
+    before(async function() {
+      article = await Article.create(article);
+    });
+
     it('FindById_1', function() {
-      expect(Article.findById(null, null)).to.be.rejectedWith(Error, /null/);
+      return expect(Article.findById(null, null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('FindById_2', function() {
-      expect(Article.findById('lalala', 'lelele')).to.be.rejectedWith(Error, /No result/);
+      return expect(Article.findById('lalala', 'lelele')).to.be.rejectedWith(Error, /No result/);
     });
 
     it('FindById_3', function() {
-      expect(Article.findById(article.id, article.notice_protocol)).to.be.fulfilled;
+      return expect(Article.findById(article.id, article.notice_protocol)).to.be.fulfilled;
     });
   });
 
   describe('FindByNotice method', function() {
     it('FindByNotice_1', function() {
-      expect(Article.findByNotice(null)).to.be.rejectedWith(Error, /null/);
+      return expect(Article.findByNotice(null)).to.be.rejectedWith(Error, /null/);
     });
 
     it('FindByNotice_2', function() {
-      expect(Article.findByNotice(article.notice_protocol)).to.be.fulfilled;
+      return expect(Article.findByNotice(article.notice_protocol)).to.be.fulfilled;
     });
   });
 
   describe('FindAll method', function() {
     it('FindAll_1', function() {
-      expect(Article.findAll()).to.be.fulfilled;
+      return expect(Article.findAll()).to.be.fulfilled;
     });
   });
 });

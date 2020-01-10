@@ -39,16 +39,16 @@ describe('Student model', function() {
       await Student.delete(student);
     });
 
-    it('Create_1', async function() {
-      await expect(Student.create(null)).to.be.rejectedWith(Error, 'The parameter student can not be null or undefined');
+    it('Create_1', function() {
+      return expect(Student.create(null)).to.be.rejectedWith(Error, 'The parameter student can not be null or undefined');
     });
 
-    it('Create_2', async function() {
-      await expect(Student.create({hey: 'hey'})).to.be.rejectedWith(Error);
+    it('Create_2', function() {
+      return expect(Student.create({hey: 'hey'})).to.be.rejectedWith(Error);
     });
 
-    it('Create_3', async function() {
-      await expect(Student.create(student)).to.be.fulfilled;
+    it('Create_3', function() {
+      return expect(Student.create(student)).to.be.fulfilled;
     });
   });
 
@@ -65,23 +65,25 @@ describe('Student model', function() {
       await Student.delete(student);
     });
 
-    it('Update_1', async function() {
-      await expect(Student.update(null)).to.be.rejectedWith(Error, 'The parameter student can not be null or undefined');
+    it('Update_1', function() {
+      return expect(Student.update(null)).to.be.rejectedWith(Error, 'The parameter student can not be null or undefined');
     });
 
-    it('Update_2', async function() {
+    it('Update_2', function() {
       student.email = '...non esiste';
-      await expect(Student.update(student)).to.be.rejectedWith(Error, 'The student doesn\'t exist');
+
+      return expect(Student.update(student)).to.be.rejectedWith(Error, 'The student doesn\'t exist');
     });
 
-    it('Update_3', async function() {
+    it('Update_3', function() {
       delete student.registration_number;
       delete student.birth_date;
-      await expect(Student.update(student)).to.be.rejectedWith(Error);
+
+      return expect(Student.update(student)).to.be.rejectedWith(Error);
     });
 
-    it('Update_4', async function() {
-      await expect(Student.update(student)).to.be.fulfilled;
+    it('Update_4', function() {
+      return expect(Student.update(student)).to.be.fulfilled;
     });
   });
 
@@ -96,27 +98,28 @@ describe('Student model', function() {
       await Student.delete(student);
     });
 
-    it('FindByEmail_1', async function() {
-      await expect(Student.findByEmail(null)).to.be.rejectedWith(Error, 'The parameter email can not be null or undefined');
+    it('FindByEmail_1', function() {
+      return expect(Student.findByEmail(null)).to.be.rejectedWith(Error, 'The parameter email can not be null or undefined');
     });
 
-    it('FindByEmail_2', async function() {
+    it('FindByEmail_2', function() {
       student.email = 'nulla...';
-      await expect(Student.findByEmail(student.email)).to.be.rejectedWith(Error, `No result found: ${student.email}`);
+
+      return expect(Student.findByEmail(student.email)).to.be.rejectedWith(Error, `No result found: ${student.email}`);
     });
 
-    it('FindByEmail_3', async function() {
-      await expect(Student.findByEmail({hey: 'hey'})).to.be.rejectedWith(Error);
+    it('FindByEmail_3', function() {
+      return expect(Student.findByEmail({hey: 'hey'})).to.be.rejectedWith(Error);
     });
 
-    it('FindByEmail_4', async function() {
-      await expect(Student.findByEmail(student.email)).to.be.fulfilled;
+    it('FindByEmail_4', function() {
+      return expect(Student.findByEmail(student.email)).to.be.fulfilled;
     });
   });
 
   describe('FindAll method', function() {
-    it('FindAll_1', async function() {
-      await expect(Student.findAll()).to.be.fulfilled;
+    it('FindAll_1', function() {
+      return expect(Student.findAll()).to.be.fulfilled;
     });
   });
 
@@ -131,22 +134,22 @@ describe('Student model', function() {
       await Student.delete(student);
     });
 
-    it('MatchUser_1', async function() {
-      await expect(Student.matchUser(student.email, null)).to.be.rejectedWith(Error, 'Email or Password can not be null or undefined');
+    it('MatchUser_1', function() {
+      return expect(Student.matchUser(student.email, null)).to.be.rejectedWith(Error, 'Email or Password can not be null or undefined');
     });
 
-    it('MatchUser_2', async function() {
-      await expect(Student.matchUser(student.email, 'Non la password giusta')).to.be.fulfilled;
+    it('MatchUser_2', function() {
+      return expect(Student.matchUser(student.email, 'Non la password giusta')).to.be.fulfilled;
     });
 
-    it('MatchUser_3', async function() {
-      await expect(Student.matchUser(student.email, 'Password123')).to.be.fulfilled;
+    it('MatchUser_3', function() {
+      return expect(Student.matchUser(student.email, 'Password123')).to.be.fulfilled;
     });
   });
 
   describe('Search method', function() {
-    it('Search_1', async function() {
-      await expect(Student.search({})).to.be.fulfilled;
+    it('Search_1', function() {
+      return expect(Student.search({})).to.be.fulfilled;
     });
   });
 });

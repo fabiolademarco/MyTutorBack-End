@@ -63,12 +63,11 @@ describe('Assignment model', function() {
     });
 
     it('Create_1', function() {
-      expect(Assignment.create(null)).to.be.rejectedWith(Error, /No Parameters/);
+      return expect(Assignment.create(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
 
-    it('Create_2', async function() {
-      assignmentConst.id = (await Assignment.create(assignmentConst)).id;
-      expect(assignmentConst.id).to.be.not.null;
+    it('Create_2', function() {
+      return expect(Assignment.create(assignmentConst)).to.be.fulfilled;
     });
   });
 
@@ -86,19 +85,19 @@ describe('Assignment model', function() {
     });
 
     it('Update_1', function() {
-      expect(Assignment.update(null)).to.be.rejectedWith(Error, /No Parameters/);
+      return expect(Assignment.update(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
 
     it('Update_2', function() {
       assignment.id = 'Manzo';
 
-      expect(Assignment.update(assignment)).to.be.rejectedWith(Error, /doesn't exists/);
+      return expect(Assignment.update(assignment)).to.be.rejectedWith(Error, /doesn't exists/);
     });
 
     it('Update_3', function() {
       assignment.id = assignmentConst.id;
 
-      expect(Assignment.update(assignment)).to.be.fulfilled;
+      return expect(Assignment.update(assignment)).to.be.fulfilled;
     });
   });
 
@@ -110,21 +109,21 @@ describe('Assignment model', function() {
     });
 
     it('Remove_1', function() {
-      expect(Assignment.remove(null)).to.be.rejectedWith(Error, /No Parameters/);
+      return expect(Assignment.remove(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
 
     it('Remove_2', function() {
-      expect(Assignment.remove(assignment)).to.be.fulfilled;
+      return expect(Assignment.remove(assignment)).to.be.fulfilled;
     });
   });
 
   describe('Exists method', function() {
     it('Exists_1', function() {
-      expect(Assignment.exists(null)).to.be.rejectedWith(Error, /No parameters/);
+      return expect(Assignment.exists(null)).to.be.rejectedWith(Error, /No parameters/);
     });
 
     it('Exists_2', function() {
-      expect(Assignment.exists(assignment)).to.be.fulfilled;
+      return expect(Assignment.exists(assignment)).to.be.fulfilled;
     });
   });
 
@@ -142,41 +141,41 @@ describe('Assignment model', function() {
     });
 
     it('FindById_1', function() {
-      expect(Assignment.findById(null)).to.be.rejectedWith(Error, /No Parameters/);
+      return expect(Assignment.findById(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
 
     it('FindById_2', function() {
-      expect(Assignment.findById('Pepp1')).to.be.rejectedWith(Error, /No result/);
+      return expect(Assignment.findById('Pepp1')).to.be.rejectedWith(Error, /No result/);
     });
 
     it('FindById_3', function() {
-      expect(Assignment.findById(assignment.id)).to.be.fulfilled;
+      return expect(Assignment.findById(assignment.id)).to.be.fulfilled;
     });
   });
 
   describe('FindByNotice method', function() {
     it('FindByNotice_1', function() {
-      expect(Assignment.findByNotice(null)).to.be.rejectedWith(Error, /No Parameters/);
+      return expect(Assignment.findByNotice(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
 
     it('FindByNotice_2', function() {
-      expect(Assignment.findByNotice(assignment.notice_protocol)).to.be.fulfilled;
+      return expect(Assignment.findByNotice(assignment.notice_protocol)).to.be.fulfilled;
     });
   });
 
   describe('FindByStudent method', function() {
     it('FindByStudent_1', function() {
-      expect(Assignment.findByStudent(null)).to.be.rejectedWith(Error, /No Parameters/);
+      return expect(Assignment.findByStudent(null)).to.be.rejectedWith(Error, /No Parameters/);
     });
 
     it('FindByStudent_2', function() {
-      expect(Assignment.findByStudent('rob.brun@studenti.unisa.it')).to.be.fulfilled;
+      return expect(Assignment.findByStudent('rob.brun@studenti.unisa.it')).to.be.fulfilled;
     });
   });
 
   describe('FindAll method', function() {
     it('FindAll_1', function() {
-      expect(Assignment.findAll()).to.be.fulfilled;
+      return expect(Assignment.findAll()).to.be.fulfilled;
     });
   });
 
@@ -189,11 +188,11 @@ describe('Assignment model', function() {
     };
 
     it('Search_1', function() {
-      expect(Assignment.search(filter)).to.be.fulfilled;
+      return expect(Assignment.search(filter)).to.be.fulfilled;
     });
 
     it('Search_2', function() {
-      expect(Assignment.search({})).to.be.fulfilled;
+      return expect(Assignment.search({})).to.be.fulfilled;
     });
   });
 });
