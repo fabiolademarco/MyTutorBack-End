@@ -230,7 +230,8 @@ exports.registerProfessor = async (req, res) => {
 
   const user = await User.findByEmail(professor.email);
 
-  if (user != null && user.verified === 1) {
+  console.log(user);
+  if (user != null && user.verified == 1) {
     res.status(ERR_CLIENT_STATUS);
     res.send({
       status: false,

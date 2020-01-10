@@ -92,6 +92,18 @@ describe('Authentication control', function() {
       await authenticationControl.registerProfessor(req, res);
       expect(res.status).to.been.calledWith(412);
     });
+
+    it('RegisterProfessor_3', async function() {
+      user.email = 'rzizza@unisa.it';
+      await authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.been.calledWith(200);
+    });
+
+    it('RegisterProfessor_4', async function() {
+      user.email = 'cattaneo@unisa.it';
+      await authenticationControl.registerProfessor(req, res);
+      expect(res.status).to.been.calledWith(200);
+    });
   });
 
   describe('InsertVerifiedEmail method', function() {

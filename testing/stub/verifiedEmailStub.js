@@ -1,6 +1,6 @@
 const emailsVerified = [
   {
-    email: 'r.zizza@unisa.it',
+    email: 'rzizza@unisa.it',
     signed_up: 0,
   },
   {
@@ -9,7 +9,7 @@ const emailsVerified = [
   },
   {
     email: 'cattaneo@unisa.it',
-    signed_up: 1,
+    signed_up: 0,
   },
   {
     email: 'fferrucci@unisa.it',
@@ -172,7 +172,7 @@ class VerifiedEmail {
 
     return new Promise((resolve) => resolve())
         .then(() => {
-          return emailsVerified.filter((el) => el.email === email && el.signed_up === 0).length > 0;
+          return emailsVerified.filter((el) => el.email === email && el.signed_up == 0).length > 0;
         })
         .catch((err) => {
           throw err;

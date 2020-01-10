@@ -60,7 +60,7 @@ const list = [
     name: 'Pippo',
     surname: 'Cattaneo',
     role: 'Professor',
-    verified: '1',
+    verified: '0',
   },
   {
     email: 'ufficiodidattica@unisa.it',
@@ -186,7 +186,7 @@ class User {
         .then(() => {
           const sublist = list.filter((u) => u.email === email);
 
-          return (sublist.length > 0) ? newUser(sublist[0]) : null;
+          return (sublist.length > 0) ? new User(sublist[0]) : null;
         })
         .catch((err) => {
           throw err;
