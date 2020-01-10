@@ -401,17 +401,17 @@ class Notice {
  */
 function getOtherFields(noticeProtocol) {
   const otherFields = {
-    assignments: [],
-    applicationSheet: '',
-    evaluationCriteria: [],
-    articles: [],
-    comment: '',
+    assignments: null,
+    applicationSheet: null,
+    evaluationCriteria: null,
+    articles: null,
+    comment: null,
   };
 
   return Promise.all([
 
     Assignment.findByNotice(noticeProtocol)
-        .then((assignments) => assignments.forEach((a) => otherFields.assignments.push(a)))
+        .then((assignments) => otherFields.assignments = assignments)
         .catch((err) => console.log(err)),
 
     ApplicationSheet.findByNotice(noticeProtocol)
@@ -419,11 +419,11 @@ function getOtherFields(noticeProtocol) {
         .catch((err) => console.log(err)),
 
     EvaluationCriterion.findByNotice(noticeProtocol)
-        .then((criteria) => criteria.forEach((c) => otherFields.evaluationCriteria.push(c)))
+        .then((criteria) => otherFields.evaluationCriteria = criteria)
         .catch((err) => console.log(err)),
 
     Article.findByNotice(noticeProtocol)
-        .then((articles) => articles.forEach((a) => otherFields.articles.push(a)))
+        .then((articles) => otherFields.articles = articles)
         .catch((err) => console.log(err)),
 
     Comment.findByProtocol(noticeProtocol)
