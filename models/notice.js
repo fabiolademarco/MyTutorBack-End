@@ -175,7 +175,7 @@ class Notice {
                   if (dbEvaluationCriteria == null || dbEvaluationCriteria.length < 1) {
                     return;
                   }
-                  const actions = getActionsToPerform(dbEvaluationCriteria, evaluationCriteria);
+                  const actions = getActionsToPerform(dbEvaluationCriteria, evaluationCriteria, EvaluationCriterion);
 
                   return Promise.all(performActions(EvaluationCriterion, actions));
                 });
@@ -188,7 +188,7 @@ class Notice {
                   if (dbArticles == null || dbArticles.length < 1) {
                     return;
                   }
-                  const actions = getActionsToPerform(dbArticles, articles);
+                  const actions = getActionsToPerform(dbArticles, articles, Article);
 
                   return Promise.all(performActions(Article, actions));
                 });
@@ -201,7 +201,7 @@ class Notice {
                   if (dbAssignments == null || dbAssignments.length < 1) {
                     return;
                   }
-                  const actions = getActionsToPerform(dbAssignments, assignments);
+                  const actions = getActionsToPerform(dbAssignments, assignments, Assignment);
 
                   return Promise.all(performActions(Assignment, actions));
                 });
@@ -441,9 +441,10 @@ function getOtherFields(noticeProtocol) {
  * This function is used to decide which actions are to perform on the db and the received objects
  * @param {*[]} dbElements
  * @param {*[]} receivedElements
+ * @param {class} Class
  * @return {Map<*>}
  */
-function getActionsToPerform(dbElements, receivedElements) {
+function getActionsToPerform(dbElements, receivedElements, Class) {
   const map = new Map();
 
   let field = '';
@@ -460,7 +461,7 @@ function getActionsToPerform(dbElements, receivedElements) {
 
   receivedElements.forEach((el) => {
     if (map.has(el[field])) {
-      if (JSON.stringify(map.get(el[field]).element) != JSON.stringify(el)) {
+      if (JSON.stringify(map.get(el[field]).element) != JSON.stringify(new Class(el))) {
         map.set(el[field], {action: 'UPDATE', element: el});
       } else {
         map.delete(el[field]);
