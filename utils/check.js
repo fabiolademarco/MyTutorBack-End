@@ -6,7 +6,7 @@ const Assignment = require('../models/assignment');
  * @return {boolean} True if the name respects the format.
  */
 function checkName(name) {
-  const nameExp = /^[A-Za-z ‘]+$/;
+  const nameExp = /^[A-Za-z ']+$/;
 
   if (name.length < 1 || name.length > 20) {
     throw new Error('Il nome ha meno di 1 carattere di lunghezza oppure supera i 20 caratteri di lunghezza.');
@@ -25,7 +25,7 @@ function checkName(name) {
  * @return {boolean} True if the surname respects the format.
  */
 function checkSurname(surname) {
-  const surnameExp = /^[A-Za-z ‘]+$/;
+  const surnameExp = /^[A-Za-z ']+$/;
 
   if (surname.length < 1 || surname.length > 20) {
     throw new Error('Il cognome ha meno di 1 carattere di lunghezza oppure supera i 20 caratteri di lunghezza.');
