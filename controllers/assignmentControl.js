@@ -23,8 +23,8 @@ const ERR_SERVER_STATUS = 500;
  * @param {Request} req
  * @param {Response} res
  */
-exports.sendRequest = (req, res) => {
-  const assignment = new Assignment(req.body.assignment);
+exports.sendRequest = async (req, res) => {
+  const assignment = req.body.assignment == null ? null : new Assignment(req.body.assignment);
   const emailStudent = req.body.emailStudent;
 
   // Bisogna  controllare che esista anche lo studente
@@ -51,7 +51,8 @@ exports.sendRequest = (req, res) => {
 
   assignment.student = emailStudent;
   assignment.state = Assignment.states.WAITING;
-  Assignment.update(assignment)
+
+  return Assignment.update(assignment)
       .then(async (data) => {
         Mail.sendEmailToStudentRequest(assignment.student);
         res.status(OK_STATUS)
@@ -72,8 +73,8 @@ exports.sendRequest = (req, res) => {
  * @param {Response} res
  */
 
-exports.book = (req, res) => {
-  const assignment = new Assignment(req.body.assignment);
+exports.book = async (req, res) => {
+  const assignment = req.body.assignment == null ? null : new Assignment(req.body.assignment);
   const user = req.user;
 
   if (assignment == null || assignment.state !== Assignment.states.WAITING || assignment.student != user.id) {
@@ -97,7 +98,7 @@ exports.book = (req, res) => {
     return;
   }
 
-  Assignment.update(assignment)
+  return Assignment.update(assignment)
       .then(async (data) => {
         const teachingOffice = (await User.findByRole(User.Role.TEACHING_OFFICE))[0];
 
@@ -120,8 +121,8 @@ exports.book = (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-exports.assign = (req, res) => {
-  const assignment = new Assignment(req.body.assignment);
+exports.assign = async (req, res) => {
+  const assignment = req.body.assignment == null ? null : new Assignment(req.body.assignment);
 
   if (assignment == null || assignment.state !== Assignment.states.BOOKED) {
     res.status(ERR_CLIENT_STATUS)
@@ -143,7 +144,8 @@ exports.assign = (req, res) => {
   }
 
   assignment.state = Assignment.states.ASSIGNED;
-  Assignment.update(assignment)
+
+  return Assignment.update(assignment)
       .then(async (data) => {
         Mail.sendEmailToStudentAssign(assignment.student, assignment.code);
         res.status(OK_STATUS)
@@ -164,11 +166,11 @@ exports.assign = (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-exports.search = (req, res) => {
+exports.search = async (req, res) => {
   const user = req.user;
 
   if (user == null || (user.role !== User.Role.STUDENT && user.role !== User.Role.TEACHING_OFFICE)) {
-    res.status(401)
+    res.status(403)
         .send({error: 'Non sei autorizzato'});
 
     return;
@@ -183,7 +185,8 @@ exports.search = (req, res) => {
   if (user.role === User.Role.STUDENT) {
     filter.student = user.id;
   }
-  Assignment.search(filter)
+
+  return Assignment.search(filter)
       .then((data) => {
         res.status(OK_STATUS)
             .send({list: data});
@@ -202,8 +205,8 @@ exports.search = (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-exports.decline = (req, res) => {
-  const assignment = new Assignment(req.body.assignment);
+exports.decline = async (req, res) => {
+  const assignment = req.body.assignment == null ? null : new Assignment(req.body.assignment);
   const user = req.user;
 
   if (assignment == null || assignment.state !== Assignment.states.WAITING || assignment.student !== user.id) {
@@ -227,7 +230,8 @@ exports.decline = (req, res) => {
 
   assignment.state = Assignment.states.UNASSIGNED;
   assignment.student = null;
-  Assignment.update(assignment)
+
+  return Assignment.update(assignment)
       .then(async (data) => {
         const teachingOffice = (await User.findByRole(User.Role.TEACHING_OFFICE))[0];
 
@@ -250,7 +254,7 @@ exports.decline = (req, res) => {
  * @param {Request} req
  * @param {Response} res
  */
-exports.find = (req, res) => {
+exports.find = async (req, res) => {
   const id = req.params.id;
   const user = req.user;
 
@@ -261,7 +265,8 @@ exports.find = (req, res) => {
 
       return;
     }
-    Assignment.findById(id)
+
+    return Assignment.findById(id)
         .then((data) => {
           data = data === undefined ? null : data;
           res.status(OK_STATUS)
@@ -275,7 +280,7 @@ exports.find = (req, res) => {
               });
         });
   } else if (user.role === User.Role.STUDENT) {
-    Assignment.findByStudent(user.id)
+    return Assignment.findByStudent(user.id)
         .then((assignments) => {
           const assignment = assignments.filter((el) => el.id === id);
 
@@ -306,8 +311,8 @@ exports.find = (req, res) => {
  * @param {Response} res
  * @return {Promise}
  */
-exports.close = (req, res) => {
-  const assignment = new Assignment(req.body.assignment);
+exports.close = async (req, res) => {
+  const assignment = req.body.assignment == null ? null : new Assignment(req.body.assignment);
 
   if (assignment == null || assignment.state !== Assignment.states.ASSIGNED) {
     res.status(ERR_CLIENT_STATUS)
@@ -336,6 +341,7 @@ exports.close = (req, res) => {
             .send({status: true});
       })
       .catch((err) => {
+        console.log(err);
         res.status(ERR_SERVER_STATUS)
             .send({
               status: false,

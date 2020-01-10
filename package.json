@@ -6,7 +6,9 @@
   "scripts": {
     "start": "nodemon index.js",
     "test": "mocha --exit --reporter mochawesome \"./testing/black-box/controllers\"",
-    "coverage": "nyc --reporter=html mocha --exit \"./testing/black-box/controllers\" \"./testing/white-box/models\""
+    "coverage": "nyc --reporter=html mocha --exit \"./testing/black-box/controllers\" \"./testing/white-box/models\" \"./testing/white-box/controllers\"",
+    "wb-controllers": "nyc --reporter=html mocha --exit \"./testing/white-box/controllers\"",
+    "wb-models": "nyc --reporter=html mocha --exit \"./testing/white-box/models\""
   },
   "nyc": {
     "all": true,

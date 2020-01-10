@@ -49,6 +49,20 @@ const assignmentStub = [
     state: states.UNASSIGNED,
     note: null,
   },
+  {
+    id: 4,
+    notice_protocol: 'Prot. n. 0279008',
+    student: 'p.franco69@studenti.unisa.it',
+    code: 'BD/01',
+    activity_description: 'Base Dati',
+    total_number_hours: 35,
+    title: titles.MASTER,
+    hourly_cost: 35,
+    ht_fund: null,
+    state: states.ASSIGNED,
+    note: null,
+  },
+
 ];
 
 /**
@@ -191,10 +205,10 @@ class Assignment {
       throw new Error('No Parameters');
     }
 
-    const assignment = assignmentStub.filter((ass) => ass.student == emailStudent)[0];
+    const assignments = assignmentStub.filter((ass) => ass.student == emailStudent);
 
     return new Promise((resolve) => resolve())
-        .then(() => assignment)
+        .then(() => assignments)
         .catch((err) => {
           throw err;
         });
@@ -222,10 +236,12 @@ class Assignment {
       throw new Error('No parameters');
     }
 
-    const assignmentResult = assignmentStub.pop(assignment);
+    const assignmentResult = assignmentStub.reduce((exists, currentAssign) => {
+      return exists || currentAssign.id === assignment.id;
+    }, false);
 
     return new Promise((resolve) => resolve())
-        .then(() => assignmentResult != null)
+        .then(() => assignmentResult)
         .catch((err) => {
           throw err;
         });
