@@ -152,6 +152,7 @@ exports.update = async (req, res) => {
         });
       })
       .catch((err) => {
+        console.log(err);
         res.status(ERR_SERVER_STATUS);
 
         return res.send({
@@ -168,7 +169,7 @@ exports.update = async (req, res) => {
  * @param {Response} res
  * @return {Promise}
  */
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const user = req.user;
   const notice = req.params.notice;
 
@@ -183,8 +184,9 @@ exports.delete = (req, res) => {
   }
 
   try {
-    Check.checkNoticeProtocol(candidature.notice_protocol);
+    Check.checkNoticeProtocol(notice);
   } catch (error) {
+    console.log(error);
     res.status(ERR_CLIENT_STATUS)
         .send({
           error: error.message,
@@ -214,7 +216,7 @@ exports.delete = (req, res) => {
 };
 
 // TODO doc
-exports.search = (req, res) => {
+exports.search = async (req, res) => {
   const user = req.user;
   let promise;
 
@@ -253,7 +255,8 @@ exports.search = (req, res) => {
 
     return;
   }
-  promise
+
+  return promise
       .then((candidatures) => {
         if (!Array.isArray(candidatures)) {
           candidatures = [candidatures];
@@ -270,6 +273,7 @@ exports.search = (req, res) => {
         });
       })
       .catch((err) => {
+        console.log(err);
         res.status(ERR_SERVER_STATUS);
         res.send({
           error: 'Ricerca fallita',
@@ -280,7 +284,7 @@ exports.search = (req, res) => {
 };
 
 // TODO doc
-exports.dowloadDocumentFile = (req, res) => {
+exports.downloadDocumentFile = async (req, res) => {
   const candidature = req.body.candidature;
   const fileName = req.body.fileName;
 
@@ -323,7 +327,7 @@ exports.dowloadDocumentFile = (req, res) => {
 };
 
 // TODO doc
-exports.dowloadDocuments = async (req, res) => {
+exports.downloadDocuments = async (req, res) => {
   const candidature = req.body.candidature;
 
   if (!candidature || !candidature.student) {

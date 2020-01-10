@@ -74,7 +74,7 @@ module.exports = (app, auth) => {
    * @apiParam {string} fileName The fileName of a document of the given candidature
    * @apiSuccess {Blob} Stream of byte of the document
    */
-  app.post('/api/candidatures', cors({exposedHeaders: ['Content-Disposition']}), auth.isTeachingOffice, CandidatureControl.dowloadDocumentFile);
+  app.post('/api/candidatures', cors({exposedHeaders: ['Content-Disposition']}), auth.isTeachingOffice, CandidatureControl.downloadDocumentFile);
 
   /**
    * @api {POST} /api/candidatures/all Gets all documents for a candidature
@@ -84,5 +84,5 @@ module.exports = (app, auth) => {
    * @apiParam {[Candidature](#api-Candidature-ObjectCandidature)} candidature A candidature
    * @apiSuccess {Blob} Stream of byte of the documents
    */
-  app.post('/api/candidatures/all', cors({exposedHeaders: ['Content-Disposition']}), auth.isTeachingOffice, CandidatureControl.dowloadDocuments);
+  app.post('/api/candidatures/all', cors({exposedHeaders: ['Content-Disposition']}), auth.isTeachingOffice, CandidatureControl.downloadDocuments);
 };

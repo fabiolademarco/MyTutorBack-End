@@ -12,6 +12,12 @@ const documentStubList = [
     file_name: 'pippo',
     file: 123,
   },
+  {
+    notice_protocol: 'Prot. n. 1111022',
+    student: 'c.barletta@unisa.it',
+    file_name: 'hey',
+    file: 123,
+  },
 ];
 
 /**
