@@ -25,6 +25,12 @@ const candidatureStubList = [
     state: States.EDITABLE,
     last_edit: new Date(),
   },
+  {
+    student: {email: 'c.barletta@studenti.unisa.it'},
+    notice_protocol: 'Prot. n. 1111022',
+    state: 'Editable',
+    last_edit: '2020-03-03',
+  },
 ];
 
 /**
@@ -82,7 +88,7 @@ class Candidature {
     }
 
     return new Promise((resolve) => resolve())
-        .then(() => new Candidature(candidature))
+        .then(() => candidature)
         .catch((err) => {
           throw err;
         });
@@ -100,9 +106,7 @@ class Candidature {
 
     return new Promise((resolve) => resolve())
         .then(() => {
-          delete candidature.documents;
-
-          return candidatureStubList.pop(candidature) != null;
+          return true;
         })
         .catch((err) => {
           throw err;
@@ -121,10 +125,7 @@ class Candidature {
 
     return new Promise((resolve) => resolve())
         .then(() => {
-          const predicate = (c) => {
-            c.student.email === candidature.student.email;
-            c.notice_protocol === candidature.notice_protocol;
-          };
+          const predicate = (c) => c.student.email === candidature.student.email && c.notice_protocol === candidature.notice_protocol;
 
           return candidatureStubList.filter(predicate).length > 0;
         })
@@ -146,10 +147,8 @@ class Candidature {
 
     return new Promise((resolve) => resolve())
         .then(async () => {
-          const predicate = (c) => {
-            c.student.email === email;
-            c.notice_protocol === protocol;
-          };
+          const predicate = (c) => c.student.email === email && c.notice_protocol === protocol;
+
 
           const filtered = candidatureStubList.filter(predicate);
 
@@ -181,7 +180,7 @@ class Candidature {
     return new Promise((resolve) => resolve())
         .then(async () => {
           const predicate = (c) => {
-            c.student.email === email;
+            return c.student.email === email;
           };
 
           const filtered = candidatureStubList.filter(predicate);
