@@ -447,7 +447,7 @@ function getOtherFields(noticeProtocol) {
 function getActionsToPerform(dbElements, receivedElements, Class) {
   const map = new Map();
   const field = Class == EvaluationCriterion ? 'name' : 'id';
-  let i = 0;
+  let temporaryId = 0;
 
   if (dbElements.length > 0) {
     dbElements.forEach((el) => map.set(el[field], {action: 'REMOVE', element: el}));
@@ -455,7 +455,7 @@ function getActionsToPerform(dbElements, receivedElements, Class) {
 
   receivedElements.forEach((el) => {
     if (el[field] == undefined) {
-      el[field] = i ++;
+      el[field] = temporaryId++;
       el.generated = true;
     };
     if (map.has(el[field])) {
