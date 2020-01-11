@@ -57,7 +57,7 @@ class ApplicationSheet {
     }
     const index = applicationStub.findIndex((app) => app.notice_protocol === applicationSheet.notice_protocol);
 
-    if (index != - 1) {
+    if (index != -1) {
       applicationStub[index] = applicationSheet;
     } else {
       throw new Error('the application sheet doesn\'t exist');
