@@ -492,9 +492,7 @@ exports.checkNotice = (notice) => {
 exports.checkCompleteNotice = (notice) => {
   const keys = Object.keys(notice).filter((key) => key !== 'notice_file' || key !== 'graded_list_file');
 
-  const keysNotNull = keys.reduce((check, key) => {
-    return key && check;
-  }, true);
+  const keysNotNull = keys.every((key) => key != null);
 
   if (!keysNotNull) {
     throw new Error('Non sono stati specificati tutti i campi');
