@@ -11,14 +11,14 @@ chai.use(sinonChai);
 const {expect} = chai;
 const proxy = require('proxyquire').noCallThru();
 
-const NoticeStub = require('../../stub/noticeStub');
-const UserStub = require('../../stub/userStub');
-const RatingStub = require('../../stub/ratingStub');
+const noticeStub = require('../../stub/noticeStub');
+const userStub = require('../../stub/userStub');
+const ratingStub = require('../../stub/ratingStub');
 
 const path = {
-  '../models/notice': NoticeStub,
-  '../models/user': UserStub,
-  '../models/rating': RatingStub,
+  '../models/notice': noticeStub,
+  '../models/user': userStub,
+  '../models/rating': ratingStub,
 };
 
 const noticeControl = proxy('../../../controllers/noticeControl', path);
@@ -210,7 +210,7 @@ describe('Controller Bando', function() {
     });
 
     it('TCS_AV.1.21', async function() {
-      for (i = 0; i < 16; i ++) {
+      for (i = 0; i < 16; i++) {
         notice.assignments.push(notice.assignments[0]);
       }
       await noticeControl.create(req, res);
@@ -265,7 +265,7 @@ describe('Controller Bando', function() {
     });
 
     it('TCS_AV.1.30', async function() {
-      for (i = 0; i < 10; i ++) {
+      for (i = 0; i < 10; i++) {
         notice.evaluation_criteria.push(notice.evaluation_criteria[0]);
       }
       await noticeControl.create(req, res);
@@ -387,7 +387,7 @@ describe('Controller Bando', function() {
     });
 
     it('TCS_AV.1.50', async function() {
-      for (i = 0; i < 30; i ++) {
+      for (i = 0; i < 30; i++) {
         notice.articles.push(notice.articles[0]);
       }
       await noticeControl.create(req, res);
@@ -580,7 +580,7 @@ describe('Controller Bando', function() {
     });
 
     it('TCS_AV.2.21', async function() {
-      for (i = 0; i < 16; i ++) {
+      for (i = 0; i < 16; i++) {
         notice.assignments.push(notice.assignments[0]);
       }
       await noticeControl.update(req, res);
@@ -635,7 +635,7 @@ describe('Controller Bando', function() {
     });
 
     it('TCS_AV.2.30', async function() {
-      for (i = 0; i < 10; i ++) {
+      for (i = 0; i < 10; i++) {
         notice.evaluation_criteria.push(notice.evaluation_criteria[0]);
       }
       await noticeControl.update(req, res);
@@ -757,7 +757,7 @@ describe('Controller Bando', function() {
     });
 
     it('TCS_AV.2.50', async function() {
-      for (i = 0; i < 30; i ++) {
+      for (i = 0; i < 30; i++) {
         notice.articles.push(notice.articles[0]);
       }
       await noticeControl.update(req, res);
