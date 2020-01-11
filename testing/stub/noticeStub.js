@@ -62,7 +62,7 @@ const Types = {
  *
  * This class represents a NoticeStub
  *
- * @author Roberto
+ * @author Roberto Bruno
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
@@ -330,10 +330,6 @@ class Notice {
     if (!states) {
       throw new Error('No Parameters');
     }
-
-    let query = `SELECT * FROM ${table} WHERE false`;
-
-    states.forEach((state) => query += ' OR state = ?');
 
     return new Promise((resolve) => resolve())
         .then(() => {

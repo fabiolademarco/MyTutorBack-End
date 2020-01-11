@@ -28,8 +28,8 @@ accessList.set(User.Role.TEACHING_OFFICE, Object.values(Notice.States));
  */
 
 /**
- *  Handles the request for the creation of a notice
- *  must be a Teaching Office to perform this action
+ * Handles the request for the creation of a notice
+ * must be a Teaching Office to perform this action
  *
  * @param {Request} req
  * @param {Response} res
@@ -58,12 +58,12 @@ exports.create = async (req, res) => {
 
   return Notice.create(notice)
       .then((notice) => {
-        res.status(OK_STATUS).
-            send({notice: notice});
+        res.status(OK_STATUS)
+            .send({notice: notice});
       })
       .catch((err) => {
-        res.status(ERR_SERVER_STATUS).
-            send({
+        res.status(ERR_SERVER_STATUS)
+            .send({
               error: 'Creazione del bando fallita.',
               exception: err.message,
             });
@@ -71,8 +71,8 @@ exports.create = async (req, res) => {
 };
 
 /**
- *  Handles the request for the modification of a notice
- *  must be a Teaching Office to perform this action
+ * Handles the request for the modification of a notice
+ * must be a Teaching Office to perform this action
  *
  * @param {Request} req
  * @param {Response} res
@@ -131,16 +131,24 @@ exports.update = async (req, res) => {
 };
 
 /**
- *  Handles the request to change the Status of a notice
- *  must be a Teaching Office/Professor/DDI to perform some of these actions
+ * Handles the request to change the Status of a notice
+ * must be a Teaching Office/Professor/DDI to perform some of these actions
  *
  * @param {Request} req
  * @param {Response} res
  */
 exports.setState = async (req, res) => {
   const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
-  const notice = new Notice(req.body.notice);
+  const notice = req.body.notice;
 
+  if (userRole == User.Role.STUDENT) {
+    res.status(403)
+        .send({
+          error: 'Non sei autorizzato.',
+        });
+
+    return;
+  }
   if (notice == null || notice.state == null) {
     res.status(ERR_CLIENT_STATUS)
         .send({error: 'Deve essere inserito un bando valido.'});
@@ -166,12 +174,6 @@ exports.setState = async (req, res) => {
   stateAccessList.set(User.Role.DDI, [Notice.States.DRAFT, Notice.States.APPROVED, Notice.States.CLOSED]);
   stateAccessList.set(User.Role.TEACHING_OFFICE, [Notice.States.IN_ACCEPTANCE, Notice.States.IN_APPROVAL, Notice.States.PUBLISHED, Notice.States.WAITING_FOR_GRADED_LIST]);
 
-  if (!stateAccessList.get(userRole).includes(notice.state)) {
-    res.status(403).send();
-
-    return;
-  }
-
   if (notice.state === Notice.States.IN_ACCEPTANCE) {
     try {
       Check.checkCompleteNotice(notice);
@@ -193,8 +195,7 @@ exports.setState = async (req, res) => {
 
       notice.notice_file = path;
     } catch (err) {
-      console.log(err);
-      res.status(500)
+      res.status(ERR_SERVER_STATUS)
           .send({
             error: 'Aggiornamento del bando fallito.',
             exception: err.message,
@@ -212,8 +213,7 @@ exports.setState = async (req, res) => {
 
       notice.graded_list_file = path;
     } catch (err) {
-      console.log(err);
-      res.status(500)
+      res.status(ERR_SERVER_STATUS)
           .send({
             error: 'Aggiornamento della graduatoria fallita.',
             exception: err.message,
@@ -226,9 +226,10 @@ exports.setState = async (req, res) => {
   try {
     const updatedNotice = await Notice.update(notice);
 
-    return res.status(OK_STATUS).send({notice: updatedNotice});
+    return res.status(OK_STATUS)
+        .send({notice: updatedNotice});
   } catch (err) {
-    res.status(500)
+    res.status(ERR_SERVER_STATUS)
         .send({
           error: 'Aggiornamento del bando fallito.',
           exception: err.message,
@@ -239,11 +240,12 @@ exports.setState = async (req, res) => {
 };
 
 /**
- *  Handles the request for the cancellation of a notice
- *  must be a Teaching Office to perform this action
+ * Handles the request for the cancellation of a notice
+ * must be a Teaching Office to perform this action
  *
  * @param {Request} req
  * @param {Response} res
+ * @return {Promise}
  */
 exports.delete = (req, res) => {
   const notice = req.body.notice;
@@ -267,7 +269,7 @@ exports.delete = (req, res) => {
     return;
   }
 
-  Notice.remove(notice)
+  return Notice.remove(notice)
       .then((value) => {
         res.status(OK_STATUS)
             .send({result: value});
@@ -282,8 +284,8 @@ exports.delete = (req, res) => {
 };
 
 /**
- *  Handles the request for searching the notices
- *  different roles may perform this action, if Unauthorized, will return 403
+ * Handles the request for searching the notices
+ * different roles may perform this action, if Unauthorized, will return 403
  *
  * @param {Request} req
  * @param {Response} res
@@ -293,8 +295,8 @@ exports.search = async (req, res) => {
 
   const protocol = req.body.protocol;
   const state = req.body.state;
-  const professor = req.body.professor;
   const type = req.body.type;
+  let professor = req.body.professor;
 
   if (protocol && protocol.length > 127) {
     res.status(ERR_CLIENT_STATUS)
@@ -315,10 +317,11 @@ exports.search = async (req, res) => {
     return this.find(req, res);
   }
 
-  if (professor && (userRole !== User.Role.PROFESSOR || userRole !== User.Role.TEACHING_OFFICE)) {
-    res.status(403).send({
-      error: 'Non hai i permessi per eseguire l\'operazione',
-    });
+  if (professor && (userRole !== User.Role.PROFESSOR && userRole !== User.Role.TEACHING_OFFICE)) {
+    res.status(403)
+        .send({
+          error: 'Non hai i permessi per eseguire l\'operazione',
+        });
 
     return;
   }
@@ -334,9 +337,10 @@ exports.search = async (req, res) => {
 
   if (state) {
     if (!userAccessList.includes(state)) {
-      res.status(403).send({
-        error: 'Non hai i permessi per eseguire l\'operazione',
-      });
+      res.status(403)
+          .send({
+            error: 'Non hai i permessi per eseguire l\'operazione',
+          });
 
       return;
     }
@@ -364,8 +368,8 @@ exports.search = async (req, res) => {
 };
 
 /**
- *  Handles the request for the cancellation of a notice
- *  different roles may perform this action, if Unauthorized, will return 403
+ * Handles the request for the cancellation of a notice
+ * different roles may perform this action, if Unauthorized, will return 403
  *
  * @param {Request} req
  * @param {Response} res
@@ -399,7 +403,8 @@ exports.find = async (req, res) => {
         const userAccessList = accessList.get(userRole);
         const authorizedNotices = notices.filter((notice) => userAccessList.includes(notice.state));
 
-        res.status(OK_STATUS).send({notices: authorizedNotices});
+        res.status(OK_STATUS)
+            .send({notices: authorizedNotices});
       })
       .catch((err) => {
         res.status(ERR_SERVER_STATUS)
@@ -411,18 +416,18 @@ exports.find = async (req, res) => {
 };
 
 /**
- *  Handles the request for the retrieval of all notices
- *  different roles may perform this action
+ * Handles the request for the retrieval of all notices
+ * different roles may perform this action
  *
  * @param {Request} req
  * @param {Response} res
  */
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
   const userRole = req.user == null ? User.Role.STUDENT : req.user.role;
 
   userAccessList = accessList.get(userRole);
 
-  Notice.findByState(userAccessList)
+  return Notice.findByState(userAccessList)
       .then((notices) => {
         res.status(OK_STATUS)
             .send({notices: notices});
@@ -436,6 +441,7 @@ exports.findAll = (req, res) => {
       });
 };
 
+// TODO: doc
 exports.downloadNotice = async (req, res) => {
   let userRole = req.user.role;
 
@@ -445,9 +451,9 @@ exports.downloadNotice = async (req, res) => {
 
   const protocol = req.params.protocol;
 
-  if (protocol == null || !Check.checkNoticeProtocol(protocol)) {
+  if (protocol == null) {
     res.status(ERR_CLIENT_STATUS)
-        .send({error: 'Deve essere inserito un protocollo valido'});
+        .send({error: 'Deve essere inserito un protocollo'});
 
     return;
   }
@@ -538,7 +544,7 @@ exports.uploadNotice = async (req, res) => {
     return;
   }
 
-  if (gradedListFile.substr(0, 100).indexOf(',') != - 1) {
+  if (gradedListFile.substr(0, 100).indexOf(',') != -1) {
     const substr = noticeFile.substring(0, noticeFile.indexOf(','));
 
     noticeFile = noticeFile.replace(substr, '');
@@ -559,13 +565,13 @@ exports.uploadNotice = async (req, res) => {
       return;
     });
   } catch (err) {
-    console.log(err);
     res.send({error: 'Si è verificato un errore'});
 
     return;
   }
 };
 
+// TODO: doc
 exports.downloadGradedList = async (req, res) => {
   let userRole = req.user.role;
 
@@ -617,6 +623,7 @@ exports.downloadGradedList = async (req, res) => {
       .download(path.resolve(notice.graded_list_file));
 };
 
+// TODO: doc
 exports.uploadGradedList = async (req, res) => {
   const protocol = req.params.protocol;
   let gradedListFile = req.body.gradedList;
@@ -662,7 +669,7 @@ exports.uploadGradedList = async (req, res) => {
         .send({error: `Impossibile caricare la graduatoria firmata mentre è ${notice.state}`});
   }
 
-  if (gradedListFile.substr(0, 100).indexOf(',') != - 1) {
+  if (gradedListFile.substr(0, 100).indexOf(',') != -1) {
     const substr = gradedListFile.substring(0, gradedListFile.indexOf(','));
 
     gradedListFile = gradedListFile.replace(substr, '');
@@ -683,7 +690,6 @@ exports.uploadGradedList = async (req, res) => {
       return;
     });
   } catch (err) {
-    console.log(err);
     res.send({error: 'Si è verificato un errore'});
 
     return;
