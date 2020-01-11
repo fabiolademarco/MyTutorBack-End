@@ -42,10 +42,7 @@
             "error", 
             {
             "words": true,
-            "nonwords": true,
-            "overrides": {
-                "!": false
-            }
+            "nonwords": false
         }]
     }
 }
