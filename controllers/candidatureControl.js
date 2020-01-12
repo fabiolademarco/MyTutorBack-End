@@ -215,7 +215,11 @@ exports.delete = async (req, res) => {
       });
 };
 
-// TODO doc
+/**
+ * Allows to search a candidature
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.search = async (req, res) => {
   const user = req.user;
   let promise;
@@ -283,7 +287,11 @@ exports.search = async (req, res) => {
       });
 };
 
-// TODO doc
+/**
+ * Allows to download a specific document file of a specific candidature
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.downloadDocumentFile = async (req, res) => {
   const candidature = req.body.candidature;
   const fileName = req.body.fileName;
@@ -326,7 +334,11 @@ exports.downloadDocumentFile = async (req, res) => {
       });
 };
 
-// TODO doc
+/**
+ * Allows to download all the documents file of a specific candidature
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.downloadDocuments = async (req, res) => {
   const candidature = req.body.candidature;
 

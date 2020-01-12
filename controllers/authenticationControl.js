@@ -5,7 +5,6 @@
  *
  * @author Roberto Bruno
  *
- * @todo Finire password recovery e registrazione del professore
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */
 const User = require('../models/user');
@@ -297,7 +296,6 @@ exports.passwordRecovery = (req, res) => {
  * Allows to insert a new VerifiedEmail
  * @param {Request} req
  * @param {Response} res
- * @todo Completare con l'aggiunta del model VerifiedEmail e controllare che l'email non esista già
  */
 exports.insertVerifiedEmail = async (req, res) => {
   email = req.body.email;

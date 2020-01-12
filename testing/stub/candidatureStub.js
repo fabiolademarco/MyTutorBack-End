@@ -41,7 +41,6 @@ const candidatureStubList = [
  * @author Roberto Bruno
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
- * @todo Controllare che la find funzioni...
  */
 class Candidature {
   /**
@@ -73,7 +72,7 @@ class Candidature {
           throw err;
         });
   }
-  // TO COMPLETE DON'T FORGET AAAAAAA
+
   /**
    * Updates a Candidature.
    * @param {Candidature} candidature The candidature to update.

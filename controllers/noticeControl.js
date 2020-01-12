@@ -452,7 +452,11 @@ exports.findAll = async (req, res) => {
       });
 };
 
-// TODO: doc
+/**
+ * Allows to download the notice
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.downloadNotice = async (req, res) => {
   let userRole = req.user == null ? User.Role.STUDENT : req.user.role;
 
@@ -581,7 +585,11 @@ exports.uploadNotice = async (req, res) => {
   }
 };
 
-// TODO: doc
+/**
+ * Allows to download the graded list of a notice
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.downloadGradedList = async (req, res) => {
   let userRole = req.user == null ? User.Role.STUDENT : req.user.role;
 
@@ -635,7 +643,11 @@ exports.downloadGradedList = async (req, res) => {
       .download(path.resolve(notice.graded_list_file));
 };
 
-// TODO: doc
+/**
+ * Allows to upload the graded list for the notice
+ * @param {Request} req
+ * @param {Response} res
+ */
 exports.uploadGradedList = async (req, res) => {
   const protocol = req.params.protocol;
   let gradedListFile = req.body.gradedList;

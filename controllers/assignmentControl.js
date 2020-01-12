@@ -13,7 +13,6 @@ const ERR_SERVER_STATUS = 500;
  *
  * @module
  * @author Roberto Bruno
- * @todo Bisogna definire l'autenticazione ed l'invio delle email
  *
  * @copyright 2019 - Copyright by Gang Of Four Eyes
  */

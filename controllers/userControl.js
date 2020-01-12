@@ -188,7 +188,6 @@ module.exports.find = async function(req, res) {
     return;
   }
 
-  // TODO: Il professore e il DDI possono farla?
   if (User.Role.STUDENT === user.role && user.id !== email) {
     res.status(403);
     res.send({error: 'Non sei autorizzato'});
