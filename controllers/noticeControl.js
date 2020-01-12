@@ -177,7 +177,7 @@ exports.setState = async (req, res) => {
   if (notice.state === Notice.States.IN_ACCEPTANCE) {
     try {
       Check.checkCompleteNotice(notice);
-    } catch (err) {
+    } catch (error) {
       res.status(ERR_CLIENT_STATUS)
           .send({
             error: error.message,
