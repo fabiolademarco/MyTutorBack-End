@@ -404,6 +404,17 @@ exports.checkNotice = (notice) => {
     if (notice.assignments.length < 1 || notice.assignments.length > 15) {
       throw new Error('Il campo assignments ha lunghezza minore di 1 oppure supera 15.');
     }
+
+    const assignmentsMap = new Map();
+
+    notice.assignments.forEach((element) => {
+      assignmentsMap.set(element.code, element);
+    });
+
+    if (assignmentsMap.size != notice.assignments.length) {
+      throw new Error('Ci sono assignments con codici duplicati all\'interno del bando');
+    };
+
     notice.assignments.every(this.checkAssignment);
   }
 
@@ -415,6 +426,16 @@ exports.checkNotice = (notice) => {
     if (notice.evaluation_criteria.length < 1 || notice.evaluation_criteria.length > 6) {
       throw new Error('Il campo evaluation_criteria ha lunghezza minore di 1 oppure supera 15.');
     }
+
+    const criteriaMap = new Map();
+
+    notice.evaluation_criteria.forEach((element) => {
+      criteriaMap.set(element.name, element);
+    });
+
+    if (criteriaMap.size != notice.evaluation_criteria.length) {
+      throw new Error('Ci sono criteri di valutazione con codici duplicati all\'interno del bando');
+    };
 
     notice.evaluation_criteria.every(this.checkEvaluationCriterion);
   }
@@ -490,9 +511,9 @@ exports.checkNotice = (notice) => {
  * @return {boolean} True if it respects the format, false otherwise.
  */
 exports.checkCompleteNotice = (notice) => {
-  const keys = Object.keys(notice).filter((key) => key !== 'notice_file' || key !== 'graded_list_file');
+  const keys = Object.keys(notice).filter((key) => key !== 'notice_file' || key !== 'graded_list_file' || key !== 'comment');
 
-  const keysNotNull = keys.every((key) => key != null);
+  const keysNotNull = keys.every((key) => notice[key] != null);
 
   if (!keysNotNull) {
     throw new Error('Non sono stati specificati tutti i campi');
@@ -507,7 +528,7 @@ exports.checkCompleteNotice = (notice) => {
  * @return {boolean} True if the student attributes respect the format.
  */
 exports.checkStudentWithoutPassword = (student) => {
-  const registrationNumberExp = /^[0-9A-Za-z ‘]*$/;
+  const registrationNumberExp = /^[0-9A-Za-z ']*$/;
   const birthDateExp = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/;
 
   checkName(student.name);
