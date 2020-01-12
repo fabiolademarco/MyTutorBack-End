@@ -344,8 +344,6 @@ exports.checkEvaluationCriterion = (evaluationCriterion) => {
     throw new Error('Il nome ha meno di 1 carattere di lunghezza oppure supera i 20 caratteri di lunghezza.');
   }
 
-  // TODO controllare se c'è già nel bando
-
   if (evaluationCriterion.max_score < 1 || evaluationCriterion.max_score > 27) {
     throw new Error('Il max_score non è compreso tra 1 e 27.');
   }
