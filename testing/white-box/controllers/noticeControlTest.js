@@ -135,7 +135,7 @@ describe('Controller Bando', function() {
 
       req = mockRequest({body: {notice: notice}, user: {role: UserStub.Role.TEACHING_OFFICE}});
       await noticeControl.setState(req, res);
-      expect(res.status).to.have.been.calledWith(500);
+      expect(res.status).to.have.been.calledWith(200);
     });
 
     it('SetState_7', async function() {

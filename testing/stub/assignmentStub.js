@@ -130,8 +130,6 @@ class Assignment {
       throw new Error('The assignment doesn\'t exists');
     }
 
-    assignmentStub[assignmentStub.indexOf(assignmentStub.filter((el) => el.id === assignment.id)[0])] = assignment;
-
     return new Promise((resolve) => resolve())
         .then(() => assignment)
         .catch((err) => {
