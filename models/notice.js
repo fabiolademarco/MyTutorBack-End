@@ -415,7 +415,7 @@ function getOtherFields(noticeProtocol) {
         .catch((err) => console.log(err)),
 
     ApplicationSheet.findByNotice(noticeProtocol)
-        .then((applicationSheet) => otherFields.applicationSheet = applicationSheet && applicationSheet.length ? applicationSheet : null)
+        .then((applicationSheet) => otherFields.applicationSheet = applicationSheet ? applicationSheet : null)
         .catch((err) => console.log(err)),
 
     EvaluationCriterion.findByNotice(noticeProtocol)
@@ -427,7 +427,7 @@ function getOtherFields(noticeProtocol) {
         .catch((err) => console.log(err)),
 
     Comment.findByProtocol(noticeProtocol)
-        .then((comment) => otherFields.comment = comment && comment.length ? comment : null)
+        .then((comment) => otherFields.comment = comment ? comment : null)
         .catch((err) => console.log(err)),
 
   ])
