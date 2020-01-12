@@ -511,7 +511,7 @@ exports.checkNotice = (notice) => {
  * @return {boolean} True if it respects the format, false otherwise.
  */
 exports.checkCompleteNotice = (notice) => {
-  const keys = Object.keys(notice).filter((key) => key !== 'notice_file' || key !== 'graded_list_file' || key !== 'comment');
+  const keys = Object.keys(notice).filter((key) => key !== 'notice_file' && key !== 'graded_list_file' && key !== 'comment');
 
   const keysNotNull = keys.every((key) => notice[key] != null);
 
