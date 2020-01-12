@@ -52,26 +52,48 @@ describe('Controller Bando', function() {
         deadline: '2019-12-31 ',
         notice_file: null,
         graded_list_file: null,
-        assignments: [{
-          id: 100,
-          notice_protocol: 'Prot. n. 0269008',
-          student: null,
-          code: 'BD/01',
-          activity_description: 'Base Dati',
-          total_number_hours: 35,
-          title: 'Master',
-          hourly_cost: 35,
-          ht_fund: null,
-          state: 'Unassigned',
-          note: null,
-        }],
+        assignments: [
+          {
+            id: 101,
+            notice_protocol: 'Prot. n. 0269008',
+            student: null,
+            code: 'BD/01',
+            activity_description: 'Base Dati',
+            total_number_hours: 35,
+            title: 'Master',
+            hourly_cost: 35,
+            ht_fund: null,
+            state: 'Unassigned',
+            note: null,
+          },
+          {
+            id: 102,
+            notice_protocol: 'Prot. n. 0269008',
+            student: null,
+            code: 'PD/01',
+            activity_description: 'Programmazione Distribuita',
+            total_number_hours: 35,
+            title: 'Master',
+            hourly_cost: 35,
+            ht_fund: null,
+            state: 'Unassigned',
+            note: null,
+          },
+        ],
         comment: null,
         application_sheet: null,
-        evaluation_criteria: [{
-          notice_protocol: 'Prot. n. 0269008',
-          name: 'Esperienze didattiche maturate nelle Università',
-          max_score: 17,
-        }],
+        evaluation_criteria: [
+          {
+            notice_protocol: 'Prot. n. 0269008',
+            name: 'Esperienze didattiche maturate nelle Università',
+            max_score: 17,
+          },
+          {
+            notice_protocol: 'Prot. n. 0269008',
+            name: 'Esperienze didattiche maturate all\'esterno dell\' Università',
+            max_score: 17,
+          },
+        ],
         articles: [{
           id: 100,
           notice_protocol: 'Prot. n. 0269008',
@@ -137,9 +159,10 @@ describe('Controller Bando', function() {
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    // Il controllo dei codici degli incarichi è eseguito lato front Vedere se TODO
-    it('TCS_AV.1.9', function() {
-      expect(true);
+    it('TCS_AV.1.9', async function() {
+      notice.assignments[0].code = notice.assignments[1].code;
+      await noticeControl.create(req, res);
+      expect(res.status).to.have.been.calledWith(412);
     });
 
     it('TCS_AV.1.10', async function() {
@@ -147,7 +170,6 @@ describe('Controller Bando', function() {
       await noticeControl.create(req, res);
       expect(res.status).to.have.been.calledWith(412);
     });
-
 
     it('TCS_AV.1.11', async function() {
       notice.assignments[0].activity_description = 'a'.repeat(201);
@@ -235,9 +257,10 @@ describe('Controller Bando', function() {
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    // Il nome del criterio inserito viene controllato lato front Vedere se TODO
-    it('TCS_AV.1.25', function() {
-      expect(true);
+    it('TCS_AV.1.25', async function() {
+      notice.evaluation_criteria[0].name = notice.evaluation_criteria[1].name;
+      await noticeControl.create(req, res);
+      expect(res.status).to.have.been.calledWith(412);
     });
 
     it('TCS_AV.1.26', async function() {
@@ -423,26 +446,48 @@ describe('Controller Bando', function() {
         deadline: '2019-12-31 ',
         notice_file: null,
         graded_list_file: null,
-        assignments: [{
-          id: 101,
-          notice_protocol: 'Prot. n. 0269008',
-          student: null,
-          code: 'BD/01',
-          activity_description: 'Base Dati',
-          total_number_hours: 35,
-          title: 'Master',
-          hourly_cost: 35,
-          ht_fund: null,
-          state: 'Unassigned',
-          note: null,
-        }],
+        assignments: [
+          {
+            id: 101,
+            notice_protocol: 'Prot. n. 0269008',
+            student: null,
+            code: 'BD/01',
+            activity_description: 'Base Dati',
+            total_number_hours: 35,
+            title: 'Master',
+            hourly_cost: 35,
+            ht_fund: null,
+            state: 'Unassigned',
+            note: null,
+          },
+          {
+            id: 102,
+            notice_protocol: 'Prot. n. 0269008',
+            student: null,
+            code: 'PD/01',
+            activity_description: 'Programmazione Distribuita',
+            total_number_hours: 35,
+            title: 'Master',
+            hourly_cost: 35,
+            ht_fund: null,
+            state: 'Unassigned',
+            note: null,
+          },
+        ],
         comment: null,
         application_sheet: null,
-        evaluation_criteria: [{
-          notice_protocol: 'Prot. n. 0269008',
-          name: 'Esperienze didattiche maturate nelle Università',
-          max_score: 17,
-        }],
+        evaluation_criteria: [
+          {
+            notice_protocol: 'Prot. n. 0269008',
+            name: 'Esperienze didattiche maturate nelle Università',
+            max_score: 17,
+          },
+          {
+            notice_protocol: 'Prot. n. 0269008',
+            name: 'Esperienze didattiche maturate all\'esterno dell\' Università',
+            max_score: 17,
+          },
+        ],
         articles: [{
           id: 101,
           notice_protocol: 'Prot. n. 0269008',
@@ -508,9 +553,10 @@ describe('Controller Bando', function() {
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    // TODO: Il controllo dei codici degli incarichi è eseguito lato front Vedere se TODO
-    it('TCS_AV.2.9', function() {
-      expect(true);
+    it('TCS_AV.2.9', async function() {
+      notice.assignments[0].code = notice.assignments[1].code;
+      await noticeControl.update(req, res);
+      expect(res.status).to.have.been.calledWith(412);
     });
 
     it('TCS_AV.2.10', async function() {
@@ -605,9 +651,10 @@ describe('Controller Bando', function() {
       expect(res.status).to.have.been.calledWith(412);
     });
 
-    // TODO: Il nome del criterio inserito viene controllato lato front Vedere se TODO
-    it('TCS_AV.2.25', function() {
-      expect(true);
+    it('TCS_AV.2.25', async function() {
+      notice.evaluation_criteria[0].name = notice.evaluation_criteria[1].name;
+      await noticeControl.update(req, res);
+      expect(res.status).to.have.been.calledWith(412);
     });
 
     it('TCS_AV.2.26', async function() {
