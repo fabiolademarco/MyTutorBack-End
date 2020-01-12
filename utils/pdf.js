@@ -31,6 +31,9 @@ const paddingBottom = (centimeters) => {
 const paddingLeft = (centimeters) => {
   return {paddingLeft: centimeters * cm};
 };
+const paddingRight = (centimeters) => {
+  return {paddingRight: centimeters * cm};
+};
 const padding = (centimeters) => {
   return {padding: centimeters * cm};
 };
