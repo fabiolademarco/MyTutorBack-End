@@ -478,12 +478,11 @@ exports.downloadNotice = async (req, res) => {
 
     return;
   }
-
   const notices = await Notice.findByProtocol(protocol);
 
   if (notices.length != 1) {
     res.status(ERR_CLIENT_STATUS)
-        .send({error: (notices < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
+        .send({error: (notices.length < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
 
     return;
   }
@@ -611,7 +610,9 @@ exports.downloadGradedList = async (req, res) => {
 
   if (notices.length != 1) {
     res.status(ERR_CLIENT_STATUS)
-        .send({error: (notices < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
+        .send({error: (notices.length < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
+
+    return;
   }
 
   const notice = notices[0];
@@ -666,7 +667,7 @@ exports.uploadGradedList = async (req, res) => {
 
   if (notices.length != 1) {
     res.status(ERR_CLIENT_STATUS)
-        .send({error: (notices < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
+        .send({error: (notices.length < 1 ? 'Non esiste un bando con quel protocollo' : 'Protocollo non univoco, è stato trovato più di un bando')});
 
     return;
   }

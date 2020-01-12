@@ -124,7 +124,7 @@ class ApplicationSheet {
           const filtered = applicationStub.filter((app) => app.notice_protocol == noticeProtocol);
 
 
-          return (filtered.length < 0) ? null : new ApplicationSheet(filtered[0]);
+          return (filtered.length < 1) ? null : new ApplicationSheet(filtered[0]);
         })
         .catch((err) => {
           throw err;
