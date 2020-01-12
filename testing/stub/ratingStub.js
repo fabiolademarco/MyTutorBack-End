@@ -1,6 +1,12 @@
 
 const ratingStubList = [
   {
+    student: 'm.rossi22@studenti.unisa.it',
+    assignment_id: 1,
+    titles_score: 10,
+    interview_score: 50,
+  },
+  {
     student: 'l.carpentieri7@studenti.unisa.it',
     assignment_id: 1,
     titles_score: 30,
@@ -85,7 +91,7 @@ class Rating {
 
     const index = ratingStubList.findIndex((el) => el.student === rating.student && el.assignment_id === rating.assignment_id);
 
-    if (index = - 1) {
+    if (index = -1) {
       throw new Error('The rating doesn\'t exists');
     }
     ratingStubList[index] = rating;
