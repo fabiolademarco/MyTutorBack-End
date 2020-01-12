@@ -174,6 +174,15 @@ exports.setState = async (req, res) => {
   stateAccessList.set(User.Role.DDI, [Notice.States.DRAFT, Notice.States.APPROVED, Notice.States.CLOSED]);
   stateAccessList.set(User.Role.TEACHING_OFFICE, [Notice.States.IN_ACCEPTANCE, Notice.States.IN_APPROVAL, Notice.States.PUBLISHED, Notice.States.WAITING_FOR_GRADED_LIST]);
 
+  if (!stateAccessList.get(userRole).includes(notice.state)) {
+    res.status(403)
+        .send({
+          error: 'Non sei autorizzato.',
+        });
+
+    return;
+  }
+
   if (notice.state === Notice.States.IN_ACCEPTANCE) {
     try {
       Check.checkCompleteNotice(notice);
