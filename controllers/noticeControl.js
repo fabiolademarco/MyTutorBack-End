@@ -553,7 +553,7 @@ exports.uploadNotice = async (req, res) => {
     return;
   }
 
-  if (gradedListFile.substr(0, 100).indexOf(',') != -1) {
+  if (noticeFile.substr(0, 100).indexOf(',') != -1) {
     const substr = noticeFile.substring(0, noticeFile.indexOf(','));
 
     noticeFile = noticeFile.replace(substr, '');
