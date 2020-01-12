@@ -187,6 +187,8 @@ exports.setState = async (req, res) => {
     try {
       Check.checkCompleteNotice(notice);
     } catch (error) {
+      console.log(error);
+
       res.status(ERR_CLIENT_STATUS)
           .send({
             error: error.message,

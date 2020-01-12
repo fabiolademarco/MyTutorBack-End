@@ -311,7 +311,7 @@ const generateApplicationSheet = async (notice) => {
     }
   }
 
-  for (let i = 0; i < 2; i ++) {
+  for (let i = 0; i < 2; i++) {
     if ((i == 0 && masterAssignments.length > 0 || i == 1 && phdAssignments.length > 0)) {
       if (i == 1 && masterAssignments.length > 0) {
         doc.pageBreak();

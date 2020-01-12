@@ -14,10 +14,13 @@ const proxy = require('proxyquire').noCallThru();
 const NoticeStub = require('../../stub/noticeStub');
 const UserStub = require('../../stub/userStub');
 const RatingStub = require('../../stub/ratingStub');
+const PdfStub = require('../../stub/pdfStub');
 const path = {
   '../models/notice': NoticeStub,
   '../models/user': UserStub,
   '../models/rating': RatingStub,
+  '../utils/pdf': PdfStub,
+
 };
 
 const exampleNotice = require('../models/exampleNotices');
@@ -126,9 +129,11 @@ describe('Controller Bando', function() {
     });
 
     it('SetState_6', async function() {
-      req.user.role = UserStub.Role.TEACHING_OFFICE;
-      req.body.notice.state = NoticeStub.States.IN_ACCEPTANCE;
-      req.body.notice.protocol = 'Prot. n. 0279008';
+      const [notice] = await NoticeStub.findByProtocol('Prot. n. 0279008');
+
+      notice.state = NoticeStub.States.IN_ACCEPTANCE;
+
+      req = mockRequest({body: {notice: notice}, user: {role: UserStub.Role.TEACHING_OFFICE}});
       await noticeControl.setState(req, res);
       expect(res.status).to.have.been.calledWith(500);
     });

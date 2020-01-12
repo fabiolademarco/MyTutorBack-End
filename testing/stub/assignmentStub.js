@@ -53,7 +53,7 @@ const assignmentStub = [
     id: 4,
     notice_protocol: 'Prot. n. 0279008',
     student: 'p.franco69@studenti.unisa.it',
-    code: 'BD/01',
+    code: 'BD/02',
     activity_description: 'Base Dati',
     total_number_hours: 35,
     title: titles.MASTER,
