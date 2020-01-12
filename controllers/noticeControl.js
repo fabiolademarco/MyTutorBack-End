@@ -452,7 +452,7 @@ exports.findAll = async (req, res) => {
 
 // TODO: doc
 exports.downloadNotice = async (req, res) => {
-  let userRole = req.user.role;
+  let userRole = req.user == null ? User.Role.STUDENT : req.user.role;
 
   if (userRole !== User.Role.TEACHING_OFFICE && userRole !== User.Role.DDI) {
     userRole = User.Role.STUDENT;
@@ -582,7 +582,7 @@ exports.uploadNotice = async (req, res) => {
 
 // TODO: doc
 exports.downloadGradedList = async (req, res) => {
-  let userRole = req.user.role;
+  let userRole = req.user == null ? User.Role.STUDENT : req.user.role;
 
   if (userRole !== User.Role.TEACHING_OFFICE && userRole !== User.Role.DDI) {
     userRole = User.Role.STUDENT;
