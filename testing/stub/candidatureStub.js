@@ -14,6 +14,12 @@ const States = {
 
 const candidatureStubList = [
   {
+    student: {email: 'm.rossi22@studenti.unisa.it'},
+    notice_protocol: 'Prot. n. 0279008',
+    state: States.EDITABLE,
+    last_edit: new Date(),
+  },
+  {
     student: {email: 'f.migliaro69@studenti.unisa.it'},
     notice_protocol: 'Prot. n. 0279008',
     state: States.EDITABLE,

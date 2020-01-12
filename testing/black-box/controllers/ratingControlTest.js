@@ -33,11 +33,11 @@ describe('Rating Control', function() {
 
   beforeEach(function() {
     const s1 = {
-      email: 'f.migliaro69@studenti.unisa.it',
-      name: 'Francesco',
-      surname: 'Migliaro',
+      email: 'm.rossi22@studenti.unisa.it',
+      name: 'Mario',
+      surname: 'Rossi',
       role: 'Student',
-      verified: '1',
+      verified: 1,
       registration_number: 'aaaaBBBB11112222',
       password: 'Abcde123',
       birth_date: '1998-03-03 ',
@@ -57,7 +57,7 @@ describe('Rating Control', function() {
       {
         student: s1,
         assignment_id: 1,
-        titles_score: 5,
+        titles_score: 10,
         interview_score: 50,
       },
       {
@@ -79,7 +79,7 @@ describe('Rating Control', function() {
     });
 
     it('TCS_GA.2.1', async function() {
-      ratingList[0].student.name = 'ab'.repeat(100);
+      ratingList[0].student.name = 'a'.repeat(103);
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
       await ratingControl.createTable(req, res);
@@ -87,7 +87,7 @@ describe('Rating Control', function() {
     });
 
     it('TCS_GA.2.2', async function() {
-      ratingList[0].student.name = '888';
+      ratingList[0].student.name = 'Franco$$#^234';
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
       await ratingControl.createTable(req, res);
@@ -95,7 +95,7 @@ describe('Rating Control', function() {
     });
 
     it('TCS_GA.2.3', async function() {
-      ratingList[0].titles_score = 'ajaja';
+      ratingList[0].titles_score = -10;
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
       await ratingControl.createTable(req, res);
@@ -103,7 +103,7 @@ describe('Rating Control', function() {
     });
 
     it('TCS_GA.2.4', async function() {
-      ratingList[0].titles_score = 30;
+      ratingList[0].titles_score = 1000;
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
       await ratingControl.createTable(req, res);
@@ -111,7 +111,7 @@ describe('Rating Control', function() {
     });
 
     it('TCS_GA.2.5', async function() {
-      ratingList[0].interview_score = 'aasdf';
+      ratingList[0].interview_score = -10;
       req = mockRequest({method: 'PUT', body: {'ratingList': ratingList}});
       res = mockResponse();
       await ratingControl.createTable(req, res);
