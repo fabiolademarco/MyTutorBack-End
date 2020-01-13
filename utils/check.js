@@ -198,49 +198,49 @@ exports.checkAssignment = (assignment) => {
 
   if (assignment.id) {
     if (!idExp.test(assignment.id)) {
-      throw new Error('L\'id non rispetta il formato.');
+      throw new Error('L\'id dell\'assegno non rispetta il formato.');
     }
   }
 
   if (assignment.total_number_hours < 1 || assignment.total_number_hours > 50) {
-    throw new Error('Le ore totali sono meno di 1 o maggiori di 50');
+    throw new Error('Le ore totali dell\'assegno sono meno di 1 o maggiori di 50.');
   }
 
   if (!totalNumberHoursExp.test(assignment.total_number_hours)) {
-    throw new Error('Il campo total_number_hours non rispetta il formato');
+    throw new Error('Le ore totali dell\'assegno non rispettano il formato.');
   }
 
   if (!title.test(assignment.title)) {
-    throw new Error('Il campo title non rispetta il formato.');
+    throw new Error('Il titolo dell\'assegno non rispetta il formato.');
   }
 
   if (assignment.hourly_cost < 1 || assignment.hourly_cost > 150) {
-    throw new Error('Il costo orario è minore di 1 o maggiore di 150');
+    throw new Error('Il costo orario dell\'assegno è minore di 1 o maggiore di 150');
   }
 
   if (!hourlyCostExp.test(assignment.hourly_cost)) {
-    throw new Error('Il costo orario non rispetta il formato.');
+    throw new Error('Il costo orario dell\'assegno non rispetta il formato.');
   }
 
   if (!stateExp.test(assignment.state)) {
-    throw new Error('Lo stato non rispetta il formato.');
+    throw new Error('Lo stato dell\'assegno non rispetta il formato.');
   }
 
   if (assignment.ht_fund && assignment.ht_fund.length > 50) {
-    throw new Error('Il campo ht_fund supera i 50 caratteri di lunghezza.');
+    throw new Error('Il fondo help teaching dell\'assegno supera i 50 caratteri di lunghezza.');
   }
 
   if (assignment.activity_description == null) {
-    throw new Error('Il campo activity_description è nullo.');
+    throw new Error('L\'attività dell\'assegno non è specificata.');
   }
 
   if (assignment.activity_description.length < 1 || assignment.activity_description.length > 200) {
-    throw new Error('Il campo activity_description ha meno di 1 carattere di lunghezza ooppure supera i 50 caratteri di lunghezza.');
+    throw new Error('L\'attività dell\'assegno ha meno di 1 carattere di lunghezza ooppure supera i 50 caratteri di lunghezza.');
   }
 
   if (assignment.state === Assignment.states.OVER) {
     if (assignment.note != null && (assignment.note.length < 1 || assignment.note.length > 500)) {
-      throw new Error('Il campo note ha meno di 1 carattere di lunghezza ooppure supera i 50 caratteri di lunghezza.');
+      throw new Error('La nota dell\'assegno ha meno di 1 carattere di lunghezza ooppure supera i 50 caratteri di lunghezza.');
     }
   }
 
@@ -273,7 +273,7 @@ exports.checkNoticeProtocol = (noticeProtocol) => {
  */
 exports.checkComment = (comment) => {
   if (comment.text.length < 1 || comment.text.length > 500) {
-    throw new Error('Il testo ha meno di 1 carattere di lunghezza oppure supera i 500 caratteri di lunghezza.');
+    throw new Error('Il testo del commento ha meno di 1 carattere di lunghezza oppure supera i 500 caratteri di lunghezza.');
   }
 
   return true;
@@ -286,7 +286,7 @@ exports.checkComment = (comment) => {
  */
 exports.checkApplicationSheet = (applicationSheet) => {
   if (applicationSheet.documents_to_attach.length < 1 || applicationSheet.documents_to_attach.length > 5000) {
-    throw new Error('Il testo del campo documents_to_attach ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
+    throw new Error('Il testo del campo documenti da allegare ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
   return true;
@@ -303,17 +303,17 @@ exports.checkRating = (rating) => {
   const interviewScoreExp = /^[0-9]+$/;
 
   if (!assignmentIdExp.test(rating.assignment_id)) {
-    throw new Error('L\'id non rispetta il formato');
+    throw new Error('L\'id della valutazione non rispetta il formato');
   }
 
   this.checkStudentWithoutPassword(rating.student);
 
   if (!titleScoreExp.test(rating.titles_score)) {
-    throw new Error('Il campo titles_score non rispetta il formato.');
+    throw new Error('Il punteggio dei titoli della valutazione non rispetta il formato.');
   }
 
   if (!interviewScoreExp.test(rating.interview_score)) {
-    throw new Error('Il campo interview_score non rispetta il formato.');
+    throw new Error('Il punteggio del colloquio della valutazione non rispetta il formato.');
   }
 
   return true;
@@ -326,7 +326,7 @@ exports.checkRating = (rating) => {
  */
 exports.checkRatingList = (ratingList) => {
   if (ratingList.length == 0) {
-    throw new Error('La lista è vuota');
+    throw new Error('La lista delle valutazioni è vuota');
   }
 
   return ratingList.every(this.checkRating);
@@ -341,16 +341,15 @@ exports.checkEvaluationCriterion = (evaluationCriterion) => {
   const maxScoreExp = /^[0-9]+$/;
 
   if (evaluationCriterion.name.length < 1 || evaluationCriterion.name.length > 125) {
-    throw new Error('Il nome ha meno di 1 carattere di lunghezza oppure supera i 20 caratteri di lunghezza.');
+    throw new Error('Il nome del criterio di valutazione ha meno di 1 carattere di lunghezza oppure supera i 20 caratteri di lunghezza.');
   }
 
   if (evaluationCriterion.max_score < 1 || evaluationCriterion.max_score > 27) {
-    throw new Error('Il max_score non è compreso tra 1 e 27.');
+    throw new Error('Il punteggio massimo del criterio di valutazione non è compreso tra 1 e 27.');
   }
 
-
   if (!maxScoreExp.test(evaluationCriterion.max_score)) {
-    throw new Error('Il max score non rispetta il formato.');
+    throw new Error('Il punteggio massimo del criterio di valutazione non rispetta il formato.');
   }
 
   return true;
@@ -365,15 +364,15 @@ exports.checkArticle = (article) => {
   const articleInitialExp = /^[A-Z a-z]+$/;
 
   if (article.initial.length < 1 || article.initial.length > 20) {
-    throw new Error('Il campo initial ha meno di 1 carattere di lunghezza oppure supera i 20 caratteri di lunghezza.');
+    throw new Error('Il campo initial dell\'articolo ha meno di 1 carattere di lunghezza oppure supera i 20 caratteri di lunghezza.');
   }
 
   if (!articleInitialExp.test(article.initial)) {
-    throw new Error('Il campo initial non rispetta il formato.');
+    throw new Error('Il campo initial dell\'articolo non rispetta il formato.');
   }
 
   if (article.text.length < 1 || article.text.length > 5000) {
-    throw new Error('Il testo ha meno di 1 carattere di lunghezza oppure supera i 20 caratteri di lunghezza.');
+    throw new Error('Il testo dell\'articolo ha meno di 1 carattere di lunghezza oppure supera i 20 caratteri di lunghezza.');
   }
 
   return true;
@@ -391,16 +390,16 @@ exports.checkNotice = (notice) => {
   this.checkNoticeProtocol(notice.protocol);
 
   if ((notice.description !== null && notice.description !== undefined) && (notice.description.length < 1 || notice.description.length > 300)) {
-    throw new Error('La descrizione ha meno di 1 carattere di lunghezza oppure supera i 300 caratteri di lunghezza.');
+    throw new Error('La descrizione del bando ha meno di 1 carattere di lunghezza oppure supera i 300 caratteri di lunghezza.');
   }
 
   if ((notice.notice_subject !== null && notice.notice_subject !== undefined) && (notice.notice_subject.length < 1 || notice.notice_subject.length > 2000)) {
-    throw new Error('Il campo notice_subject ha meno di 1 carattere di lunghezza oppure supera i 2000 caratteri di lunghezza.');
+    throw new Error('L\' oggetto del bando ha meno di 1 carattere di lunghezza oppure supera i 2000 caratteri di lunghezza.');
   }
 
   if (notice.assignments) {
     if (notice.assignments.length < 1 || notice.assignments.length > 15) {
-      throw new Error('Il campo assignments ha lunghezza minore di 1 oppure supera 15.');
+      throw new Error('Gli assegni del bando sono minori di 1 oppure superano i 15.');
     }
 
     const assignmentsMap = new Map();
@@ -410,19 +409,19 @@ exports.checkNotice = (notice) => {
     });
 
     if (assignmentsMap.size != notice.assignments.length) {
-      throw new Error('Ci sono assignments con codici duplicati all\'interno del bando');
+      throw new Error('Ci sono assegni con codici duplicati all\'interno del bando.');
     };
 
     notice.assignments.every(this.checkAssignment);
   }
 
   if ((notice.admission_requirements !== null && notice.admission_requirements !== undefined) && (notice.admission_requirements.length < 1 || notice.admission_requirements.length > 5000)) {
-    throw new Error('Il campo admission_requirements ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
+    throw new Error('I requisiti di ammissione del bando ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
   if (notice.evaluation_criteria != null) {
     if (notice.evaluation_criteria.length < 1 || notice.evaluation_criteria.length > 6) {
-      throw new Error('Il campo evaluation_criteria ha lunghezza minore di 1 oppure supera 15.');
+      throw new Error('I criteri di valutazione sono minori di 1 oppure superano i 15.');
     }
 
     const criteriaMap = new Map();
@@ -432,51 +431,51 @@ exports.checkNotice = (notice) => {
     });
 
     if (criteriaMap.size != notice.evaluation_criteria.length) {
-      throw new Error('Ci sono criteri di valutazione con codici duplicati all\'interno del bando');
+      throw new Error('Ci sono criteri di valutazione con codici duplicati all\'interno del bando.');
     };
 
     notice.evaluation_criteria.every(this.checkEvaluationCriterion);
   }
 
   if ((notice.assessable_titles !== null && notice.assessable_titles !== undefined) && (notice.assessable_titles.length < 1 || notice.assessable_titles.length > 5000)) {
-    throw new Error('Il campo assessable_titles ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
+    throw new Error('Il campo titoli valutabili del bando ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
   if ((notice.how_to_submit_applications !== null && notice.how_to_submit_applications !== undefined) && (notice.how_to_submit_applications.length < 1 || notice.how_to_submit_applications.length > 5000)) {
-    throw new Error('Il campo how_to_submit_applications ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
+    throw new Error('Il campo sottomissione della domanda ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
   if ((notice.selection_board !== null && notice.selection_board !== undefined) && (notice.selection_board.length < 1 || notice.selection_board.length > 5000)) {
-    throw new Error('Il campo selection_board ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
+    throw new Error('Il campo commissione giudicatrice ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
   if ((notice.acceptance !== null && notice.acceptance !== undefined) && (notice.acceptance.length < 1 || notice.acceptance.length > 5000)) {
-    throw new Error('Il campo acceptance ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
+    throw new Error('Il campo accettazione ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
   if ((notice.incompatibility !== null && notice.incompatibility !== undefined) && (notice.incompatibility.length < 1 || notice.incompatibility.length > 5000)) {
-    throw new Error('Il campo incompatibility ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
+    throw new Error('Il campo incompatibilità ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
   if ((notice.termination_of_the_assignment !== null && notice.termination_of_the_assignment !== undefined) && (notice.termination_of_the_assignment.length < 1 || notice.termination_of_the_assignment.length > 5000)) {
-    throw new Error('Il campo termination_of_the_assignment ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
+    throw new Error('Il campo cessazione dell\'incarico ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
   if ((notice.nature_of_the_assignment !== null && notice.nature_of_the_assignment !== undefined) && (notice.nature_of_the_assignment.length < 1 || notice.nature_of_the_assignment.length > 5000)) {
-    throw new Error('Il campo nature_of_the_assignment ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
+    throw new Error('Il campo natura dell\'incarico ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
   if ((notice.unused_funds !== null && notice.unused_funds !== undefined) && (notice.unused_funds.length < 1 || notice.unused_funds.length > 5000)) {
-    throw new Error('Il campo unused_funds ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
+    throw new Error('Il campo borse non utilizzati ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
   if ((notice.responsible_for_the_procedure !== null && notice.responsible_for_the_procedure !== undefined) && (notice.responsible_for_the_procedure.length < 1 || notice.responsible_for_the_procedure.length > 5000)) {
-    throw new Error('Il campo responsible_for_the_procedure ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
+    throw new Error('Il campo responsabile della procedura ha meno di 1 carattere di lunghezza oppure supera i 5000 caratteri di lunghezza.');
   }
 
   if (notice.notice_funds !== null && notice.notice_funds !== undefined) {
     if ((notice.notice_funds < 1)) {
-      throw new Error('Il campo admission_requirements ha valore minore di 1.');
+      throw new Error('Il campo requisiti di ammissione ha valore minore di 1.');
     }
 
     if (!noticeFundsExp.test(notice.notice_funds)) {
@@ -485,7 +484,7 @@ exports.checkNotice = (notice) => {
   }
 
   if ((notice.type !== null && notice.type !== undefined) && (notice.type.length < 1 || notice.type.length > 50)) {
-    throw new Error('Il campo type ha meno di 1 carattere di lunghezza oppure supera i 50 caratteri di lunghezza.');
+    throw new Error('Il campo tipo ha meno di 1 carattere di lunghezza oppure supera i 50 caratteri di lunghezza.');
   }
 
   if ((notice.deadline !== null && notice.deadline !== undefined) && !noticeDeadlineExp.test(notice.deadline)) {
@@ -494,7 +493,7 @@ exports.checkNotice = (notice) => {
 
   if (notice.articles) {
     if (notice.articles.length < 1 || notice.articles.length > 20) {
-      throw new Error('Il campo articles ha lunghezza minore di 1 oppure maggiore di 20.');
+      throw new Error('Gli articoli sono minori di 1 oppure maggiori di 20.');
     }
 
     notice.articles.every(this.checkArticle);
@@ -514,7 +513,7 @@ exports.checkCompleteNotice = (notice) => {
   const keysNotNull = keys.every((key) => notice[key] != null);
 
   if (!keysNotNull) {
-    throw new Error('Non sono stati specificati tutti i campi');
+    throw new Error('Non sono stati specificati tutti i campi.');
   }
 
   return this.checkNotice(notice);
