@@ -160,3 +160,6 @@ CREATE EVENT checkNoticeDeadline
         update candidature, notice set candidature.state = 'In Evaluation' WHERE notice.protocol = candidature.notice_protocol AND notice.state = 'Expired';
 	
     END;
+
+-- le password sono: Password123
+INSERT INTO `user` VALUES ('ufficiodidattica@unisa.it','$2b$08$zTTwHZFJmZprh49oBBZzOuvFd8cGwXZnonpuSFUCyqYap1gnqrOzS','Ufficio','Didattica','Teaching Office',1), ('ddi@unisa.it', '$2b$08$zTTwHZFJmZprh49oBBZzOuvFd8cGwXZnonpuSFUCyqYap1gnqrOzS', 'Alfredo', 'De Santis', 'DDI', '1')
