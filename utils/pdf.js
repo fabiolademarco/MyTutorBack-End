@@ -232,7 +232,7 @@ const generateNotice = async (notice) => {
       });
 
   fs.unlink('./static/logo_temp.jpg', () => {
-    console.log('Temp file `logo_temp.jpg` deleted');
+    console.log(`Temporary file 'logo_temp.jpg' deleted`);
   });
 
   return filePath;
@@ -489,7 +489,7 @@ const generateGradedList = async (ratings, notice) => {
       });
 
   fs.unlink('./static/logo_temp.jpg', () => {
-    console.log('Temp file `logo_temp.jpg` deleted');
+    console.log(`Temporary file 'logo_temp.jpg' deleted`);
   });
 
   return filePath;
