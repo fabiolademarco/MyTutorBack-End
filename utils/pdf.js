@@ -63,8 +63,8 @@ const generateNotice = async (notice) => {
   doc.pipe(fs.createWriteStream(filePath));
 
   // Header
-
-  const logo = new pdf.Image(fs.readFileSync('./static/logo.jpg'));
+  fs.copyFileSync('./static/logo.jpg', './static/logo_temp.jpg');
+  const logo = new pdf.Image(fs.readFileSync('./static/logo_temp.jpg'));
   const header = doc.header();
 
   header.cell(_(paddingBottom(1))).image(logo, {height: 2 * cm});
@@ -230,6 +230,10 @@ const generateNotice = async (notice) => {
 
         await doc.end();
       });
+
+  fs.unlink('./static/logo_temp.jpg', () => {
+    console.log('Temp file `logo_temp.jpg` deleted');
+  });
 
   return filePath;
 };
@@ -409,8 +413,8 @@ const generateGradedList = async (ratings, notice) => {
   doc.pipe(fs.createWriteStream(filePath));
 
   // Header
-
-  const logo = new pdf.Image(fs.readFileSync('./static/logo.jpg'));
+  fs.copyFileSync('./static/logo.jpg', './static/logo_temp.jpg');
+  const logo = new pdf.Image(fs.readFileSync('./static/logo_temp.jpg'));
   const header = doc.header();
 
   header.cell(_(paddingBottom(1))).image(logo, {height: 2 * cm});
@@ -483,6 +487,10 @@ const generateGradedList = async (ratings, notice) => {
 
         await doc.end();
       });
+
+  fs.unlink('./static/logo_temp.jpg', () => {
+    console.log('Temp file `logo_temp.jpg` deleted');
+  });
 
   return filePath;
 };
