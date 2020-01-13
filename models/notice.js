@@ -473,6 +473,7 @@ function getActionsToPerform(dbElements, receivedElements, Class) {
   map.forEach((entry) => {
     if (entry.element.generated) {
       delete entry.element.id;
+      delete entry.element.generated;
     }
   });
 
