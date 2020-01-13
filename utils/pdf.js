@@ -63,8 +63,7 @@ const generateNotice = async (notice) => {
   doc.pipe(fs.createWriteStream(filePath));
 
   // Header
-  fs.copyFileSync('./static/logo.pdf', './static/logo_temp.pdf');
-  const logo = new pdf.Image(fs.readFileSync('./static/logo_temp.pdf'));
+  const logo = new pdf.Image(fs.readFileSync('./static/logo.jpg'));
   const header = doc.header();
 
   header.cell(_(paddingBottom(1))).image(logo, {height: 2 * cm});
@@ -230,10 +229,6 @@ const generateNotice = async (notice) => {
 
         await doc.end();
       });
-
-  fs.unlink('./static/logo_temp.pdf', () => {
-    console.log(`Temporary file 'logo_temp.pdf' deleted`);
-  });
 
   return filePath;
 };
@@ -413,8 +408,7 @@ const generateGradedList = async (ratings, notice) => {
   doc.pipe(fs.createWriteStream(filePath));
 
   // Header
-  fs.copyFileSync('./static/logo.pdf', './static/logo_temp.pdf');
-  const logo = new pdf.Image(fs.readFileSync('./static/logo_temp.pdf'));
+  const logo = new pdf.Image(fs.readFileSync('./static/logo.jpg'));
   const header = doc.header();
 
   header.cell(_(paddingBottom(1))).image(logo, {height: 2 * cm});
@@ -487,10 +481,6 @@ const generateGradedList = async (ratings, notice) => {
 
         await doc.end();
       });
-
-  fs.unlink('./static/logo_temp.pdf', () => {
-    console.log(`Temporary file 'logo_temp.pdf' deleted`);
-  });
 
   return filePath;
 };
