@@ -19,8 +19,8 @@ After you've imported the project you should run the command `npm install` in th
 ### The .env file
 To get started you should make a **.env** (dotenv) file, it should have the following format: 
 ```
-EXPRESS_PORT=your_express_port // suggested: 7000
-PRIVATE_KEY=your_private_key  // to generate one, you could use [this](https://keygen.io/)
+EXPRESS_PORT=3001
+PRIVATE_KEY=your_private_key  // to generate one you could use any key generator
 DATABASE_URI=mysql://mt_admin:mt_password@localhost/mytutor?dateStrings=true
 ```
 
