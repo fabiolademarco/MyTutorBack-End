@@ -246,6 +246,7 @@ exports.setState = async (req, res) => {
     try {
       const candidatures = await Candidature.findByNotice(notice.protocol);
 
+      candidatures = candidatures.filter((candidature) => candidature.state != Candidature.States.REJECTED);
       candidatures.forEach(async (candidature) => {
         candidature.state = Candidature.States.IN_GRADED_LIST;
 
