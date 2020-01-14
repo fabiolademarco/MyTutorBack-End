@@ -16,6 +16,8 @@ const Notice = require('../../../models/notice');
 const User = require('../../../models/user');
 const example = require('./exampleNotices.json');
 
+new Notice({comment: {}});
+
 
 describe('Notice test', function() {
   this.timeout(5000);
@@ -90,6 +92,28 @@ describe('Notice test', function() {
       notice.evaluation_criteria = null;
       notice.articles = null;
       notice.assignments = null;
+
+      return expect(Notice.update(notice)).to.be.fulfilled;
+    });
+
+    it('Update_6', async function() {
+      notice = JSON.parse(JSON.stringify(example.notice));
+      await Notice.remove(notice);
+      notice.assignments = null;
+      notice.comment = null;
+      notice.articles = null;
+      notice.evaluation_criteria = null;
+      await Notice.create(notice);
+
+      return expect(Notice.update(notice)).to.be.fulfilled;
+    });
+
+    it('Update_6', async function() {
+      const id = notice.assignments[0].id;
+
+      notice.assignments = JSON.parse(JSON.stringify(example.notice.assignments));
+      notice.assignments[0].note = 'Hey';
+      notice.assignments[0].id = id;
 
       return expect(Notice.update(notice)).to.be.fulfilled;
     });
@@ -173,6 +197,18 @@ describe('Notice test', function() {
     });
 
     it('FindByProtocol_2', function() {
+      return expect(Notice.findByProtocol(notice.protocol)).to.be.fulfilled;
+    });
+
+    it('FindByProtocol_3', async function() {
+      notice = JSON.parse(JSON.stringify(example.notice));
+      await Notice.remove(notice);
+      notice.assignments = null;
+      notice.comment = null;
+      notice.articles = null;
+      notice.evaluation_criteria = null;
+      await Notice.create(notice);
+
       return expect(Notice.findByProtocol(notice.protocol)).to.be.fulfilled;
     });
   });

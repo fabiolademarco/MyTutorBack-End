@@ -4,6 +4,11 @@ const list = [
     author: 'alberto@unisa.it',
     text: 'Non è scritto correttamente',
   },
+  {
+    notice: 'Prot. n. 0200001',
+    author: 'alberto@unisa.it',
+    text: 'Non è scritto correttamente',
+  },
 ];
 
 
@@ -66,10 +71,6 @@ class Comment {
 
     return new Promise((resolve) => resolve())
         .then(() => {
-          const index = list.map((el) => el.notice).indexOf(comment.notice);
-
-          list[index] = comment;
-
           return comment;
         })
         .catch((err) => {
@@ -89,7 +90,7 @@ class Comment {
 
     return new Promise((resolve) => resolve())
         .then(() => {
-          return list.pop(comment) != null;
+          return true;
         })
         .catch((err) => {
           throw err;
@@ -141,7 +142,7 @@ class Comment {
    */
   static findAll() {
     return new Promise((resolve) => resolve())
-        .then(() => list)
+        .then(() => list.filter((el) => true))
         .catch((err) => {
           throw err;
         });

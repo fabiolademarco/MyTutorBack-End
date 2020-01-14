@@ -53,6 +53,8 @@ const constCandidature = {
     }],
 };
 
+new Candidature({student: JSON.parse(JSON.stringify(fakeStudent))});
+
 describe('Candidature model', function() {
   this.timeout(5000);
 

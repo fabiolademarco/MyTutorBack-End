@@ -46,10 +46,23 @@ describe('Rating Control', function() {
       await ratingControl.getTable(req, res);
       expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
     });
+
+    it('GetTable_2', async function() {
+      req.body.noticeProtocol = ' Hey';
+      await ratingControl.getTable(req, res);
+      expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
+    });
   });
 
   describe('Exists method', function() {
     it('Exists_1', async function() {
+      req.body.noticeProtocol = null;
+      await ratingControl.exists(req, res);
+      expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
+    });
+
+    it('Exists_2', async function() {
+      req.body.noticeProtocol = ' Hey';
       await ratingControl.exists(req, res);
       expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
     });

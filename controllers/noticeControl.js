@@ -189,8 +189,8 @@ exports.setState = async (req, res) => {
     const noticeComment = await Comment.findByProtocol(notice.protocol);
 
     if (noticeComment) {
-      Comment.remove(noticeComment);
-    };
+      await Comment.remove(noticeComment);
+    }
   }
 
   if (notice.state === Notice.States.IN_ACCEPTANCE) {

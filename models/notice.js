@@ -457,7 +457,7 @@ function getActionsToPerform(dbElements, receivedElements, Class) {
     if (el[field] == undefined) {
       el[field] = temporaryId++;
       el.generated = true;
-    };
+    }
     if (map.has(el[field])) {
       if (JSON.stringify(map.get(el[field]).element) != JSON.stringify(new Class(el))) {
         map.set(el[field], {action: 'UPDATE', element: el});

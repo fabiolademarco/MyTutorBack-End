@@ -153,6 +153,15 @@ describe('Controller Bando', function() {
       await noticeControl.setState(req, res);
       expect(res.status).to.have.been.calledWith(500);
     });
+
+    it('SetState_9', async function() {
+      req.user.role = UserStub.Role.DDI;
+      req.body.notice.state = NoticeStub.States.CLOSED;
+      req.body.notice.protocol = 'Prot. n. 0200001';
+
+      await noticeControl.setState(req, res);
+      expect(res.status).to.have.been.calledWith(500);
+    });
   });
 
   describe('Delete method', function() {
@@ -365,6 +374,26 @@ describe('Controller Bando', function() {
       await noticeControl.downloadNotice(req, res);
       expect(res.status).to.have.been.calledWith(ERR_UNAUTHORIZED);
     });
+
+    it('DownloadNotice_6', async function() {
+      req.params.protocol = 'Prot. n. 0270000';
+      req.user = {
+        role: 'Teaching Office',
+      };
+      res.download = (a, b) => res;
+      res.type = (el) => res;
+      await noticeControl.downloadNotice(req, res);
+      expect(res.status).to.have.been.calledWith(OK_STATUS);
+    });
+
+    it('DownloadNotice_6', async function() {
+      req.params.protocol = 'Prot. n. 0270000';
+      req.user = null;
+      res.download = (a, b) => res;
+      res.type = (el) => res;
+      await noticeControl.downloadNotice(req, res);
+      expect(res.status).to.have.been.calledWith(OK_STATUS);
+    });
   });
 
   describe('UploadNotice method', function() {
@@ -395,6 +424,13 @@ describe('Controller Bando', function() {
 
     it('UploadNotice_5', async function() {
       req.params.protocol = 'Prot. n. 0279008';
+      await noticeControl.uploadNotice(req, res);
+      expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
+    });
+
+    it('UploadNotice_6', async function() {
+      req.params.protocol = 'Prot. n. 027010102';
+      req.body.notice = 'heyyy'.repeat(1000);
       await noticeControl.uploadNotice(req, res);
       expect(res.status).to.have.been.calledWith(ERR_CLIENT_STATUS);
     });
@@ -432,6 +468,24 @@ describe('Controller Bando', function() {
       req.params.protocol = 'Prot. n. 0279008';
       await noticeControl.downloadGradedList(req, res);
       expect(res.status).to.have.been.calledWith(ERR_UNAUTHORIZED);
+    });
+
+    it('DownloadGradedList_6', async function() {
+      req.user = null;
+      req.params.protocol = 'Prot. n. 0279008';
+      await noticeControl.downloadGradedList(req, res);
+      expect(res.status).to.have.been.calledWith(ERR_UNAUTHORIZED);
+    });
+
+    it('DownloadGradedList_7', async function() {
+      req.params.protocol = 'Prot. n. 0270000';
+      req.user = {
+        role: 'Teaching Office',
+      };
+      res.download = (a, b) => res;
+      res.type = (el) => res;
+      await noticeControl.downloadGradedList(req, res);
+      expect(res.status).to.have.been.calledWith(OK_STATUS);
     });
   });
 

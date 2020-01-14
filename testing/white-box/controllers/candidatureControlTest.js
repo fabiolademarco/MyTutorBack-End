@@ -236,6 +236,17 @@ describe('Candidature control', function() {
       await candidatureControl.downloadDocuments(req, res);
       expect(res.status).to.been.calledWith(412);
     });
+
+    it('DownloadDocuments_2', async function() {
+      const candidature = JSON.parse(JSON.stringify(constCandidature));
+
+      req = mockRequest({method: 'POST', body: {candidature: candidature}});
+      res = mockResponse();
+      res.download = (a, b) => res;
+      res.type = (a) => res;
+      await candidatureControl.downloadDocuments(req, res);
+      expect(true);
+    });
   });
 });
 

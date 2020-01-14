@@ -66,14 +66,6 @@ exports.create = async (req, res) => {
 
   return Candidature.create(candidature)
       .then((candidature) => {
-        if (candidature == null) {
-          res.status(ERR_SERVER_STATUS);
-
-          return res.send({
-            status: false,
-            error: 'La transazione non è andata a buon fine.',
-          });
-        }
         res.status(OK_STATUS);
         res.send({
           status: true,
@@ -138,14 +130,6 @@ exports.update = async (req, res) => {
 
   return Candidature.update(candidature)
       .then((data) => {
-        if (data == null) {
-          res.status(ERR_SERVER_STATUS);
-
-          return res.send({
-            status: false,
-            error: 'La transazione non è andata a buon fine.',
-          });
-        }
         res.status(OK_STATUS).send({
           candidature: data,
           status: true,

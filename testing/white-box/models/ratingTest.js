@@ -36,6 +36,8 @@ const ratingConst = {
   interview_score: 10,
 };
 
+new Rating({});
+
 describe('Rating model', function() {
   this.timeout(5000);
 
