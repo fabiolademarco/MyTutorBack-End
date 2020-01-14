@@ -130,9 +130,9 @@ module.exports.update = async function(req, res) {
 
   try {
     if (user.role === User.Role.STUDENT) {
-      Check.checkStudent(user);
+      Check.checkStudentWithoutPassword(user);
     } else {
-      Check.checkProfessor(user);
+      Check.checkProfessorWithoutPassword(user);
     }
   } catch (error) {
     res.status(ERR_CLIENT_STATUS)

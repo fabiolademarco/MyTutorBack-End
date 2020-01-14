@@ -69,11 +69,7 @@ exports.checkStudent = (student) => {
  * @return {boolean} True if the user attributes respect the format.
  */
 exports.checkProfessor = (professor) => {
-  this.checkProfessorEmail(professor.email);
-
-  checkName(professor.name);
-
-  checkSurname(professor.surname);
+  this.checkProfessorWithoutPassword(professor);
 
   this.checkPassword(professor.password);
 
@@ -545,6 +541,21 @@ exports.checkStudentWithoutPassword = (student) => {
   }
 
   this.checkStudentEmail(student.email);
+
+  return true;
+};
+
+/**
+ * Checks the professors params.
+ * @param {User} professor The professor to check.
+ * @return {boolean} True if the professor attributes respect the format.
+ */
+exports.checkProfessorWithoutPassword = (professor) => {
+  this.checkProfessorEmail(professor.email);
+
+  checkName(professor.name);
+
+  checkSurname(professor.surname);
 
   return true;
 };
