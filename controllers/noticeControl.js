@@ -258,6 +258,8 @@ exports.setState = async (req, res) => {
             error: 'Aggiornamento del bando fallito.',
             exception: err.message,
           });
+
+      return;
     }
   }
 
