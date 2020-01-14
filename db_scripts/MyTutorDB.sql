@@ -156,7 +156,7 @@ CREATE EVENT checkNoticeDeadline
    DO 
 	BEGIN
     
-		update notice set state = 'Expired' WHERE deadline < now() ; 
+		update notice set state = 'Expired' WHERE deadline < now() AND state = 'Published'; 
         update candidature, notice set candidature.state = 'In Evaluation' WHERE notice.protocol = candidature.notice_protocol AND notice.state = 'Expired';
 	
     END;
