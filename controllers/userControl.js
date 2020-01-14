@@ -129,10 +129,18 @@ module.exports.update = async function(req, res) {
   }
 
   try {
-    if (user.role === User.Role.STUDENT) {
-      Check.checkStudentWithoutPassword(user);
+    if (!user.password) {
+      if (user.role === User.Role.STUDENT) {
+        Check.checkStudentWithoutPassword(user);
+      } else {
+        Check.checkProfessorWithoutPassword(user);
+      }
     } else {
-      Check.checkProfessorWithoutPassword(user);
+      if (user.role === User.Role.STUDENT) {
+        Check.checkStudent(user);
+      } else {
+        Check.checkProfessor(user);
+      }
     }
   } catch (error) {
     res.status(ERR_CLIENT_STATUS)
