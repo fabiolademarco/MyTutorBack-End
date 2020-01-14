@@ -244,7 +244,7 @@ exports.setState = async (req, res) => {
 
   if (notice.state === Notice.States.CLOSED) {
     try {
-      const candidatures = await Candidature.findByNotice(notice.protocol);
+      let candidatures = await Candidature.findByNotice(notice.protocol);
 
       candidatures = candidatures.filter((candidature) => candidature.state != Candidature.States.REJECTED);
       candidatures.forEach(async (candidature) => {
