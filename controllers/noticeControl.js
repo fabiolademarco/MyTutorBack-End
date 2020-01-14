@@ -1,6 +1,8 @@
 const Notice = require('../models/notice');
 const User = require('../models/user');
 const Rating = require('../models/rating');
+const Candidature = require('../models/candidature');
+const Comment = require('../models/comment');
 const Check = require('../utils/check');
 const pdf = require('../utils/pdf');
 const fs = require('fs');
@@ -183,6 +185,14 @@ exports.setState = async (req, res) => {
     return;
   }
 
+  if (notice.state !== Notice.States.DRAFT) {
+    const noticeComment = await Comment.findByProtocol(notice.protocol);
+
+    if (noticeComment) {
+      Comment.remove(noticeComment);
+    };
+  }
+
   if (notice.state === Notice.States.IN_ACCEPTANCE) {
     try {
       Check.checkCompleteNotice(notice);
@@ -229,6 +239,24 @@ exports.setState = async (req, res) => {
           });
 
       return;
+    }
+  }
+
+  if (notice.state === Notice.States.CLOSED) {
+    try {
+      const candidatures = await Candidature.findByNotice(notice.protocol);
+
+      candidatures.forEach(async (candidature) => {
+        candidature.state = Candidature.States.IN_GRADED_LIST;
+
+        await Candidature.update(candidature);
+      });
+    } catch (err) {
+      res.status(ERR_SERVER_STATUS)
+          .send({
+            error: 'Aggiornamento del bando fallito.',
+            exception: err.message,
+          });
     }
   }
 
