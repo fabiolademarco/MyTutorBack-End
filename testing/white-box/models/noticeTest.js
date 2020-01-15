@@ -102,13 +102,14 @@ describe('Notice test', function() {
       notice.assignments = null;
       notice.comment = null;
       notice.articles = null;
+      notice.application_sheet = null;
       notice.evaluation_criteria = null;
       await Notice.create(notice);
 
       return expect(Notice.update(notice)).to.be.fulfilled;
     });
 
-    it('Update_6', async function() {
+    it('Update_7', async function() {
       const id = notice.assignments[0].id;
 
       notice.assignments = JSON.parse(JSON.stringify(example.notice.assignments));
