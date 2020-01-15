@@ -110,7 +110,6 @@ class Candidature {
             Promise.all(Array.from(map.values()).map((doc) => Document.remove(doc, candidature))),
           ])
               .catch((err) => {
-                console.log(err);
                 throw err;
               });
         })

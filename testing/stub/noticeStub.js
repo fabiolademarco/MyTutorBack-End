@@ -310,7 +310,6 @@ class Notice {
           return new Notice(notice);
         })
         .catch((err) => {
-          console.log(err);
           throw err;
         });
   }
@@ -509,23 +508,34 @@ function getOtherFields(noticeProtocol) {
 
     Assignment.findByNotice(noticeProtocol)
         .then((assignments) => assignments.forEach((a) => otherFields.assignments.push(a)))
-        .catch((err) => console.log(err)),
+        .catch((err) => {
+          throw err;
+        }),
 
     ApplicationSheet.findByNotice(noticeProtocol)
         .then((applicationSheet) => otherFields.applicationSheet = applicationSheet)
-        .catch((err) => console.log(err)),
+        .catch((err) => {
+          throw err;
+        }),
 
     EvaluationCriterion.findByNotice(noticeProtocol)
         .then((criteria) => criteria.forEach((c) => otherFields.evaluationCriteria.push(c)))
-        .catch((err) => console.log(err)),
+        .catch((err) => {
+          throw err;
+        }),
 
     Article.findByNotice(noticeProtocol)
         .then((articles) => articles.forEach((a) => otherFields.articles.push(a)))
-        .catch((err) => console.log(err)),
+        .catch((err) => {
+          throw err;
+        }),
 
     Comment.findByProtocol(noticeProtocol)
         .then((comment) => otherFields.comment = comment)
-        .catch((err) => console.log(err)),
+        .catch((err) => {
+          throw err
+          ;
+        }),
 
   ])
       .then(() => otherFields)

@@ -244,7 +244,6 @@ exports.registerProfessor = async (req, res) => {
     };
     const token = createToken(payload);
 
-    console.log('token: ' + token);
     Mail.sendEmailToProfessor(professor.email, token);
     res.status(200);
     res.send({
@@ -265,7 +264,6 @@ exports.registerProfessor = async (req, res) => {
         };
         const token = createToken(payload);
 
-        console.log('token: ' + token);
         Mail.sendEmailToProfessor(professor.email, token);
         res.status(200);
         res.send({

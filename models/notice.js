@@ -412,23 +412,33 @@ function getOtherFields(noticeProtocol) {
 
     Assignment.findByNotice(noticeProtocol)
         .then((assignments) => otherFields.assignments = assignments && assignments.length ? assignments : null)
-        .catch((err) => console.log(err)),
+        .catch((err) => {
+          throw err;
+        }),
 
     ApplicationSheet.findByNotice(noticeProtocol)
         .then((applicationSheet) => otherFields.applicationSheet = applicationSheet ? applicationSheet : null)
-        .catch((err) => console.log(err)),
+        .catch((err) => {
+          throw err;
+        }),
 
     EvaluationCriterion.findByNotice(noticeProtocol)
         .then((criteria) => otherFields.evaluationCriteria = criteria && criteria.length ? criteria : null)
-        .catch((err) => console.log(err)),
+        .catch((err) => {
+          throw err;
+        }),
 
     Article.findByNotice(noticeProtocol)
         .then((articles) => otherFields.articles = articles && articles.length ? articles : null)
-        .catch((err) => console.log(err)),
+        .catch((err) => {
+          throw err;
+        }),
 
     Comment.findByProtocol(noticeProtocol)
         .then((comment) => otherFields.comment = comment ? comment : null)
-        .catch((err) => console.log(err)),
+        .catch((err) => {
+          throw err;
+        }),
 
   ])
       .then(() => otherFields)

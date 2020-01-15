@@ -113,8 +113,6 @@ class User {
           return user;
         })
         .catch((err) => {
-          console.log(err);
-
           return err.message;
         });
   }
@@ -264,13 +262,12 @@ class User {
 
       sublist = new Set(sublist);
     } catch (err) {
-      console.log(err);
+      throw err;
     }
 
     return new Promise((resolve) => resolve())
         .then(() => Array.from(sublist))
         .catch((err) => {
-          console.log(err);
           throw err;
         });
   }

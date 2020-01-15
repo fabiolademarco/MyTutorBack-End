@@ -170,13 +170,12 @@ class Student extends User {
     try {
       users = await super.search(filter);
     } catch (err) {
-      console.log(err);
+      throw err;
     }
 
     return Promise.all(users.map((u) => this.findByEmail(u.email)))
         .then((students) => students.map((s) => new Student(s)))
         .catch((err) => {
-          console.log(err);
           throw err;
         });
   }

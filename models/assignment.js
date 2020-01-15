@@ -62,7 +62,6 @@ class Assignment {
           return new Assignment(assignment);
         })
         .catch((err) => {
-          console.log(err);
           throw err;
         });
   }
