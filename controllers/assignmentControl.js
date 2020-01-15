@@ -340,7 +340,6 @@ exports.close = async (req, res) => {
             .send({status: true});
       })
       .catch((err) => {
-        console.log(err);
         res.status(ERR_SERVER_STATUS)
             .send({
               status: false,

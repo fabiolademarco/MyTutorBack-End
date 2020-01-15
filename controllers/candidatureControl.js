@@ -136,7 +136,6 @@ exports.update = async (req, res) => {
         });
       })
       .catch((err) => {
-        console.log(err);
         res.status(ERR_SERVER_STATUS);
 
         return res.send({
@@ -170,7 +169,6 @@ exports.delete = async (req, res) => {
   try {
     Check.checkNoticeProtocol(notice);
   } catch (error) {
-    console.log(error);
     res.status(ERR_CLIENT_STATUS)
         .send({
           error: error.message,
@@ -261,7 +259,6 @@ exports.search = async (req, res) => {
         });
       })
       .catch((err) => {
-        console.log(err);
         res.status(ERR_SERVER_STATUS);
         res.send({
           error: 'Ricerca fallita',
