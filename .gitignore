@@ -114,6 +114,8 @@ out
 #apidocjs output
 doc
 
+.env
+
 notices
 static/*.pdf
 *.rest
