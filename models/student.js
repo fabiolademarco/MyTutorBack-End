@@ -41,7 +41,8 @@ class Student extends User {
 
           return new Student(student);
         })
-        .catch((err) => {
+        .catch(async (err) => {
+          await super.delete(user);
           throw err;
         });
   }
