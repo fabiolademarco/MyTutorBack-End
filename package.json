@@ -47,7 +47,7 @@
     "jszip": "^3.2.2",
     "mock-req-res": "^1.1.4",
     "mysql2": "^2.0.2",
-    "nodemailer": "^6.4.2",
+    "nodemailer": "^6.4.16",
     "nodemon": "^2.0.2",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
