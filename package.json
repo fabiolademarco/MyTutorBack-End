@@ -44,7 +44,7 @@
     "express": "^4.17.1",
     "file-type": "^13.0.0",
     "jsonwebtoken": "^8.5.1",
-    "jszip": "^3.2.2",
+    "jszip": "^3.7.0",
     "mock-req-res": "^1.1.4",
     "mysql2": "^2.0.2",
     "nodemailer": "^6.4.2",
